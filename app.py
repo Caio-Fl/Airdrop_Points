@@ -9,7 +9,7 @@ from get_leader_Level_function import get_leader_Level_function
 from get_Pendle_Data import get_Pendle_Data
 
 st.set_page_config(page_title="Painel de Dados Airdrops", layout="wide")
-st.title("📈 Painel de Monitoramento de Pontuação Total dos Airdrops")
+st.title("📈 Monitoring Painel for YT Airdrops Farming")
 
 API_URL = "http://localhost:8000/dados"
 
@@ -59,7 +59,7 @@ Level_date0 = datetime.strptime("2025-03-27T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%
 placeholder = st.empty()  # espaço vazio que vamos atualizar no loop
 df2 = pd.DataFrame(columns=["time", "value"])
 #invested = st.number_input("Value to Invest $:", min_value=0.0, step=0.1)
-st.subheader("📋 Insert Data to Calculate the Expected Profit and ROI")
+st.subheader("📋 Insert Data to Calculate the Expected Profit and ROI for Hold YT Tokens")
 invested = st.number_input(
     "Choose the Value to Invest: $",
     min_value=0,
@@ -109,9 +109,10 @@ while True:
     with placeholder.container():
         st.subheader("📋 Total Points Farmed by Protocol")
         if i == 0:
-            st.info("Loading Data...")
+            info_box = st.empty()
+            info_box.info("Loading Data...")
         else:
-            st.info("")
+            info_box.empty()
       
         tags, values, time_Open, time_Level = enviar_dados()
         Open_Data.append([values[0],time_Open])
@@ -140,9 +141,9 @@ while True:
         if values[0] != 0:
             # Adicionar unidade
             #df['Total Points Farmed'] = df['value'].astype(str) + " XP"
-            st.info("Data Received! Data Refresh in 1 minute...")
             
-            st.markdown(f"<p style='font-size:22px;'>🔹 Protocol: {tags[0]}  - {"<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
+            
+            st.markdown(f"<p style='font-size:23px;'>🔹 Protocol: {tags[0]}  - {"<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
             st.markdown(f"  🏆 **Total Points Farmed:** {values[0]} XP ") 
             st.markdown(f"  🕒 **Last Update:** {time_Open}")
             st.markdown(f"  🚀 **Pendle YT-cUSDO:** {round(Open_ytMul,3)}")
@@ -163,7 +164,7 @@ while True:
             st.markdown(f"  🤑 **Profit : $** {round((((fdv/tsp)*(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token*(date2-date1).days)/Open_points_per_token)+(invested*Open_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Open_priceImpact)),2)}")
             st.markdown(f"  🤞 **ROI :** {round(100*(((fdv/tsp)*(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token*(date2-date1).days)/Open_points_per_token)+(invested*Open_ytMul*Open_unApy*(date3-date1).days/365)-invested-(invested*Open_priceImpact))/abs((invested*Open_ytMul*Open_unApy*(date2-date1).days/365)-invested-(invested*Open_priceImpact)),3)} %")
 
-            st.markdown(f"<p style='font-size:22px;'>🔹 Protocol: {tags[1]}  - {"<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size:23px;'>🔹 Protocol: {tags[1]}  - {"<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
             st.markdown(f"  🏆 **Total Points Farmed:** {values[1]} XP ") 
             st.markdown(f"  🕒 **Last Update:** {time_Level}")
             st.markdown(f"  🚀 **Pendle YT-lvlUSD:** {round(Level_ytMul,3)}")
@@ -183,10 +184,11 @@ while True:
             st.markdown(f"  💰 **Estimated Airdrop Value: $** {round((fdv/tsp)*(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token*(date3-date1).days)/Level_points_per_token,2)}")            
             st.markdown(f"  🤑 **Profit : $** {round((((fdv/tsp)*(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token*(date3-date1).days)/Level_points_per_token)+(invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact)),2)}")
             st.markdown(f"  🤞 **ROI :** {round(100*(((fdv/tsp)*(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token*(date3-date1).days)/Level_points_per_token)+(invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact))/abs((invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact)),3)} %")
-
+            
+            info_box.empty()
             
         else:
-            st.info("No data received!")
+            info_box.info("No data received!")
         i += 1
         
         time.sleep(60)
