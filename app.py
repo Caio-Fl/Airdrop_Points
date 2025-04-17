@@ -142,8 +142,8 @@ while True:
             # Adicionar unidade
             #df['Total Points Farmed'] = df['value'].astype(str) + " XP"
             
-            
-            st.markdown(f"<p style='font-size:23px;'>🔹 Protocol: {tags[0]}  - {"<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
+            st.markdown(f" ")
+            st.markdown(f"<p style='font-size:22px;'>🔹 Protocol: {tags[0]}  - {"<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
             st.markdown(f"  🏆 **Total Points Farmed:** {values[0]} XP ") 
             st.markdown(f"  🕒 **Last Update:** {time_Open}")
             st.markdown(f"  🚀 **Pendle YT-cUSDO:** {round(Open_ytMul,3)}")
@@ -163,8 +163,8 @@ while True:
             st.markdown(f"  💰 **Estimated Airdrop Value: $** {round((fdv/tsp)*(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token*(date2-date1).days)/Open_points_per_token,2)}")
             st.markdown(f"  🤑 **Profit : $** {round((((fdv/tsp)*(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token*(date2-date1).days)/Open_points_per_token)+(invested*Open_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Open_priceImpact)),2)}")
             st.markdown(f"  🤞 **ROI :** {round(100*(((fdv/tsp)*(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token*(date2-date1).days)/Open_points_per_token)+(invested*Open_ytMul*Open_unApy*(date3-date1).days/365)-invested-(invested*Open_priceImpact))/abs((invested*Open_ytMul*Open_unApy*(date2-date1).days/365)-invested-(invested*Open_priceImpact)),3)} %")
-
-            st.markdown(f"<p style='font-size:23px;'>🔹 Protocol: {tags[1]}  - {"<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
+            st.markdown(f" ")
+            st.markdown(f"<p style='font-size:22px;'>🔹 Protocol: {tags[1]}  - {"<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
             st.markdown(f"  🏆 **Total Points Farmed:** {values[1]} XP ") 
             st.markdown(f"  🕒 **Last Update:** {time_Level}")
             st.markdown(f"  🚀 **Pendle YT-lvlUSD:** {round(Level_ytMul,3)}")
