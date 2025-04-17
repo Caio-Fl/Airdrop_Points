@@ -29,15 +29,15 @@ def enviar_dados():
         "tag": tags[0],
         "value": values[0]
     }
-    try:
-        resp = requests.post(API_URL, json=dado)
-        if resp.status_code == 200:
-            st.session_state.dados = []
-            st.session_state.dados.append(dado)
+    #try:
+    #    resp = requests.post(API_URL, json=dado)
+    #    if resp.status_code == 200:
+    #        st.session_state.dados = []
+    #        st.session_state.dados.append(dado)
             # Atualiza o horário de última atualização
             #st.session_state.last_update = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    except:
-        st.warning("⚠️ Não foi possível conectar à API.")
+    #except:
+    #    st.warning("⚠️ Não foi possível conectar à API.")
     return(tags,values,time_Open,time_Level)
 
 # Botão manual para simular envio
@@ -108,6 +108,10 @@ Level_pts_token = 2400
 while True:
     with placeholder.container():
         st.subheader("📋 Total Points Farmed by Protocol")
+        if i == 0:
+            st.info("Loading Data...")
+        else:
+            st.info("")
       
         tags, values, time_Open, time_Level = enviar_dados()
         Open_Data.append([values[0],time_Open])
@@ -132,12 +136,12 @@ while True:
         Level_points_per_token = round(Level_points_tge/(tsp*drop/100),2)
 
         # Mostrar dados recebidos
-        df = pd.DataFrame(st.session_state.dados)
-        if not df.empty:
+        #df = pd.DataFrame(st.session_state.dados)
+        if values[0] != 0:
             # Adicionar unidade
-            df['Total Points Farmed'] = df['value'].astype(str) + " XP"
+            #df['Total Points Farmed'] = df['value'].astype(str) + " XP"
+            st.info("Data Received! Data Refresh in 1 minute...")
             
-
             st.markdown(f"<p style='font-size:22px;'>🔹 Protocol: {tags[0]}  - {"<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'>🔗 More info</a>"}</p>", unsafe_allow_html=True)
             st.markdown(f"  🏆 **Total Points Farmed:** {values[0]} XP ") 
             st.markdown(f"  🕒 **Last Update:** {time_Open}")
@@ -180,8 +184,9 @@ while True:
             st.markdown(f"  🤑 **Profit : $** {round((((fdv/tsp)*(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token*(date3-date1).days)/Level_points_per_token)+(invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact)),2)}")
             st.markdown(f"  🤞 **ROI :** {round(100*(((fdv/tsp)*(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token*(date3-date1).days)/Level_points_per_token)+(invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact))/abs((invested*Level_ytMul*Level_unApy*(date3-date1).days/365)-invested-(invested*Level_priceImpact)),3)} %")
 
+            
         else:
-            st.info("Ainda não há dados recebidos.")
+            st.info("No data received!")
         i += 1
         
-        time.sleep(10)
+        time.sleep(60)
