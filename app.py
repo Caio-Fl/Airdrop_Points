@@ -123,7 +123,7 @@ Level_pts_token = 2400
 Frag_pts_token = 86.4
 while True:
     with placeholder.container():
-        image = "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/blob/main/assets/banner.png"
+        image = "https://github.com/Caio-Fl/Airdrop_Points/blob/main/banner.png?raw=true"
         st.image(image,use_container_width=True)
 
         st.subheader("📋 Total Points Farmed by Protocol")
