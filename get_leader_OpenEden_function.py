@@ -20,6 +20,7 @@ def get_leader_OpenEden_function():
 
     total_accured = 0 # inicialização de pontos totais
     page = 1 # contador para  inicial
+    count = 0
     while True:
         print(f"Lendo OpenEden Página {page}...")
 
@@ -34,11 +35,14 @@ def get_leader_OpenEden_function():
                 break
             for entry in leaderboard:
                 accured = entry.get("totalPoints", "0")
-                total_accured += int(accured)  
+                total_accured += int(accured) 
+                count += 1
+                if count == 100:
+                    top100 = total_accured
             page += 1
         else:
             print(f"Erro ao coletar dados na página {page}. Status Code:", response.status_code)
             break
-
+    top100p = top100/total_accured
     print("TOTAL PONTOS =", total_accured, " XP")
-    return(total_accured)
+    return(total_accured,top100p,count)
