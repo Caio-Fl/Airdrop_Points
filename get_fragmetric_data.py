@@ -12,7 +12,7 @@ def get_fragmetric_data():
             "Accept": "*/*"
     }
 
-    payload = {"operationName":"restakingFund","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"ea2749c76bda5b889a1e5b9c5958b9aa6e027d009b71fab8b2a1bff4e4eedc71"}}}
+    payload = {"operationName":"restakingFund","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"d3874b3fa022f6a3d4b28c26525d6a49dbaf3424c8e94635e04db8bb4866de7f"}}}
     url = f"https://api.fragmetric.xyz/v1/graphql"
     response = requests.post(url, json=payload, headers=headers)
     data = response.json()
