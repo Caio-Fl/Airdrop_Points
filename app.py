@@ -18,6 +18,9 @@ import webbrowser
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Painel de Dados Airdrops", page_icon="🇾🇹", layout="wide")
 
+
+#https://airdrops.io/wp-content/themes/airdrops-io/js/cmc-ticker-data.js?_=20253292  - get btc, sol, eth price
+
 page_bg_img = '''
 <style>
 body {
@@ -407,4 +410,4 @@ while True:
         """, unsafe_allow_html=True)
 
         
-        time.sleep(60)
+        time.sleep(120)
