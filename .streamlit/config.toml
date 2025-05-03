@@ -1,0 +1,6 @@
+[theme]
+primaryColor="#00BFFF"
+backgroundColor="#c9ada7"
+secondaryBackgroundColor="#342b44"  # Isso afeta a cor da sidebar
+textColor="#ffffff"
+font="sans serif"
