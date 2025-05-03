@@ -12,11 +12,11 @@ def get_rateX_data(protocol):
     }
     if protocol == "kyros":
         qS = 15 #kySOL_querySymbol = 15
-        qT = 20 #kySOL_queryTrade = 20
+        qT = 21 #kySOL_queryTrade = 20
     else:
         qS = 21 #fragSOL_querySymbol = 21
-        qT = 21#fragSOL_queryTrade = 21
-    payload = {"serverName":"AdminSvr","method":"querySymbol","content":{"cid":"ec0aace6-3a68-43c0-895a-0410e3a68310"}} #{"serverName":"TradeFRAGSOLSvr","method":"dc.trade.dprice","content":{"cid":"e59573e8-3c48-163d-4a11-902b566b0e20"}}
+        qT = 22#fragSOL_queryTrade = 21
+    payload = {"serverName": "AdminSvr", "method": "querySymbol", "content": {"cid": "4c00d4ca-b0e8-ebc8-da27-0ac0120b470a"}}#{"serverName":"TradeFRAGSOLSvr","method":"dc.trade.dprice","content":{"cid":"e59573e8-3c48-163d-4a11-902b566b0e20"}}
     url = f"https://api.rate-x.io/"
     response = requests.post(url, json=payload, headers=headers)
     data = response.json()
@@ -33,7 +33,7 @@ def get_rateX_data(protocol):
     priceImpact = 0
 
     #fragAsUSD = rateXInfoarray.get("14", {})
-    payload = {"serverName":"MDSvr","method":"queryTrade","content":{"cid":"ec0aace6-3a68-43c0-895a-0410e3a68310"}}
+    payload = {"serverName":"MDSvr","method":"queryTrade","content":{"cid":"f2443b24-44dd-fded-6dba-7a6c567b4ff5"}}
     response2 = requests.post(url, json=payload, headers=headers)
     data2 = response2.json()
     rateXfragarray = data2.get("data", {})
