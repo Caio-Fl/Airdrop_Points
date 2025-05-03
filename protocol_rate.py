@@ -110,8 +110,9 @@ def protocol_rate(tvl,top100,roi,daily_points_rate,users,hype):
     elif hype == "top":
         hype_grade = 7
 
+
     grade = round(10*((1.5*tvl_grade)+(top100_grade)+(1.5*roi_grade)+(dpr_grade)+(users_grade)+(hype_grade))/(2*7*6),2)
-    
+
     if grade < 0.5:
         stars = "☆☆☆☆☆ - " + str(grade)
     elif 0.5 <= grade < 1.5:
