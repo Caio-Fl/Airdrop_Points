@@ -598,7 +598,7 @@ elif opcao == "Farm with YT":
                 "Equivalent YT Received": f"$ {round(invested*Open_ytMul,2)}",
                 "Daily Points Farmed": f"{Open_daily_pts_farmed}",
                 "Total Points Farmed in YT": f"{Open_total_pts_farmed}",
-                "Top 100 Concentration": f"{round(100*top100[1],2)}",
+                "Top 100 Concentration": f"{round(100*top100[0],2)}",
                 "Total User": f"{total_users[0]}",
                 "Farmed Yield in YT": f"$ {Open_farmed_yield}",
                 "Mean Daily Points (x 1.30)": f"{round(Open_mean_daily,0)}",
