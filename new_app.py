@@ -780,8 +780,8 @@ elif opcao == "Pendle APY Prediction":
 
     # Buscar índice do mercado default
     default_index = markets[markets["name"] == default_market_name].index
-    default_index = default_index[0] if not default_index.empty else 0  # fallback para 0 se não encontrar
-
+    default_index = int(default_index[0]) if not default_index.empty else 0  # fallback para 0 se não encontrar
+    print(default_index)
     st.sidebar.markdown("<h3 style='font-size: 20px;'>Select Pendle Market</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
         # CSS para alterar a fonte de todos os selectbox
