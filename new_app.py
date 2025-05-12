@@ -447,7 +447,7 @@ elif opcao == "Farm with YT":
         )
 
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds > 300 or not protocolos:
+    if elapsed_seconds > 600 or not protocolos:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
@@ -466,7 +466,7 @@ elif opcao == "Farm with YT":
             Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xe45d2ce15abba3c67b9ff1e7a69225c855d3da82","0x65901Ac9EFA7CdAf1Bdb4dbce4c53B151ae8d014")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
-            print(Level_ytMul)
+            
             # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
             date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -475,7 +475,7 @@ elif opcao == "Farm with YT":
             date3 = datetime.strptime(Level_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            print(date5)
+            
             # Calcula os parâmetros de cada Protocolo
             # OpenEden
             Open_date_tge = datetime.strptime((Open_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -666,7 +666,6 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Ky_ROI} %"   
             }
         }
-        print(protocolos)
         
     # --- Salvar automaticamente sem botão ---
     salvar_json(protocolos)
@@ -697,7 +696,7 @@ elif opcao == "Farm with YT":
                 unsafe_allow_html=True
             )
             st.markdown(f"""
-            <div style="background-color: #376a94; padding: 20px; border: 2px solid white; border-radius: 10px; margin-top: 20px; font-size: 16px;margin-bottom: 5px;">
+            <div style="background-color: #376a94; padding: 20px; border: 2px solid white; border-radius: 10px; margin-top: 20px; font-size: 20px;margin-bottom: 5px;">
                 <h2>Details {p}</h2>
                     <p style="font-size:22px;">
                         <strong>Protocol:</strong> {p} – 
