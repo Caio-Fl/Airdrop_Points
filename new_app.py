@@ -447,7 +447,7 @@ elif opcao == "Farm with YT":
         )
 
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds > 600 or not protocolos:
+    if elapsed_seconds > 100 or not protocolos:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
@@ -669,6 +669,7 @@ elif opcao == "Farm with YT":
         
     # --- Salvar automaticamente sem botão ---
     salvar_json(protocolos)
+    print(protocolos)
 
     # --- Estado de seleção ---
     if "protocolo_selecionado" not in st.session_state:
