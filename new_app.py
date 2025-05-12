@@ -384,7 +384,7 @@ if opcao == "Welcome":
         
         <div class="airdrop-description">
 
-        I am a graduate in electrical-electronic engineering and a PhD in signal processing, with a deep passion for the world of investments. Throughout my career, I have had the opportunity to combine my technical knowledge with my curiosity about the financial universe, especially in the cryptocurrency and airdrop sectors. Over time, I have applied the lessons I learned in engineering to explore new investment opportunities. Additionally, I am a programming enthusiast, with an emphasis on Python, which was the language chosen for the development of this site. My goal is to use both my technical skills and financial experience to provide relevant content and efficient solutions for others who share the same interest in the world of crypto and investments.
+        I am graduated in electrical-electronic engineering and D.Sc. in signal processing, with a deep passion for the world of investments. Throughout my career, I have had the opportunity to combine my technical knowledge with my curiosity about the financial universe, especially in the cryptocurrency and airdrop sectors. Over time, I have applied the lessons I learned in engineering to explore new investment opportunities. Additionally, I am a programming enthusiast, with an emphasis on Python, which was the language chosen for the development of this site. My goal is to use both my technical skills and financial experience to provide relevant content and efficient solutions for others who share the same interest in the world of crypto and investments.
         
 
         </div>
@@ -545,7 +545,7 @@ elif opcao == "Farm with YT":
 
         protocolos = {
             "Level": {
-                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/level.jpg?raw=true",
+                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/Level.jpg?raw=true",
                 "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
                 "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
                 "Grade": f"{Level_grade}",
