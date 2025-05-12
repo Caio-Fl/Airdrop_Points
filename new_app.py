@@ -25,7 +25,7 @@ from streamlit_option_menu import option_menu
 
 # Configuração da página (sempre primeiro!)
 st.set_page_config(
-    page_title="Fleming Airdrop Monitor",
+    page_title="Airdrops Monitor",
     page_icon="🪂",
     layout="wide"
 )
@@ -545,7 +545,7 @@ elif opcao == "Farm with YT":
 
         protocolos = {
             "Level": {
-                "Imagem": r"C:\Users\0335372\Documents\app_streamlit\Level.jpg",
+                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/level.jpg?raw=true",
                 "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
                 "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
                 "Grade": f"{Level_grade}",
@@ -574,7 +574,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Level_ROI} %"      
             },
             "OpenEden": {
-                "Imagem": r"C:\Users\0335372\Documents\app_streamlit\open.jpg",
+                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/open.jpg?raw=true",
                 "Logo": "https://pbs.twimg.com/profile_images/1529034875642478592/70m4xSFd_400x400.jpg",
                 "Link": "<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'  style='color:#1E90FF;'>More info</a> - <a href='https://app.pendle.finance/trade/points?chains=ethereum' target='_blank'>🔗 Pendle </a>",
                 "Grade": f"{Open_grade}",
@@ -603,7 +603,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Open_ROI} %"            
             },
             "Fragmetric": {
-                "Imagem": r"C:\Users\0335372\Documents\app_streamlit\frag.jpg",
+                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/frag.jpg?raw=true",
                 "Logo": "https://pbs.twimg.com/profile_images/1887701999426412544/ok8QD_Gh_400x400.png",
                 "Link": "<a href='https://app.fragmetric.xyz/referral?ref=77XL68' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Frag_grade}",
@@ -635,7 +635,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Frag_ROI} %"          
             },
             "Kyros": {
-                "Imagem": r"C:\Users\0335372\Documents\app_streamlit\kyros.jpg",
+                "Imagem": "https://github.com/Caio-Fl/Airdrop_Points/blob/main/kyros.jpg?raw=true",
                 "Logo": "https://pbs.twimg.com/profile_images/1847426788252590080/-Tb-I1Yl_400x400.jpg",
                 "Link": "<a href='https://boost.kyros.fi/?ref=nq3orn' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Ky_grade}",
@@ -775,6 +775,13 @@ elif opcao == "Pendle APY Prediction":
     # Exibindo a lista de seleção múltipla
     #selected_names = st.multiselect("Escolha um ou mais mercados", options)
 
+    # Define o mercado desejado (exatamente como aparece no 'label')
+    default_market_name = "slvlUSD"  # substitua pela label desejada
+
+    # Buscar índice do mercado default
+    default_index = markets[markets["name"] == default_market_name].index
+    default_index = default_index[0] if not default_index.empty else 0  # fallback para 0 se não encontrar
+
     st.sidebar.markdown("<h3 style='font-size: 20px;'>Select Pendle Market</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
         # CSS para alterar a fonte de todos os selectbox
@@ -789,6 +796,7 @@ elif opcao == "Pendle APY Prediction":
         selected_label = st.selectbox(
             "Markets:",
             markets["label"].tolist(),
+            index=default_index,
             format_func=lambda x: x.upper()
         )    
         time_scale = st.selectbox(
