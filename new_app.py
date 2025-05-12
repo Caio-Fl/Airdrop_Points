@@ -851,13 +851,13 @@ elif opcao == "Pendle APY Prediction":
         base_apy_series = pd.Series(base_apy)
 
         # Calcular Q1, Q3 e IQR
-        Q1 = base_apy_series.quantile(0.1)
-        Q3 = base_apy_series.quantile(0.9)
+        Q1 = base_apy_series.quantile(0.2)
+        Q3 = base_apy_series.quantile(0.8)
         IQR = Q3 - Q1
 
         # Definir limites
-        lower_bound = Q1 - 1 * IQR
-        upper_bound = Q3 + 1 * IQR
+        lower_bound = Q1 - 1.2 * IQR
+        upper_bound = Q3 + 1.2 * IQR
 
         # Filtrar dados válidos
         mask = (base_apy_series >= lower_bound) & (base_apy_series <= upper_bound)
