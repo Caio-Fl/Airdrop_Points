@@ -42,8 +42,8 @@ def get_pendle_apy_data(selected_data,time_scale):
     from datetime import datetime, timezone
     import matplotlib.dates as mdates
     import numpy as np
-    from statsmodels.tsa.arima.model import ARIMA
-    from prophet import Prophet
+    #from statsmodels.tsa.arima.model import ARIMA
+    #from prophet import Prophet
     
     
     # Retorna todos os itens que correspondem ao nome
