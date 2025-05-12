@@ -415,6 +415,9 @@ elif opcao == "Farm with YT":
             <p>
             To view the full list of parameters for each protocol, double-click on <strong>"View Details"</strong>.
             </p>
+            <p>
+            To apply new Parameters to ROI Estimation, click on <strong>"Refresh YT"</strong>.
+            </p>
         </div>
         """,
         unsafe_allow_html=True
@@ -446,8 +449,11 @@ elif opcao == "Farm with YT":
             value="2025-07-30",   # valor padrão
         )
 
+    # Botão de atualizar
+    update_button = st.button("Refresh YT")
+
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds < 10 or not protocolos:
+    if update_button or not protocolos or elapsed_seconds < 10:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
