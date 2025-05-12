@@ -149,7 +149,7 @@ st.sidebar.markdown("<h3 style='font-size: 20px;'></h3>", unsafe_allow_html=True
 options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
             "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract"]
     
-opcao = st.sidebar.selectbox("", options)
+opcao = st.sidebar.selectbox("", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
@@ -447,7 +447,7 @@ elif opcao == "Farm with YT":
         )
 
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds > 100 or not protocolos:
+    if elapsed_seconds > 10 or not protocolos:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
