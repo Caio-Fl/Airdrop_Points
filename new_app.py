@@ -547,6 +547,7 @@ elif opcao == "Farm with YT":
             "Level": {
                 "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/lev.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
+                "pureLink": "https://app.level.money/farm?referralCode=pwlblh",
                 "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
                 "Grade": f"{Level_grade}",
                 "TVL": f"{Level_tvl} M",
@@ -576,6 +577,7 @@ elif opcao == "Farm with YT":
             "OpenEden": {
                 "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/open.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1529034875642478592/70m4xSFd_400x400.jpg",
+                "pureLink": "https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k",
                 "Link": "<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'  style='color:#1E90FF;'>More info</a> - <a href='https://app.pendle.finance/trade/points?chains=ethereum' target='_blank'>🔗 Pendle </a>",
                 "Grade": f"{Open_grade}",
                 "TVL": f"{Open_tvl} M",
@@ -605,6 +607,7 @@ elif opcao == "Farm with YT":
             "Fragmetric": {
                 "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/frag.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1887701999426412544/ok8QD_Gh_400x400.png",
+                "pureLink": "https://app.fragmetric.xyz/referral?ref=77XL68",
                 "Link": "<a href='https://app.fragmetric.xyz/referral?ref=77XL68' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Frag_grade}",
                 "TVL": f"{Frag_tvl} M",
@@ -637,6 +640,7 @@ elif opcao == "Farm with YT":
             "Kyros": {
                 "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/kyros.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1847426788252590080/-Tb-I1Yl_400x400.jpg",
+                "pureLink": "https://boost.kyros.fi/?ref=nq3orn",
                 "Link": "<a href='https://boost.kyros.fi/?ref=nq3orn' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Ky_grade}",
                 "TVL": f"{Ky_tvl} M",
@@ -701,9 +705,7 @@ elif opcao == "Farm with YT":
                 <h2>Details {p}</h2>
                     <p style="font-size:22px;">
                         <strong>Protocol:</strong> {p} – 
-                        <a href="{protocolos[p]['Link']}" target="_blank" style="color:#FFA500;">
-                            {protocolos[p]['Link']}
-                        </a>
+                        <a href= {protocolos[p]['pureLink']} target='_blank' style='color:#1E90FF;'>Visit Protocol</a>
                     </p>
                 <ul>
                     <li><strong>TVL:</strong> {protocolos[p]['TVL']}</li>
@@ -746,7 +748,14 @@ elif opcao == "Farm with YT":
             with cols[i % 4]:
                 col_left, col_center, col_right = st.columns([1, 2, 1])
                 with col_center:
-                    st.image(protocolos[p]['Imagem'], width=600) 
+                    st.markdown(
+                        f"""
+                        <div style="text-align: center;">
+                            <img src="{protocolos[p]['Logo']}" width="80" style="border-radius: 5%; border: 2px solid white; border-radius: 10px; margin-top: 5px; margin-bottom: 15px;">
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
                 st.markdown(f"""
                     <div style='text-align: center; font-size: 24px;'>
                         <p>TVL: {protocolos[p]['TVL']}</p>
@@ -758,9 +767,24 @@ elif opcao == "Farm with YT":
                         <p></p>
                     </div>
                 """, unsafe_allow_html=True)
-                if st.button(f"View Details", key=p):
-                    st.session_state.protocolo_selecionado = p
-            i += 1
+                # Coluna única para empilhar os botões verticalmente
+                button_col = st.columns([1])[0]
+                with button_col:
+                    st.markdown(
+                        f"""
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <a href="{protocolos[p]['pureLink']}" target="_blank">
+                                <button style='width: 75%; padding: 8px; font-size: 18px; background-color: #FFA500;'>Visit Protocol</button>
+                            </a>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                bcol1, bcol2, bcol3 = st.columns([1.6, 2, 1])
+                with bcol2:
+                    if st.button(f"View Details", key=p):
+                        st.session_state.protocolo_selecionado = p
+                    i += 1
 elif opcao == "Pendle APY Prediction":
     markets = get_pendle_markets()
     print(markets)
