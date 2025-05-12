@@ -5,7 +5,7 @@ import base64
 st.set_page_config(page_title="Bridge & Swap Airdrops", layout="wide")
 
 # Updated protocols data including Sonic and Hyperlane networks
-protocols = {
+protocols_bridge_swap = {
     "EVM": [
         {"name": "Relay", "site": "https://relaychain.xyz", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1889316674383282176/ulV41xZ7_400x400.jpg"},
         {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1889316674383282176/ulV41xZ7_400x400.jpg"},
@@ -130,15 +130,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='title-style'>🎉 Latest Bridge & Swap Airdrops</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='title-style'>🎉 Bridge & Swap Airdrops</h1>", unsafe_allow_html=True)
 
 # Network selection
-selected_network = st.selectbox("Select a network:", list(protocols.keys()), format_func=lambda x: x.upper())
+selected_network = st.selectbox("Select a network:", list(protocols_bridge_swap.keys()), format_func=lambda x: x.upper())
 
 # Render selected network section
 st.subheader(selected_network.upper())
 cols = st.columns(3)
-for idx, protocol in enumerate(protocols[selected_network]):
+for idx, protocol in enumerate(protocols_bridge_swap[selected_network]):
     with cols[idx % 3]:
         st.markdown(f"""
             <div class="card">
