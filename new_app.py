@@ -447,7 +447,7 @@ elif opcao == "Farm with YT":
         )
 
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds < 10 or not protocolos:
+    if elapsed_seconds > 300 or not protocolos:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
@@ -545,7 +545,7 @@ elif opcao == "Farm with YT":
 
         protocolos = {
             "Level": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/open.jpg",
+                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/Level.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
                 "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
                 "Grade": f"{Level_grade}",
