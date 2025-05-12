@@ -545,7 +545,7 @@ elif opcao == "Farm with YT":
 
         protocolos = {
             "Level": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/refs/heads/main/Level.jpg",
+                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/Level.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
                 "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
                 "Grade": f"{Level_grade}",
@@ -574,7 +574,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Level_ROI} %"      
             },
             "OpenEden": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/refs/heads/main/open.jpg",
+                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/open.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1529034875642478592/70m4xSFd_400x400.jpg",
                 "Link": "<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'  style='color:#1E90FF;'>More info</a> - <a href='https://app.pendle.finance/trade/points?chains=ethereum' target='_blank'>🔗 Pendle </a>",
                 "Grade": f"{Open_grade}",
@@ -603,7 +603,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Open_ROI} %"            
             },
             "Fragmetric": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/refs/heads/main/frag.jpg",
+                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/frag.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1887701999426412544/ok8QD_Gh_400x400.png",
                 "Link": "<a href='https://app.fragmetric.xyz/referral?ref=77XL68' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Frag_grade}",
@@ -635,7 +635,7 @@ elif opcao == "Farm with YT":
                 "Expected ROI": f"{Frag_ROI} %"          
             },
             "Kyros": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/refs/heads/main/kyros.jpg",
+                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/kyros.jpg",
                 "Logo": "https://pbs.twimg.com/profile_images/1847426788252590080/-Tb-I1Yl_400x400.jpg",
                 "Link": "<a href='https://boost.kyros.fi/?ref=nq3orn' target='_blank' style='color:#1E90FF;'>More info</a> - <a href='https://app.rate-x.io/referral?ref=H9GnKZON' target='_blank'>🔗 Rate-X </a>",
                 "Grade": f"{Ky_grade}",
