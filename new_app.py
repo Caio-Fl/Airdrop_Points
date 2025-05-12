@@ -757,10 +757,8 @@ elif opcao == "Farm with YT":
                         <p></p>
                     </div>
                 """, unsafe_allow_html=True)
-                bcol1, bcol2 = st.columns([2, 2.6])
-                with bcol2:
-                    if st.button(f"View Details", key=p):
-                        st.session_state.protocolo_selecionado = p
+                if st.button(f"View Details", key=p):
+                    st.session_state.protocolo_selecionado = p
             i += 1
 elif opcao == "Pendle APY Prediction":
     markets = get_pendle_markets()
