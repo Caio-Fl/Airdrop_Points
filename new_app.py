@@ -447,7 +447,7 @@ elif opcao == "Farm with YT":
         )
 
     # Verifica se já se passaram 120 segundos
-    if elapsed_seconds > 300 or not protocolos:
+    if elapsed_seconds < 10 or not protocolos:
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
