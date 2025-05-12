@@ -1178,7 +1178,7 @@ elif opcao == "Bridges & Swaps Protocols":
             </style>
         """, unsafe_allow_html=True)
         selected_network = st.selectbox(
-            "",
+            "Network:",
             list(protocols_bridge_swap.keys()),
             format_func=lambda x: x.upper()
         )
@@ -1293,7 +1293,7 @@ elif opcao == "Revoke Contract":
             </style>
         """, unsafe_allow_html=True)
         selected_network = st.selectbox(
-            "",
+            "Network:",
             list(protocols_revoke.keys()),
             format_func=lambda x: x.upper()
         )
