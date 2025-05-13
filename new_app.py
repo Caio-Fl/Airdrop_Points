@@ -15,6 +15,7 @@ from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
 from PIL import Image
+import requests
 import webbrowser
 import sqlite3
 import json
@@ -29,6 +30,72 @@ st.set_page_config(
     page_icon="🪂",
     layout="wide"
 )
+
+tokens = {
+    "bitcoin": {"name": "Bitcoin (BTC)", "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png"},
+    "ethereum": {"name": "Ethereum (ETH)", "icon": "https://cryptologos.cc/logos/ethereum-eth-logo.png"},
+    "solana": {"name": "Solana (SOL)", "icon": "https://cryptologos.cc/logos/solana-sol-logo.png"},
+    "binancecoin": {"name": "BNB (BNB)", "icon": "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"},
+    "aave": {"name": "Aave (AAVE)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+    "ripple": {"name": "XRP (XRP)", "icon": "https://cryptologos.cc/logos/xrp-xrp-logo.png"},
+    "sui": {"name": "Sui (SUI)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
+    "link": {"name": "Link (LINK)", "icon": "https://cryptologos.cc/logos/chainlink-link-logo.png"},
+    "ethena": {"name": "Ethena (ENA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+    "sonic-3": {"name": "Sonic (S)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+    "berachain-bera": {"name": "Berachain (BERA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+    "burr-governance-token": {"name": "Burr (BURR)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+}
+
+# Obter preços
+url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(tokens.keys())}&vs_currencies=usd"
+
+data = requests.get(url).json()
+
+# HTML e CSS do ticker
+html = """
+<style>
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    background-color: #111;
+    padding: 10px 0;
+}
+.ticker {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+}
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+.ticker-item {
+    display: inline-block;
+    margin: 0 30px;
+    color: white;
+    font-family: monospace;
+    font-size: 16px;
+}
+.ticker-item img {
+    vertical-align: middle;
+    height: 20px;
+    margin-right: 8px;
+}
+</style>
+<div class="ticker-container"><div class="ticker">
+"""
+
+# Preencher os dados
+
+for key, token in tokens.items():
+    price = data.get(key, {}).get("usd")
+    if price is not None:
+        html += f"&nbsp;&nbsp;&nbsp;&nbsp{token['name']} ${price:,.4f}&nbsp;&nbsp;&nbsp;&nbsp|"
+
+html += "  "
+
+# Renderização correta do HTML
+st.markdown(html, unsafe_allow_html=True)
 
 # Adicionando CSS para os botões de navegação
 st.markdown("""
@@ -147,7 +214,7 @@ st.sidebar.markdown("<h3 style='font-size: 20px;'></h3>", unsafe_allow_html=True
 # Define options for the sidebar
 
 options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
-            "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract"]
+            "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
     
 opcao = st.sidebar.selectbox("", options, index=1)
 st.markdown("\n\n")
@@ -274,7 +341,6 @@ elapsed_seconds = (now - st.session_state.start_time).total_seconds()
 # Carrega dados do BD
 try:
     protocolos = carregar_json()
-    print(protocolos)
 except:
     protocolos = {}
     print("No data in DB")
@@ -679,7 +745,6 @@ elif opcao == "Farm with YT":
         
     # --- Salvar automaticamente sem botão ---
     salvar_json(protocolos)
-    print(protocolos)
 
     # --- Estado de seleção ---
     if "protocolo_selecionado" not in st.session_state:
@@ -793,13 +858,11 @@ elif opcao == "Farm with YT":
                     i += 1
 elif opcao == "Pendle APY Prediction":
     markets = get_pendle_markets()
-    print(markets)
     names = markets["name"].tolist()
     exp = markets["expiry"].str.split('T').str[0].tolist()
 
     # Criar rótulos combinando nome + data
     markets["label"] = markets["name"] + " (Expires in: " + exp + ")"
-    print(markets)
     # Exibindo a lista de seleção múltipla
     #selected_names = st.multiselect("Escolha um ou mais mercados", options)
 
@@ -809,7 +872,7 @@ elif opcao == "Pendle APY Prediction":
     # Buscar índice do mercado default
     default_index = markets[markets["name"] == default_market_name].index
     default_index = int(default_index[0]) if not default_index.empty else 0  # fallback para 0 se não encontrar
-    print(default_index)
+
     st.sidebar.markdown("<h3 style='font-size: 20px;'>Select Pendle Market</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
         # CSS para alterar a fonte de todos os selectbox
@@ -843,7 +906,7 @@ elif opcao == "Pendle APY Prediction":
         st.markdown(f"<span style='font-size:22px'><strong>Selected Market:</strong> {label}</span>", unsafe_allow_html=True)
     else:
         st.markdown("Maket not Founded")
-    print(address)
+
     with st.spinner('Loading Pendle Data to Plot Implied APY Tendency...'):
         df_implied,implied_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address = get_pendle_apy_data(selected_row,time_scale)
 
@@ -1393,6 +1456,107 @@ elif opcao == "Revoke Contract":
         "<hr style='border: 2px double #342b44;'>",
         unsafe_allow_html=True
     )
+
+elif opcao == "Avoiding Scams":
+
+    st.markdown("""
+    <div style="font-size: 22px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
+    <b>With the rise of crypto airdrops, scams have become more widespread than ever.</b><br>
+    Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.<br>
+    Without careful verification, it’s easy to fall into traps set by scammers.<br>
+    They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <style>
+    html, body, [class*="css"]  {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 22px;
+        line-height: 1.6;
+        color: #222;
+    }
+    .app a {
+        color: #e91e63 !important; /* rosa forte */
+        text-decoration: none !important;
+    }
+    .app a:hover {
+        color: #2196f3 !important; /* azul no hover */
+        text-decoration: underline !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+    st.subheader("🚨 How to Avoid Crypto Airdrop Scams")
+
+    st.markdown("""
+    Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.
+    """)
+
+    st.subheader("🔒 1. Use a Dedicated Wallet for Airdrops")
+    st.markdown("""
+    - Create a **separate wallet** just for airdrop interactions. I highly recommend buying a Cold Wallet and create at least 3 accounts (by network), being one for Hold, other to interact with DeFi protocols and other to interact with free Airdrops like testnets, games, quests, etc.
+    - Never use your main wallet with valuable assets.
+    - If anything goes wrong, your main funds stay safe.
+    """)
+
+    st.subheader("🧠 2. Research Before You Click")
+    st.markdown("""
+    - Verify the project’s legitimacy through **official sites** and **trusted communities**.
+    - Avoid links from random X (Twitter) users or Telegram DMs.
+    - Look for audits, GitHub repos, and real backers.
+    """)
+
+    st.subheader("⚠️ 3. Beware of Fake Accounts and Bots")
+    st.markdown("""
+    - Many scam comments and impersonators exist under legit posts.
+    - Double-check usernames and links—**look for subtle typos**.
+    - **Never trust DMs** offering "airdrops" or "early access".
+    """)
+
+    st.subheader("🧾 4. Audit the Smart Contract or Wait")
+    st.markdown("""
+    - Don’t rush to sign random transactions.
+    - Use tools like **Etherscan**, **DeBank**, or **Rabby Wallet** to inspect them.
+    - If a project lacks transparency or an audit, think twice.
+    """)
+
+    st.subheader("🧼 5. Revoke Unused Permissions")
+    st.markdown("""
+    - Clean up your wallet permissions regularly with:
+    - [revoke.cash](https://revoke.cash)
+    - [Safe](https://app.safe.global)
+    - This reduces the chance of malicious token drains.
+    """)
+
+    st.subheader("🔐 6. Never Share Private Keys or Seed Phrases")
+    st.markdown("""
+    - **No legit team will ever ask** for your keys or phrase.
+    - Use **hardware wallets** like Ledger or Trezor for serious funds.
+    """)
+
+    st.subheader("🪪 7. Watch Out for 'Connect Wallet to Check Eligibility'")
+    st.markdown("""
+    - Don't connect your wallet to **random sites**.
+    - Always verify the domain and source.
+    - If in doubt, don’t click!
+    """)
+
+    st.subheader("🧾 8. Use Reputable Airdrop Aggregators")
+    st.markdown("""
+    - Use vetted aggregators to spot real airdrops:
+    - [Earnifi](https://earni.fi/)
+    - [DeFiLlama Airdrops](https://defillama.com/airdrops)
+    - Still verify manually before connecting wallets or claiming anything.
+    """)
+
+    st.markdown("""
+    <div style="background-color: #FFA500; padding: 16px; border-radius: 8px; border-left: 6px solid #FFA500;">
+        <strong>Stay tuned, stay safe, and enjoy the airdrop hunt!</strong>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 # --- Footer ---
 st.markdown("""
     <style>
