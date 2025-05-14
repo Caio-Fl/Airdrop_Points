@@ -193,7 +193,7 @@ st.markdown("""
 
 <div class="marquee-container">
   <div class="marquee-text">
-    🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='claim.0gfoundation.ai/unlock target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>
+    🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='claim.0gfoundation.ai/unlock' target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>
   </div>
 </div>
 """, unsafe_allow_html=True)
