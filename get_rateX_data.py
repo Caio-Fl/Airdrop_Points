@@ -11,10 +11,10 @@ def get_rateX_data(protocol):
             "Accept": "*/*"
     }
     if protocol == "kyros":
-        qS = 15 #kySOL_querySymbol = 15
+        qS = 16 #kySOL_querySymbol = 15
         qT = 22 #kySOL_queryTrade = 20
     else:
-        qS = 21 #ragSOL_querySymbol = 21
+        qS = 22 #ragSOL_querySymbol = 21
         qT = 23 #fragSOL_queryTrade = 21
     payload = {"serverName": "AdminSvr", "method": "querySymbol", "content": {"cid": "4c00d4ca-b0e8-ebc8-da27-0ac0120b470a"}}#{"serverName":"TradeFRAGSOLSvr","method":"dc.trade.dprice","content":{"cid":"e59573e8-3c48-163d-4a11-902b566b0e20"}}
     url = f"https://api.rate-x.io/"
