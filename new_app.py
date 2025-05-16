@@ -193,7 +193,7 @@ st.markdown("""
 
 <div class="marquee-container">
   <div class="marquee-text">
-    🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='https://claim.0gfoundation.ai/unlock' target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>
+    🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='https://claim.0gfoundation.ai/unlock' target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>  / <a href='https://claim.streamflow.finance/stabble/' target='_blank' style='color:#342b44;'>Checker Stabble Airdrop Available!</a>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -908,7 +908,7 @@ elif opcao == "Pendle APY Prediction":
         st.markdown("Maket not Founded")
 
     with st.spinner('Loading Pendle Data to Plot Implied APY Tendency...'):
-        df_implied,implied_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address = get_pendle_apy_data(selected_row,time_scale)
+        df_implied,implied_apy,underlying_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address = get_pendle_apy_data(selected_row,time_scale)
 
         # Supondo que base_apy seja uma lista ou Series
         base_apy_series = pd.Series(base_apy)
