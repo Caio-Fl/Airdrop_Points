@@ -1098,15 +1098,15 @@ elif opcao == "Depin Airdrops":
                         color: white;
                         margin-bottom: 5px;
                     ">
-                        <p><strong>📌 Priority:</strong> {protocol['priority']}</p>
-                        <p><strong>💰 Funding:</strong> {protocol['funding']}</p>
-                        <p><strong>🚀 Application:</strong> {protocol['application']}</p>
-                        <p><strong>📊 Status:</strong> {protocol['status']}</p>
-                        <p><strong>📣 Social:</strong> 
+                        <p style="font-size: 20px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
+                        <p style="font-size: 20px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
+                        <p style="font-size: 20px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
+                        <p style="font-size: 20px;"><strong>📊 Status:</strong> {protocol['status']}</p>
+                        <p style="font-size: 20px;"><strong>📣 Social:</strong> 
                             <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
                             <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
                         </p>
-                        <p><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
+                        <p style="font-size: 20px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
                 </div>
             """, unsafe_allow_html=True)
 
