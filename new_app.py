@@ -1036,7 +1036,84 @@ elif opcao == "Latest Airdrops":
     st.info("🚧 Coming Soon: Protocols with Airdrop Potential.")
 
 elif opcao == "Depin Airdrops":
-    st.info("🚧 Coming Soon: DePIN Protocols with Airdrops.")
+
+    protocols_depin = [
+        {"name":"Solix","priority":"S","funding":"$29.5M","site":"https://dashboard.solixdepin.net/sign-up?ref=d8VeEkEy","social":{"twitter":"https://x.com/solixdepin","discord":"https://discord.com/invite/solixdepin"},"status":"Active Farming","application":"Decentralized Access Gateways", "image":"https://pbs.twimg.com/profile_images/1910993189344796672/UkfLqUAO_400x400.jpg"},
+        {"name":"Monad Score","priority":"S","funding":"Not disclosed","site":"https://dashboard.monadscore.xyz/signup/r/cWiIkvLG","social":{"twitter":"https://x.com/monadscores_xyz","discord":"https://discord.com/invite/rYGaM87RZV"},"status":"Active Farming","application":"Decentralized Reputation", "image":"https://pbs.twimg.com/profile_images/1898905479998287873/KqiFFod6_400x400.jpg"},
+        {"name":"OpenLedger","priority":"S","funding":"Not disclosed","site":"https://testnet.openledger.xyz/?referral_code=fdhgyvakoq","social":{"twitter":"https://x.com/OpenledgerHQ","discord":"https://discord.gg/wfeSEqH8"},"status":"Active Farming","application":"AI Blockchain", "image":"https://pbs.twimg.com/profile_images/1876981396134416384/lYzcJz9J_400x400.jpg"}, 
+        {"name":"Taker","priority":"A","funding":"$3M","site":"https://earn.taker.xyz?start=BXBDE7KR","social":{"twitter":"https://x.com/TakerProtocol","discord":"https://discord.gg/BkJy83ZT"},"status":"Active Farming","application":"Data Monetization Infra", "image":"https://pbs.twimg.com/profile_images/1905084157732257792/qIzxjm1A_400x400.jpg"},
+        {"name":"Parasail","priority":"A","funding":"$4M","site":"https://www.parasail.network/season?refer=MHgzRTYyMTAxMkNiNjI3MmIwN2UwNTVhYTYyRjNBRTEyQzJBZGNDOTZG","social":{"twitter":"https://x.com/parasailnetwork","discord":"https://discord.com/invite/parasail"},"status":"Active Farming","application":"Private AI at the Edge", "image":"https://pbs.twimg.com/profile_images/1788203111720570880/RqVxPfmL_400x400.jpg"},
+        {"name":"Rynus.io","priority":"S","funding":"Not disclosed","site":"https://cloud.rynus.io/login?affiliateId=BFD9FF25EC3B","social":{"twitter":"https://x.com/Rynus_io","discord":"https://discord.com/invite/Y3S8U8myeA"},"status":"Active Farming","application":"Distributed Computing", "image":"https://pbs.twimg.com/profile_images/1843848451177754629/JG9s95wv_400x400.jpg"},
+        {"name":"Public AI","priority":"A","funding":"$2M","site":"https://beta.publicai.io/?r=eBoOF","social":{"twitter":"https://x.com/PublicAIData","discord":"https://discord.gg/JRaJFdmx"},"status":"Active Farming","application":"Decentralized AI Infrastructure", "image":"https://pbs.twimg.com/profile_images/1910358838764802048/3Mk5g06M_400x400.jpg"},
+        {"name":"Uplink","priority":"S","funding":"$10M","site":"https://explorer.uplink.xyz/register?referralCode=XK7aY2","social":{"twitter":"https://x.com/uplink_xyz","discord":"https://discord.com/invite/r5d9DCT2e2"},"status":"Active Farming","application":"Decentralized Connectivity", "image":"https://pbs.twimg.com/profile_images/1897064849689227264/iOge47Am_400x400.jpg"},
+        {"name":"Kaisar","priority":"A","funding":"$1M","site":"https://zero.kaisar.io/register?ref=GoGPgT669","social":{"twitter":"https://x.com/KaisarNetwork","discord":"https://discord.gg/fKHUPa72"},"status":"Active Farming","application":"Secure Connectivity & Identity", "image":"https://pbs.twimg.com/profile_images/1776202066282926080/5ppDFq9k_400x400.jpg"},
+        {"name":"NodePay","priority":"S","funding":"$7M","site":"https://app.nodepay.ai/register?ref=0kKEtv5Z8Ae3yMv","social":{"twitter":"https://x.com/nodepay_ai","discord":"https://discord.gg/nodepay"},"status":"Season 3","application":"Sensor & Edge Devices","image": "https://pbs.twimg.com/profile_images/1785448882195013632/NlAWjldQ_400x400.jpg"},
+        {"name":"Dawn","priority":"S","funding":"$18M","site":"(Code: dker3uap) https://chromewebstore.google.com/detail/dawn-validator-chrome-ext/fpdkjdnhkakefebpekbdhillbhonfjjp?authuser=0&hl=en","social":{"twitter":"https://x.com/dawninternet","discord":"https://discord.gg/jhPkKCZq"},"status":"Active Farming","application":"Data Storage / Web Browsing Data","image": "https://pbs.twimg.com/profile_images/1811363474284417025/3yGX3CjY_400x400.jpg"},
+        {"name":"Grass","priority":"S","funding":"$4.5M","site":"https://app.getgrass.io/register?referralCode=XEQ1thjGfHk0N8O","social":{"twitter":"https://x.com/grass","discord":"https://discord.gg/getgrass"},"status":"Season 2","application":"Data Monetization (Web)", "image":"https://pbs.twimg.com/profile_images/1836126251007852545/wILJU3d6_400x400.jpg"},
+        {"name":"NodeGoAI","priority":"S","funding":"$8M","site":"https://app.nodego.ai/r/NODE1E320E1A79AD","social":{"twitter":"https://twitter.com/NodeGoAI","discord":"https://discord.gg/nodegoai"},"status":"Active Farming","application":"Sensor & AI Edge Devices", "image":"https://pbs.twimg.com/profile_images/1867600619093032961/35Gmx6dh_400x400.jpg"},
+        {"name":"3DOS","priority":"S","funding":"Not disclosed","site":"https://dashboard.3dos.io/register?ref_code=894a3e","social":{"twitter":"https://x.com/3DOSNetwork","discord":"https://discord.gg/3kE2yUxa"},"status":"Active Farming","application":"Distributed Manufacturing / IoT", "image":"https://pbs.twimg.com/profile_images/1616254196377952257/yUxZSRAX_400x400.jpg"},
+        {"name":"Gradient","priority":"S","funding":"Not disclosed","site":"https://app.gradient.network/signup?code=VFKHU1","social":{"twitter":"https://x.com/Gradient_HQ","discord":"https://discord.com/invite/2MthdzVJX9"},"status":"Active Farming","application":"Edge Devices / Sensors", "image":"https://pbs.twimg.com/profile_images/1873672943965990913/nlVpEV72_400x400.jpg"},
+        {"name":"Bless","priority":"A","funding":"$8M","site":"https://bless.network/dashboard?ref=2SPZLM","social":{"twitter":"https://x.com/theblessnetwork","discord":"https://discord.gg/blessnetwork"},"status":"Active Farming","application":"Edge Devices / Sensor Data", "image":"https://pbs.twimg.com/profile_images/1858647923212361728/GYk64f8U_400x400.jpg"},
+        {"name":"Multisync","priority":"A","funding":"$2.2M","site":"https://multisynq.io/auth?referral=487a7ae52ccc7827","social":{"twitter":"https://x.com/multisynq","discord":"https://discord.com/invite/6Bvt8vx8NA"},"status":"Connection Only","application":"Device Synchronization", "image":"https://pbs.twimg.com/profile_images/1801808935286095873/CWDq9WfZ_400x400.jpg"},
+        {"name":"GRID","priority":"A","funding":"$2.2M","site":"https://sso.getgrid.ai/registration?referral_code=fc126e7","social":{"twitter":"","discord":""},"status":"Connection Only","application":"AI training", "image":""},
+        {"name":"MyGate","priority":"A","funding":"Not disclosed","site":"https://app.mygate.network/login?code=hrolNX","social":{"twitter":"https://x.com/mygatenetwork","discord":""},"status":"Active Farming","application":"Decentralized Access Gateways", "image":"https://img.cryptorank.io/coins/my_gate_network1736259877598.png"},
+        {"name":"Stork","priority":"A","funding":"$4M","site":"https://chromewebstore.google.com/detail/stork-verify/knnliglhgkmlblppdejchidfihjnockl","social":{"twitter":"https://x.com/StorkOracle","discord":"https://discord.com/invite/storkoracle"},"status":"Active Farming","application":"Geolocation Data Distribution", "image":"https://pbs.twimg.com/profile_images/1899474008195637248/-nVBNuKn_400x400.jpg"},
+        {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity & Data Sharing", "image":"https://pbs.twimg.com/profile_images/1847181726973415424/8mw2mGXQ_400x400.png"},
+        {"name":"BlockMesh","priority":"B","funding":"Not disclosed","site":"https://app.blockmesh.xyz/register?invite_code=925336ba-de36-4e8e-a8ab-ce645919ce27","social":{"twitter":"https://x.com/blockmesh_xyz","discord":"https://discord.com/invite/pwZWzCtGx4"},"status":"Active Farming","application":"Decentralized Communication", "image":"https://pbs.twimg.com/profile_images/1820702766026645504/mL-smILQ_400x400.jpg"},
+        {"name":"Distribute AI","priority":"B","funding":"Not disclosed","site":"https://r.oasis.ai/4c858669677a0fe6","social":{"twitter":"https://x.com/distributeai","discord":"https://discord.gg/distributeai"},"status":"Active Farming","application":"Data Privacy & Storage for AI", "image":"https://pbs.twimg.com/profile_images/1866227189122789376/Ic2w3fhw_400x400.jpg"},
+        {"name":"GaeaAI","priority":"B","funding":"Not disclosed","site":"https://app.aigaea.net/register?ref=gaSC6trQ0WpqzZ","social":{"twitter":"https://x.com/aigaealabs","discord":"https://discord.com/invite/aigaea"},"status":"Active Farming","application":"AI Training & Data Collection", "image":"https://pbs.twimg.com/profile_images/1904422472902115328/OQd87AE6_400x400.png"},
+        {"name":"Teneo","priority":"B","funding":"Not disclosed","site":"(Code: uigsb) https://bit.ly/teneo-community-node","social":{"twitter":"https://x.com/teneo_protocol","discord":"https://discord.gg/teneoprotocol"},"status":"Active Farming","application":"DePIN Points + Data Contribution", "image":"https://pbs.twimg.com/profile_images/1797649020564754432/0Oav1zjU_400x400.jpg"},
+        {"name":"Depinned","priority":"C","funding":"Not disclosed","site":"(Code: DES9xJKEsKLfo2) https://chromewebstore.google.com/detail/depined/pjlappmodaidbdjhmhifbnnmmkkicjoc?hl=pt-BR","social":{"twitter":"https://x.com/DePINed_org","discord":"https://discord.com/invite/74dEq5Et"},"status":"Active Farming","application":"Unclear / Browser Plugin", "image":"https://pbs.twimg.com/profile_images/1871083685732061184/GklrQE2V_400x400.jpg"},
+        {"name":"Functor","priority":"C","funding":"Not disclosed","site":"https://node.securitylabs.xyz/?from=extension&type=signin&referralCode=cm4nihl58l8bto81b7ovj6x9y","social":{"twitter":"https://x.com/FunctorNetwork","discord":""},"status":"Active Farming","application":"Decentralized Security", "image":"https://pbs.twimg.com/profile_images/1818718538070179840/qNOTiYtH_400x400.jpg"},
+        {"name":"Kleo Network","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/kleo-network/jimpblheogbjfgajkccdoehjfadmimoo?refAddress=0xb905B5F5869F6F6b6FC3C92950ec5bE210585f98","social":{"twitter":"","discord":""},"status":"Active Farming","application":"Private Storage Network", "image":""},
+    ]
+    
+    cols = st.columns(4)
+    for idx, protocol in enumerate(protocols_depin):
+        with cols[idx % 4]:
+            st.markdown(
+                f"""
+                <div style="
+                    border: 3px solid white;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background-color: #342b44;
+                    color: white;
+                    margin-bottom: 5px;
+                    margin-top: 20px;
+                ">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                        <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
+                        <h4 style="margin: 0;color: #FFA500">{protocol['name']}</h4>
+                    </div>
+                """,
+                unsafe_allow_html=True
+            )
+            st.markdown(f"""
+                <div style="
+                        border: 2px solid white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        background-color: #376a94;
+                        color: white;
+                        margin-bottom: 5px;
+                    ">
+                        <p><strong>📌 Priority:</strong> {protocol['priority']}</p>
+                        <p><strong>💰 Funding:</strong> {protocol['funding']}</p>
+                        <p><strong>🚀 Application:</strong> {protocol['application']}</p>
+                        <p><strong>📊 Status:</strong> {protocol['status']}</p>
+                        <p><strong>📣 Social:</strong> 
+                            <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
+                            <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
+                        </p>
+                        <p><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit</a></p>
+                </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
 
 elif opcao == "Comparative YT Table":
 
