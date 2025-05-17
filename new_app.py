@@ -1106,7 +1106,7 @@ elif opcao == "Depin Airdrops":
                             <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
                             <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
                         </p>
-                        <p><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit</a></p>
+                        <p><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
                 </div>
             """, unsafe_allow_html=True)
 
