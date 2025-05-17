@@ -2,6 +2,7 @@ def get_pendle_markets():
     import requests
     import json
     import pandas as pd
+    import statistics
 
     url = f"https://api-v2.pendle.finance/core/v1/1/markets/active"
     response = requests.get(url)
@@ -84,6 +85,7 @@ def get_pendle_apy_data(selected_data,time_scale):
     # Convert strings para floats
     base_apy = [float(x) * 100 for x in historical_data['baseApy']]
     implied_apy = [float(x) * 100 for x in historical_data['impliedApy']]
+    underlying_apy = [float(x) * 100 for x in historical_data['underlyingApy']]
     tvl = [float(x) for x in historical_data['tvl']]
     tvl_in_k = [float(value) / 1000000 for value in tvl]
 
@@ -166,5 +168,5 @@ def get_pendle_apy_data(selected_data,time_scale):
     #    'forecast_ap': forecast.values
     #})
 
-    return(df_implied,implied_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address)
+    return(df_implied,implied_apy,underlying_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address)
 
