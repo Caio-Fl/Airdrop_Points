@@ -1166,13 +1166,14 @@ elif opcao == "Pendle APY Prediction":
         time.sleep(3)
         IA_2 = mistral_AI(question_2,language,model,personality)
         IA_2 = IA_2['content']
-        
-        print(' ',IA_1, '\n',IA_2)
         IA = [IA_1, IA_2]
         #IA = lang_IA(questions,criteria)
 
         if isinstance(IA, list):
-            st.markdown("IA Analysis:") 
+            st.markdown(
+                "<h2 style='font-size:20px; color:#333;'>IA Analysis:</h2>",
+                unsafe_allow_html=True
+            )
             for resposta in IA:
                 st.markdown(
                     f"<div style='padding: 15px; border-radius: 10px; background-color: #342b44; font-size: 18px;'>{resposta}</div>",
