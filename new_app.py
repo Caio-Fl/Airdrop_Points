@@ -14,7 +14,7 @@ from get_leader_kyros_function import get_leader_kyros_function
 from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
-from lang_IA import lang_IA
+
 from PIL import Image
 import requests
 import webbrowser
@@ -24,7 +24,6 @@ from streamlit_option_menu import option_menu
 import statistics
 from mistralai import Mistral
 from dotenv import load_dotenv
-from mistralai import Mistral
 from mistralai.models import UserMessage
 from mistralai.models import File
 load_dotenv("apikey.env")  # Load .env file
