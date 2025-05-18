@@ -14,6 +14,7 @@ from get_leader_kyros_function import get_leader_kyros_function
 from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
+from lang_IA import lang_IA
 from PIL import Image
 import requests
 import webbrowser
@@ -192,7 +193,7 @@ st.markdown("""
 </style>
 
 <div class="marquee-container">
-  <div class="marquee-text">
+  <div class="marquee-text" style=m'argin-bottom: 10px;'>
     🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='https://claim.0gfoundation.ai/unlock' target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>  / <a href='https://claim.streamflow.finance/stabble/' target='_blank' style='color:#342b44;'>Checker Stabble Airdrop Available!</a>
   </div>
 </div>
@@ -202,21 +203,47 @@ st.markdown("""
 st.markdown('<div class="header"> Airdrops Monitor </div>', unsafe_allow_html=True)
 
 st.markdown(
-    "<hr style='border: 2px double #342b44;'>",
+    "<hr style='border: 2px double #342b44;'font-size: 18px;''>",
     unsafe_allow_html=True
 )
 # --- Sidebar ---
 st.sidebar.title("Airdrops Monitor")
 st.sidebar.markdown("---")
 st.sidebar.title("Menu")
-st.sidebar.markdown("<h3 style='font-size: 20px;'></h3>", unsafe_allow_html=True)
+st.sidebar.markdown("<h3 style='font-size: 18px;'></h3>", unsafe_allow_html=True)
 
 # Define options for the sidebar
+
+st.markdown("""
+    <style>
+    /* Aumenta espaçamento entre as opções do radio */
+    [data-testid="stSidebar"] .stRadio > div {
+        gap: 5px;
+    }
+
+    /* Aumenta altura e fonte das opções */
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label {
+        font-size: 16px;
+        padding: 12px 6px;
+        border-radius: 6px;
+        background-color: #b18d7e33;
+        transition: background-color 0.2s;
+    }
+
+    /* Destaque da opção selecionada */
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label[data-selected="true"] {
+        background-color: #b18d7e;
+        color: white;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
             "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
     
-opcao = st.sidebar.selectbox("", options, index=1)
+#opcao = st.sidebar.selectbox("", options, index=1)
+opcao = st.sidebar.radio("Escolha uma opção:", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
@@ -350,7 +377,7 @@ st.markdown("""
     <style>
     /* Altera a fonte de toda a sidebar */
     section[data-testid="stSidebar"] * {
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -857,12 +884,26 @@ elif opcao == "Farm with YT":
                         st.session_state.protocolo_selecionado = p
                     i += 1
 elif opcao == "Pendle APY Prediction":
-    markets = get_pendle_markets()
-    names = markets["name"].tolist()
-    exp = markets["expiry"].str.split('T').str[0].tolist()
+    #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
+    ids = [1, 56, 146, 5000, 8453, 42161, 80094, 10]
+    nets = ["Ethereum", "BNB Chain", "Sonic Labs", "Mantle", "Base", "Arbitrum", "Berachain", "Optimism"]
 
-    # Criar rótulos combinando nome + data
-    markets["label"] = markets["name"] + " (Expires in: " + exp + ")"
+    all_markets_list = []
+
+    for i, id in enumerate(ids):
+        markets = get_pendle_markets(id)
+        if not markets.empty:
+            net = nets[i]
+            markets = markets.copy()
+            markets['expiry_date'] = markets["expiry"].str.split('T').str[0]
+            markets['net'] = net
+            markets["label"] = markets["name"] + " (Expires in: " + markets['expiry_date'] + ") " + net
+            all_markets_list.append(markets)
+
+    # Concatenar todos os DataFrames em um só
+    markets = pd.concat(all_markets_list, ignore_index=True)
+
+    print(markets[['name', 'expiry_date', 'net', 'label']])
     # Exibindo a lista de seleção múltipla
     #selected_names = st.multiselect("Escolha um ou mais mercados", options)
 
@@ -898,6 +939,9 @@ elif opcao == "Pendle APY Prediction":
 
     # Pega o mercado selecionado com base no label
     selected_row = markets[markets["label"] == selected_label].iloc[0]
+    net_name = markets.loc[markets["label"] == selected_label, "net"].iloc[0]
+    print(net_name)
+    id = ids[nets.index(net_name)]
     # Pegando o address
     if not selected_row.empty:
         address = selected_row["address"]
@@ -908,7 +952,7 @@ elif opcao == "Pendle APY Prediction":
         st.markdown("Maket not Founded")
 
     with st.spinner('Loading Pendle Data to Plot Implied APY Tendency...'):
-        df_implied,implied_apy,underlying_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address = get_pendle_apy_data(selected_row,time_scale)
+        df_implied,implied_apy,underlying_apy,base_apy,tvl_in_k,trend_line,upper_line,lower_line,trend_line_extended,upper_line_extended,lower_line_extended,dates,extended_dates,expiry_date,address = get_pendle_apy_data(selected_row,time_scale,id)
 
         # Supondo que base_apy seja uma lista ou Series
         base_apy_series = pd.Series(base_apy)
@@ -926,6 +970,38 @@ elif opcao == "Pendle APY Prediction":
         mask = (base_apy_series >= lower_bound) & (base_apy_series <= upper_bound)
         filtered_dates = [d for d, keep in zip(dates, mask) if keep]
         filtered_base_apy = base_apy_series[mask].tolist()
+
+        # IA anwser
+        criteria = criteria = """You are an investor learn the following Criteria:An "Actual Implied APY"  next to "Maximum Historical APY" can be an excellent moment to sell the Yield Token if you already hold the token; An "Actual Implied APY"  next to "Minimum Historical APY" can be an excellent moment to buy the Yield Token; An "Actual Implied APY"  next or higher than "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; An "Actual Implied APY"  next or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; An "Actual Implied APY"  very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; An "Actual Implied APY percentual in relation of Range" next or higher than 100 indicates na great moment to sell the Yield Tokenif you already hold the token; An "Actual Implied APY percentual in relation of Range" next to 0 or a little negative indicates na great moment to buy the Yield Token; An "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; If "Days to expiry" is lower than 20, this implies in a high risk to try trade it. An "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. The YT multiplier factor indicates the multiplication factor over the invested capital and the underlying APY gives the yield return based in (YT Multiplier x Invested Capital x Actual Underlying APY/100 x Days to expiry/365), so higher YT miltiplier means that you can receire more yield and farm with higher capital the protocol of token, but if underlying APY is zero you will just farm points in protocol airdrop. YT ROI for hold token up to expiry is the return at maturity o YT token, higher YT ROI means a smaller loss at maturity.
+        """
+        description = f"""
+        Implied APY Data of {label}:
+        Actual Implied APY = {implied_apy[-1]}
+        Maximum Historical APY = {max(implied_apy)}
+        Minimum Historical APY = {min(implied_apy)}
+        Actual Best Sell point of Implied APY = {upper_line[-1]}
+        Actual Mean Implied APY = {trend_line[-1]}
+        Actual Best Buy point of Implied APY = {lower_line[-1]}
+        Mean Implied APY percentual in relation of Range = {trend_perc}
+        Actual Implied APY percentual in relation of Range = {actual_perc}
+        Time to expiry and YT value goes to zero = {expiry_date}
+        Days to expiry = {delta}
+        Actual Underlying APY =  {underlying_apy[-1]}
+        Mean Underlying APY = {statistics.mean(underlying_apy)}
+        Maximum Underlying APY Historical = {max(underlying_apy)}
+        Minimum Underlying APY Historical = {min(underlying_apy)}
+   
+        Actual Implied APY history (1 sample by hour) = [{implied_apy[(len(implied_apy)-50):-1]}]
+        """
+    
+        question = "Evaluate the following data, without mention the criteria. Also verify if the Actual Implied APY history (1 sample by hour) falls more than 20 percent in last 48 h: "
+        IA = lang_IA(criteria,question)
+
+        st.markdown(f"""
+        <div style='padding: 15px; border-radius: 10px; background-color: #f0f2f6; font-size: 18px;'>
+            {IA}
+        </div>
+        """, unsafe_allow_html=True)
 
         # Criar figura
         fig = go.Figure()
@@ -1537,7 +1613,7 @@ elif opcao == "Revoke Contract":
 elif opcao == "Avoiding Scams":
 
     st.markdown("""
-    <div style="font-size: 22px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
+    <div style="font-size: 20px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
     <b>With the rise of crypto airdrops, scams have become more widespread than ever.</b><br>
     Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.<br>
     Without careful verification, it’s easy to fall into traps set by scammers.<br>
@@ -1545,24 +1621,7 @@ elif opcao == "Avoiding Scams":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <style>
-    html, body, [class*="css"]  {
-        font-family: 'Segoe UI', sans-serif;
-        font-size: 22px;
-        line-height: 1.6;
-        color: #222;
-    }
-    .app a {
-        color: #e91e63 !important; /* rosa forte */
-        text-decoration: none !important;
-    }
-    .app a:hover {
-        color: #2196f3 !important; /* azul no hover */
-        text-decoration: underline !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+
 
     st.subheader("🚨 How to Avoid Crypto Airdrop Scams")
 

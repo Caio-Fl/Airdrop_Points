@@ -1,14 +1,15 @@
-def get_pendle_markets():
+def get_pendle_markets(id):
     import requests
     import json
     import pandas as pd
     import statistics
 
-    url = f"https://api-v2.pendle.finance/core/v1/1/markets/active"
+    url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/active"
     response = requests.get(url)
     data = json.loads(response.text)
 
     rows = []
+    df = pd.DataFrame()
     for market in data["markets"]:
         details = market["details"]
         row = {
@@ -34,7 +35,7 @@ def get_pendle_markets():
 
     return df
     
-def get_pendle_apy_data(selected_data,time_scale):
+def get_pendle_apy_data(selected_data,time_scale,id):
     # Importar Bibliotecas Python
     import requests
     import json
@@ -46,7 +47,7 @@ def get_pendle_apy_data(selected_data,time_scale):
     #from statsmodels.tsa.arima.model import ARIMA
     #from prophet import Prophet
     
-    
+    #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
     # Retorna todos os itens que correspondem ao nome
     def get_matches_by_name(df, name):
         return df[df['name'].str.lower() == name.lower()]
@@ -75,7 +76,7 @@ def get_pendle_apy_data(selected_data,time_scale):
     address = selected_data["address"]
     expiry = selected_data["expiry"]
     expiry = expiry.split('T')[0]
-    url = f"https://api-v2.pendle.finance/core/v1/1/markets/{address}/historical-data?time_frame={time_scale}"
+    url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{address}/historical-data?time_frame={time_scale}"
     response = requests.get(url)
     historical_data = json.loads(response.text)
 
@@ -103,8 +104,8 @@ def get_pendle_apy_data(selected_data,time_scale):
     x = np.arange(len(df_implied))  # dias como sequência de inteiros
     y = df_implied['implied_apy'].values
 
-    Q1 = np.percentile(y, 25)
-    Q3 = np.percentile(y, 75)
+    Q1 = np.percentile(y, 20)
+    Q3 = np.percentile(y, 80)
     IQR = Q3 - Q1
     mask = (y >= Q1 - 1 * IQR) & (y <= Q3 + 1 * IQR)
 
