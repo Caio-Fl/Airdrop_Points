@@ -39,7 +39,7 @@ def mistral_AI(question,language,model,personality):
     import os
     from dotenv import load_dotenv
     from mistralai import Mistral
-
+    max_retries = 5
     load_dotenv("apikey.env")  # Load .env file
     api_key = os.getenv("MISTRAL_API_KEY")
 
@@ -59,32 +59,38 @@ def mistral_AI(question,language,model,personality):
             If "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. 
             If "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. 
             """
-    #client = MistralClient(api_key=api_key)
-    client = Mistral(api_key=api_key)
-    if language == "ingles":
-        inicial = " "
-    else:
-        inicial = "Você interpreta os dados fornecidos para identificar as melhores oportunidades: \n"
+    for attempt in range(max_retries):
+        try:
+            client = Mistral(api_key=api_key)
+            if language == "ingles":
+                inicial = " "
+            else:
+                inicial = "Você interpreta os dados fornecidos para identificar as melhores oportunidades: \n"
 
-    chat_response = client.chat.complete(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": criteria,
-            }, 
-            {
-                "role": "user", 
-                "content": inicial+question
-            }, 
-            #UserMessage(content= "I'm fine, i trust you're too?")
-        ],
-    )
-    if chat_response.choices[0].message.content is not None:
-        res = {"content" : chat_response.choices[0].message.content}
-    else:
-        res = {"content" : ''}
-    return res
+            chat_response = client.chat.complete(
+                model=model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": criteria,
+                    }, 
+                    {
+                        "role": "user", 
+                        "content": inicial+question
+                    }, 
+                    #UserMessage(content= "I'm fine, i trust you're too?")
+                ],
+            )
+            if chat_response.choices[0].message.content is not None:
+                res = {"content" : chat_response.choices[0].message.content}
+            else:
+                res = {"content" : ''}
+            return res
+        except Exception as e:
+            st.warning(f"Tentativa {attempt+1}/5 falhou: {e}")
+            time.sleep(5)
+    st.error("Erro: todas as tentativas de chamada à Mistral falharam.")
+    return {"content": "Erro ao tentar acessar a IA Mistral."}
 
 
 # --- Configurações da Página ---
