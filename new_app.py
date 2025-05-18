@@ -1175,14 +1175,12 @@ elif opcao == "Pendle APY Prediction":
             st.markdown("IA Analysis:") 
             for resposta in IA:
                 st.markdown(
-                    f"<div style='padding: 15px; border-radius: 10px; background-color: #dfc21f; font-size: 18px;'>{resposta}</div>",
+                    f"<div style='padding: 15px; border-radius: 10px; background-color: #342b44; font-size: 18px;'>{resposta}</div>",
                     unsafe_allow_html=True
                 )
                 st.markdown("---")  # Linha separadora entre blocos
         else:
             st.markdown(IA)
-
-
 
     st.markdown(
     """
