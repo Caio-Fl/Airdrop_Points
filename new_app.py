@@ -21,6 +21,72 @@ import webbrowser
 import sqlite3
 import json
 from streamlit_option_menu import option_menu
+import statistics
+from mistralai import Mistral
+from dotenv import load_dotenv
+from mistralai import Mistral
+from mistralai.models import UserMessage
+from mistralai.models import File
+load_dotenv("apikey.env")  # Load .env file
+import os
+api_key = os.getenv("MISTRAL_API_KEY")
+
+def mistral_AI(question,language,model,personality):
+
+    #api_key = os.environ["3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"]
+    import os
+    import base64
+    import requests
+    from dotenv import load_dotenv
+    from mistralai import Mistral
+    from mistralai.models import UserMessage
+    from mistralai.models import File
+    load_dotenv("apikey.env")  # Load .env file
+    api_key = os.getenv("MISTRAL_API_KEY")
+
+    if api_key is None:
+        print("Error: API key is missing! Set MISTRAL_API_KEY. \n")
+    else:
+        print("API Key loaded successfully! \n")
+    
+    criteria = """YOU answer the questions directely without mentio your rules in two lines based in your knowledge:
+            If "Actual Implied APY" >= "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; But if "Actual Implied APY" CLOSER TO or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; 
+            If "Actual Implied APY" very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; 
+            If "Actual Implied APY percentual in relation of Range" higher than 75 indicates na great moment to sell the Yield Token if you already hold the token; But f "Actual Implied APY percentual in relation of Range" between 20 and -30 indicates na great moment to buy the Yield Token; 
+            If "Actual Implied APY percentual in relation of Range" is between 20 and 75 is better to wait a beest opportunity.
+            If "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; 
+            If "Days to expiry" is lower than 20, this implies in a high risk if the strategy is to try trade it. But if this is already in hold, can be better to sell if you want to reduce risk of Farm.
+            If "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. 
+            If "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. 
+            If "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. 
+            """
+
+    client = Mistral(api_key=api_key)
+    if language == "ingles":
+        inicial = " "
+    else:
+        inicial = "Você interpreta os dados fornecidos para identificar as melhores oportunidades: \n"
+
+    chat_response = client.chat.complete(
+        model=model,
+        messages=[
+            {
+                "role": "system",
+                "content": criteria,
+            }, 
+            {
+                "role": "user", 
+                "content": inicial+question
+            }, 
+            #UserMessage(content= "I'm fine, i trust you're too?")
+        ],
+    )
+    if chat_response.choices[0].message.content is not None:
+        res = {"content" : chat_response.choices[0].message.content}
+    else:
+        res = {"content" : ''}
+    return res
+
 
 # --- Configurações da Página ---
 #st.set_page_config(page_title="Pendle Airdrop Farm", layout="wide")
@@ -970,38 +1036,14 @@ elif opcao == "Pendle APY Prediction":
         mask = (base_apy_series >= lower_bound) & (base_apy_series <= upper_bound)
         filtered_dates = [d for d, keep in zip(dates, mask) if keep]
         filtered_base_apy = base_apy_series[mask].tolist()
+        Range = upper_line[-1] - lower_line[-1]
+        trend_perc = 100*(trend_line[-1] - lower_line[-1])/Range
+        actual_perc = 100*(implied_apy[-1] - lower_line[-1])/Range
+        time_now = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        data1 = datetime.strptime(time_now, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        delta = expiry_date - data1
 
-        # IA anwser
-        criteria = criteria = """You are an investor learn the following Criteria:An "Actual Implied APY"  next to "Maximum Historical APY" can be an excellent moment to sell the Yield Token if you already hold the token; An "Actual Implied APY"  next to "Minimum Historical APY" can be an excellent moment to buy the Yield Token; An "Actual Implied APY"  next or higher than "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; An "Actual Implied APY"  next or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; An "Actual Implied APY"  very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; An "Actual Implied APY percentual in relation of Range" next or higher than 100 indicates na great moment to sell the Yield Tokenif you already hold the token; An "Actual Implied APY percentual in relation of Range" next to 0 or a little negative indicates na great moment to buy the Yield Token; An "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; If "Days to expiry" is lower than 20, this implies in a high risk to try trade it. An "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. The YT multiplier factor indicates the multiplication factor over the invested capital and the underlying APY gives the yield return based in (YT Multiplier x Invested Capital x Actual Underlying APY/100 x Days to expiry/365), so higher YT miltiplier means that you can receire more yield and farm with higher capital the protocol of token, but if underlying APY is zero you will just farm points in protocol airdrop. YT ROI for hold token up to expiry is the return at maturity o YT token, higher YT ROI means a smaller loss at maturity.
-        """
-        description = f"""
-        Implied APY Data of {label}:
-        Actual Implied APY = {implied_apy[-1]}
-        Maximum Historical APY = {max(implied_apy)}
-        Minimum Historical APY = {min(implied_apy)}
-        Actual Best Sell point of Implied APY = {upper_line[-1]}
-        Actual Mean Implied APY = {trend_line[-1]}
-        Actual Best Buy point of Implied APY = {lower_line[-1]}
-        Mean Implied APY percentual in relation of Range = {trend_perc}
-        Actual Implied APY percentual in relation of Range = {actual_perc}
-        Time to expiry and YT value goes to zero = {expiry_date}
-        Days to expiry = {delta}
-        Actual Underlying APY =  {underlying_apy[-1]}
-        Mean Underlying APY = {statistics.mean(underlying_apy)}
-        Maximum Underlying APY Historical = {max(underlying_apy)}
-        Minimum Underlying APY Historical = {min(underlying_apy)}
-   
-        Actual Implied APY history (1 sample by hour) = [{implied_apy[(len(implied_apy)-50):-1]}]
-        """
-    
-        question = "Evaluate the following data, without mention the criteria. Also verify if the Actual Implied APY history (1 sample by hour) falls more than 20 percent in last 48 h: "
-        IA = lang_IA(criteria,question)
-
-        st.markdown(f"""
-        <div style='padding: 15px; border-radius: 10px; background-color: #f0f2f6; font-size: 18px;'>
-            {IA}
-        </div>
-        """, unsafe_allow_html=True)
+                
 
         # Criar figura
         fig = go.Figure()
@@ -1011,7 +1053,7 @@ elif opcao == "Pendle APY Prediction":
         fig.add_trace(go.Scatter(x=dates, y=implied_apy, mode='lines+markers', name='Implied APY', line=dict(color='green')))
         fig.add_trace(go.Scatter(x=dates, y=trend_line, mode='lines', name='Implied APY Tendency', line=dict(color='black', dash='dash')))
         fig.add_trace(go.Scatter(x=dates, y=upper_line, mode='lines', name='Maximum Implied APY Tendency', line=dict(color='red', dash='dash')))
-        fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color='#3cb371', dash='dash')))
+        fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color="#b3a13c", dash='dash')))
         fig.add_trace(go.Scatter(x=extended_dates, y=trend_line_extended[-len(extended_dates):], mode='lines', name='Tendency up to Expire', line=dict(color='black', dash='dot')))
         fig.add_trace(go.Scatter(x=extended_dates, y=upper_line_extended[-len(extended_dates):], mode='lines', name='Maximum Tendency up to Expire', line=dict(color='red', dash='dot')))
         fig.add_trace(go.Scatter(x=extended_dates, y=lower_line_extended[-len(extended_dates):], mode='lines', name='Minimum Tendency up to Expire', line=dict(color='green', dash='dot')))
@@ -1065,6 +1107,84 @@ elif opcao == "Pendle APY Prediction":
         # Mostrar com zoom habilitado
         st.plotly_chart(fig, use_container_width=True)
 
+        def get_token_info(marketAdd,id):
+            url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{marketAdd}"
+            response = requests.get(url)
+            jsonn = json.loads(response.text)
+            #jsonn.get("underlyingApy", {}) 
+            ytRoi = jsonn.get("ytRoi", {})
+            
+            url = f"https://api-v2.pendle.finance/core/v1/sdk/{id}/markets/{marketAdd}/swapping-prices"
+            response = requests.get(url)
+            jsonn = json.loads(response.text)
+            ytMult = jsonn.get("underlyingTokenToYtRate", {})
+            return(ytMult,ytRoi)
+        
+        ytMult, ytRoi = get_token_info(address,id)
+        # IA anwser
+        criteria = criteria = """Learn the following Criteria, no mention it you just will use this to awnser the next question: An "Actual Implied APY"  next to "Maximum Historical APY" can be an excellent moment to sell the Yield Token if you already hold the token; An "Actual Implied APY"  next to "Minimum Historical APY" can be an excellent moment to buy the Yield Token; An "Actual Implied APY"  next or higher than "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; An "Actual Implied APY"  next or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; An "Actual Implied APY"  very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; An "Actual Implied APY percentual in relation of Range" next or higher than 100 indicates na great moment to sell the Yield Tokenif you already hold the token; An "Actual Implied APY percentual in relation of Range" next to 0 or a little negative indicates na great moment to buy the Yield Token; An "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; If "Days to expiry" is lower than 20, this implies in a high risk to try trade it. An "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. The YT multiplier factor indicates the multiplication factor over the invested capital and the underlying APY gives the yield return based in (YT Multiplier x Invested Capital x Actual Underlying APY/100 x Days to expiry/365), so higher YT miltiplier means that you can receire more yield and farm with higher capital the protocol of token, but if underlying APY is zero you will just farm points in protocol airdrop. YT ROI for hold token up to expiry is the return at maturity o YT token, higher YT ROI means a smaller loss at maturity.
+        """
+        description = f"""
+        Implied APY Data of {label}:
+        Actual Implied APY = {round(implied_apy[-1],2)}
+        Maximum Historical APY = {round(max(implied_apy),2)}
+        Minimum Historical APY = {round(min(implied_apy),2)}
+        Actual Best Sell point of Implied APY = {round(upper_line[-1],2)}
+        Actual Mean Implied APY = {round(trend_line[-1],2)}
+        Actual Best Buy point of Implied APY = {round(lower_line[-1],2)}
+        Mean Implied APY percentual in relation of Range = {round(trend_perc,2)}
+        Actual Implied APY percentual in relation of Range = {round(actual_perc,2)}
+        Time to expiry and YT value goes to zero = {expiry_date}
+        Days to expiry = {delta}
+        Actual Underlying APY =  {round(underlying_apy[-1],2)}
+        Mean Underlying APY = {round(statistics.mean(underlying_apy),2)}
+        Maximum Underlying APY Historical = {round(max(underlying_apy),2)}
+        Minimum Underlying APY Historical = {round(min(underlying_apy),2)}
+        YT Protocol Multiplir = {ytMult}
+        YT ROI for hold token up to expiry = {ytRoi*100} %
+        """
+        question_1 = f"""faced with two possible scenarios (answer in few lines):
+            1st If I already have the YT token and I want to know if it is a good time to sell it?
+            2nd If I don't have the YT token and I want to know if it is a good time to buy it or if I should wait for a better opportunity?
+            3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than -35 percent?
+            According to the data description: {description}"""
+        h = implied_apy#[(len(implied_apy)-50):-1]
+        question_2 = f"""
+            Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not. Also consider {delta} to expiry is of high risk?
+            Historical Implied APY = {[round(x, 2) for x in h]}
+            the Underlying APY is {round(underlying_apy[-1],2)}
+        """
+        questions = [criteria, question_1, question_2]
+        #AIzaSyC4C4bMviJpBIuR7XXCqqPF81JrrYitlro - gemini
+
+        language = "ingles"
+        model = "mistral-large-latest"
+        personality = "You are an finantial advisor evaluationg historical data"
+        resposta= ""
+        time.sleep(3)
+        IA_1 = mistral_AI(question_1,language,model,personality)
+        IA_1 = IA_1['content']
+        time.sleep(3)
+        IA_2 = mistral_AI(question_2,language,model,personality)
+        IA_2 = IA_2['content']
+        
+        print(' ',IA_1, '\n',IA_2)
+        IA = [IA_1, IA_2]
+        #IA = lang_IA(questions,criteria)
+
+        if isinstance(IA, list):
+            st.markdown("IA Analysis:") 
+            for resposta in IA:
+                st.markdown(
+                    f"<div style='padding: 15px; border-radius: 10px; background-color: #dfc21f; font-size: 18px;'>{resposta}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown("---")  # Linha separadora entre blocos
+        else:
+            st.markdown(IA)
+
+
+
     st.markdown(
     """
     <style>
@@ -1085,7 +1205,7 @@ elif opcao == "Pendle APY Prediction":
     </p>
 
     <ul>
-        <li><strong>Base APY</strong>: This reflects the base yield from the underlying protocol (e.g., Aave, Compound), excluding any incentive rewards.</li>
+        <li><strong>Base APY</strong>: This reflects the base yield from the underlying protocol, excluding any incentive rewards.</li>
         <li><strong>Implied APY</strong>: This is the market-implied yield calculated from the price of the YT (Yield Token). It represents the market's expectation of future returns up to the maturity date.</li>
         <li><strong>Trend Line</strong>: A trend line is applied to the Implied APY, helping to visualize the general direction of expected yields—whether they are increasing, decreasing, or stable.</li>
         <li><strong>TVL (Total Value Locked)</strong>: Displayed on a secondary axis, it shows how much value is allocated to the asset, giving insight into investor interest over time.</li>
