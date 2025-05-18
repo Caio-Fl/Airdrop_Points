@@ -9,4 +9,3 @@ langchain-core
 langchain-mistralai
 mistralai
 dotenv
-os
