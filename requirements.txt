@@ -7,3 +7,6 @@ plotly
 streamlit_option_menu
 langchain-core
 langchain-mistralai
+mistralai
+dotenv
+os
