@@ -1171,7 +1171,7 @@ elif opcao == "Pendle APY Prediction":
 
         if isinstance(IA, list):
             st.markdown(
-                "<h2 style='font-size:20px; color:#333;'>IA Analysis:</h2>",
+                "<h2 style='font-size:20px; color:#333;'>🧠 IA Analysis:</h2>",
                 unsafe_allow_html=True
             )
             for resposta in IA:
@@ -1179,9 +1179,11 @@ elif opcao == "Pendle APY Prediction":
                     f"<div style='padding: 15px; border-radius: 10px; background-color: #342b44; font-size: 18px;'>{resposta}</div>",
                     unsafe_allow_html=True
                 )
-                st.markdown("---")  # Linha separadora entre blocos
+                
         else:
             st.markdown(IA)
+    
+    st.markdown("---")  # Linha separadora entre blocos
 
     st.markdown(
     """
