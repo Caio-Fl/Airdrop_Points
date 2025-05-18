@@ -28,18 +28,18 @@ from mistralai.models import UserMessage
 from mistralai.models import File
 load_dotenv("apikey.env")  # Load .env file
 import os
+from mistralai.client import MistralClient
+
 api_key = os.getenv("MISTRAL_API_KEY")
+
 
 def mistral_AI(question,language,model,personality):
 
     #api_key = os.environ["3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"]
     import os
-    import base64
-    import requests
     from dotenv import load_dotenv
     from mistralai import Mistral
-    from mistralai.models import UserMessage
-    from mistralai.models import File
+
     load_dotenv("apikey.env")  # Load .env file
     api_key = os.getenv("MISTRAL_API_KEY")
 
@@ -59,8 +59,8 @@ def mistral_AI(question,language,model,personality):
             If "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. 
             If "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. 
             """
-
-    client = Mistral(api_key=api_key)
+    client = MistralClient(api_key=api_key)
+    #client = Mistral(api_key=api_key)
     if language == "ingles":
         inicial = " "
     else:
