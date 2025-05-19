@@ -315,7 +315,7 @@ options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Predict
             "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
     
 #opcao = st.sidebar.selectbox("", options, index=1)
-opcao = st.sidebar.radio("Escolha uma opção:", options, index=1)
+opcao = st.sidebar.radio("", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
