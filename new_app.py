@@ -14,6 +14,7 @@ from get_leader_kyros_function import get_leader_kyros_function
 from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
+from barra_compra_venda import barra_compra_venda
 
 from PIL import Image
 import requests
@@ -1112,6 +1113,16 @@ elif opcao == "Pendle APY Prediction":
         # Mostrar com zoom habilitado
         st.plotly_chart(fig, use_container_width=True)
 
+        def normalizar_para_faixa(valor, min_origem=0, max_origem=100, min_dest=-100, max_dest=100):
+            return min_dest + ((valor - min_origem) / (max_origem - min_origem)) * (max_dest - min_dest)
+
+        valor = normalizar_para_faixa(round(actual_perc,2))
+        figura = barra_compra_venda(valor,round(actual_perc,2))
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
+            st.pyplot(figura)
+
         def get_token_info(marketAdd,id):
             url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{marketAdd}"
             response = requests.get(url)
@@ -1175,9 +1186,12 @@ elif opcao == "Pendle APY Prediction":
         IA = [IA_1, IA_2]
         #IA = lang_IA(questions,criteria)
 
+
+        
+
         if isinstance(IA, list):
             st.markdown(
-                "<h2 style='font-size:20px; color:#333;'>🧠 IA Analysis:</h2>",
+                "<h2 style='font-size:24px; color:#333;'>🧠 AI Interpretation:</h2>",
                 unsafe_allow_html=True
             )
             for resposta in IA:
