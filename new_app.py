@@ -731,7 +731,7 @@ elif opcao == "Farm with YT":
 
             # Spark
             Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            Sp_mean_daily = 5*Sp_tokens_per_day#(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+            Sp_mean_daily = 7*Sp_tokens_per_day#(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
             Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
             Sp_points_per_token = round(Sp_points_tge/(tsp*drop/100),2)
             Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
@@ -894,7 +894,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"{round(100*Sp_top100p,2)}",
                 "Total User": f"{Sp_total_users}",
                 "Farmed Yield in YT": f"$ {Sp_farmed_yield}",
-                "Mean Daily Points (x 5)": f"{round(Sp_mean_daily,0)}",
+                "Mean Daily Points (x 7)": f"{round(Sp_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Sp_points_tge,0)}",
                 "Points per Token": f"{Sp_points_per_token}",
                 "Estimated Token Price": f"$ {10000000000/tsp}",
