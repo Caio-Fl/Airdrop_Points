@@ -7,6 +7,7 @@ import time
 from datetime import datetime, timezone
 from get_leader_OpenEden_function import get_leader_OpenEden_function
 from get_leader_Level_function import get_leader_Level_function
+from get_Leader_Spark_Data import get_Leader_Spark_Data
 from get_fragmetric_data import get_fragmetric_data
 from get_Pendle_Data import get_Pendle_Data
 from get_rateX_data import get_rateX_data
@@ -312,7 +313,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
-            "Latest Airdrops", "Depin Airdrops", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
+            "Latest Airdrops", "Depin Airdrops", "Last Claims and Checkers", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
     
 #opcao = st.sidebar.selectbox("", options, index=1)
 opcao = st.sidebar.radio("", options, index=1)
@@ -422,6 +423,14 @@ Ky_Boost = 1.10
 Ky_TP_0 = 881892008
 ky_pts_token = 1
 Ky_date0 = datetime.strptime("2025-04-18T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+
+# Sparks
+Sp_Data = []
+Sp_Multipleir = 25
+Sp_Boost = 1.10
+Sp_TP_0 = 35000000
+Sp_pts_token = 1
+Sp_date0 = datetime.strptime("2025-05-16T09:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
 # --- Dados dos Protocolos ---
 # Armazena a hora da primeira execução na sessão do usuário
@@ -613,6 +622,10 @@ elif opcao == "Farm with YT":
             "Expected Kyros TGE Date:",
             value="2025-07-30",   # valor padrão
         )
+        Sp_l_date = st.text_input(
+            "Expected Sparks TGE Date:",
+            value="2025-08-14",   # valor padrão
+        )
 
     # Botão de atualizar
     update_button = st.button("Refresh YT")
@@ -626,17 +639,20 @@ elif opcao == "Farm with YT":
             Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
             Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
             Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
+            Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("Spark","Ethereum")
             
             # Busca dados dos protocolos em suas respectivas API's
             tags, values, time_Open, time_Level,top100,total_users = enviar_dados()
             Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
             Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
-            
+            Ky_accured,Ky_unApy,KyAsUSD,Sp_total_users,Ky_top100p = get_Leader_Spark_Data()
+            Sp_accured,Sp_top100p,Sp_total_users,tokens_per_day = 
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
             Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
             Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xe45d2ce15abba3c67b9ff1e7a69225c855d3da82","0x65901Ac9EFA7CdAf1Bdb4dbce4c53B151ae8d014")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
+            Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
             
             # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
@@ -646,6 +662,7 @@ elif opcao == "Farm with YT":
             date3 = datetime.strptime(Level_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            date6 = datetime.strptime(Sp_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             
             # Calcula os parâmetros de cada Protocolo
             # OpenEden
@@ -711,6 +728,22 @@ elif opcao == "Farm with YT":
             Ky_ROI = round((100*Ky_profit/Ky_cost),2)
 
             Ky_grade = protocol_rate(Ky_tvl,(100*Ky_top100p),Ky_ROI,(100*Ky_mean_daily/Ky_accured),Ky_total_users,"bom")
+
+            # Spark
+            Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+            Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
+            Sp_points_per_token = round(Sp_points_tge/(tsp*drop/100),2)
+            Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
+            Sp_daily_pts_farmed = round(invested*Sp_ytMul*Sp_Multipleir*Sp_Boost*Sp_pts_token,2)
+            Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
+            Sp_etimated_tokens = round(Sp_total_pts_farmed/Sp_points_per_token,2)
+            Sp_airdrop_value = round((fdv/tsp)*Sp_etimated_tokens,2)
+            Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*Sp_priceImpact)),2))
+            Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
+            Sp_ROI = round((100*Sp_profit/Sp_cost),2)
+
+            Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"excelente")
             #except:
             #    print("Error in YT Data Request")
 
