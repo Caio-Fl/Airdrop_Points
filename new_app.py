@@ -1570,11 +1570,11 @@ elif opcao == "Last Claims and Checkers":
     headers = {
         "Authorization" : c1+c2+c3+c4
     }
-    print(headers)
+
     Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
     res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL,headers)
     respostas = mirror_list(org_res)
-    print(respostas)
+
     Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
     question = "\n\n".join(Resp_sem_tag)
