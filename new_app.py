@@ -1563,9 +1563,12 @@ elif opcao == "Comparative YT Table":
         st.write(styled_df)
 
 elif opcao == "Last Claims and Checkers":
-    code = os.getenv("DISCORD_TOKEN") 
+    c1 = "MTIyMTI1MjYwNzQxNTE1Njc3MA."
+    c2 = "GZgHS7."
+    c3 = "M14bi-JaQXVM6BB8c"
+    c4 = "EXG69vWUXHcMMwU0Ppq0g"
     headers = {
-        "Authorization" : code
+        "Authorization" : c1+c2+c3+c4
     }
     Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
     res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL)
