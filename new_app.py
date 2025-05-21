@@ -16,7 +16,7 @@ from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
 from barra_compra_venda import barra_compra_venda
-
+import re
 from PIL import Image
 import requests
 import webbrowser
@@ -93,6 +93,72 @@ def mistral_AI(question,language,model,personality):
             time.sleep(5)
     st.error("Erro: todas as tentativas de chamada à Mistral falharam.")
     return {"content": "Erro ao tentar acessar a IA Mistral."}
+
+def mistral_AI_2(question,language,model,personality):
+
+    #api_key = os.environ["3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"]
+    import os
+    from dotenv import load_dotenv
+    max_retries = 5
+    load_dotenv("apikey.env")  # Load .env file
+    api_key = os.getenv("MISTRAL_API_KEY")
+
+    if api_key is None:
+        print("Error: API key is missing! Set MISTRAL_API_KEY. \n")
+    else:
+        print("API Key loaded successfully! \n")
+    
+    for attempt in range(max_retries):
+        try:
+            client = Mistral(api_key=api_key)
+            if language == "ingles":
+                inicial = " "
+
+            chat_response = client.chat.complete(
+                model=model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": personality,
+                    }, 
+                    {
+                        "role": "user", 
+                        "content": question
+                    }, 
+                    #UserMessage(content= "I'm fine, i trust you're too?")
+                ],
+            )
+            if chat_response.choices[0].message.content is not None:
+                res = {"content" : chat_response.choices[0].message.content}
+            else:
+                res = {"content" : ''}
+            return res
+        except Exception as e:
+            time.sleep(5)
+    return {"content": "Erro ao tentar acessar a IA Mistral."}
+
+def retrieve_messages(Request_URL):
+    res = requests.get(Request_URL, headers=headers)
+    jsonn = json.loads(res.text)
+    org_res = []
+    org_author = []
+    org_author_name = []
+    org_mention = []
+
+    for value in jsonn:
+        #print(value['author']['username'],': ',value['content'], '\n')
+        org_res.append(value['content'])
+        org_author.append(value['author']['id'])
+        org_author_name.append(value['author']['username'])
+        if value['mentions']:
+            org_mention.append(value['mentions'][0]['username'])
+        else:
+            org_mention.append(' ')
+
+    return res, org_res, org_author, org_mention, org_author_name
+
+def mirror_list(arr):
+    return arr[::-1]
 
 
 # --- Configurações da Página ---
@@ -273,7 +339,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Header ---
-st.markdown('<div class="header"> Airdrops Monitor </div>', unsafe_allow_html=True)
+st.markdown('<div class="header">🪂 Airdrops Monitor </div>', unsafe_allow_html=True)
 
 st.markdown(
     "<hr style='border: 2px double #342b44;'font-size: 18px;''>",
@@ -769,7 +835,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"{round(100*top100[1],2)}",
                 "Total User": f"{total_users[1]}",
                 "Farmed Yield in YT": f"$ {Level_farmed_yield}",
-                "Mean Daily Points (x 1.30)": f"{round(Level_mean_daily,0)}",
+                "Mean Daily Points": f"{round(Level_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Level_points_tge,0)}",
                 "Points per Token": f"{Level_points_per_token}",
                 "Estimated Token Price": f"$ {fdv/tsp}",
@@ -799,7 +865,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"{round(100*top100[0],2)}",
                 "Total User": f"{total_users[0]}",
                 "Farmed Yield in YT": f"$ {Open_farmed_yield}",
-                "Mean Daily Points (x 1.30)": f"{round(Open_mean_daily,0)}",
+                "Mean Daily Points": f"{round(Open_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Open_points_tge,0)}",
                 "Points per Token": f"{Open_points_per_token}",
                 "Estimated Token Price": f"$ {fdv/tsp}",
@@ -832,7 +898,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"unknown",
                 "Total User": f"{Frag_total_users}",
                 "Farmed Yield in YT": f"$ {Frag_farmed_yield}",
-                "Mean Daily Points (x 1.30)": f"{round(Frag_mean_daily,0)}",
+                "Mean Daily Points": f"{round(Frag_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Frag_points_tge,0)}",
                 "Points per Token": f"{Frag_points_per_token}",
                 "Estimated Token Price": f"$ {fdv/tsp}",
@@ -864,7 +930,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"{round(100*Ky_top100p,2)}",
                 "Total User": f"{Ky_total_users}",
                 "Farmed Yield in YT": f"$ {Ky_farmed_yield}",
-                "Mean Daily Points (x 1.30)": f"{round(Ky_mean_daily,0)}",
+                "Mean Daily Points": f"{round(Ky_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Ky_points_tge,0)}",
                 "Points per Token": f"{Ky_points_per_token}",
                 "Estimated Token Price": f"$ {fdv/tsp}",
@@ -894,7 +960,7 @@ elif opcao == "Farm with YT":
                 "Top 100 Concentration": f"{round(100*Sp_top100p,2)}",
                 "Total User": f"{Sp_total_users}",
                 "Farmed Yield in YT": f"$ {Sp_farmed_yield}",
-                "Mean Daily Points (x 7)": f"{round(Sp_mean_daily,0)}",
+                "Mean Daily Points": f"{round(Sp_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Sp_points_tge,0)}",
                 "Points per Token": f"{Sp_points_per_token}",
                 "Estimated Token Price": f"$ {10000000000/tsp}",
@@ -955,7 +1021,7 @@ elif opcao == "Farm with YT":
                     <li><strong>Top 100 Points Percentual Concentration:</strong> {protocolos[p]['Top 100 Concentration']}%</li>
                     <li><strong>Total Users:</strong> {protocolos[p]['Total User']}</li>
                     <li><strong>Farmed Yield in YT Expiration:</strong> {protocolos[p]['Farmed Yield in YT']}</li>
-                    <li><strong>Mean Daily Points (x1.30):</strong> {protocolos[p]['Mean Daily Points (x 1.30)']} XP</li>
+                    <li><strong>Mean Daily Points:</strong> {protocolos[p]['Mean Daily Points']} XP</li>
                     <li><strong>Estimated Total Points in TGE:</strong> {protocolos[p]['Estimated Points in TGE']} XP</li>
                     <li><strong>Points to Receive 1 Token:</strong> {protocolos[p]['Points per Token']}</li>
                     <li><strong>Estimated Token Price:</strong> {protocolos[p]['Estimated Token Price']}</li>
@@ -1429,7 +1495,7 @@ elif opcao == "Comparative YT Table":
         "Top 100 Concentration (%)": [protocolos[p]["Top 100 Concentration"] for p in protocolos],
         "Total Users": [protocolos[p]["Total User"] for p in protocolos],
         "Farmed Yield in YT": [protocolos[p]["Farmed Yield in YT"] for p in protocolos],
-        "Mean Daily Points (XP)": [protocolos[p]["Mean Daily Points (x 1.30)"] for p in protocolos],
+        "Mean Daily Points (XP)": [protocolos[p]["Mean Daily Points"] for p in protocolos],
         "Points in TGE (XP)": [protocolos[p]["Estimated Points in TGE"] for p in protocolos],
         "Points per Token": [protocolos[p]["Points per Token"] for p in protocolos],
         "Token Price": [protocolos[p]["Estimated Token Price"] for p in protocolos],
@@ -1495,6 +1561,65 @@ elif opcao == "Comparative YT Table":
     with tab2:
         st.markdown("<h2 style='font-size:32px;'>Horizontal Table</h2>", unsafe_allow_html=True)
         st.write(styled_df)
+
+elif opcao == "Last Claims and Checkers":
+    code = os.getenv("DISCORD_TOKEN") 
+    headers = {
+        "Authorization" : code
+    }
+    Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
+    res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL)
+    respostas = mirror_list(org_res)
+    print(respostas)
+    Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
+
+    question = "\n\n".join(Resp_sem_tag)
+    personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title"""
+
+    result = mistral_AI_2(question,"ingles","mistral-large-latest",personality)
+    print(result)
+    # IA pode ser uma lista de dicionários com 'content'
+    def markdown_to_html(texto):
+        # Negrito em HTML
+        texto = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', texto)
+
+        # Substitui [qualquer coisa](link) por apenas o link com texto fixo
+        texto = re.sub(r'\[.*?\]\((https?://[^\s]+)\)', r'<a href="\1" target="_blank" style="color: #ffd700;">Check Link</a>', texto)
+
+        # Substitui links puros (sem markdown) por links com texto fixo também
+        texto = re.sub(r'(?<!["=])\bhttps?://[^\s<]+', lambda match: f'<a href="{match.group(0)}" target="_blank" style="color: #ffd700;">Check Link</a>', texto)
+
+        # Substituir quebras de linha por <br>
+        return texto.replace('\n', '<br>')
+
+    # Obter conteúdo e dividir pelos separadores
+    blocos = result['content'].strip().split('\n\n')
+
+    # Criar 2 colunas
+    col1, col2 = st.columns(2)
+
+    if isinstance(result , dict) and 'content' in result:
+        for i, bloco in enumerate(blocos):
+            texto_html = markdown_to_html(bloco)
+            # Define a cor do fundo com base na posição
+            background_color = '#342b44' if i % 2 == 0 else '#376a94'  # azul escuro e roxo escuro
+            margin_bottom = "5px" if i % 2 == 0 else "15px"
+            div_html = f"""
+            <div style='
+                font-size: 22px; 
+                line-height: 1.6; 
+                background-color: {background_color}; 
+                padding: 12px; 
+                border-radius: 10px; 
+                margin-bottom: {margin_bottom}; 
+                color: white;
+                border: 2px solid white;
+            '>
+                {texto_html}
+            </div>
+            """
+            col1.markdown(div_html, unsafe_allow_html=True)
+
 
 elif opcao == "Bridges & Swaps Protocols":
     # Updated protocols data including Sonic and Hyperlane networks
