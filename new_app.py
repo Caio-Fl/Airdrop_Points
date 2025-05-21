@@ -1563,18 +1563,16 @@ elif opcao == "Comparative YT Table":
         st.write(styled_df)
 
 elif opcao == "Last Claims and Checkers":
-    c1 = "MTIyMTI1MjYwNzQxNTE1Njc3MA."
-    c2 = "GZgHS7."
-    c3 = "M14bi-JaQXVM6BB8c"
-    c4 = "EXG69vWUXHcMMwU0Ppq0g"
+    code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.GRCiQ6"
+    code2=".JYJrhDkJOo07MpA-PsPrYb4azUHVu4D9n27U6A"
     headers = {
-        "Authorization" : c1+c2+c3+c4
+        "Authorization" : code+code2
     }
-
+    print(headers)
     Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
     res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL,headers)
     respostas = mirror_list(org_res)
-
+    print(respostas)
     Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
     question = "\n\n".join(Resp_sem_tag)
@@ -1623,6 +1621,7 @@ elif opcao == "Last Claims and Checkers":
             </div>
             """
             col1.markdown(div_html, unsafe_allow_html=True)
+    time.sleep(3)
 
 
 elif opcao == "Bridges & Swaps Protocols":
