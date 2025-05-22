@@ -745,7 +745,7 @@ elif opcao == "Farm with YT":
             Open_profit = round((Open_airdrop_value - Open_cost),2)
             Open_ROI = round((100*Open_profit/Open_cost),2)
             
-            Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"excelente")
+            Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"muito bom")
             
             # Level
             Level_date_tge = datetime.strptime((Level_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -809,7 +809,7 @@ elif opcao == "Farm with YT":
             Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
             Sp_ROI = round((100*Sp_profit/Sp_cost),2)
 
-            Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"excelente")
+            Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"muito bom")
             #except:
             #    print("Error in YT Data Request")
 
