@@ -39,7 +39,9 @@ def protocol_rate(tvl,top100,roi,daily_points_rate,users,hype):
         top100_grade = 7
 
     # ROI
-    if roi <= 40:
+    if roi <= 0:
+        roi_grade = -0.5
+    elif 0 < roi <= 40:
         roi_grade = 0
     elif 40 < roi <= 60:
         roi_grade = 1
