@@ -712,14 +712,14 @@ elif opcao == "Farm with YT":
             Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
             Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
             Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
-           
+            print(Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day)
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
             Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
             Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xe45d2ce15abba3c67b9ff1e7a69225c855d3da82","0x65901Ac9EFA7CdAf1Bdb4dbce4c53B151ae8d014")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
             Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
-            
+            print(Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact)
             # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
             date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -797,9 +797,9 @@ elif opcao == "Farm with YT":
 
             # Spark
             Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            Sp_mean_daily = 5*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+            Sp_mean_daily = 3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
             Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
-            Sp_points_per_token = round(Sp_points_tge/(tsp*drop/100),2)
+            Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
             Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
             Sp_daily_pts_farmed = round(invested*Sp_ytMul*Sp_Multipleir*Sp_Boost*Sp_pts_token,2)
             Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
