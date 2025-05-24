@@ -494,9 +494,9 @@ Ky_date0 = datetime.strptime("2025-04-18T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ"
 Sp_Data = []
 Sp_Multipleir = 25
 Sp_Boost = 1.10
-Sp_TP_0 = 35000000
+Sp_TP_0 = 523450305
 Sp_pts_token = 1
-Sp_date0 = datetime.strptime("2025-05-16T09:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+Sp_date0 = datetime.strptime("2025-05-18T09:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
 # --- Dados dos Protocolos ---
 # Armazena a hora da primeira execução na sessão do usuário
@@ -797,7 +797,7 @@ elif opcao == "Farm with YT":
 
             # Spark
             Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            Sp_mean_daily = 7*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+            Sp_mean_daily = 5*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
             Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
             Sp_points_per_token = round(Sp_points_tge/(tsp*drop/100),2)
             Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
