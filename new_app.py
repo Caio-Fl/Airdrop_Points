@@ -467,8 +467,8 @@ Open_date0 = datetime.strptime("2025-04-09T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%f
 
 # Level
 Level_Data = []
-Level_Multipleir = 40
-Level_Boost = 1.10
+Level_Multipleir = 20
+Level_Boost = 1.12
 Level_TP_0 = 117375084663151
 Level_pts_token = 2400
 Level_date0 = datetime.strptime("2025-03-27T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -674,7 +674,7 @@ elif opcao == "Farm with YT":
         st.markdown("---")
         Level_l_date = st.text_input(
             "Expected Level TGE Date:",
-            value="2025-08-08",   # valor padrão
+            value="2025-09-24",   # valor padrão
         )
         Open_l_date = st.text_input(
             "Expected OpenEden TGE Date:",
@@ -715,7 +715,7 @@ elif opcao == "Farm with YT":
             print(Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day)
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
             Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
-            Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xe45d2ce15abba3c67b9ff1e7a69225c855d3da82","0x65901Ac9EFA7CdAf1Bdb4dbce4c53B151ae8d014")
+            Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
             Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
@@ -1402,7 +1402,7 @@ elif opcao == "Depin Airdrops":
         {"name":"Stork","priority":"A","funding":"$4M","site":"https://chromewebstore.google.com/detail/stork-verify/knnliglhgkmlblppdejchidfihjnockl","social":{"twitter":"https://x.com/StorkOracle","discord":"https://discord.com/invite/storkoracle"},"status":"Active Farming","application":"Geolocation Data Distribution", "image":"https://pbs.twimg.com/profile_images/1899474008195637248/-nVBNuKn_400x400.jpg"},
         {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity & Data Sharing", "image":"https://pbs.twimg.com/profile_images/1847181726973415424/8mw2mGXQ_400x400.png"},
         {"name":"BlockMesh","priority":"B","funding":"Not disclosed","site":"https://app.blockmesh.xyz/register?invite_code=925336ba-de36-4e8e-a8ab-ce645919ce27","social":{"twitter":"https://x.com/blockmesh_xyz","discord":"https://discord.com/invite/pwZWzCtGx4"},"status":"Active Farming","application":"Decentralized Communication", "image":"https://pbs.twimg.com/profile_images/1820702766026645504/mL-smILQ_400x400.jpg"},
-        {"name":"Distribute AI","priority":"B","funding":"Not disclosed","site":"https://r.oasis.ai/4c858669677a0fe6","social":{"twitter":"https://x.com/distributeai","discord":"https://discord.gg/distributeai"},"status":"Active Farming","application":"Data Privacy & Storage for AI", "image":"https://pbs.twimg.com/profile_images/1866227189122789376/Ic2w3fhw_400x400.jpg"},
+        {"name":"Distribute AI","priority":"B","funding":"Not disclosed","site":"https://r.oasis.ai/4c858669677a0fe6","social":{"twitter":"https://x.com/distributeai","discord":"https://discord.gg/distributeai"},"status":"Airdrop Released - Waiting Season 2","application":"Data Privacy & Storage for AI", "image":"https://pbs.twimg.com/profile_images/1866227189122789376/Ic2w3fhw_400x400.jpg"},
         {"name":"GaeaAI","priority":"B","funding":"Not disclosed","site":"https://app.aigaea.net/register?ref=gaSC6trQ0WpqzZ","social":{"twitter":"https://x.com/aigaealabs","discord":"https://discord.com/invite/aigaea"},"status":"Active Farming","application":"AI Training & Data Collection", "image":"https://pbs.twimg.com/profile_images/1904422472902115328/OQd87AE6_400x400.png"},
         {"name":"Teneo (Code: uigsb)","priority":"B","funding":"Not disclosed","site":"https://bit.ly/teneo-community-node","social":{"twitter":"https://x.com/teneo_protocol","discord":"https://discord.gg/teneoprotocol"},"status":"Active Farming","application":"DePIN Points + Data Contribution", "image":"https://pbs.twimg.com/profile_images/1797649020564754432/0Oav1zjU_400x400.jpg"},
         {"name":"Depinned (Code: DES9xJKEsKLfo2)","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/depined/pjlappmodaidbdjhmhifbnnmmkkicjoc?hl=pt-BR","social":{"twitter":"https://x.com/DePINed_org","discord":"https://discord.com/invite/74dEq5Et"},"status":"Active Farming","application":"Unclear / Browser Plugin", "image":"https://pbs.twimg.com/profile_images/1871083685732061184/GklrQE2V_400x400.jpg"},
@@ -1572,10 +1572,10 @@ elif opcao == "Last Claims and Checkers":
     Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
     question = "\n\n".join(Resp_sem_tag)
-    personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title"""
+    personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title ang ignore content with X(twitter)"""
 
     result = mistral_AI_2(question,"ingles","mistral-large-latest",personality)
-    print(result)
+    
     # IA pode ser uma lista de dicionários com 'content'
     def markdown_to_html(texto):
         # Negrito em HTML
@@ -1618,7 +1618,6 @@ elif opcao == "Last Claims and Checkers":
             """
             col1.markdown(div_html, unsafe_allow_html=True)
     time.sleep(3)
-
 
 elif opcao == "Bridges & Swaps Protocols":
     # Updated protocols data including Sonic and Hyperlane networks
