@@ -79,6 +79,7 @@ def get_pendle_apy_data(selected_data,time_scale,id):
     url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{address}/historical-data?time_frame={time_scale}"
     response = requests.get(url)
     historical_data = json.loads(response.text)
+    print(address)
 
     # Convert timestamps para datas legíveis
     dates = [datetime.fromtimestamp(ts, tz=timezone.utc) for ts in historical_data['timestamp']]
