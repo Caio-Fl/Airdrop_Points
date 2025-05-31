@@ -712,14 +712,14 @@ elif opcao == "Farm with YT":
             Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
             Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
             Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
-            print(Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day)
+            
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
             Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
             Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
             Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
-            print(Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact)
+            
             # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
             date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -762,18 +762,19 @@ elif opcao == "Farm with YT":
             Level_ROI = round((100*Level_profit/Level_cost),2)
 
             Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"excelente")
-
+            
             # Fragmetric
             Frag_date_tge = datetime.strptime((Frag_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             Frag_mean_daily = 1.3*(Frag_accured-Frag_TP_0)/((date1-Frag_date0).days)
             Frag_points_tge = round(Frag_accured + (((Frag_date_tge-date1).days)*Frag_mean_daily),0)
             Frag_points_per_token = round(Frag_points_tge/(tsp*drop/100),2)
-            Frag_farmed_yield = round((invested/fragAsUSD)*Frag_ytMul*Frag_unApy*(date4-date1).days/365,2)
+            Frag_farmed_yield = round((invested)*Frag_ytMul*Frag_unApy*(date4-date1).days/365,2)
+            
             Frag_daily_pts_farmed = round((invested/fragAsUSD)*Frag_ytMul*Frag_Multipleir*Frag_Boost*Backpack_Boost*Frag_pts_token,2)
             Frag_total_pts_farmed = round(Frag_daily_pts_farmed*(date4-date1).days,2)
             Frag_etimated_tokens = round(Frag_total_pts_farmed/Frag_points_per_token,2)
             Frag_airdrop_value = round((fdv/tsp)*Frag_etimated_tokens,2)
-            Frag_cost = abs(round(((fragAsUSD*Frag_farmed_yield) - invested - (fragAsUSD*Frag_swapFee)),2))
+            Frag_cost = abs(round(((Frag_farmed_yield) - invested - (fragAsUSD*Frag_swapFee)),2))
             Frag_profit = round((Frag_airdrop_value - Frag_cost),2)
             Frag_ROI = round((100*Frag_profit/Frag_cost),2)
 
@@ -784,12 +785,12 @@ elif opcao == "Farm with YT":
             Ky_mean_daily = 1.3*(Ky_accured-Ky_TP_0)/((date1-Ky_date0).days)
             Ky_points_tge = round(Ky_accured + (((Ky_date_tge-date1).days)*Ky_mean_daily),0)
             Ky_points_per_token = round(Ky_points_tge/((tsp)*2*drop/100),2)
-            Ky_farmed_yield = round((invested/KyAsUSD)*ky_ytMul*Ky_unApy*(date5-date1).days/365,2)
+            Ky_farmed_yield = round((invested)*ky_ytMul*Ky_unApy*(date5-date1).days/365,2)
             Ky_daily_pts_farmed = round((invested/KyAsUSD)*ky_ytMul*Ky_Multipleir*Ky_Boost*ky_pts_token,2)
             Ky_total_pts_farmed = round(Ky_daily_pts_farmed*(date5-date1).days,2)
             Ky_etimated_tokens = round(Ky_total_pts_farmed/Ky_points_per_token,2)
             Ky_airdrop_value = round((fdv/tsp)*Ky_etimated_tokens,2)
-            Ky_cost = abs(round(((KyAsUSD*Ky_farmed_yield) - invested - (KyAsUSD*ky_swapFee)),2))
+            Ky_cost = abs(round(((Ky_farmed_yield) - invested - (KyAsUSD*ky_swapFee)),2))
             Ky_profit = round((Ky_airdrop_value - Ky_cost),2)
             Ky_ROI = round((100*Ky_profit/Ky_cost),2)
 
