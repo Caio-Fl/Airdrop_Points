@@ -1560,8 +1560,9 @@ elif opcao == "Comparative YT Table":
         st.write(styled_df)
 
 elif opcao == "Last Claims and Checkers":
-    code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.GRCiQ6"
-    code2=".JYJrhDkJOo07MpA-PsPrYb4azUHVu4D9n27U6A"
+    code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.G_eTfU"
+    code2=".p2WlhCJ6f-ewl83V2zp7AHuL2M7NucW4oWVG5w"
+    
     headers = {
         "Authorization" : code+code2
     }
