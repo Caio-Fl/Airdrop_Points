@@ -10,6 +10,7 @@ def get_leader_Level_function():
     total_accured = 0 # inicialização de pontos totais
     page = 1 # contador para  inicial
     count = 0
+    accured = 0
     # Loop de leitura
     #while True:
     print(f"Lendo Level Página {page}...")
@@ -25,9 +26,11 @@ def get_leader_Level_function():
             #break
 
         for entry in leaderboard:
+            acc = int(entry["balance"]["accrued"])
+            accured += acc
             count += 1
             if count == 100:
-                top100 = total_accured  
+                top100 = accured  
         page += 1
     else:
         print(f"Erro ao coletar dados na página {page}. Status Code:", response.status_code)
