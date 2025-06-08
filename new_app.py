@@ -741,7 +741,7 @@ elif opcao == "Farm with YT":
             Open_total_pts_farmed = round(Open_daily_pts_farmed*(date2-date1).days,2)
             Open_etimated_tokens = round(Open_total_pts_farmed/Open_points_per_token,2)
             Open_airdrop_value = round((fdv/tsp)*Open_etimated_tokens,2)
-            Open_cost = abs(round((Open_farmed_yield - invested - (invested*Open_priceImpact)),2))
+            Open_cost = abs(round((Open_farmed_yield - invested - (invested*abs(Open_priceImpact))),2))
             Open_profit = round((Open_airdrop_value - Open_cost),2)
             Open_ROI = round((100*Open_profit/Open_cost),2)
             
@@ -757,7 +757,8 @@ elif opcao == "Farm with YT":
             Level_total_pts_farmed = round(Level_daily_pts_farmed*(date3-date1).days,2)
             Level_etimated_tokens = round(Level_total_pts_farmed/Level_points_per_token,2)
             Level_airdrop_value = round((fdv/tsp)*Level_etimated_tokens,2)
-            Level_cost = abs(round((Level_farmed_yield - invested - (invested*Level_priceImpact)),2))
+            Level_cost = abs(round((Level_farmed_yield - invested - (invested*abs(Level_priceImpact))),2))
+            print((invested*Level_priceImpact),Level_farmed_yield)
             Level_profit = round((Level_airdrop_value - Level_cost),2)
             Level_ROI = round((100*Level_profit/Level_cost),2)
 
@@ -774,7 +775,7 @@ elif opcao == "Farm with YT":
             Frag_total_pts_farmed = round(Frag_daily_pts_farmed*(date4-date1).days,2)
             Frag_etimated_tokens = round(Frag_total_pts_farmed/Frag_points_per_token,2)
             Frag_airdrop_value = round((fdv/tsp)*Frag_etimated_tokens,2)
-            Frag_cost = abs(round(((Frag_farmed_yield) - invested - (fragAsUSD*Frag_swapFee)),2))
+            Frag_cost = abs(round(((Frag_farmed_yield) - invested - abs(fragAsUSD*Frag_swapFee)),2))
             Frag_profit = round((Frag_airdrop_value - Frag_cost),2)
             Frag_ROI = round((100*Frag_profit/Frag_cost),2)
 
@@ -790,7 +791,7 @@ elif opcao == "Farm with YT":
             Ky_total_pts_farmed = round(Ky_daily_pts_farmed*(date5-date1).days,2)
             Ky_etimated_tokens = round(Ky_total_pts_farmed/Ky_points_per_token,2)
             Ky_airdrop_value = round((fdv/tsp)*Ky_etimated_tokens,2)
-            Ky_cost = abs(round(((Ky_farmed_yield) - invested - (KyAsUSD*ky_swapFee)),2))
+            Ky_cost = abs(round(((Ky_farmed_yield) - invested - abs(KyAsUSD*ky_swapFee)),2))
             Ky_profit = round((Ky_airdrop_value - Ky_cost),2)
             Ky_ROI = round((100*Ky_profit/Ky_cost),2)
 
@@ -806,7 +807,7 @@ elif opcao == "Farm with YT":
             Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
             Sp_etimated_tokens = round(Sp_total_pts_farmed/Sp_points_per_token,2)
             Sp_airdrop_value = round((fdv/10000000000)*Sp_etimated_tokens,2)
-            Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*Sp_priceImpact)),2))
+            Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*abs(Sp_priceImpact))),2))
             Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
             Sp_ROI = round((100*Sp_profit/Sp_cost),2)
 
