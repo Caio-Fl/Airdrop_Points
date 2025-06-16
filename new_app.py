@@ -1883,7 +1883,7 @@ elif opcao == "Faucets":
                         color: white;
                         margin-bottom: 5px;
                     ">
-                        <div style='margin-top: 10px; margin-bottom: 10px;'>
+                        <div style='margin-top: 10px; margin-bottom: 10px;font-size: 20px;'>
                             <strong>🪙 Token: {faucets['token']}:</strong><br>
                             {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">{site}</a>' for site in faucets['sites']])}
                         </div>
