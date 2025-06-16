@@ -1062,6 +1062,7 @@ elif opcao == "Farm with YT":
                         <p>TVL: {protocolos[p]['TVL']}</p>
                         <p>Expected ROI: {protocolos[p]['Expected ROI']}</p>
                         <p>YT Multiplier: {protocolos[p]['YT Multiplier']}</p>
+                        <p>YT Underlying APY: {protocolos[p]['YT APY']} %</p>
                         <p>Boost: {protocolos[p]['Protocol Referral Boost']}</p>
                         <p>{protocolos[p]['Expiry']}</p>
                         <p>{protocolos[p]['Grade']}</p>
