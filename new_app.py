@@ -333,7 +333,7 @@ st.markdown("""
 
 <div class="marquee-container">
   <div class="marquee-text" style=m'argin-bottom: 10px;'>
-    🚨 Last News: <a href='https://claim.resolv.xyz/' target='_blank' style='color:#342b44;'>Register to Receive Airdrop from Resolv Protocol (Up to 16/05/2025)!</a> / <a href='https://claim.0gfoundation.ai/unlock' target='_blank' style='color:#342b44;'>Claim NFT of 0G_Labs Node and Rebate Available!</a>  / <a href='https://claim.sophon.xyz/' target='_blank' style='color:#342b44;'>Checker Sophon Available!</a>
+    🚨 Last News: <a href='https://app.spark.fi/SPK/airdrop' target='_blank' style='color:#342b44;'>Verify if you have tokens to receive!</a> / <a href='https://app.kamino.finance/season-3-airdrop' target='_blank' style='color:#342b44;'>Kamino Season 3 Airdrop Claim!</a>  / <a href='https://build.assisterr.ai/auth/wallet-connect' target='_blank' style='color:#342b44;'>Assisterr Airdrop Claim!</a> / <a href='https://btcsol.co/' target='_blank' style='color:#342b44;'>Zeus btcSOL Register to receive 200% Boost for 2 weeks!</a>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -379,7 +379,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
-            "Latest Airdrops", "Depin Airdrops", "Last Claims and Checkers", "Bridges & Swaps Protocols", "Revoke Contract","Avoiding Scams"]
+            "Latest Airdrops", "Depin Airdrops", "Last Claims and Checkers", "Bridges & Swaps Protocols", "Faucets", "Revoke Contract","Avoiding Scams"]
     
 #opcao = st.sidebar.selectbox("", options, index=1)
 opcao = st.sidebar.radio("", options, index=1)
@@ -745,7 +745,7 @@ elif opcao == "Farm with YT":
             Open_profit = round((Open_airdrop_value - Open_cost),2)
             Open_ROI = round((100*Open_profit/Open_cost),2)
             
-            Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"muito bom")
+            Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"bom")
             
             # Level
             Level_date_tge = datetime.strptime((Level_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -762,7 +762,7 @@ elif opcao == "Farm with YT":
             Level_profit = round((Level_airdrop_value - Level_cost),2)
             Level_ROI = round((100*Level_profit/Level_cost),2)
 
-            Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"excelente")
+            Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"otimo")
             
             # Fragmetric
             Frag_date_tge = datetime.strptime((Frag_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -779,7 +779,7 @@ elif opcao == "Farm with YT":
             Frag_profit = round((Frag_airdrop_value - Frag_cost),2)
             Frag_ROI = round((100*Frag_profit/Frag_cost),2)
 
-            Frag_grade = protocol_rate(Frag_tvl,60,Frag_ROI,(100*Frag_mean_daily/Frag_accured),Frag_total_users,"excelente")
+            Frag_grade = protocol_rate(Frag_tvl,60,Frag_ROI,(100*Frag_mean_daily/Frag_accured),Frag_total_users,"top")
 
             # Kyros
             Ky_date_tge = datetime.strptime((Ky_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1646,7 +1646,7 @@ elif opcao == "Bridges & Swaps Protocols":
     protocols_bridge_swap = {
         "EVM": [
             {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1753515078316355584/uT6CssGo_400x400.jpg"},
-            {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1889316674383282176/ulV41xZ7_400x400.jpg"},
+            {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1930642162984579072/NtYd0Egd_400x400.png"},
             {"name": "Uniswap", "site": "https://uniswap.org", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1831348758753206272/y2Z0hMrl_400x400.jpg"},
             {"name": "Swaps.io", "site": "https://swaps.io?ref=q7kMylhY2EY", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1710931572667584512/GWMzqBE0_400x400.png"},
             {"name": "Bungee", "site": "https://bungee.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1883923855456215040/uUFkZI_D_400x400.jpg"},
@@ -1820,6 +1820,76 @@ elif opcao == "Bridges & Swaps Protocols":
                 </div>
             """, unsafe_allow_html=True)
     
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
+
+elif opcao == "Faucets":
+    faucet_sites = [
+        {"network": "Ethereum", "token": "ETH (Sepolia, Holesky)", "sites": ["https://sepolia-faucet.pk910.de/","https://faucet.hoodscan.io/", "https://console.optimism.io/faucet","",""]},
+        {"network": "Bitcoin", "token": "BTC (Signet)", "sites": ["https://faucet.hoodscan.io/","","","",""]},
+        {"network": "Sei", "token": "SEI", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
+        {"network": "Babylon", "token": "Babylon Testnet", "sites": ["https://faucet.hoodscan.io/","","","",""]},
+        {"network": "0G Labs", "token": "0G", "sites": ["https://faucet.0g.ai/","","","",""]},
+        {"network": "Pharos", "token": "Pharos", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
+        {"network": "Opnet", "token": "Opnet", "sites": ["https://faucet.opnet.org","","","",""]},
+        {"network": "Campnetwork", "token": "Campnetwork", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
+        {"network": "Somnia", "token": "Somnia", "sites": ["https://testnet.somnia.network/","","","",""]},
+        {"network": "Moonveil", "token": "Moonveil", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
+        {"network": "Sahara", "token": "Sahara", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
+        {"network": "MegaETH", "token": "MegaETH", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
+        {"network": "Xion", "token": "Xion", "sites": ["https://faucet.xion.burnt.com/", "https://web3.okx.com/pt-br/faucet","","",""]},
+        {"network": "AVAX", "token": "AVAX", "sites": ["https://core.app/tools/testnet-faucet/?subnet=c&token=c","","","",""]},
+        {"network": "Seismic", "token": "Seismic", "sites": ["https://faucet-2.seismicdev.net/","","","",""]},
+        {"network": "Humanity", "token": "Humanity", "sites": ["https://faucets.alchemy.com/faucets/humanity-testnet","","","",""]},
+        {"network": "Monad", "token": "Monad", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
+        {"network": "Sui", "token": "SUI", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
+        {"network": "Ethereum", "token": "USDC, EURC (Sepolia)", "sites": ["https://faucet.circle.com/","","","",""]},
+        {"network": "Ethereum", "token": "PYUSD (Sepolia)", "sites": ["https://cloud.google.com/application/web3/faucet","","","",""]},
+        {"network": "Google Web3 Faucet", "token": "ETH, Holesky, ZetaChain, Injective, Mantra, Story Aeneid, PYUSD ETH & Solana", "sites": ["https://cloud.google.com/application/web3/faucet","","",""]},
+        {"network": "Chainlink", "token": "Multichain", "sites": ["https://faucets.chain.link/","","","",""]},
+        {"network": "Alchemy", "token": "Multichain", "sites": ["https://www.alchemy.com/faucets","","","",""]},
+        {"network": "Quicknode", "token": "Multichain", "sites": ["https://faucet.quicknode.com/","","","",""]},
+        {"network": "Buy Faucets", "token": "Multichain", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
+    ]
+    cols = st.columns(4)
+    for idx, faucets in enumerate(faucet_sites):
+        with cols[idx % 4]:
+            st.markdown(
+                f"""
+                <div style="
+                    border: 3px solid white;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background-color: #342b44;
+                    color: white;
+                    margin-bottom: 5px;
+                    margin-top: 20px;
+                ">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">                       
+                        <h4 style="margin: 0;color: #FFA500">{faucets['network']}</h4>
+                    </div>
+                """,
+                unsafe_allow_html=True
+            )
+        
+            st.markdown(f"""
+                <div style="
+                        border: 2px solid white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        background-color: #376a94;
+                        color: white;
+                        margin-bottom: 5px;
+                    ">
+                        <div style='margin-top: 10px; margin-bottom: 10px;'>
+                            <strong>🪙 Token: {faucets['token']}:</strong><br>
+                            {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">{site}</a>' for site in faucets['sites']])}
+                        </div>
+                </div>
+            """, unsafe_allow_html=True)
+
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
         unsafe_allow_html=True
