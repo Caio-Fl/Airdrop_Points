@@ -1827,31 +1827,30 @@ elif opcao == "Bridges & Swaps Protocols":
 
 elif opcao == "Faucets":
     faucet_sites = [
-        {"network": "Ethereum", "token": "ETH (Sepolia, Holesky)", "sites": ["https://sepolia-faucet.pk910.de/","https://faucet.hoodscan.io/", "https://console.optimism.io/faucet","",""]},
-        {"network": "Bitcoin", "token": "BTC (Signet)", "sites": ["https://faucet.hoodscan.io/","","","",""]},
-        {"network": "Sei", "token": "SEI", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
-        {"network": "Babylon", "token": "Babylon Testnet", "sites": ["https://faucet.hoodscan.io/","","","",""]},
-        {"network": "0G Labs", "token": "0G", "sites": ["https://faucet.0g.ai/","","","",""]},
-        {"network": "Pharos", "token": "Pharos", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
-        {"network": "Opnet", "token": "Opnet", "sites": ["https://faucet.opnet.org","","","",""]},
-        {"network": "Campnetwork", "token": "Campnetwork", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
-        {"network": "Somnia", "token": "Somnia", "sites": ["https://testnet.somnia.network/","","","",""]},
-        {"network": "Moonveil", "token": "Moonveil", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
-        {"network": "Sahara", "token": "Sahara", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
-        {"network": "MegaETH", "token": "MegaETH", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
-        {"network": "Xion", "token": "Xion", "sites": ["https://faucet.xion.burnt.com/", "https://web3.okx.com/pt-br/faucet","","",""]},
-        {"network": "AVAX", "token": "AVAX", "sites": ["https://core.app/tools/testnet-faucet/?subnet=c&token=c","","","",""]},
-        {"network": "Seismic", "token": "Seismic", "sites": ["https://faucet-2.seismicdev.net/","","","",""]},
-        {"network": "Humanity", "token": "Humanity", "sites": ["https://faucets.alchemy.com/faucets/humanity-testnet","","","",""]},
-        {"network": "Monad", "token": "Monad", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
-        {"network": "Sui", "token": "SUI", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
-        {"network": "Ethereum", "token": "USDC, EURC (Sepolia)", "sites": ["https://faucet.circle.com/","","","",""]},
-        {"network": "Ethereum", "token": "PYUSD (Sepolia)", "sites": ["https://cloud.google.com/application/web3/faucet","","","",""]},
-        {"network": "Google Web3 Faucet", "token": "ETH, Holesky, ZetaChain, Injective, Mantra, Story Aeneid, PYUSD ETH & Solana", "sites": ["https://cloud.google.com/application/web3/faucet","","",""]},
-        {"network": "Chainlink", "token": "Multichain", "sites": ["https://faucets.chain.link/","","","",""]},
-        {"network": "Alchemy", "token": "Multichain", "sites": ["https://www.alchemy.com/faucets","","","",""]},
-        {"network": "Quicknode", "token": "Multichain", "sites": ["https://faucet.quicknode.com/","","","",""]},
-        {"network": "Buy Faucets", "token": "Multichain", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
+        {"network": "Ethereum", "token": "ETH (Sepolia, Holesky)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://sepolia-faucet.pk910.de/","https://faucet.hoodscan.io/", "https://console.optimism.io/faucet","",""]},
+        {"network": "Bitcoin", "token": "BTC (Signet)", "image":"https://pbs.twimg.com/profile_images/421692600446619648/dWAbC2wg_400x400.jpeg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
+        {"network": "0G Labs", "token": "0G", "image":"https://pbs.twimg.com/profile_images/1933474287027171329/L-I1k2oL_400x400.jpg", "sites": ["https://faucet.0g.ai/","","","",""]},
+        {"network": "Pharos", "token": "Pharos", "image":"https://pbs.twimg.com/profile_images/1899385457047412736/vfvmbKVj_400x400.jpg", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
+        {"network": "Opnet", "token": "Opnet", "image":"https://pbs.twimg.com/profile_images/1817743953627660289/7HObLZyL_400x400.jpg", "sites": ["https://faucet.opnet.org","","","",""]},
+        {"network": "Campnetwork", "token": "Campnetwork", "image":"https://pbs.twimg.com/profile_images/1774932612160557056/QOyzwbO2_400x400.jpg", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
+        {"network": "Somnia", "token": "Somnia", "image":"https://pbs.twimg.com/profile_images/1896736794810458112/9tsFttK2_400x400.jpg", "sites": ["https://testnet.somnia.network/","","","",""]},
+        {"network": "Moonveil", "token": "Moonveil", "image":"https://pbs.twimg.com/profile_images/1789490763933577216/njozvdjD_400x400.jpg", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
+        {"network": "Sahara", "token": "Sahara", "image":"https://pbs.twimg.com/profile_images/1871431718198239232/2LNyhe05_400x400.jpg", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
+        {"network": "MegaETH", "token": "MegaETH", "image":"https://pbs.twimg.com/profile_images/1861751545790070784/KvlxTzAq_400x400.jpg", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
+        {"network": "Xion", "token": "Xion", "image":"https://pbs.twimg.com/profile_images/1881756422507024384/Huw5cTrb_400x400.jpg", "sites": ["https://faucet.xion.burnt.com/", "https://web3.okx.com/pt-br/faucet","","",""]},
+        {"network": "AVAX", "token": "AVAX", "image":"https://pbs.twimg.com/profile_images/1923466301227532288/TuL8kPq3_400x400.jpg", "sites": ["https://core.app/tools/testnet-faucet/?subnet=c&token=c","","","",""]},
+        {"network": "Seismic", "token": "Seismic", "image":"https://pbs.twimg.com/profile_images/1889153006483935233/VWQ-F4dG_400x400.png", "sites": ["https://faucet-2.seismicdev.net/","","","",""]},
+        {"network": "Humanity", "token": "Humanity", "image":"https://pbs.twimg.com/profile_images/1923385112172888065/Elwahdp2_400x400.jpg", "sites": ["https://faucets.alchemy.com/faucets/humanity-testnet","","","",""]},
+        {"network": "Monad", "token": "Monad", "image":"https://pbs.twimg.com/profile_images/1877532281419739137/I_t8rg_V_400x400.jpg", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
+        {"network": "Sui", "token": "SUI", "image":"https://pbs.twimg.com/profile_images/1928528183466373120/4xpp6RSr_400x400.jpg", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
+        {"network": "Ethereum", "token": "USDC, EURC (Sepolia)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://faucet.circle.com/","","","",""]},
+        {"network": "Sei", "token": "SEI", "image":"https://pbs.twimg.com/profile_images/1873839225914716160/w8650_qp_400x400.jpg", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
+        {"network": "Babylon", "token": "Babylon Testnet", "image":"https://pbs.twimg.com/profile_images/1877578455576948736/q0GnBs9F_400x400.jpg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
+        {"network": "Google Web3 Faucet", "token": "ETH, Holesky, ZetaChain, Injective, Mantra, Story Aeneid, PYUSD ETH & Solana", "image":"https://pbs.twimg.com/profile_images/1754606338460487681/bWupXdxo_400x400.jpg", "sites": ["https://cloud.google.com/application/web3/faucet","","",""]},
+        {"network": "Chainlink", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1800426318099595264/N7yf_kOD_400x400.jpg", "sites": ["https://faucets.chain.link/","","","",""]},
+        {"network": "Alchemy", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1876056405012033536/vjO9FucE_400x400.jpg", "sites": ["https://www.alchemy.com/faucets","","","",""]},
+        {"network": "Quicknode", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1875136807781662720/MJP7n4UN_400x400.jpg", "sites": ["https://faucet.quicknode.com/","","","",""]},
+        {"network": "Buy Faucets", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1876981396134416384/lYzcJz9J_400x400.jpg", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
     ]
     cols = st.columns(4)
     for idx, faucets in enumerate(faucet_sites):
@@ -1867,7 +1866,8 @@ elif opcao == "Faucets":
                     margin-bottom: 5px;
                     margin-top: 20px;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">                       
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                        <img src="{faucets['image']}" width="50" height="50" style="border-radius: 50%;">                       
                         <h4 style="margin: 0;color: #FFA500">{faucets['network']}</h4>
                     </div>
                 """,
@@ -1884,7 +1884,7 @@ elif opcao == "Faucets":
                         margin-bottom: 5px;
                     ">
                         <div style='margin-top: 10px; margin-bottom: 10px;font-size: 20px;'>
-                            <strong>🪙 Token: {faucets['token']}:</strong><br>
+                            <strong>🪙 Token: {faucets['token']}</strong><br>
                             {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">{site}</a>' for site in faucets['sites']])}
                         </div>
                 </div>
