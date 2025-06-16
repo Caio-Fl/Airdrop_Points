@@ -1826,6 +1826,22 @@ elif opcao == "Bridges & Swaps Protocols":
     )
 
 elif opcao == "Faucets":
+    st.markdown(
+        """
+        <style>
+        .bridge-description {
+            font-size: 22px;
+            text-align: justify;
+            line-height: 1.6;
+        }
+        </style>
+
+        <div class="bridge-description">
+            Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     faucet_sites = [
         {"network": "Ethereum", "token": "ETH (Sepolia, Holesky)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://sepolia-faucet.pk910.de/","https://faucet.hoodscan.io/", "https://console.optimism.io/faucet","",""]},
         {"network": "Bitcoin", "token": "BTC (Signet)", "image":"https://pbs.twimg.com/profile_images/421692600446619648/dWAbC2wg_400x400.jpeg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
