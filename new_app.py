@@ -1850,7 +1850,7 @@ elif opcao == "Faucets":
         {"network": "Chainlink", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1800426318099595264/N7yf_kOD_400x400.jpg", "sites": ["https://faucets.chain.link/","","","",""]},
         {"network": "Alchemy", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1876056405012033536/vjO9FucE_400x400.jpg", "sites": ["https://www.alchemy.com/faucets","","","",""]},
         {"network": "Quicknode", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1875136807781662720/MJP7n4UN_400x400.jpg", "sites": ["https://faucet.quicknode.com/","","","",""]},
-        {"network": "Buy Faucets", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1876981396134416384/lYzcJz9J_400x400.jpg", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
+        {"network": "Buy Faucets", "token": "Multichain", "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA131noMEukSs7KjDfFB7fURfU_mkHSZVmWw&s", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
     ]
     cols = st.columns(4)
     for idx, faucets in enumerate(faucet_sites):
