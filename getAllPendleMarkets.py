@@ -22,10 +22,6 @@ def get_pendle_markets(id):
             "aggregatedApy": details["aggregatedApy"],
             "maxBoostedApy": details["maxBoostedApy"],
             "feeRate": details["feeRate"],
-            "ptUp": details["movement10Percent"]["ptMovementUpUsd"],
-            "ptDown": details["movement10Percent"]["ptMovementDownUsd"],
-            "ytUp": details["movement10Percent"]["ytMovementUpUsd"],
-            "ytDown": details["movement10Percent"]["ytMovementDownUsd"],
             "yieldMin": details["yieldRange"]["min"],
             "yieldMax": details["yieldRange"]["max"],
             "creationTimestamp": market["timestamp"]
