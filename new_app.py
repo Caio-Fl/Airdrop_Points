@@ -9,6 +9,7 @@ from get_leader_OpenEden_function import get_leader_OpenEden_function
 from get_leader_Level_function import get_leader_Level_function
 from get_Leader_Spark_Data import get_Leader_Spark_Data
 from get_fragmetric_data import get_fragmetric_data
+from get_leader_Gaib_function import get_leader_Gaib_function
 from get_Pendle_Data import get_Pendle_Data
 from get_rateX_data import get_rateX_data
 from get_leader_kyros_function import get_leader_kyros_function
@@ -494,9 +495,17 @@ Ky_date0 = datetime.strptime("2025-04-18T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ"
 Sp_Data = []
 Sp_Multipleir = 25
 Sp_Boost = 1.10
-Sp_TP_0 = 523450305
+Sp_TP_0 = 4026173640
 Sp_pts_token = 1
 Sp_date0 = datetime.strptime("2025-05-18T09:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+
+# Gaib
+Gaib_Data = []
+Gaib_Multipleir = 20
+Gaib_Boost = 1.20
+Gaib_TP_0 = 4026167060
+Gaib_pts_token = 1
+Gaib_date0 = datetime.strptime("2025-06-11T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
 # --- Dados dos Protocolos ---
 # Armazena a hora da primeira execução na sessão do usuário
@@ -658,6 +667,10 @@ elif opcao == "Farm with YT":
             <p>
             To apply new Parameters to ROI Estimation, click on <strong>"Refresh YT"</strong>.
             </p>
+            <p>
+            You need to adjust the Parameters to evaluate each Protocol, mainly the expected FDV in TGE. 
+            Do not expect that a protocol with $30M TVL will be able to do an TGE with $100M of FDV, be coherent in your expectations.
+            </p>
         </div>
         """,
         unsafe_allow_html=True
@@ -666,10 +679,15 @@ elif opcao == "Farm with YT":
     # --- Novo Quadro de Inputs ---
     st.sidebar.markdown("<h3 style='font-size: 20px;'>Parameters to YT ROI Estimation</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
-        invested = st.number_input("Choose the Value to Invest: $", min_value=0.0, value=1000.0, step=1.0)
-        tsp = st.number_input("Expected Token Total Supply:", min_value=0, value=1000000000)
-        drop = st.number_input("Expected Percentual to Protocol Airdrop:", min_value=0.0, max_value=100.0, value=5.0)
-        fdv = st.number_input("Expected FDV in TGE: $", min_value=0.0, value=200000000.0)
+        invested = st.number_input("Choose the Value to Invest ($):", min_value=0.0, value=1000.0, step=1.0)
+        tsp = st.number_input("Expected Token Total Supply (B):", min_value=0, value=1) * 1_000_000_000
+        drop = st.number_input("Expected Percentual to Protocol Airdrop (%):", min_value=0.0, max_value=100.0, value=5.0)
+        Level_fdv = st.number_input("Expected Level FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
+        Open_fdv = st.number_input("Expected OpenEden FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
+        Frag_fdv = st.number_input("Expected Frag. FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
+        ky_fdv = st.number_input("Expected Kyros FDV in TGE ($M):", min_value=0, value=40, step=1) * 1_000_000
+        Sp_fdv = st.number_input("Expected Spark FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
+        Gaib_fdv = st.number_input("Expected Gaib FDV in TGE ($M):", min_value=0, value=30, step=1) * 1_000_000
 
         st.markdown("---")
         Level_l_date = st.text_input(
@@ -692,7 +710,11 @@ elif opcao == "Farm with YT":
             "Expected Sparks TGE Date:",
             value="2025-08-14",   # valor padrão
         )
-
+        Gaib_l_date = st.text_input(
+            "Expected Gaib TGE Date:",
+            value="2025-08-14",   # valor padrão
+        )
+        
     # Botão de atualizar
     update_button = st.button("Refresh YT")
 
@@ -712,6 +734,7 @@ elif opcao == "Farm with YT":
             Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
             Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
             Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
+            Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
             
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
             Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
@@ -719,7 +742,8 @@ elif opcao == "Farm with YT":
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
             Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
-            
+            Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
+
             # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
             date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -729,6 +753,7 @@ elif opcao == "Farm with YT":
             date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date6 = datetime.strptime(Sp_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            date7 = datetime.strptime(Gaib_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             
             # Calcula os parâmetros de cada Protocolo
             # OpenEden
@@ -740,7 +765,7 @@ elif opcao == "Farm with YT":
             Open_daily_pts_farmed = round(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token,2)
             Open_total_pts_farmed = round(Open_daily_pts_farmed*(date2-date1).days,2)
             Open_etimated_tokens = round(Open_total_pts_farmed/Open_points_per_token,2)
-            Open_airdrop_value = round((fdv/tsp)*Open_etimated_tokens,2)
+            Open_airdrop_value = round((Open_fdv/tsp)*Open_etimated_tokens,2)
             Open_cost = abs(round((Open_farmed_yield - invested - (invested*abs(Open_priceImpact))),2))
             Open_profit = round((Open_airdrop_value - Open_cost),2)
             Open_ROI = round((100*Open_profit/Open_cost),2)
@@ -756,9 +781,8 @@ elif opcao == "Farm with YT":
             Level_daily_pts_farmed = round(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token,2)
             Level_total_pts_farmed = round(Level_daily_pts_farmed*(date3-date1).days,2)
             Level_etimated_tokens = round(Level_total_pts_farmed/Level_points_per_token,2)
-            Level_airdrop_value = round((fdv/tsp)*Level_etimated_tokens,2)
+            Level_airdrop_value = round((Level_fdv/tsp)*Level_etimated_tokens,2)
             Level_cost = abs(round((Level_farmed_yield - invested - (invested*abs(Level_priceImpact))),2))
-            print((invested*Level_priceImpact),Level_farmed_yield)
             Level_profit = round((Level_airdrop_value - Level_cost),2)
             Level_ROI = round((100*Level_profit/Level_cost),2)
 
@@ -770,11 +794,10 @@ elif opcao == "Farm with YT":
             Frag_points_tge = round(Frag_accured + (((Frag_date_tge-date1).days)*Frag_mean_daily),0)
             Frag_points_per_token = round(Frag_points_tge/(tsp*drop/100),2)
             Frag_farmed_yield = round((invested)*Frag_ytMul*Frag_unApy*(date4-date1).days/365,2)
-            
             Frag_daily_pts_farmed = round((invested/fragAsUSD)*Frag_ytMul*Frag_Multipleir*Frag_Boost*Backpack_Boost*Frag_pts_token,2)
             Frag_total_pts_farmed = round(Frag_daily_pts_farmed*(date4-date1).days,2)
             Frag_etimated_tokens = round(Frag_total_pts_farmed/Frag_points_per_token,2)
-            Frag_airdrop_value = round((fdv/tsp)*Frag_etimated_tokens,2)
+            Frag_airdrop_value = round((Frag_fdv/tsp)*Frag_etimated_tokens,2)
             Frag_cost = abs(round(((Frag_farmed_yield) - invested - abs(fragAsUSD*Frag_swapFee)),2))
             Frag_profit = round((Frag_airdrop_value - Frag_cost),2)
             Frag_ROI = round((100*Frag_profit/Frag_cost),2)
@@ -790,7 +813,7 @@ elif opcao == "Farm with YT":
             Ky_daily_pts_farmed = round((invested/KyAsUSD)*ky_ytMul*Ky_Multipleir*Ky_Boost*ky_pts_token,2)
             Ky_total_pts_farmed = round(Ky_daily_pts_farmed*(date5-date1).days,2)
             Ky_etimated_tokens = round(Ky_total_pts_farmed/Ky_points_per_token,2)
-            Ky_airdrop_value = round((fdv/tsp)*Ky_etimated_tokens,2)
+            Ky_airdrop_value = round((ky_fdv/tsp)*Ky_etimated_tokens,2)
             Ky_cost = abs(round(((Ky_farmed_yield) - invested - abs(KyAsUSD*ky_swapFee)),2))
             Ky_profit = round((Ky_airdrop_value - Ky_cost),2)
             Ky_ROI = round((100*Ky_profit/Ky_cost),2)
@@ -799,19 +822,35 @@ elif opcao == "Farm with YT":
 
             # Spark
             Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            Sp_mean_daily = 5*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+            Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
             Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
             Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
             Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
             Sp_daily_pts_farmed = round(invested*Sp_ytMul*Sp_Multipleir*Sp_Boost*Sp_pts_token,2)
             Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
             Sp_etimated_tokens = round(Sp_total_pts_farmed/Sp_points_per_token,2)
-            Sp_airdrop_value = round((fdv/10000000000)*Sp_etimated_tokens,2)
+            Sp_airdrop_value = round((Sp_fdv/10000000000)*Sp_etimated_tokens,2)
             Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*abs(Sp_priceImpact))),2))
             Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
             Sp_ROI = round((100*Sp_profit/Sp_cost),2)
 
             Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"muito bom")
+
+            # Gaib
+            Gaib_date_tge = datetime.strptime((Gaib_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            Gaib_mean_daily = 1.3*(Gaib_accured - Gaib_TP_0)/((date1-Gaib_date0).days)
+            Gaib_points_tge = round(Gaib_accured + (((Gaib_date_tge-date1).days)*Gaib_mean_daily),0)
+            Gaib_points_per_token = round(Gaib_points_tge/((tsp)*drop/100),2)
+            Gaib_farmed_yield = round(invested*Gaib_ytMul*Sp_unApy*(date6-date1).days/365,2)
+            Gaib_daily_pts_farmed = round(invested*Gaib_ytMul*Gaib_Multipleir*Gaib_Boost*Gaib_pts_token,2)
+            Gaib_total_pts_farmed = round(Gaib_daily_pts_farmed*(date7-date1).days,2)
+            Gaib_etimated_tokens = round(Gaib_total_pts_farmed/Gaib_points_per_token,2)
+            Gaib_airdrop_value = round((Gaib_fdv/tsp)*Gaib_etimated_tokens,2)
+            Gaib_cost = abs(round((Gaib_farmed_yield - invested - (invested*abs(Gaib_priceImpact))),2))
+            Gaib_profit = round((Gaib_airdrop_value - Gaib_cost),2)
+            Gaib_ROI = round((100*Gaib_profit/Gaib_cost),2)
+
+            Gaib_grade = protocol_rate(Gaib_tvl,(100*Gaib_top100p),Gaib_ROI,(100*Gaib_mean_daily/Gaib_accured),Gaib_total_users,"bom")
             #except:
             #    print("Error in YT Data Request")
 
@@ -840,7 +879,8 @@ elif opcao == "Farm with YT":
                 "Mean Daily Points": f"{round(Level_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Level_points_tge,0)}",
                 "Points per Token": f"{Level_points_per_token}",
-                "Estimated Token Price": f"$ {fdv/tsp}",
+                "Estimated FDV in TGE": f"{Level_fdv}",
+                "Estimated Token Price": f"$ {Level_fdv/tsp}",
                 "Estimated Tokens Airdrop": f"{Level_etimated_tokens}",
                 "Estimated Airdrop Value": f"$ {Level_airdrop_value}",
                 "Expected Profit": f"$ {Level_profit}",
@@ -870,7 +910,8 @@ elif opcao == "Farm with YT":
                 "Mean Daily Points": f"{round(Open_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Open_points_tge,0)}",
                 "Points per Token": f"{Open_points_per_token}",
-                "Estimated Token Price": f"$ {fdv/tsp}",
+                "Estimated FDV in TGE": f"{Open_fdv}",
+                "Estimated Token Price": f"$ {Open_fdv/tsp}",
                 "Estimated Tokens Airdrop": f"{Open_etimated_tokens}",
                 "Estimated Airdrop Value": f"$ {Open_airdrop_value}",
                 "Expected Profit": f"$ {Open_profit}",
@@ -903,7 +944,8 @@ elif opcao == "Farm with YT":
                 "Mean Daily Points": f"{round(Frag_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Frag_points_tge,0)}",
                 "Points per Token": f"{Frag_points_per_token}",
-                "Estimated Token Price": f"$ {fdv/tsp}",
+                "Estimated FDV in TGE": f"{Frag_fdv}",
+                "Estimated Token Price": f"$ {Frag_fdv/tsp}",
                 "Estimated Tokens Airdrop": f"{Frag_etimated_tokens}",
                 "Estimated Airdrop Value": f"$ {Frag_airdrop_value}",
                 "Expected Profit": f"$ {Frag_profit}",
@@ -935,7 +977,8 @@ elif opcao == "Farm with YT":
                 "Mean Daily Points": f"{round(Ky_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Ky_points_tge,0)}",
                 "Points per Token": f"{Ky_points_per_token}",
-                "Estimated Token Price": f"$ {fdv/tsp}",
+                "Estimated FDV in TGE": f"{ky_fdv}",
+                "Estimated Token Price": f"$ {ky_fdv/tsp}",
                 "Estimated Tokens Airdrop": f"{Ky_etimated_tokens}",
                 "Estimated Airdrop Value": f"$ {Ky_airdrop_value}",
                 "Expected Profit": f"$ {Ky_profit}",
@@ -965,11 +1008,43 @@ elif opcao == "Farm with YT":
                 "Mean Daily Points": f"{round(Sp_mean_daily,0)}",
                 "Estimated Points in TGE": f"{round(Sp_points_tge,0)}",
                 "Points per Token": f"{Sp_points_per_token}",
-                "Estimated Token Price": f"$ {10000000000/tsp}",
+                "Estimated FDV in TGE": f"{Sp_fdv}",
+                "Estimated Token Price": f"$ {Sp_fdv/10000000000}",
                 "Estimated Tokens Airdrop": f"{Sp_etimated_tokens}",
                 "Estimated Airdrop Value": f"$ {Sp_airdrop_value}",
                 "Expected Profit": f"$ {Sp_profit}",
                 "Expected ROI": f"{Sp_ROI} %"      
+            },
+            "Gaib": {
+                "Imagem": "https://pbs.twimg.com/profile_images/1882466326423470082/ZttuZmOg_400x400.jpg",
+                "Logo": "https://pbs.twimg.com/profile_images/1882466326423470082/ZttuZmOg_400x400.jpg",
+                "pureLink": "https://aid.gaib.ai/explore?invite=BF96D68D",
+                "Link": "<a href='https://aid.gaib.ai/explore?invite=BF96D68D' target='_blank' style='color:#FFA500;'>More info</a> - <a href='https://app.pendle.finance/trade/markets/0x47306e3cb4e325042556864b38aa0cbe8d928be5/swap?view=yt&py=output&chain=ethereum' target='_blank'>🔗 Pendle </a>",
+                "Grade": f"{Gaib_grade}",
+                "TVL": f"{Gaib_tvl} M",
+                "Last Update": f"{time_Level}",
+                "Expiry": f"{date7.date()}",
+                "Total Points Farmed": f"{round(Gaib_accured,0)}",
+                "YT Multiplier": f"{round(Gaib_ytMul,3)}",
+                "YT APY": f"{round(Gaib_unApy*100,2)}",
+                "Time Until Expiration": f"{(date7-date1)}",
+                "Protocol YT Multiplier": f"{Gaib_Multipleir}",
+                "Protocol Referral Boost": f"{round((Gaib_Boost-1),2)*100} %",
+                "Equivalent YT Received": f"$ {round(invested*Gaib_ytMul,2)}",
+                "Daily Points Farmed": f"{Gaib_daily_pts_farmed}",
+                "Total Points Farmed in YT": f"{Gaib_total_pts_farmed}",
+                "Top 100 Concentration": f"{round(100*Gaib_top100p,2)}",
+                "Total User": f"{Gaib_total_users}",
+                "Farmed Yield in YT": f"$ {Gaib_farmed_yield}",
+                "Mean Daily Points": f"{round(Gaib_mean_daily,0)}",
+                "Estimated Points in TGE": f"{round(Gaib_points_tge,0)}",
+                "Points per Token": f"{Gaib_points_per_token}",
+                "Estimated FDV in TGE": f"{Gaib_fdv}",
+                "Estimated Token Price": f"$ {Gaib_fdv/tsp}",
+                "Estimated Tokens Airdrop": f"{Gaib_etimated_tokens}",
+                "Estimated Airdrop Value": f"$ {Gaib_airdrop_value}",
+                "Expected Profit": f"$ {Gaib_profit}",
+                "Expected ROI": f"{Gaib_ROI} %"      
             }
         }
         
@@ -1026,7 +1101,8 @@ elif opcao == "Farm with YT":
                     <li><strong>Mean Daily Points:</strong> {protocolos[p]['Mean Daily Points']} XP</li>
                     <li><strong>Estimated Total Points in TGE:</strong> {protocolos[p]['Estimated Points in TGE']} XP</li>
                     <li><strong>Points to Receive 1 Token:</strong> {protocolos[p]['Points per Token']}</li>
-                    <li><strong>Estimated Token Price:</strong> {protocolos[p]['Estimated Token Price']}</li>
+                    <li><strong>Estimated FDV in TGE:</strong> {protocolos[p]['Estimated FDV in TGE']}</li>
+                    <li><strong>Estimated Token Price:</strong> {protocolos[p]['Estimated Token Price']}</li>                  
                     <li><strong>Estimated Tokens Airdrop:</strong> {protocolos[p]['Estimated Tokens Airdrop']}</li>
                     <li><strong>Estimated Airdrop Value:</strong> {protocolos[p]['Estimated Airdrop Value']}</li>
                     <li><strong>Expected Profit:</strong> {protocolos[p]['Expected Profit']}</li>
@@ -1082,11 +1158,12 @@ elif opcao == "Farm with YT":
                         """,
                         unsafe_allow_html=True
                     )
-                bcol1, bcol2, bcol3 = st.columns([1.6, 2, 1])
+                bcol1, bcol2, bcol3 = st.columns([1.75, 1.88, 1])
                 with bcol2:
                     if st.button(f"View Details", key=p):
                         st.session_state.protocolo_selecionado = p
                     i += 1
+
 elif opcao == "Pendle APY Prediction":
     #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
     ids = [1, 56, 146, 5000, 8453, 42161, 80094, 10]
@@ -1377,8 +1454,6 @@ elif opcao == "Pendle APY Prediction":
     """,
     unsafe_allow_html=True
     )
-
-
     
 elif opcao == "Latest Airdrops":
     st.info("🚧 Coming Soon: Protocols with Airdrop Potential.")
@@ -1497,6 +1572,7 @@ elif opcao == "Comparative YT Table":
         "Mean Daily Points (XP)": [protocolos[p]["Mean Daily Points"] for p in protocolos],
         "Points in TGE (XP)": [protocolos[p]["Estimated Points in TGE"] for p in protocolos],
         "Points per Token": [protocolos[p]["Points per Token"] for p in protocolos],
+        "Estimated FDV in TGE": [protocolos[p]["Estimated FDV in TGE"] for p in protocolos],
         "Token Price": [protocolos[p]["Estimated Token Price"] for p in protocolos],
         "Tokens Airdrop": [protocolos[p]["Estimated Tokens Airdrop"] for p in protocolos],
         "Airdrop Value": [protocolos[p]["Estimated Airdrop Value"] for p in protocolos],
