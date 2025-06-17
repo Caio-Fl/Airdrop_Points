@@ -1400,7 +1400,7 @@ elif opcao == "Pendle APY Prediction":
 
         if isinstance(IA, list):
             st.markdown(
-                "<h2 style='font-size:24px; color:#333;'>🧠 AI Interpretation:</h2>",
+                "<h2 style='font-size:24px; color:#E6EDF3;'>🧠 AI Interpretation:</h2>",
                 unsafe_allow_html=True
             )
             for resposta in IA:
@@ -1584,7 +1584,7 @@ elif opcao == "Comparative YT Table":
     dfT = df.set_index("Protocolo").T
     styled_dfT = (
         dfT.style
-        .applymap(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #342b44')
+        .applymap(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #E6EDF3')
         .set_table_styles([
             {
                 "selector": "th.row_heading", 
@@ -1596,15 +1596,17 @@ elif opcao == "Comparative YT Table":
             },
             {
                 "selector": "td",  # Aqui é o corpo da tabela
-                "props": [("font-size", "18px"), ("padding", "6px 12px"),("font-weight", "bold")]
+                "props": [("color", "#342b44"), ("background-color", "#E6EDF3"), ("font-size", "18px"), ("padding", "6px 12px"),("font-weight", "bold")]
             }
         ])
     )
     #st.write(styled_dfT)
     # Mostrando no Streamlit
     #st.dataframe(df, use_container_width=True)
-    styled_df = df.style.applymap(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #342b44')
-
+    styled_df = df.style.applymap(
+        lambda v: 'color: #342b44; background-color: #E6EDF3' if isinstance(v, (int, float)) and v > 0.1 
+        else 'color: #342b44; background-color: #E6EDF3'
+    )
     st.markdown("""
     <style>
     /* Fonte e cor das abas */
