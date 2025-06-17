@@ -38,4 +38,5 @@ def get_leader_Level_function():
 
     top100p = top100/total_accured
     print("TOTAL DE PONTOS = ",total_accured, "XP")
+    
     return(total_accured,top100p,users)
