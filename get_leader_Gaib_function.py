@@ -11,7 +11,7 @@ def get_leader_Gaib_function():
         "Referer": "https://aid.gaib.ai/",
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, verify=False)
     data = response.json()
 
 
