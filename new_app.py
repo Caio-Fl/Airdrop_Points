@@ -714,7 +714,7 @@ elif opcao == "Farm with YT":
             "Expected Gaib TGE Date:",
             value="2025-08-14",   # valor padrão
         )
-        
+
     # Botão de atualizar
     update_button = st.button("Refresh YT")
 
@@ -850,7 +850,7 @@ elif opcao == "Farm with YT":
             Gaib_profit = round((Gaib_airdrop_value - Gaib_cost),2)
             Gaib_ROI = round((100*Gaib_profit/Gaib_cost),2)
 
-            Gaib_grade = protocol_rate(Gaib_tvl,(100*Gaib_top100p),Gaib_ROI,(100*Gaib_mean_daily/Gaib_accured),Gaib_total_users,"bom")
+            Gaib_grade = protocol_rate(Gaib_tvl,(100*Gaib_top100p),Gaib_ROI,(100*Gaib_mean_daily/Gaib_accured),Gaib_total_users,"muito bom")
             #except:
             #    print("Error in YT Data Request")
 
