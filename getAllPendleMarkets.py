@@ -22,8 +22,6 @@ def get_pendle_markets(id):
             "aggregatedApy": details["aggregatedApy"],
             "maxBoostedApy": details["maxBoostedApy"],
             "feeRate": details["feeRate"],
-            "yieldMin": details["yieldRange"]["min"],
-            "yieldMax": details["yieldRange"]["max"],
             "creationTimestamp": market["timestamp"]
         }
         rows.append(row)
