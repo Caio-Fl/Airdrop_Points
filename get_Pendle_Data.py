@@ -32,6 +32,6 @@ def get_Pendle_Data(marketAdd,tokenAdd):
     response = requests.get(url)
     jsonn = json.loads(response.text)
     priceImpact = jsonn.get("data", {}).get("priceImpact", "0")
-    ytMultiplier = int(jsonn.get("data", {}).get("amountOut", "0"))/1000000000000000000/1000
+    #ytMultiplier = int(jsonn.get("data", {}).get("amountOut", "0"))/1000000000000000000/1000
   
     return(ytMultiplier,unApy,impApy,feeRate,swapFee,ytRoi,expiry,priceImpact)
