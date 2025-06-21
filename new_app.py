@@ -171,12 +171,32 @@ st.set_page_config(
     page_icon="🪂",
     layout="wide"
 )
+st.markdown("""
+<style>
+body, html, .stApp {
+    font-family: 'Sora', sans-serif;
+}
+
+/* Botões com Sora */
+.stButton > button {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+/* Títulos, textos customizados */
+.header, .footer, .marquee-container, .card {
+    font-family: 'Sora', sans-serif !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 tokens = {
     "bitcoin": {"name": "Bitcoin (BTC)", "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png"},
     "ethereum": {"name": "Ethereum (ETH)", "icon": "https://cryptologos.cc/logos/ethereum-eth-logo.png"},
     "solana": {"name": "Solana (SOL)", "icon": "https://cryptologos.cc/logos/solana-sol-logo.png"},
     "binancecoin": {"name": "BNB (BNB)", "icon": "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"},
+    "hyperliquid": {"name": "Hyperliquid (HYPE)", "icon": "https://assets.coingecko.com/coins/images/34898/large/hype.png"},
     "aave": {"name": "Aave (AAVE)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
     "ripple": {"name": "XRP (XRP)", "icon": "https://cryptologos.cc/logos/xrp-xrp-logo.png"},
     "sui": {"name": "Sui (SUI)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
@@ -215,7 +235,7 @@ html = """
     margin: 0 30px;
     color: white;
     font-family: monospace;
-    font-size: 16px;
+    font-size: 22px;
 }
 .ticker-item img {
     vertical-align: middle;
@@ -231,7 +251,7 @@ html = """
 for key, token in tokens.items():
     price = data.get(key, {}).get("usd")
     if price is not None:
-        html += f"&nbsp;&nbsp;&nbsp;&nbsp{token['name']} ${price:,.4f}&nbsp;&nbsp;&nbsp;&nbsp|"
+        html += f'<span class="ticker-item">{token["name"]} ${price:,.3f} |</span>'
 
 html += "  "
 
@@ -347,46 +367,70 @@ st.markdown(
     unsafe_allow_html=True
 )
 # --- Sidebar ---
-st.sidebar.title("Airdrops Monitor")
+st.sidebar.title("🪂 Airdrops Monitor")
 st.sidebar.markdown("---")
 st.sidebar.title("Menu")
-st.sidebar.markdown("<h3 style='font-size: 18px;'></h3>", unsafe_allow_html=True)
+st.sidebar.markdown("<h3 style='font-size: 22px;'></h3>", unsafe_allow_html=True)
 
 # Define options for the sidebar
 
+# --- CSS para estilizar o sidebar ---
 st.markdown("""
     <style>
-    /* Aumenta espaçamento entre as opções do radio */
+    [data-testid="stSidebar"] {
+        background-color: #2f2e41;
+    }
+
     [data-testid="stSidebar"] .stRadio > div {
-        gap: 5px;
+        gap: 8px;
     }
 
-    /* Aumenta altura e fonte das opções */
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label {
-        font-size: 16px;
-        padding: 12px 6px;
-        border-radius: 6px;
+        font-size: 25px;
+        padding: 10px 8px;
+        border-radius: 8px;
         background-color: #b18d7e33;
-        transition: background-color 0.2s;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
     }
 
-    /* Destaque da opção selecionada */
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label:hover {
+        background-color: #b18d7e55;
+    }
+
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label[data-selected="true"] {
         background-color: #b18d7e;
         color: white;
         font-weight: bold;
     }
+
+    .sidebar-title {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .sidebar-section {
+        font-size: 14px;
+        color: #cccccc;
+        margin: 20px 0 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-options = ["Welcome","Farm with YT", "Comparative YT Table", "Pendle APY Prediction",
-            "Latest Airdrops", "Depin Airdrops", "Last Claims and Checkers", "Bridges & Swaps Protocols", "Faucets", "Revoke Contract","Avoiding Scams"]
+options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
+           "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
+           "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
+
     
-#opcao = st.sidebar.selectbox("", options, index=1)
 opcao = st.sidebar.radio("", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
-
 
 # --- Inicializar o banco de dados ---
 def init_db():
@@ -438,21 +482,21 @@ init_db()
 # Faz a busca de dados da OpenEden e Level em suas API's
 def enviar_dados():
     try:
-        Total_OpenEden,top100p_OpenEden,Open_count = get_leader_OpenEden_function()
-        time_Open = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        #Total_OpenEden,top100p_OpenEden,Open_count = get_leader_OpenEden_function()
+        #time_Open = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         Total_Level,top100p_Level,Level_count = get_leader_Level_function()
         time_Level = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         tags = ["OpenEden","Level"]
-        values = [Total_OpenEden,Total_Level]
-        top100 = [top100p_OpenEden,top100p_Level]
-        total_users = [Open_count,Level_count]
+        values = [Total_Level,Total_Level]
+        top100 = [top100p_Level,top100p_Level]
+        total_users = [Level_count,Level_count]
         dado = {
             "tag": tags[0],
             "value": values[0]
         }
     except:
         st.warning("⚠️ Não foi possível conectar à API.")
-    return(tags,values,time_Open,time_Level,top100,total_users)
+    return(tags,values,time_Level,time_Level,top100,total_users)
 
 
 # Inicialização de parâmetros de cada protocolo
@@ -541,13 +585,14 @@ st.markdown("""
 # --- Conteúdo Principal ---
 st.title(opcao)
 
-if opcao == "Welcome":
+
+if opcao == "🏠 Welcome":
         
     st.markdown(
         """
         <style>
         .airdrop-description {
-            font-size: 24px;
+            font-size: 25px;
             line-height: 1.6;
             text-align: justify;
         }
@@ -566,7 +611,7 @@ if opcao == "Welcome":
         """
         <style>
         .airdrop-description {
-            font-size: 22px;
+            font-size: 25px;
             line-height: 1.6;
             font-weight: bold; 
         }
@@ -583,7 +628,7 @@ if opcao == "Welcome":
         """
         <style>
         .airdrop-description {
-            font-size: 22px;
+            font-size: 25px;
             line-height: 1.6;
         }
         </style>
@@ -608,7 +653,7 @@ if opcao == "Welcome":
         """
         <style>
         .airdrop-description {
-            font-size: 22px;
+            font-size: 25px;
             line-height: 1.6;
             font-weight: bold; 
         }
@@ -625,7 +670,7 @@ if opcao == "Welcome":
         """
         <style>
         .airdrop-description {
-            font-size: 22px;
+            font-size: 25px;
             line-height: 1.6;
             text-align: justify;
         }
@@ -641,14 +686,18 @@ if opcao == "Welcome":
         unsafe_allow_html=True
     )
 
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
 
-elif opcao == "Farm with YT":
+elif opcao == "🌾 Farm with YT":
     # CSS personalizado para ajustar o tamanho da fonte da sidebar
     st.markdown(
         """
         <style>
         .yt-farm-description {
-            font-size: 22px;
+            font-size: 25px;
             text-align: justify;
             line-height: 1.6;
         }
@@ -683,7 +732,7 @@ elif opcao == "Farm with YT":
         tsp = st.number_input("Expected Token Total Supply (B):", min_value=0, value=1) * 1_000_000_000
         drop = st.number_input("Expected Percentual to Protocol Airdrop (%):", min_value=0.0, max_value=100.0, value=5.0)
         Level_fdv = st.number_input("Expected Level FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
-        Open_fdv = st.number_input("Expected OpenEden FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
+        #Open_fdv = st.number_input("Expected OpenEden FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
         Frag_fdv = st.number_input("Expected Frag. FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
         ky_fdv = st.number_input("Expected Kyros FDV in TGE ($M):", min_value=0, value=40, step=1) * 1_000_000
         Sp_fdv = st.number_input("Expected Spark FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
@@ -694,10 +743,10 @@ elif opcao == "Farm with YT":
             "Expected Level TGE Date:",
             value="2025-09-24",   # valor padrão
         )
-        Open_l_date = st.text_input(
-            "Expected OpenEden TGE Date:",
-            value="2025-09-30",   # valor padrão
-        )
+        #Open_l_date = st.text_input(
+        #    "Expected OpenEden TGE Date:",
+        #    value="2025-09-30",   # valor padrão
+        #)
         Frag_l_date = st.text_input(
             "Expected Fragmetric TGE Date:",
             value="2025-09-30",   # valor padrão
@@ -715,7 +764,7 @@ elif opcao == "Farm with YT":
             value="2025-08-14",   # valor padrão
         )
 
-    # Botão de atualizar
+    # Botão
     update_button = st.button("Refresh YT")
 
     # Verifica se já se passaram 120 segundos
@@ -723,7 +772,7 @@ elif opcao == "Farm with YT":
         with st.spinner('Loading Data and Calculating Parameters...'):
             #try: 
             # Busca Informações no Defillama
-            Open_tvl,Open_amount,Open_leadInvestors,Open_otherInvestors = get_defillama_info("openeden","Ethereum")
+            #Open_tvl,Open_amount,Open_leadInvestors,Open_otherInvestors = get_defillama_info("openeden","Ethereum")
             Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
             Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
             Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
@@ -737,7 +786,7 @@ elif opcao == "Farm with YT":
             Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
             
             # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
-            Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
+            #Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
             Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
             Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
             ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
@@ -748,7 +797,7 @@ elif opcao == "Farm with YT":
             date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
             date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
             date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            date2 = datetime.strptime(Open_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            #date2 = datetime.strptime(Open_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date3 = datetime.strptime(Level_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
             date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -757,20 +806,20 @@ elif opcao == "Farm with YT":
             
             # Calcula os parâmetros de cada Protocolo
             # OpenEden
-            Open_date_tge = datetime.strptime((Open_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-            Open_mean_daily = 1.3*(values[0]-Open_TP_0)/((date1-Open_date0).days)
-            Open_points_tge = round(values[0] + (((Open_date_tge-date1).days)*Open_mean_daily),0)
-            Open_points_per_token = round(Open_points_tge/(tsp*drop/100),2)
-            Open_farmed_yield = round(invested*Open_ytMul*Open_unApy*(date2-date1).days/365,2)
-            Open_daily_pts_farmed = round(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token,2)
-            Open_total_pts_farmed = round(Open_daily_pts_farmed*(date2-date1).days,2)
-            Open_etimated_tokens = round(Open_total_pts_farmed/Open_points_per_token,2)
-            Open_airdrop_value = round((Open_fdv/tsp)*Open_etimated_tokens,2)
-            Open_cost = abs(round((Open_farmed_yield - invested - (invested*abs(Open_priceImpact))),2))
-            Open_profit = round((Open_airdrop_value - Open_cost),2)
-            Open_ROI = round((100*Open_profit/Open_cost),2)
+            #Open_date_tge = datetime.strptime((Open_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+            #Open_mean_daily = 1.3*(values[0]-Open_TP_0)/((date1-Open_date0).days)
+            #Open_points_tge = round(values[0] + (((Open_date_tge-date1).days)*Open_mean_daily),0)
+            #Open_points_per_token = round(Open_points_tge/(tsp*drop/100),2)
+            #Open_farmed_yield = round(invested*Open_ytMul*Open_unApy*(date2-date1).days/365,2)
+            #Open_daily_pts_farmed = round(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token,2)
+            #Open_total_pts_farmed = round(Open_daily_pts_farmed*(date2-date1).days,2)
+            #Open_etimated_tokens = round(Open_total_pts_farmed/Open_points_per_token,2)
+            #Open_airdrop_value = round((Open_fdv/tsp)*Open_etimated_tokens,2)
+            #Open_cost = abs(round((Open_farmed_yield - invested - (invested*abs(Open_priceImpact))),2))
+            #Open_profit = round((Open_airdrop_value - Open_cost),2)
+            #Open_ROI = round((100*Open_profit/Open_cost),2)
             
-            Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"bom")
+            #Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"bom")
             
             # Level
             Level_date_tge = datetime.strptime((Level_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -885,37 +934,6 @@ elif opcao == "Farm with YT":
                 "Estimated Airdrop Value": f"$ {Level_airdrop_value}",
                 "Expected Profit": f"$ {Level_profit}",
                 "Expected ROI": f"{Level_ROI} %"      
-            },
-            "OpenEden": {
-                "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/open.jpg",
-                "Logo": "https://pbs.twimg.com/profile_images/1529034875642478592/70m4xSFd_400x400.jpg",
-                "pureLink": "https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k",
-                "Link": "<a href='https://portal.openeden.com/bills-campaign?refCode=1WgbBka17k' target='_blank'  style='color:#1E90FF;'>More info</a> - <a href='https://app.pendle.finance/trade/points?chains=ethereum' target='_blank'>🔗 Pendle </a>",
-                "Grade": f"{Open_grade}",
-                "TVL": f"{Open_tvl} M",
-                "Last Update": f"{time_Open}",
-                "Expiry": f"{date2.date()}",
-                "Total Points Farmed": f"{round(values[0],0)}",
-                "YT Multiplier": f"{round(Open_ytMul,3)}",
-                "YT APY": f"{round(Open_unApy*100,2)}",
-                "Time Until Expiration": f"{(date2-date1)}",
-                "Protocol YT Multiplier": f"{Open_Multipleir}",
-                "Protocol Referral Boost": f"{round((Open_Boost-1),2)*100} %",
-                "Equivalent YT Received": f"$ {round(invested*Open_ytMul,2)}",
-                "Daily Points Farmed": f"{Open_daily_pts_farmed}",
-                "Total Points Farmed in YT": f"{Open_total_pts_farmed}",
-                "Top 100 Concentration": f"{round(100*top100[0],2)}",
-                "Total User": f"{total_users[0]}",
-                "Farmed Yield in YT": f"$ {Open_farmed_yield}",
-                "Mean Daily Points": f"{round(Open_mean_daily,0)}",
-                "Estimated Points in TGE": f"{round(Open_points_tge,0)}",
-                "Points per Token": f"{Open_points_per_token}",
-                "Estimated FDV in TGE": f"{Open_fdv}",
-                "Estimated Token Price": f"$ {Open_fdv/tsp}",
-                "Estimated Tokens Airdrop": f"{Open_etimated_tokens}",
-                "Estimated Airdrop Value": f"$ {Open_airdrop_value}",
-                "Expected Profit": f"$ {Open_profit}",
-                "Expected ROI": f"{Open_ROI} %"            
             },
             "Fragmetric": {
                 "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/frag.jpg",
@@ -1069,17 +1087,17 @@ elif opcao == "Farm with YT":
                     color: white;
                     margin-bottom: 5px;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;font-size: 22px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;font-size: 25px;">
                         <img src="{protocolos[p]['Logo']}" width="70" height="70" style="border-radius: 5%;">
-                        <h4 style="margin: 5;color: #FFA500">{p}</h4>
+                        <h4 style="margin: 5;font-size: 25px;color: #FFA500">{p}</h4>
                     </div>
                 """,
                 unsafe_allow_html=True
             )
             st.markdown(f"""
-            <div style="background-color: #376a94; padding: 20px; border: 2px solid white; border-radius: 10px; margin-top: 20px; font-size: 20px;margin-bottom: 5px;">
+            <div style="background-color: #376a94; padding: 20px; border: 2px solid white; border-radius: 10px; margin-top: 20px; font-size: 25px;margin-bottom: 5px;">
                 <h2>Details {p}</h2>
-                    <p style="font-size:22px;">
+                    <p style="font-size:25px;">
                         <strong>Protocol:</strong> {p} – 
                         <a href= {protocolos[p]['pureLink']} target='_blank' style='color:#1E90FF;'>Visit Protocol</a>
                     </p>
@@ -1127,14 +1145,16 @@ elif opcao == "Farm with YT":
                 with col_center:
                     st.markdown(
                         f"""
-                        <div style="text-align: center;">
+                        <div style="text-align: center;margin-bottom: 5px;
+                            margin-top: 20px;
+                        ">
                             <img src="{protocolos[p]['Logo']}" width="80" style="border-radius: 5%; border: 2px solid white; border-radius: 10px; margin-top: 5px; margin-bottom: 15px;">
                         </div>
                         """,
                         unsafe_allow_html=True
                     )
                 st.markdown(f"""
-                    <div style='text-align: center; font-size: 24px;'>
+                    <div style='text-align: center; font-size: 25px;'>
                         <p>TVL: {protocolos[p]['TVL']}</p>
                         <p>Expected ROI: {protocolos[p]['Expected ROI']}</p>
                         <p>YT Multiplier: {protocolos[p]['YT Multiplier']}</p>
@@ -1152,19 +1172,23 @@ elif opcao == "Farm with YT":
                         f"""
                         <div style="text-align: center; margin-bottom: 10px;">
                             <a href="{protocolos[p]['pureLink']}" target="_blank">
-                                <button style='width: 75%; padding: 8px; font-size: 18px; background-color: #FFA500;'>Visit Protocol</button>
+                                <button style='width: 75%; padding: 8px; font-size: 25px; background-color: #FFA500;'>Visit Protocol</button>
                             </a>
                         </div>
                         """,
                         unsafe_allow_html=True
                     )
-                bcol1, bcol2, bcol3 = st.columns([1.75, 1.88, 1])
+                bcol1, bcol2, bcol3 = st.columns([1.75, 1.5, 1])
                 with bcol2:
                     if st.button(f"View Details", key=p):
                         st.session_state.protocolo_selecionado = p
                     i += 1
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
 
-elif opcao == "Pendle APY Prediction":
+elif opcao == "📈 Pendle APY Prediction":
     #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
     ids = [1, 56, 146, 5000, 8453, 42161, 80094, 10]
     nets = ["Ethereum", "BNB Chain", "Sonic Labs", "Mantle", "Base", "Arbitrum", "Berachain", "Optimism"]
@@ -1195,7 +1219,7 @@ elif opcao == "Pendle APY Prediction":
     default_index = markets[markets["name"] == default_market_name].index
     default_index = int(default_index[0]) if not default_index.empty else 0  # fallback para 0 se não encontrar
 
-    st.sidebar.markdown("<h3 style='font-size: 20px;'>Select Pendle Market</h3>", unsafe_allow_html=True)
+    st.sidebar.markdown("<h3 style='font-size: 25px;'>Select Pendle Market</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
         # CSS para alterar a fonte de todos os selectbox
         st.markdown("""
@@ -1228,7 +1252,7 @@ elif opcao == "Pendle APY Prediction":
         address = selected_row["address"]
         label = selected_row["label"]
         expires = selected_row["expiry"]
-        st.markdown(f"<span style='font-size:22px'><strong>Selected Market:</strong> {label}</span>", unsafe_allow_html=True)
+        st.markdown(f"<span style='font-size:25px'><strong>Selected Market:</strong> {label}</span>", unsafe_allow_html=True)
     else:
         st.markdown("Maket not Founded")
 
@@ -1258,69 +1282,89 @@ elif opcao == "Pendle APY Prediction":
         data1 = datetime.strptime(time_now, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
         delta = expiry_date - data1
 
+    # Criar figura
+        col1, col2 = st.columns(2)
+
+        with col1:
+            fig = go.Figure()
+
+            # Base e Implied APY
+            fig.add_trace(go.Scatter(x=filtered_dates, y=filtered_base_apy, mode='lines+markers', name='Base APY', line=dict(color='blue')))
+            fig.add_trace(go.Scatter(x=dates, y=implied_apy, mode='lines+markers', name='Implied APY', line=dict(color='green')))
+            fig.add_trace(go.Scatter(x=dates, y=trend_line, mode='lines', name='Implied APY Tendency', line=dict(color='black', dash='dash')))
+            fig.add_trace(go.Scatter(x=dates, y=upper_line, mode='lines', name='Maximum Implied APY Tendency', line=dict(color='red', dash='dash')))
+            fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color="#b3a13c", dash='dash')))
+            fig.add_trace(go.Scatter(x=extended_dates, y=trend_line_extended[-len(extended_dates):], mode='lines', name='Tendency up to Expire', line=dict(color='black', dash='dot')))
+            fig.add_trace(go.Scatter(x=extended_dates, y=upper_line_extended[-len(extended_dates):], mode='lines', name='Maximum Tendency up to Expire', line=dict(color='red', dash='dot')))
+            fig.add_trace(go.Scatter(x=extended_dates, y=lower_line_extended[-len(extended_dates):], mode='lines', name='Minimum Tendency up to Expire', line=dict(color='green', dash='dot')))
+
+            # TVL em eixo secundário
+            fig.add_trace(go.Scatter(x=dates, y=tvl_in_k, mode='lines+markers', name='TVL (Mi USD)', line=dict(color='orange', dash='dot'), yaxis='y2'))
+
+            # Linha vertical para expiry
+            fig.add_shape(
+                type='line',
+                x0=expiry_date,
+                x1=expiry_date,
+                y0=0,
+                y1=1,
+                line=dict(color='gray', dash='dot'),
+                xref='x',
+                yref='paper'
+            )
+            fig.add_annotation(
+                x=expiry_date,
+                y=0,
+                text='Expiry Date',
+                showarrow=False,
+                xanchor='left',
+                yanchor='bottom',
+                xref='x',
+                yref='paper',
+                font=dict(size=20)  # Só o tamanho
+            )
+
+            # Layout com dois eixos y e fonte aumentada
+            fig.update_layout(
+                title=f'YT-{selected_row["name"]} {expiry_date.date()} - History of Base APY, Implied APY, Tendency Lines and TVL',
                 
+                xaxis_title='Date',
+                xaxis=dict(
+                    tickfont=dict(size=20)
+                ),
 
-        # Criar figura
-        fig = go.Figure()
+                yaxis_title='APY (%)',
+                yaxis=dict(
+                    range=[0, None],
+                    tickfont=dict(size=20)
+                ),
 
-        # Base e Implied APY
-        fig.add_trace(go.Scatter(x=filtered_dates, y=filtered_base_apy, mode='lines+markers', name='Base APY', line=dict(color='blue')))
-        fig.add_trace(go.Scatter(x=dates, y=implied_apy, mode='lines+markers', name='Implied APY', line=dict(color='green')))
-        fig.add_trace(go.Scatter(x=dates, y=trend_line, mode='lines', name='Implied APY Tendency', line=dict(color='black', dash='dash')))
-        fig.add_trace(go.Scatter(x=dates, y=upper_line, mode='lines', name='Maximum Implied APY Tendency', line=dict(color='red', dash='dash')))
-        fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color="#b3a13c", dash='dash')))
-        fig.add_trace(go.Scatter(x=extended_dates, y=trend_line_extended[-len(extended_dates):], mode='lines', name='Tendency up to Expire', line=dict(color='black', dash='dot')))
-        fig.add_trace(go.Scatter(x=extended_dates, y=upper_line_extended[-len(extended_dates):], mode='lines', name='Maximum Tendency up to Expire', line=dict(color='red', dash='dot')))
-        fig.add_trace(go.Scatter(x=extended_dates, y=lower_line_extended[-len(extended_dates):], mode='lines', name='Minimum Tendency up to Expire', line=dict(color='green', dash='dot')))
-        #fig.add_trace(go.Scatter(x=df_forecast['date'], y=df_forecast['forecast_ap'], mode='lines', name='Implied APY Prediction', line=dict(color='orange', dash='dash')))
+                yaxis2=dict(
+                    title='TVL (Mi USD)',
+                    overlaying='y',
+                    side='right',
+                    tickfont=dict(size=20)
+                ),
 
-        # TVL em eixo secundário
-        fig.add_trace(go.Scatter(x=dates, y=tvl_in_k, mode='lines+markers', name='TVL (Mi USD)', line=dict(color='orange', dash='dot'), yaxis='y2'))
+                legend=dict(
+                    x=1,
+                    y=1,
+                    xanchor='right',
+                    yanchor='top',
+                    bgcolor='rgba(52,43,68,0.8)',
+                    font=dict(size=20)
+                ),
 
-        # Linha vertical para expiry (usar apenas add_shape + add_annotation)
-        fig.add_shape(
-            type='line',
-            x0=expiry_date,
-            x1=expiry_date,
-            y0=0,
-            y1=1,
-            line=dict(color='gray', dash='dot'),
-            xref='x',
-            yref='paper'
-        )
-        fig.add_annotation(
-            x=expiry_date,
-            y=0,
-            text='Expiry Date',
-            showarrow=False,
-            xanchor='left',
-            yanchor='bottom',
-            xref='x',
-            yref='paper',
-            font=dict(color='red')
-        )
+                font=dict(size=20),  # Fonte geral: aplica em títulos, anotações e eixos que não foram especificados
 
-        # Layout com dois eixos y
-        fig.update_layout(
-            title=f'    YT-{selected_row["name"]} {expiry_date.date()} - History of Base APY, Implied APY, Tendency Lines and TVL',
-            xaxis=dict(title='Date'),
-            yaxis=dict(title='APY (%)',range=[0, None]),
-            yaxis2=dict(title='TVL (Mi USD)', overlaying='y', side='right'),
-            legend=dict(
-                x=1,              # posição horizontal (0 = esquerda)
-                y=1,              # posição vertical (1 = topo)
-                xanchor='right',   # ancora horizontal da legenda
-                yanchor='top',    # ancora vertical da legenda
-                bgcolor='rgba(52,43,68,0.8)'  # fundo semi-transparente opcional
-            ),
-            plot_bgcolor='rgba(255, 255, 255, 1)',   # Cor do fundo da área do gráfico
-            paper_bgcolor='rgba(52,43,68, 1)',  # Cor do fundo geral da figura
-            hovermode='x unified',
-            height=600
-        )
+                plot_bgcolor='rgba(255, 255, 255, 1)',
+                paper_bgcolor='rgba(52,43,68, 1)',
+                hovermode='x unified',
+                height=600
+            )
 
-        # Mostrar com zoom habilitado
-        st.plotly_chart(fig, use_container_width=True)
+            # Mostrar com zoom habilitado
+            st.plotly_chart(fig, use_container_width=True)
 
         def normalizar_para_faixa(valor, min_origem=0, max_origem=100, min_dest=-100, max_dest=100):
             return min_dest + ((valor - min_origem) / (max_origem - min_origem)) * (max_dest - min_dest)
@@ -1400,17 +1444,17 @@ elif opcao == "Pendle APY Prediction":
 
         if isinstance(IA, list):
             st.markdown(
-                "<h2 style='font-size:24px; color:#E6EDF3;'>🧠 AI Interpretation:</h2>",
+                "<h2 style='font-size:25px; color:#E6EDF3;'>🧠 AI Interpretation:</h2>",
                 unsafe_allow_html=True
             )
             for resposta in IA:
                 st.markdown(
-                    f"<div style='padding: 15px; border-radius: 10px; background-color: #342b44; font-size: 18px;'>{resposta}</div>",
+                    f"<div style='padding: 15px; font-size:22px; border-radius: 10px; background-color: #342b44; '>{resposta}</div>",
                     unsafe_allow_html=True
                 )
                 
-        else:
-            st.markdown(IA)
+        #else:
+        #    st.markdown(IA)
     
     st.markdown("---")  # Linha separadora entre blocos
 
@@ -1418,7 +1462,7 @@ elif opcao == "Pendle APY Prediction":
     """
     <style>
     .pendle-apy-description {
-        font-size: 22px;
+        font-size: 25px;
         line-height: 1.6;
         text-align: justify;
     }
@@ -1441,8 +1485,8 @@ elif opcao == "Pendle APY Prediction":
     </ul>
 
     <p>
-    In addition, <strong>buying opportunities</strong> may arise when the Implied APY touches the <span style='color:black;'><strong>minimum green trend line</strong></span>,
-    indicating a temporary undervaluation. Conversely, <strong>selling opportunities</strong> may be more favorable when the Implied APY reaches the <span style='color:black;'><strong>maximum red trend line</strong></span>,
+    In addition, <strong>buying opportunities</strong> may arise when the Implied APY touches the <span style='color:red;'><strong>minimum green trend line</strong></span>,
+    indicating a temporary undervaluation. Conversely, <strong>selling opportunities</strong> may be more favorable when the Implied APY reaches the <span style='color:red;'><strong>maximum red trend line</strong></span>,
     suggesting a potential overvaluation.
     </p>
 
@@ -1454,11 +1498,15 @@ elif opcao == "Pendle APY Prediction":
     """,
     unsafe_allow_html=True
     )
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )    
     
-elif opcao == "Latest Airdrops":
+elif opcao == "🎁 Latest Airdrops":
     st.info("🚧 Coming Soon: Protocols with Airdrop Potential.")
 
-elif opcao == "Depin Airdrops":
+elif opcao == "📡 Depin Airdrops":
 
     protocols_depin = [
         {"name":"Monad Score","priority":"S","funding":"Not disclosed","site":"https://dashboard.monadscore.xyz/signup/r/cWiIkvLG","social":{"twitter":"https://x.com/monadscores_xyz","discord":"https://discord.com/invite/rYGaM87RZV"},"status":"Active Farming","application":"Decentralized Reputation", "image":"https://pbs.twimg.com/profile_images/1898905479998287873/KqiFFod6_400x400.jpg"},
@@ -1478,7 +1526,7 @@ elif opcao == "Depin Airdrops":
         {"name":"Multisync","priority":"A","funding":"$2.2M","site":"https://multisynq.io/auth?referral=487a7ae52ccc7827","social":{"twitter":"https://x.com/multisynq","discord":"https://discord.com/invite/6Bvt8vx8NA"},"status":"Connection Only","application":"Device Synchronization", "image":"https://pbs.twimg.com/profile_images/1801808935286095873/CWDq9WfZ_400x400.jpg"},
         {"name":"GRID","priority":"A","funding":"$2.2M","site":"https://sso.getgrid.ai/registration?referral_code=fc126e7","social":{"twitter":"https://x.com/GetGridAi","discord":"https://discord.com/invite/fDs88WUNXS"},"status":"Connection Only","application":"AI training", "image":"https://pbs.twimg.com/profile_images/1798313490534555648/BET1sJNK_400x400.jpg"},
         {"name":"Stork","priority":"A","funding":"$4M","site":"https://chromewebstore.google.com/detail/stork-verify/knnliglhgkmlblppdejchidfihjnockl","social":{"twitter":"https://x.com/StorkOracle","discord":"https://discord.com/invite/storkoracle"},"status":"Active Farming","application":"Geolocation Data Distribution", "image":"https://pbs.twimg.com/profile_images/1899474008195637248/-nVBNuKn_400x400.jpg"},
-        {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity & Data Sharing", "image":"https://pbs.twimg.com/profile_images/1847181726973415424/8mw2mGXQ_400x400.png"},
+        {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity", "image":"https://pbs.twimg.com/profile_images/1847181726973415424/8mw2mGXQ_400x400.png"},
         {"name":"BlockMesh","priority":"B","funding":"Not disclosed","site":"https://app.blockmesh.xyz/register?invite_code=925336ba-de36-4e8e-a8ab-ce645919ce27","social":{"twitter":"https://x.com/blockmesh_xyz","discord":"https://discord.com/invite/pwZWzCtGx4"},"status":"Active Farming","application":"Decentralized Communication", "image":"https://pbs.twimg.com/profile_images/1820702766026645504/mL-smILQ_400x400.jpg"},
         {"name":"Distribute AI","priority":"B","funding":"Not disclosed","site":"https://r.oasis.ai/4c858669677a0fe6","social":{"twitter":"https://x.com/distributeai","discord":"https://discord.gg/distributeai"},"status":"Airdrop Released - Waiting Season 2","application":"Data Privacy & Storage for AI", "image":"https://pbs.twimg.com/profile_images/1866227189122789376/Ic2w3fhw_400x400.jpg"},
         {"name":"GaeaAI","priority":"B","funding":"Not disclosed","site":"https://app.aigaea.net/register?ref=gaSC6trQ0WpqzZ","social":{"twitter":"https://x.com/aigaealabs","discord":"https://discord.com/invite/aigaea"},"status":"Active Farming","application":"AI Training & Data Collection", "image":"https://pbs.twimg.com/profile_images/1904422472902115328/OQd87AE6_400x400.png"},
@@ -1500,10 +1548,19 @@ elif opcao == "Depin Airdrops":
                     color: white;
                     margin-bottom: 5px;
                     margin-top: 20px;
+                    margin-right: 15px;
+                    box-shadow: 
+                        0 0 10px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;color: #FFA500">{protocol['name']}</h4>
+                        <h4 style="margin: 0;color: #FFA500";font-size: 30px;>{protocol['name']}</h4>
                     </div>
                 """,
                 unsafe_allow_html=True
@@ -1515,17 +1572,27 @@ elif opcao == "Depin Airdrops":
                         padding: 20px;
                         background-color: #376a94;
                         color: white;
-                        margin-bottom: 5px;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                        margin-right: 18px;
+                        box-shadow: 
+                            0 0 10px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
                     ">
-                        <p style="font-size: 20px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
-                        <p style="font-size: 20px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
-                        <p style="font-size: 20px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
-                        <p style="font-size: 20px;"><strong>📊 Status:</strong> {protocol['status']}</p>
-                        <p style="font-size: 20px;"><strong>📣 Social:</strong> 
+                        <p style="font-size: 30px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
+                        <p style="font-size: 30px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
+                        <p style="font-size: 30px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
+                        <p style="font-size: 30px;"><strong>📊 Status:</strong> {protocol['status']}</p>
+                        <p style="font-size: 30px;"><strong>📣 Social:</strong> 
                             <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
                             <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
                         </p>
-                        <p style="font-size: 20px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
+                        <p style="font-size: 30px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -1534,13 +1601,13 @@ elif opcao == "Depin Airdrops":
         unsafe_allow_html=True
     )
 
-elif opcao == "Comparative YT Table":
+elif opcao == "📊 Comparative YT Table":
 
     st.markdown(
         """
         <style>
         .bridge-description {
-            font-size: 22px;
+            font-size: 25px;
             text-align: justify;
             line-height: 1.6;
         }
@@ -1584,19 +1651,19 @@ elif opcao == "Comparative YT Table":
     dfT = df.set_index("Protocolo").T
     styled_dfT = (
         dfT.style
-        .applymap(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #E6EDF3')
+        .map(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #E6EDF3')
         .set_table_styles([
             {
                 "selector": "th.row_heading", 
-                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "20px")]
+                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
             },
             {
                 "selector": "th.col_heading", 
-                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "20px")]
+                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
             },
             {
                 "selector": "td",  # Aqui é o corpo da tabela
-                "props": [("color", "#342b44"), ("background-color", "#E6EDF3"), ("font-size", "18px"), ("padding", "6px 12px"),("font-weight", "bold")]
+                "props": [("color", "#342b44"), ("background-color", "#E6EDF3"), ("font-size", "20px"), ("padding", "6px 12px"),("font-weight", "bold")]
             }
         ])
     )
@@ -1638,8 +1705,13 @@ elif opcao == "Comparative YT Table":
     with tab2:
         st.markdown("<h2 style='font-size:32px;'>Horizontal Table</h2>", unsafe_allow_html=True)
         st.write(styled_df)
+    
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
 
-elif opcao == "Last Claims and Checkers":
+elif opcao == "✅ Last Claims and Checkers":
     code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.G_eTfU"
     code2=".p2WlhCJ6f-ewl83V2zp7AHuL2M7NucW4oWVG5w"
     
@@ -1686,7 +1758,7 @@ elif opcao == "Last Claims and Checkers":
             margin_bottom = "5px" if i % 2 == 0 else "15px"
             div_html = f"""
             <div style='
-                font-size: 22px; 
+                font-size: 25px; 
                 line-height: 1.6; 
                 background-color: {background_color}; 
                 padding: 12px; 
@@ -1701,7 +1773,12 @@ elif opcao == "Last Claims and Checkers":
             col1.markdown(div_html, unsafe_allow_html=True)
     time.sleep(3)
 
-elif opcao == "Bridges & Swaps Protocols":
+    st.markdown(
+        "<hr style='border: 2px double #342b44;'>",
+        unsafe_allow_html=True
+    )
+
+elif opcao == "🌉 Bridges & Swaps Protocols":
     # Updated protocols data including Sonic and Hyperlane networks
 
     st.markdown(
@@ -1875,10 +1952,19 @@ elif opcao == "Bridges & Swaps Protocols":
                     color: white;
                     margin-bottom: 5px;
                     margin-top: 20px;
+                    margin-right: 15px;
+                    box-shadow: 
+                        0 0 10px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;color: #FFA500">{protocol['name']}</h4>
+                        <h4 style="margin: 0;font-size: 30px;color: #FFA500">{protocol['name']}</h4>
                     </div>
                 """,
                 unsafe_allow_html=True
@@ -1890,11 +1976,21 @@ elif opcao == "Bridges & Swaps Protocols":
                         padding: 20px;
                         background-color: #376a94;
                         color: white;
-                        margin-bottom: 5px;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                        margin-right: 18px;
+                        box-shadow: 
+                            0 0 10px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
                     ">
-                        <div style="margin-top: 20px; font-size: 20x;">
-                            <p style="font-size: 20px;">💸 Fees: {protocol['fees']} </p>
-                            <p style="font-size: 20px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 20px;" target="_blank">Visit Protocol</a></p>
+                        <div style="margin-top: 20px; font-size: 30x;">
+                            <p style="font-size: 30px;">💸 Fees: {protocol['fees']} </p>
+                            <p style="font-size: 30px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 30px;" target="_blank">Visit Protocol</a></p>
                         </div>
                 </div>
             """, unsafe_allow_html=True)
@@ -1904,7 +2000,7 @@ elif opcao == "Bridges & Swaps Protocols":
         unsafe_allow_html=True
     )
 
-elif opcao == "Faucets":
+elif opcao == "🚰 Faucets":
     st.markdown(
         """
         <style>
@@ -1960,10 +2056,19 @@ elif opcao == "Faucets":
                     color: white;
                     margin-bottom: 5px;
                     margin-top: 20px;
+                    margin-right: 15px;
+                    box-shadow: 
+                        0 0 10px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
                         <img src="{faucets['image']}" width="50" height="50" style="border-radius: 50%;">                       
-                        <h4 style="margin: 0;color: #FFA500">{faucets['network']}</h4>
+                        <h4 style="margin: 0;font-size: 30px;color: #FFA500">{faucets['network']}</h4>
                     </div>
                 """,
                 unsafe_allow_html=True
@@ -1976,9 +2081,18 @@ elif opcao == "Faucets":
                         padding: 20px;
                         background-color: #376a94;
                         color: white;
-                        margin-bottom: 5px;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                        margin-right: 18px;
+                        box-shadow:
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 10px #00e0ff;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
                     ">
-                        <div style='margin-top: 10px; margin-bottom: 10px;font-size: 20px;'>
+                        <div style='margin-top: 10px; margin-bottom: 10px;font-size: 30px;'>
                             <strong>🪙 Token: {faucets['token']}</strong><br>
                             {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">{site}</a>' for site in faucets['sites']])}
                         </div>
@@ -1990,13 +2104,13 @@ elif opcao == "Faucets":
         unsafe_allow_html=True
     )
 
-elif opcao == "Revoke Contract":
+elif opcao == "⛔ Revoke Contract":
 
     st.markdown(
         """
         <style>
         .bridge-description {
-            font-size: 22px;
+            font-size: 25px;
             text-align: justify;
             line-height: 1.6;
         }
@@ -2076,10 +2190,19 @@ elif opcao == "Revoke Contract":
                     color: white;
                     margin-bottom: 5px;
                     margin-top: 20px;
+                    margin-right: 15px;
+                    box-shadow: 
+                        0 0 10px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff,
+                        0 0 8px #00e0ff;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                 ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;color: #FFA500">{protocol['name']}</h4>
+                        <h4 style="margin: 0;color: #FFA500;font-size: 30px;">{protocol['name']}</h4>
                     </div>
                 """,
                 unsafe_allow_html=True
@@ -2091,10 +2214,20 @@ elif opcao == "Revoke Contract":
                         padding: 20px;
                         background-color: #376a94;
                         color: white;
-                        margin-bottom: 5px;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                        margin-right: 18px;
+                        box-shadow: 
+                            0 0 10px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
                     ">
-                        <div style="margin-top: 20px; font-size: 20x;">
-                            <p style="font-size: 20px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 20px;" target="_blank">Visit Protocol</a></p>
+                        <div style="margin-top: 20px; font-size: 30px;">
+                            <p style="font-size: 30px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 30px;" target="_blank">Visit Protocol</a></p>
                         </div>
                 </div>
             """, unsafe_allow_html=True)
@@ -2104,10 +2237,10 @@ elif opcao == "Revoke Contract":
         unsafe_allow_html=True
     )
 
-elif opcao == "Avoiding Scams":
+elif opcao == "⚠️ Avoiding Scams":
 
     st.markdown("""
-    <div style="font-size: 20px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
+    <div style="font-size: 25px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
     <b>With the rise of crypto airdrops, scams have become more widespread than ever.</b><br>
     Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.<br>
     Without careful verification, it’s easy to fall into traps set by scammers.<br>
@@ -2120,70 +2253,104 @@ elif opcao == "Avoiding Scams":
     st.subheader("🚨 How to Avoid Crypto Airdrop Scams")
 
     st.markdown("""
-    Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.
-    """)
+        <div style="font-size: 25px;">
+        Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🔒 1. Use a Dedicated Wallet for Airdrops")
     st.markdown("""
-    - Create a **separate wallet** just for airdrop interactions. I highly recommend buying a Cold Wallet and create at least 3 accounts (by network), being one for Hold, other to interact with DeFi protocols and other to interact with free Airdrops like testnets, games, quests, etc.
-    - Never use your main wallet with valuable assets.
-    - If anything goes wrong, your main funds stay safe.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li><b>Create a separate wallet</b> just for airdrop interactions. I highly recommend buying a Cold Wallet and creating at least 3 accounts (by network): one for holding, one for DeFi protocol interaction, and one for free airdrops like testnets, games, quests, etc.</li>
+                <li><b>Never use your main wallet</b> with valuable assets.</li>
+                <li>If anything goes wrong, your main funds stay safe.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🧠 2. Research Before You Click")
     st.markdown("""
-    - Verify the project’s legitimacy through **official sites** and **trusted communities**.
-    - Avoid links from random X (Twitter) users or Telegram DMs.
-    - Look for audits, GitHub repos, and real backers.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li><b>Verify the project’s legitimacy</b> through <b>official sites</b> and <b>trusted communities</b>.</li>
+                <li><b>Avoid links</b> from random X (Twitter) users or Telegram DMs.</li>
+                <li><b>Look for audits, GitHub repos, and real backers.</b></li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("⚠️ 3. Beware of Fake Accounts and Bots")
     st.markdown("""
-    - Many scam comments and impersonators exist under legit posts.
-    - Double-check usernames and links—**look for subtle typos**.
-    - **Never trust DMs** offering "airdrops" or "early access".
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li>Many scam comments and impersonators exist under legit posts.</li>
+                <li>Double-check usernames and links—<b>look for subtle typos</b>.</li>
+                <li><b>Never trust DMs</b> offering "airdrops" or "early access".</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🧾 4. Audit the Smart Contract or Wait")
     st.markdown("""
-    - Don’t rush to sign random transactions.
-    - Use tools like **Etherscan**, **DeBank**, or **Rabby Wallet** to inspect them.
-    - If a project lacks transparency or an audit, think twice.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li>Don’t rush to sign random transactions.</li>
+                <li>Use tools like <b>Etherscan</b>, <b>DeBank</b>, or <b>Rabby Wallet</b> to inspect them.</li>
+                <li>If a project lacks transparency or an audit, think twice.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🧼 5. Revoke Unused Permissions")
     st.markdown("""
-    - Clean up your wallet permissions regularly with:
-    - [revoke.cash](https://revoke.cash)
-    - [Safe](https://app.safe.global)
-    - This reduces the chance of malicious token drains.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li>Clean up your wallet permissions regularly with:</li>
+                <li><a href="https://revoke.cash" target="_blank">revoke.cash</a></li>
+                <li><a href="https://app.safe.global" target="_blank">Safe</a></li>
+                <li>This reduces the chance of malicious token drains.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🔐 6. Never Share Private Keys or Seed Phrases")
     st.markdown("""
-    - **No legit team will ever ask** for your keys or phrase.
-    - Use **hardware wallets** like Ledger or Trezor for serious funds.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li><b>No legit team will ever ask</b> for your keys or phrase.</li>
+                <li>Use <b>hardware wallets</b> like Ledger or Trezor for serious funds.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🪪 7. Watch Out for 'Connect Wallet to Check Eligibility'")
     st.markdown("""
-    - Don't connect your wallet to **random sites**.
-    - Always verify the domain and source.
-    - If in doubt, don’t click!
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li>Don't connect your wallet to <b>random sites</b>.</li>
+                <li>Always verify the domain and source.</li>
+                <li>If in doubt, don’t click!</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.subheader("🧾 8. Use Reputable Airdrop Aggregators")
     st.markdown("""
-    - Use vetted aggregators to spot real airdrops:
-    - [Earnifi](https://earni.fi/)
-    - [DeFiLlama Airdrops](https://defillama.com/airdrops)
-    - Still verify manually before connecting wallets or claiming anything.
-    """)
+        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <ul>
+                <li>Use vetted aggregators to spot real airdrops:</li>
+                <li><a href="https://earni.fi/" target="_blank">Earnifi</a></li>
+                <li><a href="https://defillama.com/airdrops" target="_blank">DeFiLlama Airdrops</a></li>
+                <li>Still verify manually before connecting wallets or claiming anything.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="background-color: #FFA500; padding: 16px; border-radius: 8px; border-left: 6px solid #FFA500;">
-        <strong>Stay tuned, stay safe, and enjoy the airdrop hunt!</strong>
-    </div>
+        <div style="background-color: #FFA500; padding: 16px; border-radius: 8px; border-left: 6px solid #FFA500; font-size: 25px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;color: white;">
+            Stay tuned, stay safe, and enjoy the airdrop hunt!
+        </div> 
     """, unsafe_allow_html=True)
 
 
@@ -2211,10 +2378,10 @@ st.markdown("""
         }
     </style>
     <div class="footer">
-        <div>
+        <div style="font-size:25px;">
             <p>🪂 Airdrops Monitor</p>
         </div>
-        <div style="text-align: center; color: #c9ada7; font-size:20px;">
+        <div style="text-align: center; color: #c9ada7; font-size:25px;">
             Made with ❤️ by <a href="https://x.com/CaioFlemin2089" style="color: white; text-decoration: none;" target="_blank">@CaioFleming</a> |
             Follow for more airdrop farming strategies 🚀<br>
             Stay updated on Twitter and Discord! 📢
@@ -2223,7 +2390,7 @@ st.markdown("""
                 Disclaimer: This is not financial advice. Always do your own research (DYOR)!
             </div>
         </div>
-        <div style="text-align: center; color: #c9ada7; font-size:20px;">
+        <div style="text-align: center; color: #c9ada7; font-size:25px;">
             <p>Community: </p>
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAAAAABXZoBIAAAA/0lEQVR4AbXPIazCMACE4d+L2qoZFEGSIGcRc/gJJB5XMzGJmK9EN0HMi+qaibkKVF1txdQe4g0YzPK5yyWXHL9TaPNQ89LojH87N1rbJcXkMF4Fk31UMrf34hm14KUeoQxGArALHTMuQD2cAWQfJXOpgTbksGr9ng8qluShJTPhyCdx63POg7rEim95ZyR68I1ggQpnCEGwyPicw6hZtPEGmnhkycqOio1zm6XuFtyw5XDXfGvuau0dXHzJp8pfBPuhIXO9ZK5ILUCdSvLYMpc6ASBtl3EaC97I4KaFaOCaBE9Zn5jUsVqR2vcTJZO1DdbGoZryVp94Ka/mQfE7f2T3df0WBhLDAAAAAElFTkSuQmCC" width="24" height="24" style="border-radius: 50%;">
             <a href="https://twitter.com/" target="_blank">Twitter</a>
