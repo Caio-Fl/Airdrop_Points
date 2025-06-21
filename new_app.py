@@ -169,7 +169,8 @@ def mirror_list(arr):
 st.set_page_config(
     page_title="Airdrops Monitor",
     page_icon="🪂",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded" 
 )
 st.markdown("""
 <style>
