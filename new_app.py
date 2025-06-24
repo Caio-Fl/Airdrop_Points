@@ -1154,7 +1154,7 @@ elif opcao == "🌾 Farm with YT":
                                 <p><strong>Expiry:</strong> {dados['Expiry']}</p>
                                 <p><strong>Rating:</strong> {dados['Grade']}</p>
                             </div>
-                            <p href="{dados['pureLink']}" target="_blank">
+                            <a href="{dados['pureLink']}" target="_blank">
                                 <button style="
                                     background-color: orange;
                                     color: black;
@@ -1166,20 +1166,16 @@ elif opcao == "🌾 Farm with YT":
                                     cursor: pointer;
                                     margin-bottom: 10px;
                                 "><strong>Visit Protocol</strong></button>
-                            </p>
-                            <button style="
-                                background-color: #2e2b44;
-                                font-family: 'Space Grotesk', sans-serif;
-                                color: white;
-                                padding: 8px 16px;
-                                border: none;
-                                border-radius: 5px;
-                                font-size: 25px;
-                                cursor: pointer;
-                            ">View Details</button>
+                            </a>
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
+                # 🔘 Botão funcional View Details
+                # Botão funcional — fora do HTML
+                btn1, btn2, btn3 = st.columns([2.8, 2, 2])
+                with btn2:
+                    if st.button("🔍 View Details", key=f"view_{nome}"):
+                        st.session_state.protocolo_selecionado = nome
 
     st.markdown("<hr style='border: 2px double #342b44;'>", unsafe_allow_html=True)
 
