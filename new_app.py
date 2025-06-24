@@ -714,9 +714,9 @@ elif opcao == "🌾 Farm with YT":
         invested = st.number_input("Choose the Value to Invest ($):", min_value=0.0, value=1000.0, step=1.0)
         tsp = st.number_input("Expected Token Total Supply (B):", min_value=0, value=1) * 1_000_000_000
         drop = st.number_input("Expected Percentual to Protocol Airdrop (%):", min_value=0.0, max_value=100.0, value=5.0)
-        Level_fdv = st.number_input("Expected Level FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
+        Level_fdv = st.number_input("Expected Level FDV in TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
         #Open_fdv = st.number_input("Expected OpenEden FDV in TGE ($M):", min_value=0, value=200, step=1) * 1_000_000
-        Frag_fdv = st.number_input("Expected Frag. FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
+        Frag_fdv = st.number_input("Expected Frag. FDV in TGE ($M):", min_value=0, value=400, step=1) * 1_000_000
         ky_fdv = st.number_input("Expected Kyros FDV in TGE ($M):", min_value=0, value=40, step=1) * 1_000_000
         Sp_fdv = st.number_input("Expected Spark FDV in TGE ($M):", min_value=0, value=300, step=1) * 1_000_000
         Gaib_fdv = st.number_input("Expected Gaib FDV in TGE ($M):", min_value=0, value=30, step=1) * 1_000_000
