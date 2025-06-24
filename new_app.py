@@ -601,7 +601,7 @@ if opcao == "🏠 Welcome":
                 margin-top: 30px;
                 background: #212328;
                 display: flex;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 30px;
                 font-size: 25px;
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -1437,7 +1437,6 @@ elif opcao == "📈 Pendle APY Prediction":
                 resposta_html = resposta.replace("**", "&nbsp;").replace("\n", "<br>")
                 blocks_html += f"""
                 <div class="protocol-block">
-                        st.plotly_chart(fig, use_container_width=True)
                         <p style="font-size: 25px;">{resposta_html}</p>
                 </div>
                 """   
