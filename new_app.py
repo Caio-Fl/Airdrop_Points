@@ -1172,7 +1172,7 @@ elif opcao == "🌾 Farm with YT":
                 """, unsafe_allow_html=True)
                 # 🔘 Botão funcional View Details
                 # Botão funcional — fora do HTML
-                btn1, btn2, btn3 = st.columns([3, 2, 2])
+                btn1, btn2, btn3 = st.columns([3.2, 2, 2])
                 with btn2:
                     if st.button("🔍 View Details", key=f"view_{nome}"):
                         st.session_state.protocolo_selecionado = nome
