@@ -732,7 +732,7 @@ elif opcao == "🌾 Farm with YT":
         #)
         Frag_l_date = st.text_input(
             "Expected Fragmetric TGE Date:",
-            value="2025-09-30",   # valor padrão
+            value="2025-07-10",   # valor padrão
         )
         Ky_l_date = st.text_input(
             "Expected Kyros TGE Date:",
