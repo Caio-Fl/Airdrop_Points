@@ -1,4 +1,5 @@
 import streamlit as st
+import html
 import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
@@ -17,6 +18,7 @@ from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
 from barra_compra_venda import barra_compra_venda
+import streamlit.components.v1 as components
 import re
 from PIL import Image
 import requests
@@ -175,19 +177,19 @@ st.set_page_config(
 st.markdown("""
 <style>
 body, html, .stApp {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
 }
 
 /* Botões com Sora */
 .stButton > button {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
     font-size: 25px;
 }
 
 /* Títulos, textos customizados */
 .header, .footer, .marquee-container, .card {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Space Grotesk', sans-serif;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -214,7 +216,7 @@ url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(tokens.keys(
 data = requests.get(url).json()
 
 # HTML e CSS do ticker
-html = """
+htmld = """
 <style>
 .ticker-container {
     width: 100%;
@@ -235,7 +237,7 @@ html = """
     display: inline-block;
     margin: 0 30px;
     color: white;
-    font-family: monospace;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 22px;
 }
 .ticker-item img {
@@ -252,12 +254,12 @@ html = """
 for key, token in tokens.items():
     price = data.get(key, {}).get("usd")
     if price is not None:
-        html += f'<span class="ticker-item">{token["name"]} ${price:,.3f} |</span>'
+        htmld += f'<span class="ticker-item">{token["name"]} ${price:,.3f} |</span>'
 
-html += "  "
+htmld += "  "
 
 # Renderização correta do HTML
-st.markdown(html, unsafe_allow_html=True)
+st.markdown(htmld, unsafe_allow_html=True)
 
 # Adicionando CSS para os botões de navegação
 st.markdown("""
@@ -592,100 +594,79 @@ if opcao == "🏠 Welcome":
     st.markdown(
         """
         <style>
-        .airdrop-description {
-            font-size: 25px;
-            line-height: 1.6;
-            text-align: justify;
-        }
+            .airdrop-box {
+                border: 2px solid #444;
+                border-radius: 12px;
+                padding: 25px;
+                margin-top: 30px;
+                background: #212328;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 30px;
+                font-size: 25px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                padding: 25px;
+                margin: 20px 0;
+                color: white;
+                font-family: 'Space Grotesk', sans-serif;
+            }
+
+            .airdrop-box h1 {
+                font-size: 32px;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .airdrop-box h2 {
+                font-size: 28px;
+                margin-top: 35px;
+                margin-bottom: 15px;
+            }
+
+            .airdrop-box ul {
+                margin-left: 25px;
+                margin-bottom: 25px;
+            }
         </style>
-        
-        <div class="airdrop-description">
-        
-        ## Welcome to Airdrops Monitor
-        
-        The goal of this site is to provide a platform dedicated to airdrop enthusiasts in the world of cryptocurrencies, offering a practical and efficient way to stay updated on the latest news and opportunities that arise. 
-        If you are passionate about crypto assets and want to stay ahead in the world of airdrops, this site is your ally to ensure you don’t miss any valuable opportunities in the market.""",
-        unsafe_allow_html=True
-    )
 
-    st.markdown(
-        """
-        <style>
-        .airdrop-description {
-            font-size: 25px;
-            line-height: 1.6;
-            font-weight: bold; 
-        }
-        </style>
-        
-        <div class="airdrop-description">
-        What Are Airdrops and How Can You Benefit from Them?
-        
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        """
-        <style>
-        .airdrop-description {
-            font-size: 25px;
-            line-height: 1.6;
-        }
-        </style>
-        
-        <div class="airdrop-description">
-
-        There are two main types of airdrops:
-
-        - **Task-based airdrops**: Also known as *bounties*, these require you to complete easy tasks like following a Twitter account, sharing a post, or joining a Telegram group. In return, you receive tokens from the project.
-
-        - **Holder airdrops**: Some projects reward users simply for holding certain cryptocurrencies in their wallets. If you qualify, the tokens are automatically sent to you — no need to register or interact.
-
-        Participating in airdrops is an accessible and educational way to get involved in the crypto space, especially for beginners. Best of all, you can grow your portfolio with real value without investing money upfront.
-
-        Browse our list of active airdrops, track new opportunities in real time, and start earning free crypto today!
+        <div class="airdrop-box">
+            <h2>Welcome to Airdrops Monitor</h2>
+            <p>
+            The goal of this site is to provide a platform dedicated to airdrop enthusiasts in the world of cryptocurrencies,
+            offering a practical and efficient way to stay updated on the latest news and opportunities that arise.
+            If you are passionate about crypto assets and want to stay ahead in the world of airdrops,
+            this site is your ally to ensure you don't miss any valuable opportunities in the market.
+            </p>
+            <h2>What Are Airdrops and How Can You Benefit from Them?</h2>
+            <ul>
+            <p>
+            There are two main types of airdrops:
+            </p>
+                <li><strong>Task-based airdrops</strong>: Also known as <em>bounties</em>, these require you to complete easy tasks like following a Twitter account, sharing a post, or joining a Telegram group. In return, you receive tokens from the project.</li>
+                <li><strong>Holder airdrops</strong>: Some projects reward users simply for holding certain cryptocurrencies in their wallets. If you qualify, the tokens are automatically sent to you — no need to register or interact.</li>
+            </ul>
+            <p>
+            Participating in airdrops is an accessible and educational way to get involved in the crypto space, especially for beginners.
+            Best of all, you can grow your portfolio with real value without investing money upfront.
+            Browse our list of active airdrops, track new opportunities in real time, and start earning free crypto today!
+            </p>
+            <h2>About Me...</h2>
+            <p>
+            I am graduated in electrical-electronic engineering and D.Sc. in signal processing, with a deep passion for the world of investments.
+            Throughout my career, I have had the opportunity to combine my technical knowledge with my curiosity about the financial universe,
+            especially in the cryptocurrency and airdrop sectors.
+            </p>
+            <p>
+            Over time, I have applied the lessons I learned in engineering to explore new investment opportunities.
+            Additionally, I am a programming enthusiast, with an emphasis on Python, which was the language chosen for the development of this site.
+            My goal is to use both my technical skills and financial experience to provide relevant content and efficient solutions for others
+            who share the same interest in the world of crypto and investments.
+            </p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        """
-        <style>
-        .airdrop-description {
-            font-size: 25px;
-            line-height: 1.6;
-            font-weight: bold; 
-        }
-        </style>
-        
-        <div class="airdrop-description">
-        About Me...
-        
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        """
-        <style>
-        .airdrop-description {
-            font-size: 25px;
-            line-height: 1.6;
-            text-align: justify;
-        }
-        </style>
-        
-        <div class="airdrop-description">
-
-        I am graduated in electrical-electronic engineering and D.Sc. in signal processing, with a deep passion for the world of investments. Throughout my career, I have had the opportunity to combine my technical knowledge with my curiosity about the financial universe, especially in the cryptocurrency and airdrop sectors. Over time, I have applied the lessons I learned in engineering to explore new investment opportunities. Additionally, I am a programming enthusiast, with an emphasis on Python, which was the language chosen for the development of this site. My goal is to use both my technical skills and financial experience to provide relevant content and efficient solutions for others who share the same interest in the world of crypto and investments.
-        
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -694,37 +675,38 @@ if opcao == "🏠 Welcome":
 
 elif opcao == "🌾 Farm with YT":
     # CSS personalizado para ajustar o tamanho da fonte da sidebar
-    st.markdown(
-        """
-        <style>
-        .yt-farm-description {
+    st.markdown("""
+        <div style="
+            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
             font-size: 25px;
-            text-align: justify;
-            line-height: 1.6;
-        }
-        </style>
-
-        <div class="yt-farm-description">
-            <p>
-            Below are the potential returns you can achieve by participating in Yield Token (YT) farming strategies from various protocols that currently have ongoing airdrop campaigns.
-            </p>
-            <p>
-            Each protocol also receives a score based on its potential to deliver solid results, according to the parameters set by the user in the sidebar.
-            </p>
-            <p>
-            To view the full list of parameters for each protocol, double-click on <strong>"View Details"</strong>.
-            </p>
-            <p>
-            To apply new Parameters to ROI Estimation, click on <strong>"Refresh YT"</strong>.
-            </p>
-            <p>
-            You need to adjust the Parameters to evaluate each Protocol, mainly the expected FDV in TGE. 
-            Do not expect that a protocol with $30M TVL will be able to do an TGE with $100M of FDV, be coherent in your expectations.
-            </p>
+            border: 2px solid #444; 
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+        ">
+            <div class="yt-farm-description">
+                <p>
+                Below are the potential returns you can achieve by participating in Yield Token (YT) farming strategies from various protocols that currently have ongoing airdrop campaigns.
+                </p>
+                <p>
+                Each protocol also receives a score based on its potential to deliver solid results, according to the parameters set by the user in the sidebar.
+                </p>
+                <p>
+                To view the full list of parameters for each protocol, double-click on <strong>"View Details"</strong>.
+                </p>
+                <p>
+                You need to adjust the Parameters to evaluate each Protocol, mainly the expected FDV in TGE. 
+                Do not expect that a protocol with $30M TVL will be able to do an TGE with $100M of FDV, be coherent in your expectations.
+                </p>
+                <p>
+                To apply new Parameters to ROI Estimation, click on <strong>"Refresh YT"</strong>.
+                </p>
+            </div>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
     # --- Novo Quadro de Inputs ---
     st.sidebar.markdown("<h3 style='font-size: 20px;'>Parameters to YT ROI Estimation</h3>", unsafe_allow_html=True)
@@ -1134,60 +1116,73 @@ elif opcao == "🌾 Farm with YT":
             st.session_state.protocolo_selecionado = None
 
     else:
-        st.markdown("<h3 style='text-align: center;'></h3>", unsafe_allow_html=True)
-        col1, col2, col3, col4 = st.columns(4)
+        # Centraliza o conteúdo
+        
 
-        cols = [col1, col2, col3, col4]
-        i = 0
-
-        for p in protocolos:#<img src="{protocolos[p]['Imagem']}" width="200"/>
-            with cols[i % 4]:
-                col_left, col_center, col_right = st.columns([1, 2, 1])
-                with col_center:
-                    st.markdown(
-                        f"""
-                        <div style="text-align: center;margin-bottom: 5px;
-                            margin-top: 20px;
-                        ">
-                            <img src="{protocolos[p]['Logo']}" width="80" style="border-radius: 5%; border: 2px solid white; border-radius: 10px; margin-top: 5px; margin-bottom: 15px;">
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+        cols = st.columns(3, gap="large")
+        for i, (nome, dados) in enumerate(protocolos.items()):
+            with cols[i % 3]:
                 st.markdown(f"""
-                    <div style='text-align: center; font-size: 25px;'>
-                        <p>TVL: {protocolos[p]['TVL']}</p>
-                        <p>Expected ROI: {protocolos[p]['Expected ROI']}</p>
-                        <p>YT Multiplier: {protocolos[p]['YT Multiplier']}</p>
-                        <p>YT Underlying APY: {protocolos[p]['YT APY']} %</p>
-                        <p>Boost: {protocolos[p]['Protocol Referral Boost']}</p>
-                        <p>{protocolos[p]['Expiry']}</p>
-                        <p>{protocolos[p]['Grade']}</p>
-                        <p></p>
+                    <div style="
+                        background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+                        border: 3px double #555;
+                        box-shadow: 
+                            0 0 10px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff,
+                            0 0 8px #00e0ff;
+                        border-radius: 10px;
+                        width: 100%;
+                        padding: 20px;
+                        margin: 15px 0;
+                        color: white;
+                        text-align: center;
+                        font-family: 'Space Grotesk', sans-serif;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    ">
+                        <div style="border: 2px solid #444; padding: 10px; radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%); border-radius: 6px; margin: 15px 0; font-size: 25px;">
+                            <img src="{dados['Logo']}" width="70" />
+                            <div style="margin-top: 15px; font-weight: bold;">{nome}</div>
+                            <div style="border: 2px solid #444; background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);border-radius: 16px;box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 22px; text-align: center;">
+                                <p><strong>TVL:</strong> {dados['TVL']}</p>
+                                <p><strong>Expected ROI:</strong> {dados['Expected ROI']}</p>
+                                <p><strong>YT Multiplier:</strong> {dados['YT Multiplier']}</p>
+                                <p><strong>YT APY:</strong> {dados['YT APY']} %</p>
+                                <p><strong>Boost:</strong> {dados['Protocol Referral Boost']}</p>
+                                <p><strong>Expiry:</strong> {dados['Expiry']}</p>
+                                <p><strong>Rating:</strong> {dados['Grade']}</p>
+                            </div>
+                            <p href="{dados['pureLink']}" target="_blank">
+                                <button style="
+                                    background-color: orange;
+                                    color: black;
+                                    font-family: 'Space Grotesk', sans-serif;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    border-radius: 5px;
+                                    font-size: 25px;
+                                    cursor: pointer;
+                                    margin-bottom: 10px;
+                                "><strong>Visit Protocol</strong></button>
+                            </p>
+                            <button style="
+                                background-color: #2e2b44;
+                                font-family: 'Space Grotesk', sans-serif;
+                                color: white;
+                                padding: 8px 16px;
+                                border: none;
+                                border-radius: 5px;
+                                font-size: 25px;
+                                cursor: pointer;
+                            ">View Details</button>
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
-                # Coluna única para empilhar os botões verticalmente
-                button_col = st.columns([1])[0]
-                with button_col:
-                    st.markdown(
-                        f"""
-                        <div style="text-align: center; margin-bottom: 10px;">
-                            <a href="{protocolos[p]['pureLink']}" target="_blank">
-                                <button style='width: 75%; padding: 8px; font-size: 25px; background-color: #FFA500;'>Visit Protocol</button>
-                            </a>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                bcol1, bcol2, bcol3 = st.columns([1.75, 1.5, 1])
-                with bcol2:
-                    if st.button(f"View Details", key=p):
-                        st.session_state.protocolo_selecionado = p
-                    i += 1
-    st.markdown(
-        "<hr style='border: 2px double #342b44;'>",
-        unsafe_allow_html=True
-    )
+
+    st.markdown("<hr style='border: 2px double #342b44;'>", unsafe_allow_html=True)
+
 
 elif opcao == "📈 Pendle APY Prediction":
     #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
@@ -1284,9 +1279,9 @@ elif opcao == "📈 Pendle APY Prediction":
         delta = expiry_date - data1
 
     # Criar figura
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns([1, 2, 1])
 
-        with col1:
+        with col2:
             fig = go.Figure()
 
             # Base e Implied APY
@@ -1331,13 +1326,13 @@ elif opcao == "📈 Pendle APY Prediction":
                 
                 xaxis_title='Date',
                 xaxis=dict(
-                    tickfont=dict(size=20)
+                    tickfont=dict(size=25)
                 ),
 
                 yaxis_title='APY (%)',
                 yaxis=dict(
                     range=[0, None],
-                    tickfont=dict(size=20)
+                    tickfont=dict(size=25)
                 ),
 
                 yaxis2=dict(
@@ -1361,7 +1356,7 @@ elif opcao == "📈 Pendle APY Prediction":
                 plot_bgcolor='rgba(255, 255, 255, 1)',
                 paper_bgcolor='rgba(52,43,68, 1)',
                 hovermode='x unified',
-                height=600
+                height=750
             )
 
             # Mostrar com zoom habilitado
@@ -1372,9 +1367,9 @@ elif opcao == "📈 Pendle APY Prediction":
 
         valor = normalizar_para_faixa(round(actual_perc,2))
         figura = barra_compra_venda(valor,round(actual_perc,2))
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3 = st.columns([1, 2, 1])
 
-        with col1:
+        with col2:
             st.pyplot(figura)
 
         def get_token_info(marketAdd,id):
@@ -1440,22 +1435,94 @@ elif opcao == "📈 Pendle APY Prediction":
         IA = [IA_1, IA_2]
         #IA = lang_IA(questions,criteria)
 
-
-        
-
         if isinstance(IA, list):
-            st.markdown(
-                "<h2 style='font-size:25px; color:#E6EDF3;'>🧠 AI Interpretation:</h2>",
-                unsafe_allow_html=True
-            )
+            blocks_html = "<h2 style='font-size:25px;font-family: 'Space Grotesk', sans-serif; color:#E6EDF3;'>🧠 AI Interpretation:</h2>"
             for resposta in IA:
-                st.markdown(
-                    f"<div style='padding: 15px; font-size:22px; border-radius: 10px; background-color: #342b44; '>{resposta}</div>",
-                    unsafe_allow_html=True
-                )
-                
+                resposta_html = resposta.replace("**", "&nbsp;").replace("\n", "<br>")
+                blocks_html += f"""
+                <div class="protocol-block">
+                        st.plotly_chart(fig, use_container_width=True)
+                        <p style="font-size: 25px;">{resposta_html}</p>
+                </div>
+                """   
         #else:
         #    st.markdown(IA)
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 2830px;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+
+    components.html(full_html, height=800, scrolling=True)
+
     
     st.markdown("---")  # Linha separadora entre blocos
 
@@ -1463,38 +1530,42 @@ elif opcao == "📈 Pendle APY Prediction":
     """
     <style>
     .pendle-apy-description {
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        justify-content: left;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        font-family: 'Space Grotesk', sans-serif;
         font-size: 25px;
-        line-height: 1.6;
-        text-align: justify;
+        color: white;
+        margin: 20px 0;
     }
     </style>
-
     <div class="pendle-apy-description">
-
     <h3>📈 How the Pendle APY Chart Works?</h3>
-
     <p>
     The APY (Annual Percentage Yield) chart on Pendle shows the evolution of annualized yield rates for tokenized assets over time.
     It is built with multiple layers of information to support deeper analysis:
     </p>
-
     <ul>
         <li><strong>Base APY</strong>: This reflects the base yield from the underlying protocol, excluding any incentive rewards.</li>
         <li><strong>Implied APY</strong>: This is the market-implied yield calculated from the price of the YT (Yield Token). It represents the market's expectation of future returns up to the maturity date.</li>
         <li><strong>Trend Line</strong>: A trend line is applied to the Implied APY, helping to visualize the general direction of expected yields—whether they are increasing, decreasing, or stable.</li>
         <li><strong>TVL (Total Value Locked)</strong>: Displayed on a secondary axis, it shows how much value is allocated to the asset, giving insight into investor interest over time.</li>
     </ul>
-
     <p>
     In addition, <strong>buying opportunities</strong> may arise when the Implied APY touches the <span style='color:red;'><strong>minimum green trend line</strong></span>,
     indicating a temporary undervaluation. Conversely, <strong>selling opportunities</strong> may be more favorable when the Implied APY reaches the <span style='color:red;'><strong>maximum red trend line</strong></span>,
     suggesting a potential overvaluation.
     </p>
-
     <p>
     This chart allows users to compare real and expected yields, monitor market sentiment, and identify attractive entry and exit points for Pendle pools.
     </p>
-
     </div>
     """,
     unsafe_allow_html=True
@@ -1536,66 +1607,104 @@ elif opcao == "📡 Depin Airdrops":
         {"name":"Kleo Network","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/kleo-network/jimpblheogbjfgajkccdoehjfadmimoo?refAddress=0xb905B5F5869F6F6b6FC3C92950ec5bE210585f98","social":{"twitter":"https://x.com/kleo_network","discord":"discord.gg/4JQyXqBg8b"},"status":"Active Farming","application":"Private Storage Network", "image":"https://pbs.twimg.com/profile_images/1864932989756694528/M11KSBsP_400x400.jpg"},
     ]
     
-    cols = st.columns(4)
-    for idx, protocol in enumerate(protocols_depin):
-        with cols[idx % 4]:
-            st.markdown(
-                f"""
-                <div style="
-                    border: 3px solid white;
-                    border-radius: 10px;
-                    padding: 10px;
-                    background-color: #342b44;
-                    color: white;
-                    margin-bottom: 5px;
-                    margin-top: 20px;
-                    margin-right: 15px;
-                    box-shadow: 
-                        0 0 10px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
-                        <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;color: #FFA500";font-size: 30px;>{protocol['name']}</h4>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-            st.markdown(f"""
-                <div style="
-                        border: 2px solid white;
-                        border-radius: 10px;
-                        padding: 20px;
-                        background-color: #376a94;
-                        color: white;
-                        margin-bottom: 20px;
-                        margin-top: 5px;
-                        margin-right: 18px;
-                        box-shadow: 
-                            0 0 10px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    ">
-                        <p style="font-size: 30px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
-                        <p style="font-size: 30px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
-                        <p style="font-size: 30px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
-                        <p style="font-size: 30px;"><strong>📊 Status:</strong> {protocol['status']}</p>
-                        <p style="font-size: 30px;"><strong>📣 Social:</strong> 
-                            <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
-                            <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
-                        </p>
-                        <p style="font-size: 30px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
-                </div>
-            """, unsafe_allow_html=True)
+    # Gera os blocos HTML individualmente
+    blocks_html = ""
+    for protocol in protocols_depin:
+        blocks_html += f"""
+        <div class="protocol-block">
+            <div class="protocol-header">
+                <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
+                <strong style="color: #FFA500;">{protocol['name']}</strong>
+            </div>
+            <div class="protocol-footer">
+                <p style="font-size: 25px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
+                <p style="font-size: 25px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
+                <p style="font-size: 25px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
+                <p style="font-size: 25px;"><strong>📊 Status:</strong> {protocol['status']}</p>
+                <p style="font-size: 25px;"><strong>📣 Social:</strong> 
+                    <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
+                    <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
+                </p>
+                <p style="font-size: 25px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
+            </div>
+        </div>
+        """
+
+    # HTML completo
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 683px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+
+    components.html(full_html, height=3600, scrolling=True)
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -1680,7 +1789,7 @@ elif opcao == "📊 Comparative YT Table":
     /* Fonte e cor das abas */
     .stTabs [data-baseweb="tab"] {
         font-size: 20px;
-        font-family: 'Segoe UI', sans-serif;
+        font-family: 'Space Grotesk', sans-serif;
         color: white;
         background-color: #342b44;  /* roxo escuro */
         border-radius: 8px 8px 0 0;
@@ -1713,17 +1822,18 @@ elif opcao == "📊 Comparative YT Table":
     )
 
 elif opcao == "✅ Last Claims and Checkers":
-    code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.G_eTfU"
-    code2=".p2WlhCJ6f-ewl83V2zp7AHuL2M7NucW4oWVG5w"
+    code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.Gg8_XS"
+    code2=".BGfC4ic2rEyvs0bPk_jh3DSxRTNTlfbYZOjY34"
     
     headers = {
         "Authorization" : code+code2
     }
-    print(headers)
+    
     Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
     res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL,headers)
+
     respostas = mirror_list(org_res)
-    print(respostas)
+
     Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
     question = "\n\n".join(Resp_sem_tag)
@@ -1748,31 +1858,105 @@ elif opcao == "✅ Last Claims and Checkers":
     # Obter conteúdo e dividir pelos separadores
     blocos = result['content'].strip().split('\n\n')
 
-    # Criar 2 colunas
-    col1, col2 = st.columns(2)
-
-    if isinstance(result , dict) and 'content' in result:
-        for i, bloco in enumerate(blocos):
-            texto_html = markdown_to_html(bloco)
-            # Define a cor do fundo com base na posição
-            background_color = '#342b44' if i % 2 == 0 else '#376a94'  # azul escuro e roxo escuro
-            margin_bottom = "5px" if i % 2 == 0 else "15px"
-            div_html = f"""
-            <div style='
-                font-size: 25px; 
-                line-height: 1.6; 
-                background-color: {background_color}; 
-                padding: 12px; 
-                border-radius: 10px; 
-                margin-bottom: {margin_bottom}; 
-                color: white;
-                border: 2px solid white;
-            '>
-                {texto_html}
-            </div>
-            """
-            col1.markdown(div_html, unsafe_allow_html=True)
     time.sleep(3)
+
+        # Gera os blocos HTML individualmente
+    blocks_html = ""
+    texto_html = ""
+    for i, bloco in enumerate(blocos):
+        texto_html += markdown_to_html(bloco)
+        texto_html += "<br><br>"
+    blocks_html =f"""
+        <div style='
+            align-items: left;
+            margin-bottom: 30px;
+            justify-content: left;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+            gap: 30px;
+            width: 2000px;
+            display: flex; 
+            flex-direction: column;
+        '>
+            {texto_html}
+        </div>
+        <div style="height: 40px;"></div>
+        """
+
+    # HTML completo
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: left;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 2000px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+    components.html(full_html, height=2850, scrolling=True)
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -1786,12 +1970,21 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
         """
         <style>
         .bridge-description {
-            font-size: 22px;
+            border: 2px solid #444;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;       
+            background: #212328;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin: 30px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+            line-height: 1.7;
             text-align: justify;
-            line-height: 1.6;
+            margin-bottom: 30px;
         }
         </style>
-
         <div class="bridge-description">
             Explore and access the best bridge and swap protocols available for each network, 
             making it easier and more secure to transfer and exchange assets within the crypto ecosystem.
@@ -1898,7 +2091,7 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
             {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
         ]
     }
-    st.sidebar.markdown("<h3 style='font-size: 20px;'>Select Network</h3>", unsafe_allow_html=True)
+    st.sidebar.markdown("<h3 style='font-size: 25px;font-family: 'Space Grotesk', sans-serif;'>Select Network</h3>", unsafe_allow_html=True)
     with st.sidebar.expander("", expanded=True):
         # CSS para alterar a fonte de todos os selectbox
         st.markdown("""
@@ -1939,63 +2132,112 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
 
     # Render selected network section
     
-    st.subheader(selected_network.upper())
-    cols = st.columns(4)
-    for idx, protocol in enumerate(protocols_bridge_swap[selected_network]):
-        with cols[idx % 4]:
-            st.markdown(
-                f"""
-                <div style="
-                    border: 3px solid white;
-                    border-radius: 10px;
-                    padding: 10px;
-                    background-color: #342b44;
-                    color: white;
-                    margin-bottom: 5px;
-                    margin-top: 20px;
-                    margin-right: 15px;
-                    box-shadow: 
-                        0 0 10px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
-                        <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;font-size: 30px;color: #FFA500">{protocol['name']}</h4>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-            st.markdown(f"""
-                <div style="
-                        border: 2px solid white;
-                        border-radius: 10px;
-                        padding: 20px;
-                        background-color: #376a94;
-                        color: white;
-                        margin-bottom: 20px;
-                        margin-top: 5px;
-                        margin-right: 18px;
-                        box-shadow: 
-                            0 0 10px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    ">
-                        <div style="margin-top: 20px; font-size: 30x;">
-                            <p style="font-size: 30px;">💸 Fees: {protocol['fees']} </p>
-                            <p style="font-size: 30px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 30px;" target="_blank">Visit Protocol</a></p>
-                        </div>
-                </div>
-            """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+            .custom-header {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 25px;
+                font-weight: 600;
+                color: white;
+                margin-bottom: 5px;
+                margin-left: 20px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Exibir texto com a fonte Sora
+    st.markdown(f'<div class="custom-header">   {selected_network.upper()}</div>', unsafe_allow_html=True)
     
+    # Gera os blocos HTML individualmente
+    blocks_html = ""
+    for protocol in protocols_bridge_swap[selected_network]:
+        blocks_html += f"""
+        <div class="protocol-block">
+            <div class="protocol-header">
+                <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
+                <strong style="color: #FFA500;">{protocol['name']}</strong>
+            </div>
+            <div class="protocol-footer">
+                <p style="font-size: 25px;">💸 Fees: {protocol['fees']} </p>
+                <p style="font-size: 25px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 30px;" target="_blank">Visit Protocol</a></p>
+            </div>
+        </div>
+        """
+
+    # HTML completo
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 683px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+
+    components.html(full_html, height=2600, scrolling=True)
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
         unsafe_allow_html=True
@@ -2006,9 +2248,18 @@ elif opcao == "🚰 Faucets":
         """
         <style>
         .bridge-description {
-            font-size: 22px;
+            border: 2px solid #444;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;       
+            background: #212328;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin: 30px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+            line-height: 1.7;
             text-align: justify;
-            line-height: 1.6;
         }
         </style>
 
@@ -2044,61 +2295,99 @@ elif opcao == "🚰 Faucets":
         {"network": "Quicknode", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1875136807781662720/MJP7n4UN_400x400.jpg", "sites": ["https://faucet.quicknode.com/","","","",""]},
         {"network": "Buy Faucets", "token": "Multichain", "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA131noMEukSs7KjDfFB7fURfU_mkHSZVmWw&s", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
     ]
-    cols = st.columns(4)
-    for idx, faucets in enumerate(faucet_sites):
-        with cols[idx % 4]:
-            st.markdown(
-                f"""
-                <div style="
-                    border: 3px solid white;
-                    border-radius: 10px;
-                    padding: 10px;
-                    background-color: #342b44;
-                    color: white;
-                    margin-bottom: 5px;
-                    margin-top: 20px;
-                    margin-right: 15px;
-                    box-shadow: 
-                        0 0 10px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
-                        <img src="{faucets['image']}" width="50" height="50" style="border-radius: 50%;">                       
-                        <h4 style="margin: 0;font-size: 30px;color: #FFA500">{faucets['network']}</h4>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-        
-            st.markdown(f"""
-                <div style="
-                        border: 2px solid white;
-                        border-radius: 10px;
-                        padding: 20px;
-                        background-color: #376a94;
-                        color: white;
-                        margin-bottom: 20px;
-                        margin-top: 5px;
-                        margin-right: 18px;
-                        box-shadow:
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 10px #00e0ff;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    ">
-                        <div style='margin-top: 10px; margin-bottom: 10px;font-size: 30px;'>
-                            <strong>🪙 Token: {faucets['token']}</strong><br>
-                            {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">{site}</a>' for site in faucets['sites']])}
-                        </div>
-                </div>
-            """, unsafe_allow_html=True)
+  
+    # Gera os blocos HTML individualmente
+    blocks_html = ""
+    for protocol in faucet_sites:
+        blocks_html += f"""
+        <div class="protocol-block">
+            <div class="protocol-header">
+                <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
+                <strong style="color: #FFA500;">{protocol['network']}</strong>
+            </div>
+            <div class="protocol-footer">
+                <p><strong>🪙 Token: {protocol['token']}</strong></p>
+                <strong>🌐 Sites: </strong><br>
+                {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue;">&emsp;&emsp;{site}</a>' for site in protocol['sites']])}
+            </div>
+        </div>
+        """
+
+    # HTML completo
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 683px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+
+    components.html(full_html, height=2850, scrolling=True)
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -2111,12 +2400,20 @@ elif opcao == "⛔ Revoke Contract":
         """
         <style>
         .bridge-description {
+            border: 2px solid #444;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;       
+            background: #212328;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin: 30px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 25px;
+            line-height: 1.7;
             text-align: justify;
-            line-height: 1.6;
         }
         </style>
-
         <div class="bridge-description">
             <p>The purpose of revoke protocols is to allow you to remove permissions previously granted to smart contracts in your cryptocurrency wallet.</p>
             <p>When interacting with DApps (such as exchanges, farms, or NFTs), you typically authorize these contracts to move your tokens — and these permissions remain active indefinitely unless you revoke them manually.</p>
@@ -2142,7 +2439,7 @@ elif opcao == "⛔ Revoke Contract":
         st.markdown("""
             <style>
             div[data-baseweb="select"] {
-                font-size: 20px;
+                font-size: 25px;
             }
             </style>
         """, unsafe_allow_html=True)
@@ -2177,62 +2474,117 @@ elif opcao == "⛔ Revoke Contract":
 
     # Render selected network section
     
-    st.subheader(selected_network.upper())
-    cols = st.columns(4)
-    for idx, protocol in enumerate(protocols_revoke[selected_network]):
-        with cols[idx % 4]:
-            st.markdown(
-                f"""
-                <div style="
-                    border: 3px solid white;
-                    border-radius: 10px;
-                    padding: 10px;
-                    background-color: #342b44;
-                    color: white;
-                    margin-bottom: 5px;
-                    margin-top: 20px;
-                    margin-right: 15px;
-                    box-shadow: 
-                        0 0 10px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff,
-                        0 0 8px #00e0ff;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                ">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 5px;font-size: 30px;">
-                        <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                        <h4 style="margin: 0;color: #FFA500;font-size: 30px;">{protocol['name']}</h4>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-            st.markdown(f"""
-                <div style="
-                        border: 2px solid white;
-                        border-radius: 10px;
-                        padding: 20px;
-                        background-color: #376a94;
-                        color: white;
-                        margin-bottom: 20px;
-                        margin-top: 5px;
-                        margin-right: 18px;
-                        box-shadow: 
-                            0 0 10px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff,
-                            0 0 8px #00e0ff;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    ">
-                        <div style="margin-top: 20px; font-size: 30px;">
-                            <p style="font-size: 30px;">🌐 Site: <a href="{protocol['site']}" style="color: lightblue; font-size: 30px;" target="_blank">Visit Protocol</a></p>
-                        </div>
-                </div>
-            """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+            .custom-header {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 25px;
+                font-weight: 600;
+                color: white;
+                margin-bottom: 5px;
+                margin-left: 20px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Exibir texto com a fonte Sora
+    st.markdown(f'<div class="custom-header">   {selected_network.upper()}</div>', unsafe_allow_html=True)
     
+    
+
+    # Gera os blocos HTML individualmente
+    blocks_html = ""
+    for protocol in protocols_revoke[selected_network]:
+        blocks_html += f"""
+        <div class="protocol-block">
+            <div class="protocol-header">
+                <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
+                <strong style="color: #FFA500;">{protocol['name']}</strong>
+            </div>
+            <div class="protocol-footer">
+                <br>
+                🌐 Site: <a href="{protocol['site']}" target="_blank">{protocol['site']}</a>
+            </div>
+        </div>
+        """
+    
+
+    # HTML completo
+    full_html = f"""
+    <style>
+    .container-externa {{
+        border: 2px solid #444;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 30px;
+        background: #212328;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: flex-start;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin: 20px 0;
+    }}
+    .protocol-block {{
+        width: 684px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }}
+    .protocol-header {{
+        margin-top: 20px;
+        min-height: 70px;
+        border: 3px solid #00e0ff;
+        border-radius: 10px;
+        padding: 10px;
+        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+        color: white;
+        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-header .icon {{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }}
+    .protocol-footer {{
+        border: 2px solid #00e0ff;
+        style="flex-basis: 100%; height: 0;
+        margin-bottom: 20px;
+        min-height: 100px;
+        border-radius: 10px;
+        border: 2px solid #444; 
+        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
+        padding: 10px; 
+        border-radius: 10px;
+        color: white;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+    }}
+    .protocol-footer a {{
+        color: lightblue;
+        text-decoration: none;
+    }}
+    </style>
+
+    <div class="container-externa">
+        {blocks_html}
+    </div>
+    """
+
+    components.html(full_html, height=500, scrolling=True)
+
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
         unsafe_allow_html=True
@@ -2240,120 +2592,105 @@ elif opcao == "⛔ Revoke Contract":
 
 elif opcao == "⚠️ Avoiding Scams":
 
-    st.markdown("""
-    <div style="font-size: 25px; line-height: 1.6;margin-bottom: 15px;text-align: justify;">
-    <b>With the rise of crypto airdrops, scams have become more widespread than ever.</b><br>
-    Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.<br>
-    Without careful verification, it’s easy to fall into traps set by scammers.<br>
-    They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <style>
+            .scam-warning-box {
+                background: #212328;
+                border: 3px double #ff7b00;
+                box-shadow: 0 0 15px #ff7b00, 0 0 5px #ff7b00 inset;
+                border-radius: 16px;
+                padding: 40px;
+                margin: 30px 0;
+                color: white;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 25px;
+                line-height: 1.7;
+                text-align: justify;
+            }
+            .scam-warning-box h2 {
+                color: #ffae42;
+                font-size: 28px;
+                margin-top: 30px;
+            }
+            .scam-warning-box ul {
+                margin-left: 25px;
+                margin-bottom: 25px;
+            }
+            .scam-warning-box a {
+                color: #ffae42;
+                text-decoration: none;
+            }
+            .scam-warning-box a:hover {
+                text-decoration: underline;
+            }
+        </style>
 
-
-
-    st.subheader("🚨 How to Avoid Crypto Airdrop Scams")
-
-    st.markdown("""
-        <div style="font-size: 25px;">
-        Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🔒 1. Use a Dedicated Wallet for Airdrops")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+        <div class="scam-warning-box">
+            <p><strong>With the rise of crypto airdrops, scams have become more widespread than ever.</strong></p>
+            <p>
+            Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.
+            Without careful verification, it’s easy to fall into traps set by scammers.
+            They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
+            </p>
+            <h2>🚨 How to Avoid Crypto Airdrop Scams</h2>
+            <p>Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.</p>
+            <h2>🔒 1. Use a Dedicated Wallet for Airdrops</h2>
             <ul>
-                <li><b>Create a separate wallet</b> just for airdrop interactions. I highly recommend buying a Cold Wallet and creating at least 3 accounts (by network): one for holding, one for DeFi protocol interaction, and one for free airdrops like testnets, games, quests, etc.</li>
+                <li><b>Create a separate wallet</b> just for airdrop interactions. Consider a Cold Wallet with at least 3 accounts by network.</li>
                 <li><b>Never use your main wallet</b> with valuable assets.</li>
                 <li>If anything goes wrong, your main funds stay safe.</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🧠 2. Research Before You Click")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🧠 2. Research Before You Click</h2>
             <ul>
                 <li><b>Verify the project’s legitimacy</b> through <b>official sites</b> and <b>trusted communities</b>.</li>
                 <li><b>Avoid links</b> from random X (Twitter) users or Telegram DMs.</li>
                 <li><b>Look for audits, GitHub repos, and real backers.</b></li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("⚠️ 3. Beware of Fake Accounts and Bots")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>⚠️ 3. Beware of Fake Accounts and Bots</h2>
             <ul>
                 <li>Many scam comments and impersonators exist under legit posts.</li>
-                <li>Double-check usernames and links—<b>look for subtle typos</b>.</li>
+                <li>Double-check usernames and links — <b>look for subtle typos</b>.</li>
                 <li><b>Never trust DMs</b> offering "airdrops" or "early access".</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🧾 4. Audit the Smart Contract or Wait")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🧾 4. Audit the Smart Contract or Wait</h2>
             <ul>
                 <li>Don’t rush to sign random transactions.</li>
                 <li>Use tools like <b>Etherscan</b>, <b>DeBank</b>, or <b>Rabby Wallet</b> to inspect them.</li>
                 <li>If a project lacks transparency or an audit, think twice.</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🧼 5. Revoke Unused Permissions")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🧼 5. Revoke Unused Permissions</h2>
             <ul>
                 <li>Clean up your wallet permissions regularly with:</li>
                 <li><a href="https://revoke.cash" target="_blank">revoke.cash</a></li>
                 <li><a href="https://app.safe.global" target="_blank">Safe</a></li>
                 <li>This reduces the chance of malicious token drains.</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🔐 6. Never Share Private Keys or Seed Phrases")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🔐 6. Never Share Private Keys or Seed Phrases</h2>
             <ul>
                 <li><b>No legit team will ever ask</b> for your keys or phrase.</li>
                 <li>Use <b>hardware wallets</b> like Ledger or Trezor for serious funds.</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🪪 7. Watch Out for 'Connect Wallet to Check Eligibility'")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🪪 7. Watch Out for “Connect Wallet to Check Eligibility”</h2>
             <ul>
                 <li>Don't connect your wallet to <b>random sites</b>.</li>
                 <li>Always verify the domain and source.</li>
                 <li>If in doubt, don’t click!</li>
             </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("🧾 8. Use Reputable Airdrop Aggregators")
-    st.markdown("""
-        <div style="font-size: 25px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
+            <h2>🧾 8. Use Reputable Airdrop Aggregators</h2>
             <ul>
                 <li>Use vetted aggregators to spot real airdrops:</li>
                 <li><a href="https://earni.fi/" target="_blank">Earnifi</a></li>
                 <li><a href="https://defillama.com/airdrops" target="_blank">DeFiLlama Airdrops</a></li>
                 <li>Still verify manually before connecting wallets or claiming anything.</li>
             </ul>
+            <div style="background-color: #FFA500; padding: 16px; border-radius: 8px; border-left: 6px solid #FFA500; font-size: 25px; font-weight: bold; margin-top: 30px; color: white;">
+                ✅ Stay tuned, stay safe, and enjoy the airdrop hunt!
+            </div>
         </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-        <div style="background-color: #FFA500; padding: 16px; border-radius: 8px; border-left: 6px solid #FFA500; font-size: 25px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;color: white;">
-            Stay tuned, stay safe, and enjoy the airdrop hunt!
-        </div> 
-    """, unsafe_allow_html=True)
-
+        """,
+        unsafe_allow_html=True
+    )
 
 # --- Footer ---
 st.markdown("""
@@ -2366,6 +2703,7 @@ st.markdown("""
             color: white;
             padding: 20px;
             font-size: 20px;
+            font-family: 'Space Grotesk', sans-serif;
         }
         .footer p {
             margin: 0;
@@ -2379,19 +2717,19 @@ st.markdown("""
         }
     </style>
     <div class="footer">
-        <div style="font-size:25px;">
+        <div style="font-size:25px;font-family: 'Space Grotesk', sans-serif;">
             <p>🪂 Airdrops Monitor</p>
         </div>
-        <div style="text-align: center; color: #c9ada7; font-size:25px;">
+        <div style="text-align: center; color: #c9ada7; font-size:25px;font-family: 'Space Grotesk', sans-serif;">
             Made with ❤️ by <a href="https://x.com/CaioFlemin2089" style="color: white; text-decoration: none;" target="_blank">@CaioFleming</a> |
             Follow for more airdrop farming strategies 🚀<br>
             Stay updated on Twitter and Discord! 📢
             <br>
-            <div style="text-align: center; color: #c9ada7; font-size:18px;">
+            <div style="text-align: center; color: #c9ada7; font-size:18px;font-family: 'Space Grotesk', sans-serif;">
                 Disclaimer: This is not financial advice. Always do your own research (DYOR)!
             </div>
         </div>
-        <div style="text-align: center; color: #c9ada7; font-size:25px;">
+        <div style="text-align: center; color: #c9ada7; font-size:25px;font-family: 'Space Grotesk', sans-serif;">
             <p>Community: </p>
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAAAAABXZoBIAAAA/0lEQVR4AbXPIazCMACE4d+L2qoZFEGSIGcRc/gJJB5XMzGJmK9EN0HMi+qaibkKVF1txdQe4g0YzPK5yyWXHL9TaPNQ89LojH87N1rbJcXkMF4Fk31UMrf34hm14KUeoQxGArALHTMuQD2cAWQfJXOpgTbksGr9ng8qluShJTPhyCdx63POg7rEim95ZyR68I1ggQpnCEGwyPicw6hZtPEGmnhkycqOio1zm6XuFtyw5XDXfGvuau0dXHzJp8pfBPuhIXO9ZK5ILUCdSvLYMpc6ASBtl3EaC97I4KaFaOCaBE9Zn5jUsVqR2vcTJZO1DdbGoZryVp94Ka/mQfE7f2T3df0WBhLDAAAAAElFTkSuQmCC" width="24" height="24" style="border-radius: 50%;">
             <a href="https://twitter.com/" target="_blank">Twitter</a>
