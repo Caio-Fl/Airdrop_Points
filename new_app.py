@@ -1889,13 +1889,13 @@ elif opcao == "✅ Last Claims and Checkers":
         background: #212328;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: left;
+        flex-direction: column;
+        gap: 20px;
+        width: fit-content; 
+        max-width: 100%;       
         font-family: 'Space Grotesk', sans-serif;
-        font-size: 25px;
+        font-size: 18px;
         color: white;
-        margin: 20px 0;
     }}
     .protocol-block {{
         width: 2000px;
@@ -1951,7 +1951,7 @@ elif opcao == "✅ Last Claims and Checkers":
         {blocks_html}
     </div>
     """
-    components.html(full_html, height=2850, scrolling=True)
+    components.html(full_html, height=700, scrolling=True)
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -2170,6 +2170,7 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
         background: #212328;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         display: flex;
+        justify-content: center;
         flex-wrap: wrap;
         gap: 30px;
         font-family: 'Space Grotesk', sans-serif;
@@ -2180,7 +2181,7 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
     .protocol-block {{
         width: 683px;
         min-height: 200px;
-        display: flex;
+        display: block;
         flex-direction: column;
         gap: 10px;
     }}
@@ -2248,6 +2249,7 @@ elif opcao == "🚰 Faucets":
             padding: 25px;
             margin-top: 30px;       
             background: #212328;
+            justify-content: center;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
             margin: 30px 0;
             color: white;
@@ -2271,7 +2273,7 @@ elif opcao == "🚰 Faucets":
         {"network": "Pharos", "token": "Pharos", "image":"https://pbs.twimg.com/profile_images/1899385457047412736/vfvmbKVj_400x400.jpg", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
         {"network": "Opnet", "token": "Opnet", "image":"https://pbs.twimg.com/profile_images/1817743953627660289/7HObLZyL_400x400.jpg", "sites": ["https://faucet.opnet.org","","","",""]},
         {"network": "Campnetwork", "token": "Campnetwork", "image":"https://pbs.twimg.com/profile_images/1774932612160557056/QOyzwbO2_400x400.jpg", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
-        {"network": "Somnia", "token": "Somnia", "image":"https://pbs.twimg.com/profile_images/1896736794810458112/9tsFttK2_400x400.jpg", "sites": ["https://testnet.somnia.network/","","","",""]},
+        {"network": "Somnia", "token": "Somnia", "image":"https://pbs.twimg.com/profile_images/1896736794810458112/9tsFttK2_400x400.jpg", "sites": ["https://testnet.somnia.network/","https://www.somnia.domains/faucet","","",""]},
         {"network": "Moonveil", "token": "Moonveil", "image":"https://pbs.twimg.com/profile_images/1789490763933577216/njozvdjD_400x400.jpg", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
         {"network": "Sahara", "token": "Sahara", "image":"https://pbs.twimg.com/profile_images/1871431718198239232/2LNyhe05_400x400.jpg", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
         {"network": "MegaETH", "token": "MegaETH", "image":"https://pbs.twimg.com/profile_images/1861751545790070784/KvlxTzAq_400x400.jpg", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
