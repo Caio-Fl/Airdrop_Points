@@ -2628,7 +2628,8 @@ elif opcao == "⚠️ Avoiding Scams":
             <p>
             Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.
             Without careful verification, it’s easy to fall into traps set by scammers.
-            They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
+            </p>
+            <p>They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
             </p>
             <h2>🚨 How to Avoid Crypto Airdrop Scams</h2>
             <p>Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.</p>
