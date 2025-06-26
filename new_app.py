@@ -426,6 +426,55 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+#NEON MOUSE PASS
+
+st.markdown("""
+    <style>
+        .neon-hover-block {
+            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+            font-size: 25px;
+            border: 2px solid #444; 
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .neon-hover-block:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 20px #00f0ff;
+            background: radial-gradient(circle at top center, #2f3640 0%, #1c1e22 100%);
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+        .neon-hover-block-z {
+            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+            font-size: 25px;
+            border: 2px solid #444; 
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .neon-hover-block-z:hover {
+            transform: scale(1.03);
+            border-color: #00f0ff;
+            box-shadow: 0 0 20px #00f0ff;
+            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
@@ -605,10 +654,17 @@ if opcao == "🏠 Welcome":
                 gap: 30px;
                 font-size: 25px;
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-                padding: 25px;
                 margin: 20px 0;
                 color: white;
                 font-family: 'Space Grotesk', sans-serif;
+                transition: all 0.3s ease;
+            }
+
+            /* Efeito de hover */
+            .airdrop-box:hover {
+                border-color: #00f0ff;
+                box-shadow: 0 0 20px #00f0ff;
+                background: #262b33;
             }
 
             .airdrop-box h1 {
@@ -675,18 +731,10 @@ if opcao == "🏠 Welcome":
 
 elif opcao == "🌾 Farm with YT":
     # CSS personalizado para ajustar o tamanho da fonte da sidebar
+    
+   # Bloco HTML com a classe para hover
     st.markdown("""
-        <div style="
-            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
-            font-size: 25px;
-            border: 2px solid #444; 
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            padding: 25px;
-            margin: 20px 0;
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
-        ">
+        <div class="neon-hover-block">
             <div class="yt-farm-description">
                 <p>
                 Below are the potential returns you can achieve by participating in Yield Token (YT) farming strategies from various protocols that currently have ongoing airdrop campaigns.
@@ -1275,22 +1323,20 @@ elif opcao == "📈 Pendle APY Prediction":
         delta = expiry_date - data1
 
     # Criar figura
-        col1, col2, col3 = st.columns([1, 2, 1])
+        col1, col2 = st.columns([1, 1])
 
-        with col2:
+        with col1:
             fig = go.Figure()
 
-            # Base e Implied APY
-            fig.add_trace(go.Scatter(x=filtered_dates, y=filtered_base_apy, mode='lines+markers', name='Base APY', line=dict(color='blue')))
-            fig.add_trace(go.Scatter(x=dates, y=implied_apy, mode='lines+markers', name='Implied APY', line=dict(color='green')))
-            fig.add_trace(go.Scatter(x=dates, y=trend_line, mode='lines', name='Implied APY Tendency', line=dict(color='black', dash='dash')))
-            fig.add_trace(go.Scatter(x=dates, y=upper_line, mode='lines', name='Maximum Implied APY Tendency', line=dict(color='red', dash='dash')))
-            fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color="#b3a13c", dash='dash')))
-            fig.add_trace(go.Scatter(x=extended_dates, y=trend_line_extended[-len(extended_dates):], mode='lines', name='Tendency up to Expire', line=dict(color='black', dash='dot')))
+            # Adiciona os traços (linhas) em uma linha cada
+            fig.add_trace(go.Scatter(x=filtered_dates, y=filtered_base_apy, mode='lines+markers', name='Base APY', line=dict(color='blue', width=2, shape='spline'), marker=dict(color='blue', size=4)))
+            fig.add_trace(go.Scatter(x=dates, y=implied_apy, mode='lines+markers', name='Implied APY', line=dict(color='green', width=2, shape='spline'), marker=dict(color='green', size=4)))
+            fig.add_trace(go.Scatter(x=dates, y=trend_line, mode='lines', name='Implied APY Tendency', line=dict(color='black', width=2, dash='dash'), marker=dict(color='green', size=4)))
+            fig.add_trace(go.Scatter(x=dates, y=upper_line, mode='lines', name='Maximum Implied APY Tendency', line=dict(color='red', width=2, dash='dash'), marker=dict(color='red', size=4)))
+            fig.add_trace(go.Scatter(x=dates, y=lower_line, mode='lines', name='Minimum Implied APY Tendency', line=dict(color='#b3a13c', width=2, dash='dash'), marker=dict(color='#b3a13c', size=4)))
+            fig.add_trace(go.Scatter(x=extended_dates, y=trend_line_extended[-len(extended_dates):], mode='lines', name='Tendency up to Expire', line=dict(color='black', width=2, dash='dot')))
             fig.add_trace(go.Scatter(x=extended_dates, y=upper_line_extended[-len(extended_dates):], mode='lines', name='Maximum Tendency up to Expire', line=dict(color='red', dash='dot')))
             fig.add_trace(go.Scatter(x=extended_dates, y=lower_line_extended[-len(extended_dates):], mode='lines', name='Minimum Tendency up to Expire', line=dict(color='green', dash='dot')))
-
-            # TVL em eixo secundário
             fig.add_trace(go.Scatter(x=dates, y=tvl_in_k, mode='lines+markers', name='TVL (Mi USD)', line=dict(color='orange', dash='dot'), yaxis='y2'))
 
             # Linha vertical para expiry
@@ -1313,235 +1359,219 @@ elif opcao == "📈 Pendle APY Prediction":
                 yanchor='bottom',
                 xref='x',
                 yref='paper',
-                font=dict(size=20)  # Só o tamanho
+                font=dict(size=20)
             )
 
             # Layout com dois eixos y e fonte aumentada
             fig.update_layout(
                 title=f'YT-{selected_row["name"]} {expiry_date.date()} - History of Base APY, Implied APY, Tendency Lines and TVL',
-                
-                xaxis_title='Date',
                 xaxis=dict(
+                    title='Date',
+                    color='white',
+                    gridcolor='rgba(255, 255, 255, 0.05)',
+                    showline=True,
+                    linewidth=1,
+                    linecolor='white',
                     tickfont=dict(size=25)
                 ),
-
-                yaxis_title='APY (%)',
                 yaxis=dict(
-                    range=[0, None],
+                    range=[0, None], 
+                    title='APY (%)',
+                    color='white',
+                    gridcolor='rgba(255, 255, 255, 0.05)',
+                    showline=True,
+                    linewidth=1,
+                    linecolor='white',
                     tickfont=dict(size=25)
                 ),
-
-                yaxis2=dict(
-                    title='TVL (Mi USD)',
-                    overlaying='y',
-                    side='right',
-                    tickfont=dict(size=20)
-                ),
-
-                legend=dict(
-                    x=1,
-                    y=1,
-                    xanchor='right',
-                    yanchor='top',
-                    bgcolor='rgba(52,43,68,0.8)',
-                    font=dict(size=20)
-                ),
-
-                font=dict(size=20),  # Fonte geral: aplica em títulos, anotações e eixos que não foram especificados
-
-                plot_bgcolor='rgba(255, 255, 255, 1)',
-                paper_bgcolor='rgba(52,43,68, 1)',
+                yaxis2=dict(title='TVL (Mi USD)', overlaying='y', side='right', tickfont=dict(size=20)),
+                legend=dict(x=1, y=1, xanchor='right', yanchor='top', bgcolor='rgba(52,43,68,0.8)', font=dict(size=18)),
+                font=dict(color='white', family='Space Grotesk, sans-serif',size=20),
+                plot_bgcolor='#0f0f0f',
+                paper_bgcolor= "#212328",
                 hovermode='x unified',
+                margin=dict(l=40, r=40, t=80, b=40),
                 height=750
             )
 
             # Mostrar com zoom habilitado
             st.plotly_chart(fig, use_container_width=True)
 
-        def normalizar_para_faixa(valor, min_origem=0, max_origem=100, min_dest=-100, max_dest=100):
-            return min_dest + ((valor - min_origem) / (max_origem - min_origem)) * (max_dest - min_dest)
+            def normalizar_para_faixa(valor, min_origem=0, max_origem=100, min_dest=-100, max_dest=100):
+                return min_dest + ((valor - min_origem) / (max_origem - min_origem)) * (max_dest - min_dest)
 
-        valor = normalizar_para_faixa(round(actual_perc,2))
-        figura = barra_compra_venda(valor,round(actual_perc,2))
-        col1, col2, col3 = st.columns([1, 2, 1])
-
-        with col2:
+            valor = normalizar_para_faixa(round(actual_perc,2))
+            figura = barra_compra_venda(valor,round(actual_perc,2))
             st.pyplot(figura)
 
-        def get_token_info(marketAdd,id):
-            url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{marketAdd}"
-            response = requests.get(url)
-            jsonn = json.loads(response.text)
-            #jsonn.get("underlyingApy", {}) 
-            ytRoi = jsonn.get("ytRoi", {})
+            def get_token_info(marketAdd,id):
+                url = f"https://api-v2.pendle.finance/core/v1/{id}/markets/{marketAdd}"
+                response = requests.get(url)
+                jsonn = json.loads(response.text)
+                #jsonn.get("underlyingApy", {}) 
+                ytRoi = jsonn.get("ytRoi", {})
+                
+                url = f"https://api-v2.pendle.finance/core/v1/sdk/{id}/markets/{marketAdd}/swapping-prices"
+                response = requests.get(url)
+                jsonn = json.loads(response.text)
+                ytMult = jsonn.get("underlyingTokenToYtRate", {})
+                return(ytMult,ytRoi)
             
-            url = f"https://api-v2.pendle.finance/core/v1/sdk/{id}/markets/{marketAdd}/swapping-prices"
-            response = requests.get(url)
-            jsonn = json.loads(response.text)
-            ytMult = jsonn.get("underlyingTokenToYtRate", {})
-            return(ytMult,ytRoi)
-        
-        ytMult, ytRoi = get_token_info(address,id)
-        # IA anwser
-        criteria = criteria = """Learn the following Criteria, no mention it you just will use this to awnser the next question: An "Actual Implied APY"  next to "Maximum Historical APY" can be an excellent moment to sell the Yield Token if you already hold the token; An "Actual Implied APY"  next to "Minimum Historical APY" can be an excellent moment to buy the Yield Token; An "Actual Implied APY"  next or higher than "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; An "Actual Implied APY"  next or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; An "Actual Implied APY"  very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; An "Actual Implied APY percentual in relation of Range" next or higher than 100 indicates na great moment to sell the Yield Tokenif you already hold the token; An "Actual Implied APY percentual in relation of Range" next to 0 or a little negative indicates na great moment to buy the Yield Token; An "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; If "Days to expiry" is lower than 20, this implies in a high risk to try trade it. An "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. The YT multiplier factor indicates the multiplication factor over the invested capital and the underlying APY gives the yield return based in (YT Multiplier x Invested Capital x Actual Underlying APY/100 x Days to expiry/365), so higher YT miltiplier means that you can receire more yield and farm with higher capital the protocol of token, but if underlying APY is zero you will just farm points in protocol airdrop. YT ROI for hold token up to expiry is the return at maturity o YT token, higher YT ROI means a smaller loss at maturity.
-        """
-        description = f"""
-        Implied APY Data of {label}:
-        Actual Implied APY = {round(implied_apy[-1],2)}
-        Maximum Historical APY = {round(max(implied_apy),2)}
-        Minimum Historical APY = {round(min(implied_apy),2)}
-        Actual Best Sell point of Implied APY = {round(upper_line[-1],2)}
-        Actual Mean Implied APY = {round(trend_line[-1],2)}
-        Actual Best Buy point of Implied APY = {round(lower_line[-1],2)}
-        Mean Implied APY percentual in relation of Range = {round(trend_perc,2)}
-        Actual Implied APY percentual in relation of Range = {round(actual_perc,2)}
-        Time to expiry and YT value goes to zero = {expiry_date}
-        Days to expiry = {delta}
-        Actual Underlying APY =  {round(underlying_apy[-1],2)}
-        Mean Underlying APY = {round(statistics.mean(underlying_apy),2)}
-        Maximum Underlying APY Historical = {round(max(underlying_apy),2)}
-        Minimum Underlying APY Historical = {round(min(underlying_apy),2)}
-        YT Protocol Multiplir = {ytMult}
-        YT ROI for hold token up to expiry = {ytRoi*100} %
-        """
-        question_1 = f"""faced with two possible scenarios (answer in few lines):
-            1st If I already have the YT token and I want to know if it is a good time to sell it?
-            2nd If I don't have the YT token and I want to know if it is a good time to buy it or if I should wait for a better opportunity?
-            3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than -35 percent?
-            According to the data description: {description}"""
-        h = implied_apy#[(len(implied_apy)-50):-1]
-        question_2 = f"""
-            Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not. Also consider {delta} to expiry is of high risk?
-            Historical Implied APY = {[round(x, 2) for x in h]}
-            the Underlying APY is {round(underlying_apy[-1],2)}
-        """
-        questions = [criteria, question_1, question_2]
-        #AIzaSyC4C4bMviJpBIuR7XXCqqPF81JrrYitlro - gemini
+            ytMult, ytRoi = get_token_info(address,id)
+            # IA anwser
+            criteria = criteria = """Learn the following Criteria, no mention it you just will use this to awnser the next question: An "Actual Implied APY"  next to "Maximum Historical APY" can be an excellent moment to sell the Yield Token if you already hold the token; An "Actual Implied APY"  next to "Minimum Historical APY" can be an excellent moment to buy the Yield Token; An "Actual Implied APY"  next or higher than "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; An "Actual Implied APY"  next or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; An "Actual Implied APY"  very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; An "Actual Implied APY percentual in relation of Range" next or higher than 100 indicates na great moment to sell the Yield Tokenif you already hold the token; An "Actual Implied APY percentual in relation of Range" next to 0 or a little negative indicates na great moment to buy the Yield Token; An "Actual Implied APY percentual in relation of Range" very negative indicates a possible problem with Yield Token and need to be excluded as an investiment; If "Days to expiry" is lower than 20, this implies in a high risk to try trade it. An "Actual Underlying APY" higher than 9 is an excellent yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" lower than 4 is not so good yield return for hold the YT token, but is necessary to evaluate the days until expiry. An "Actual Underlying APY" equals to 0 implies that the yield token do not have any yield return and is just used to farm points. The YT multiplier factor indicates the multiplication factor over the invested capital and the underlying APY gives the yield return based in (YT Multiplier x Invested Capital x Actual Underlying APY/100 x Days to expiry/365), so higher YT miltiplier means that you can receire more yield and farm with higher capital the protocol of token, but if underlying APY is zero you will just farm points in protocol airdrop. YT ROI for hold token up to expiry is the return at maturity o YT token, higher YT ROI means a smaller loss at maturity.
+            """
+            description = f"""
+            Implied APY Data of {label}:
+            Actual Implied APY = {round(implied_apy[-1],2)}
+            Maximum Historical APY = {round(max(implied_apy),2)}
+            Minimum Historical APY = {round(min(implied_apy),2)}
+            Actual Best Sell point of Implied APY = {round(upper_line[-1],2)}
+            Actual Mean Implied APY = {round(trend_line[-1],2)}
+            Actual Best Buy point of Implied APY = {round(lower_line[-1],2)}
+            Mean Implied APY percentual in relation of Range = {round(trend_perc,2)}
+            Actual Implied APY percentual in relation of Range = {round(actual_perc,2)}
+            Time to expiry and YT value goes to zero = {expiry_date}
+            Days to expiry = {delta}
+            Actual Underlying APY =  {round(underlying_apy[-1],2)}
+            Mean Underlying APY = {round(statistics.mean(underlying_apy),2)}
+            Maximum Underlying APY Historical = {round(max(underlying_apy),2)}
+            Minimum Underlying APY Historical = {round(min(underlying_apy),2)}
+            YT Protocol Multiplir = {ytMult}
+            YT ROI for hold token up to expiry = {ytRoi*100} %
+            """
+            question_1 = f"""faced with two possible scenarios (answer in few lines):
+                1st If I already have the YT token and I want to know if it is a good time to sell it?
+                2nd If I don't have the YT token and I want to know if it is a good time to buy it or if I should wait for a better opportunity?
+                3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than -35 percent?
+                According to the data description: {description}"""
+            h = implied_apy#[(len(implied_apy)-50):-1]
+            question_2 = f"""
+                Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not. Also consider {delta} to expiry is of high risk?
+                Historical Implied APY = {[round(x, 2) for x in h]}
+                the Underlying APY is {round(underlying_apy[-1],2)}
+            """
+            questions = [criteria, question_1, question_2]
+            #AIzaSyC4C4bMviJpBIuR7XXCqqPF81JrrYitlro - gemini
 
-        language = "ingles"
-        model = "mistral-large-latest"
-        personality = "You are an finantial advisor evaluationg historical data"
-        resposta= ""
-        time.sleep(3)
-        IA_1 = mistral_AI(question_1,language,model,personality)
-        IA_1 = IA_1['content']
-        time.sleep(3)
-        IA_2 = mistral_AI(question_2,language,model,personality)
-        IA_2 = IA_2['content']
-        IA = [IA_1, IA_2]
-        #IA = lang_IA(questions,criteria)
+            language = "ingles"
+            model = "mistral-large-latest"
+            personality = "You are an finantial advisor evaluationg historical data"
+            resposta= ""
+            time.sleep(3)
+            IA_1 = mistral_AI(question_1,language,model,personality)
+            IA_1 = IA_1['content']
+            time.sleep(3)
+            IA_2 = mistral_AI(question_2,language,model,personality)
+            IA_2 = IA_2['content']
+            IA = [IA_1, IA_2]
+            #IA = lang_IA(questions,criteria)
 
-        if isinstance(IA, list):
-            blocks_html = "<h2 style='font-size:25px;font-family: 'Space Grotesk', sans-serif; color:#E6EDF3;'>🧠 AI Interpretation:</h2>"
-            for resposta in IA:
-                resposta_html = resposta.replace("**", "&nbsp;").replace("\n", "<br>")
-                blocks_html += f"""
-                <div class="protocol-block">
-                        <p style="font-size: 25px;">{resposta_html}</p>
+            if isinstance(IA, list):
+                blocks_html = "<h2 style='font-size:25px;font-family: 'Space Grotesk', sans-serif; color:#E6EDF3;'>🧠 AI Interpretation:</h2>"
+                for resposta in IA:
+                    resposta_html = resposta.replace("**", "&nbsp;").replace("\n", "<br>")
+                    blocks_html += f"""
+                    <div class="protocol-block">
+                            <p style="font-size: 25px;">{resposta_html}</p>
+                    </div>
+                    """   
+            #else:
+            #    st.markdown(IA)
+        with col2:
+            full_html = f"""
+                <style>
+                    .container-externa {{
+                        border: 2px solid #444;
+                        border-radius: 16px;
+                        padding: 25px;
+                        margin-top: 0px;
+                        background: #212328;
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                        justify-content: center;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        font-family: 'Space Grotesk', sans-serif;
+                        font-size: 25px;
+                        color: white;
+                        transition: all 0.3s ease;
+                        word-wrap: break-word;
+                        overflow-wrap: break-word;
+                        max-width: 100%;
+                    }}
+
+                    .container-externa:hover {{
+                        border-color: #00f0ff;
+                        box-shadow: 0 0 20px #00f0ff;
+                        background: #262b33;
+                    }}
+
+                    .protocol-block {{
+                        width: 100%;
+                        min-height: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }}
+
+                    .protocol-header {{
+                        margin-top: 20px;
+                        min-height: 50px;
+                        border: 3px solid #00e0ff;
+                        border-radius: 10px;
+                        padding: 10px;
+                        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
+                        color: white;
+                        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        font-family: 'Space Grotesk', sans-serif;
+                        font-size: 25px;
+                    }}
+
+                    .protocol-header .icon {{
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                    }}
+
+                    .protocol-footer {{
+                        margin-bottom: 20px;
+                        min-height: 100px;
+                        border-radius: 10px;
+                        border: 2px solid #444;
+                        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
+                        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+                        padding: 10px; 
+                        color: white;
+                        font-family: 'Space Grotesk', sans-serif;
+                        font-size: 25px;
+                    }}
+
+                    .protocol-footer a {{
+                        color: lightblue;
+                        text-decoration: none;
+                    }}
+                </style>
+
+                <div class="container-externa">
+                    {blocks_html}
                 </div>
-                """   
-        #else:
-        #    st.markdown(IA)
-    full_html = f"""
-    <style>
-    .container-externa {{
-        border: 2px solid #444;
-        border-radius: 16px;
-        padding: 25px;
-        margin-top: 30px;
-        background: #212328;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 25px;
-        color: white;
-        margin: 20px 0;
-    }}
-    .protocol-block {{
-        width: 2830px;
-        min-height: 100px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }}
-    .protocol-header {{
-        margin-top: 20px;
-        min-height: 70px;
-        border: 3px solid #00e0ff;
-        border-radius: 10px;
-        padding: 10px;
-        background: linear-gradient(0deg, #2a2238, #342b44, #4a3b5f);
-        color: white;
-        box-shadow: 0 0 10px #00e0ff, 0 0 8px #00e0ff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 25px;
-    }}
-    .protocol-header .icon {{
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-    }}
-    .protocol-footer {{
-        border: 2px solid #00e0ff;
-        style="flex-basis: 100%; height: 0;
-        margin-bottom: 20px;
-        min-height: 100px;
-        border-radius: 10px;
-        border: 2px solid #444; 
-        background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
-        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
-        border-radius: 10px;
-        padding: 10px; 
-        border-radius: 10px;
-        color: white;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 25px;
-    }}
-    .protocol-footer a {{
-        color: lightblue;
-        text-decoration: none;
-    }}
-    </style>
+            """
 
-    <div class="container-externa">
-        {blocks_html}
-    </div>
-    """
+            components.html(full_html, height=950, scrolling=True)
 
-    components.html(full_html, height=800, scrolling=True)
 
     
     st.markdown("---")  # Linha separadora entre blocos
 
     st.markdown(
     """
-    <style>
-    .pendle-apy-description {
-        border: 2px solid #444;
-        border-radius: 16px;
-        padding: 25px;
-        margin-top: 30px;
-        background: #212328;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        justify-content: left;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 25px;
-        color: white;
-        margin: 20px 0;
-    }
-    </style>
-    <div class="pendle-apy-description">
+    <div class="neon-hover-block">
     <h3>📈 How the Pendle APY Chart Works?</h3>
     <p>
     The APY (Annual Percentage Yield) chart on Pendle shows the evolution of annualized yield rates for tokenized assets over time.
@@ -1691,6 +1721,11 @@ elif opcao == "📡 Depin Airdrops":
     .protocol-footer a {{
         color: lightblue;
         text-decoration: none;
+    }}
+    .protocol-footer:hover {{
+        box-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        transform: scale(1.01);
+        border-color: #00e0ff;
     }}
     </style>
 
@@ -1980,7 +2015,7 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
             margin-bottom: 30px;
         }
         </style>
-        <div class="bridge-description">
+        <div class="neon-hover-block">
             Explore and access the best bridge and swap protocols available for each network, 
             making it easier and more secure to transfer and exchange assets within the crypto ecosystem.
         </div>
@@ -2226,6 +2261,11 @@ elif opcao == "🌉 Bridges & Swaps Protocols":
         color: lightblue;
         text-decoration: none;
     }}
+    .protocol-footer:hover {{
+        box-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        transform: scale(1.01);
+        border-color: #00e0ff;
+    }}
     </style>
 
     <div class="container-externa">
@@ -2260,7 +2300,7 @@ elif opcao == "🚰 Faucets":
         }
         </style>
 
-        <div class="bridge-description">
+        <div class="neon-hover-block">
             Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.
         </div>
         """,
@@ -2377,6 +2417,11 @@ elif opcao == "🚰 Faucets":
         color: lightblue;
         text-decoration: none;
     }}
+    .protocol-footer:hover {{
+        box-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        transform: scale(1.01);
+        border-color: #00e0ff;
+    }}
     </style>
 
     <div class="container-externa">
@@ -2411,7 +2456,7 @@ elif opcao == "⛔ Revoke Contract":
             text-align: justify;
         }
         </style>
-        <div class="bridge-description">
+        <div class="neon-hover-block">
             <p>The purpose of revoke protocols is to allow you to remove permissions previously granted to smart contracts in your cryptocurrency wallet.</p>
             <p>When interacting with DApps (such as exchanges, farms, or NFTs), you typically authorize these contracts to move your tokens — and these permissions remain active indefinitely unless you revoke them manually.</p>
             <p>This provides more control and security, as revoking these permissions ensures that malicious or compromised contracts cannot move your assets without your consent.</p>
@@ -2554,20 +2599,22 @@ elif opcao == "⛔ Revoke Contract":
         border-radius: 50%;
     }}
     .protocol-footer {{
-        border: 2px solid #00e0ff;
-        style="flex-basis: 100%; height: 0;
         margin-bottom: 20px;
         min-height: 100px;
-        border-radius: 10px;
-        border: 2px solid #444; 
+        border-radius: 16px;
+        border: 2px solid #444;
         background: radial-gradient(circle at top, #3a3d45 0%, #2a2b30 100%);
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
-        border-radius: 16px;
-        padding: 10px; 
-        border-radius: 10px;
+        padding: 10px;
         color: white;
         font-family: 'Space Grotesk', sans-serif;
         font-size: 25px;
+        transition: all 0.3s ease-in-out;
+    }}
+    .protocol-footer:hover {{
+        box-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        transform: scale(1.01);
+        border-color: #00e0ff;
     }}
     .protocol-footer a {{
         color: lightblue;
@@ -2580,7 +2627,7 @@ elif opcao == "⛔ Revoke Contract":
     </div>
     """
 
-    components.html(full_html, height=500, scrolling=True)
+    components.html(full_html, height=400, scrolling=True)
 
     st.markdown(
         "<hr style='border: 2px double #342b44;'>",
@@ -2594,8 +2641,6 @@ elif opcao == "⚠️ Avoiding Scams":
         <style>
             .scam-warning-box {
                 background: #212328;
-                border: 3px double #ff7b00;
-                box-shadow: 0 0 15px #ff7b00, 0 0 5px #ff7b00 inset;
                 border-radius: 16px;
                 padding: 40px;
                 margin: 30px 0;
@@ -2620,6 +2665,11 @@ elif opcao == "⚠️ Avoiding Scams":
             }
             .scam-warning-box a:hover {
                 text-decoration: underline;
+            }
+            .scam-warning-box:hover {
+                box-shadow: 0 0 10px #ff7b00, 0 0 20px #ff7b00;
+                transform: scale(1.005);
+                border-color: #ff7b00;
             }
         </style>
 
