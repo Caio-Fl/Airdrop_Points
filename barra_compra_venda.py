@@ -7,7 +7,7 @@ def barra_compra_venda(valor, valor_medido,limite=100):
     # Fundo transparente
     #fig.patch.set_alpha(0.0)  # fundo da figura
     #ax.patch.set_alpha(0.0)   # fundo dos eixos
-    fig.patch.set_facecolor('#342b44')
+    fig.patch.set_facecolor('#212328'),
     # Barra compra (esquerda, valores negativos)
     if valor < 0:
         ax.barh(0, valor, color='green', height=0.2)
@@ -21,16 +21,16 @@ def barra_compra_venda(valor, valor_medido,limite=100):
     ax.axvline(0, color="black", linewidth=1)
 
     # Texto indicativo
-    ax.text(-limite * 0.9, 0.25, "← Buy", color='green', fontsize=8)
-    ax.text(limite * 0.9, 0.25, "Sell →", color='red', fontsize=8, ha='right')
+    ax.text(-limite * 0.9, 0.25, "← Buy", color='green', fontsize=8, family='Space Grotesk, sans-serif')
+    ax.text(limite * 0.9, 0.25, "Sell →", color='red', fontsize=8, ha='right', family='Space Grotesk, sans-serif')
     if (valor_medido < (-50)):
-        ax.text(0, 0.6, "⚠️ ALERT: Implied APY very Low, Verify if there is no Problem with Protocol", ha='center', fontsize=5, weight='bold', color='orange')
+        ax.text(0, 0.6, "⚠️ ALERT: Implied APY very Low, Verify if there is no Problem with Protocol", ha='center', fontsize=5, weight='bold', color='orange', family='Space Grotesk, sans-serif')
     elif ((-50) <= valor_medido < (-5)):
-        ax.text(0, 0.6, "⚠️ ALERT: EXTREME BUY", ha='center', fontsize=6, weight='bold', color='green')
+        ax.text(0, 0.6, "⚠️ ALERT: EXTREME BUY", ha='center', fontsize=6, weight='bold', color='green', family='Space Grotesk, sans-serif')
     elif (valor_medido > 105):
-        ax.text(0, 0.6, "⚠️ ALERT: EXTREME SELL", ha='center', fontsize=6, weight='bold', color='red')
+        ax.text(0, 0.6, "⚠️ ALERT: EXTREME SELL", ha='center', fontsize=6, weight='bold', color='red', family='Space Grotesk, sans-serif')
     else:
-        ax.text(0, 0.6, f"Trade Force: {abs(round(valor,1))}", ha='center', fontsize=8, weight='bold', color='white')
+        ax.text(0, 0.6, f"Trade Force: {abs(round(valor,1))}", ha='center', fontsize=8, weight='bold', color='white', family='Space Grotesk, sans-serif')
 
     # Limites e ocultar eixos
     ax.set_xlim(-limite, limite)
