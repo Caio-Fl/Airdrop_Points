@@ -1112,7 +1112,7 @@ with col_content:
                     background-color: #00ffae;
                     color: #000;
                     padding: 10px 16px;
-                    width: 482px;
+                    width: 500px;
                     border: none;
                     border-radius: 8px;
                     font-weight: bold;
@@ -1127,7 +1127,7 @@ with col_content:
 
                 <div class="ref-card">
                     <h3 style="color:#00ffae;font-size=25px;">Start with {selected_protocol}</h3>
-                    <p style="margin-top:30px;">New to {selected_protocol}? Use the referral link below to get started with <strong>Points Boost</strong> in the platform.</p>
+                    <p style="margin-top:30px;font-size=22px;">New to {selected_protocol}? Use the referral link below to get started with <strong>Points Boost</strong> in the platform.</p>
                     <div class="ref-box" style="margin-top:20px;">{referral}</div>
                     <a " href={referral} target="_blank">
                         <button >Access {selected_protocol} ↗</button>
