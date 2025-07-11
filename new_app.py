@@ -2996,6 +2996,7 @@ with col_content:
                 {"name": "deBridge", "site": "https://debridge.finance", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Solana": [
+                {"name": "Titan - Code: G1UCP3A6", "site": "https://titandex.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1864118438538436608/94Hh88Vz_400x400.jpg"},
                 {"name": "Jupiter", "site": "https://jup.ag", "fees": "Low", "image": "https://jup.ag/favicon.ico"},
                 {"name": "Kamino", "site": "https://swap.kamino.finance/swap/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1800478667040002048/8bUg0jRH_400x400.jpg"},
                 {"name": "Orca", "site": "https://www.orca.so/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1942349518894432256/QNyNnzPY_400x400.png"},
