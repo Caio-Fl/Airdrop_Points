@@ -1098,7 +1098,6 @@ with col_content:
                     color: white;
                     font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
                     margin-top: 20px;
-                    width:95.5%;
                 }}
                 .ref-box {{
                     background-color: #111;
@@ -1128,7 +1127,7 @@ with col_content:
 
                 <div class="ref-card">
                     <h3 style="color:#00ffae;font-size=25px;">Start with {selected_protocol}</h3>
-                    <p style="margin-top:30px;font-size=22px;">New to {selected_protocol}? Use the referral link below to get started with <strong>Points Boost</strong> in the platform.</p>
+                    <p style="margin-top:30px;">New to {selected_protocol}? Use the referral link below to get started with <strong>Points Boost</strong> in the platform.</p>
                     <div class="ref-box" style="margin-top:20px;">{referral}</div>
                     <a " href={referral} target="_blank">
                         <button >Access {selected_protocol} ↗</button>
@@ -1175,6 +1174,7 @@ with col_content:
                     maring-rigth: 10px;
                     maring-left: 10px;
                     font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    width: 94.5%;
                 }}
                 
                 .result-card::before {{
