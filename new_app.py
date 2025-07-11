@@ -909,10 +909,10 @@ with col_content:
                 .airdrop-box::before {
                     content: "";
                     position: absolute;
-                    top: -6px;
-                    left: -6px;
-                    right: -6px;
-                    bottom: -6px;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
                     border-radius: 14px;
                     z-index: -1;
                     background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
