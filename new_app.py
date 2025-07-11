@@ -260,6 +260,28 @@ set_background("min7.jpg")
 # CSS customizado buttons, html, body, stApp
 st.markdown("""
 <style>
+/* Make body use full width */
+[data-testid="stAppViewContainer"] > .main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Responsive font sizes */
+@media only screen and (max-width: 600px) {
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.2rem !important; }
+    h3 { font-size: 1rem !important; }
+    .stButton>button { font-size: 0.9rem !important; padding: 0.4rem 0.8rem; }
+    .stTextInput>div>div>input { font-size: 0.9rem !important; }
+}
+
+/* Reduce padding in columns on small screens */
+@media only screen and (max-width: 600px) {
+    [data-testid="column"] {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
 body, html, .stApp {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 18px !important;
