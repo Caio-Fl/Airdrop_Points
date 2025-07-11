@@ -1269,7 +1269,7 @@ with col_content:
 
 
         # Renderiza o HTML customizado
-        components.html(full_html, height=380, scrolling=False)
+        components.html(full_html, height=400, scrolling=False)
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 
