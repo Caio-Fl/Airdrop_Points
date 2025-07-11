@@ -1112,7 +1112,7 @@ with col_content:
                     background-color: #00ffae;
                     color: #000;
                     padding: 10px 16px;
-                    width: 500px;
+                    width: 550px;
                     border: none;
                     border-radius: 8px;
                     font-weight: bold;
