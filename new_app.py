@@ -282,7 +282,7 @@ body, html, .stApp {
     position: relative;
     display: block;
     width: 100%;
-    max-width: 360px;
+    max-width: 270px;
     min-width: 200px;
     box-sizing: border-box;
     padding: 2px 20px;
@@ -756,10 +756,10 @@ elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
 
 # Layout colunas menu + conteúdo
-col_left,col_menu, col_content,col_rigth = st.columns([2,1.8, 7,2.1], gap="large")
+col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 7,2.1], gap="large")
 
 # Menu lateral com botões
-with col_menu:
+with col_left:
     st.markdown('<div class="menu-column">', unsafe_allow_html=True)
     emoji = list(PAGES.keys())[1].split()[0]
     label = " ".join(list(PAGES.keys())[0].split()[1:])
