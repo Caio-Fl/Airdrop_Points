@@ -7,7 +7,7 @@ def barra_compra_venda(valor, valor_medido,limite=100):
     # Fundo transparente
     #fig.patch.set_alpha(0.0)  # fundo da figura
     #ax.patch.set_alpha(0.0)   # fundo dos eixos
-    fig.patch.set_facecolor('#212328'),
+    fig.patch.set_facecolor('#111827'),
     # Barra compra (esquerda, valores negativos)
     if valor < 0:
         ax.barh(0, valor, color='green', height=0.2)

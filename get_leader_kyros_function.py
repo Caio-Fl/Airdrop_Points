@@ -31,7 +31,7 @@ def get_leader_kyros_function():
     value = data2.get("data", [])
     KyAsUSD = value[15].get("priceUsd", 0)
 
-    url = "https://www.exponent.finance/farm/kysol-14Jun25"
+    url = "https://www.exponent.finance/farm/kysol-30Sep25"
     headers = {
         "User-Agent": "Mozilla/5.0"  # importante para evitar bloqueios básicos
     }
@@ -47,9 +47,9 @@ def get_leader_kyros_function():
 
     # Captura tudo após a palavra-chave
     resultado = html.split(palavra_chave, 1)[-1]
+    
     texto = resultado[:800]
     texto_limpo = texto.encode().decode('unicode_escape')
-
     match = re.search(r'"underlyingYieldsPct":([\d.]+)', texto_limpo)
     if match:
         Ky_unApy = float(match.group(1))

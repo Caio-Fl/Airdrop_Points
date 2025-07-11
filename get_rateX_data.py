@@ -11,8 +11,8 @@ def get_rateX_data(protocol):
             "Accept": "*/*"
     }
     if protocol == "kyros":
-        qS = 16 #kySOL_querySymbol = 15
-        qT = 23 #kySOL_queryTrade = 20
+        qS = 37 #kySOL_querySymbol = 15
+        qT = 29 #kySOL_queryTrade = 20
     else:
         qS = 22 #ragSOL_querySymbol = 21
         qT = 24 #fragSOL_queryTrade = 21
