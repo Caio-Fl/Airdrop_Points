@@ -604,10 +604,9 @@ st.markdown("""
 <div class="marquee-container">
   <div class="marquee-text">
     🚨 Last News: 
-    <a href='https://app.spark.fi/SPK/airdrop' target='_blank' style='color:black;'>Verify if you have tokens to receive!</a> / 
-    <a href='https://app.kamino.finance/season-3-airdrop' target='_blank' style='color:black;'>Kamino Season 3 Airdrop Claim!</a> / 
-    <a href='https://build.assisterr.ai/auth/wallet-connect' target='_blank' style='color:black;'>Assisterr Airdrop Claim!</a> / 
-    <a href='https://btcsol.co/' target='_blank' style='color:black;'>Zeus btcSOL Register to receive 200% Boost for 2 weeks!</a>
+    <a href='https://claims.eclipse.xyz/' target='_blank' style='color:black;'>Eclipse Airdrop Checker!</a> / 
+    <a href='https://airdrop.sunriselayer.io/' target='_blank' style='color:black;'>Verify if you have tokens to receive in Sunrise Airdrop!</a> / 
+    <a href='https://btcsol.co/' target='_blank' style='color:black;'>If you participated in Zeus activities, you may receive more!</a> / 
   </div>
 </div>
 """, unsafe_allow_html=True)
