@@ -282,7 +282,7 @@ body, html, .stApp {
     position: relative;
     display: block;
     width: 100%;
-    max-width: 270px;
+    max-width: 290px;
     min-width: 200px;
     box-sizing: border-box;
     padding: 2px 20px;
