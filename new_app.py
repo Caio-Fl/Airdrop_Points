@@ -1098,6 +1098,7 @@ with col_content:
                     color: white;
                     font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
                     margin-top: 20px;
+                    width:95.5%;
                 }}
                 .ref-box {{
                     background-color: #111;
