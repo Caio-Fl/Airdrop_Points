@@ -605,6 +605,7 @@ st.markdown("""
   <div class="marquee-text">
     🚨 Last News: 
     <a href='https://claims.eclipse.xyz/' target='_blank' style='color:black;'>Eclipse Airdrop Checker!</a> / 
+    <a href='https://claim.caldera.foundation/' target='_blank' style='color:black;'>Caldera Airdrop Checker!</a> /         
     <a href='https://airdrop.sunriselayer.io/' target='_blank' style='color:black;'>Verify if you have tokens to receive in Sunrise Airdrop!</a> / 
     <a href='https://btcsol.co/' target='_blank' style='color:black;'>If you participated in Zeus activities, you may receive more!</a> / 
   </div>
