@@ -1468,7 +1468,7 @@ with col_content:
                 Level_profit = round((Level_airdrop_value - Level_cost),2)
                 Level_ROI = round((100*Level_profit/Level_cost),2)
 
-                Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"otimo")
+                Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"muito bom")
                 
                 # Fragmetric
                 #Frag_date_tge = datetime.strptime((Frag_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1505,6 +1505,7 @@ with col_content:
                 # Spark
                 Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+                print(Sp_accured, Sp_TP_0, (Sp_accured - Sp_TP_0), ((date1-Sp_date0).days))
                 Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
                 Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
                 Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
@@ -1516,7 +1517,7 @@ with col_content:
                 Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
                 Sp_ROI = round((100*Sp_profit/Sp_cost),2)
 
-                Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"muito bom")
+                Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"bom")
 
                 # Gaib
                 Gaib_date_tge = datetime.strptime((Gaib_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1601,7 +1602,7 @@ with col_content:
                     "Expected Profit": f"$ {Ky_profit}",
                     "Expected ROI": f"{Ky_ROI} %"   
                 },
-                "Spark (T. Supply: 10 Bi)": {
+                "Spark (T.Supply: 10 Bi)": {
                     "Imagem": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
                     "Logo": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
                     "pureLink": "https://app.spark.fi/points/8KBVQB",
