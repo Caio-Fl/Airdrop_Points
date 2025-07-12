@@ -1505,7 +1505,6 @@ with col_content:
                 # Spark
                 Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
-                print(Sp_accured, Sp_TP_0, (Sp_accured - Sp_TP_0), ((date1-Sp_date0).days))
                 Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
                 Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
                 Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
@@ -2786,8 +2785,8 @@ with col_content:
         )
 
     elif st.session_state.pagina == "✅ Last Claims and Checkers":
-        code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.Gg8_XS"
-        code2=".BGfC4ic2rEyvs0bPk_jh3DSxRTNTlfbYZOjY34"
+        code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.G01IGX"
+        code2=".ueBpDmaelTgSaI0Oq6Q6ll4XvjeH5b6ycRUYTc"
         
         headers = {
             "Authorization" : code+code2
