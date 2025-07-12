@@ -1034,7 +1034,7 @@ with col_content:
 
         # --- Valores iniciais ---
         FDV = 100
-        total_points = 1_000_000
+        total_points = 1_000_000_000
         airdrop_pct = 5
         your_points = 1_000_000
         total_actual_points = 0
