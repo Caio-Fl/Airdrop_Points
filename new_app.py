@@ -1602,7 +1602,7 @@ with col_content:
                     "Expected Profit": f"$ {Ky_profit}",
                     "Expected ROI": f"{Ky_ROI} %"   
                 },
-                "Spark (T.Supply: 10 Bi)": {
+                "Spark (T.Sup.: 10 Bi)": {
                     "Imagem": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
                     "Logo": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
                     "pureLink": "https://app.spark.fi/points/8KBVQB",
