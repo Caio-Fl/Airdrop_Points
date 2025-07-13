@@ -37,17 +37,16 @@ def get_leader_kyros_function():
     }
 
     response3 = requests.get(url, headers=headers)
-
+    
     if response3.status_code == 200:
         html = response3.text
     else:
         print(f"Erro: {response3.status_code}")
 
-    palavra_chave = "kySo1nETpsZE2NWe5vj2C64mPSciH1SppmHb4XieQ7B"
+    palavra_chave = "2r8NaP6G69vb1AgkWWLGQ8SVZLAcwXgWuq19a3zWo9gN"
 
     # Captura tudo após a palavra-chave
     resultado = html.split(palavra_chave, 1)[-1]
-    
     texto = resultado[:800]
     texto_limpo = texto.encode().decode('unicode_escape')
     match = re.search(r'"underlyingYieldsPct":([\d.]+)', texto_limpo)
@@ -55,5 +54,4 @@ def get_leader_kyros_function():
         Ky_unApy = float(match.group(1))
     else:
         Ky_unApy = 0.07
-
     return(total_accured,Ky_unApy,KyAsUSD,total_users,top100p)
