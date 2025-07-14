@@ -515,6 +515,7 @@ tokens = {
     "ethena": {"name": "Ethena (ENA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
     "sonic-3": {"name": "Sonic (S)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
     "berachain-bera": {"name": "Berachain (BERA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
+    "spark-2": {"name": "Spark (SPK)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
     "burr-governance-token": {"name": "Burr (BURR)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
 }
 
@@ -900,6 +901,10 @@ with col_content:
     Gaib_pts_token = 1
     Gaib_date0 = datetime.strptime("2025-06-11T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
+    #Backpack
+    Backpack_date0 = datetime.strptime("2025-03-21T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+    Backpack_TP_0 = 0
+
     # --- Conteúdo Principal ---
    
 
@@ -1040,7 +1045,7 @@ with col_content:
         total_actual_points = 0
 
         # --- Lista de protocolos ---
-        protocolos = ["Any", "Level", "Kyros", "Spark", "Gaib"]
+        protocolos = ["Any", "Backpack", "Level", "Kyros", "Spark", "Gaib"]
 
         # --- Bloco com estilo aplicado apenas aqui ---
         st.markdown('<div class="custom-columns">', unsafe_allow_html=True)
@@ -1053,31 +1058,92 @@ with col_content:
             if selected_protocol != "Any":
                 auto_fill_actual = st.checkbox(f"Auto-fill Total Actual {selected_protocol} Points", value=True)
                 if auto_fill_actual:
-                    date_tge = st.text_input("📅 Level TGE Date:", value="2025-09-30")
-                    date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                    today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                    date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                    date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                    date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                    if selected_protocol == "Level":
+                    if selected_protocol == "Backpack":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-12")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        FDV = 1000
+                        airdrop_pct = 15
+                        your_points = 1_000
+                        actual_points = 110_046_628
+                        mean_daily = 11_400_000/7
+                        print(mean_daily,(date_tge_format-date1).days)
+                        total_points = int(round(actual_points + 4_261_285 + (((date_tge_format-date1).days)*mean_daily),0))
+                        referral = "https://backpack.exchange/join/jj2kkdp1"
+                    elif selected_protocol == "Level":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-30")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        FDV = 100
+                        airdrop_pct = 5
+                        your_points = 1_000_000_000
                         tags, actual_points, time_Open, time_Level,top100,total_users = enviar_dados()
                         mean_daily = 1*(actual_points[1]-Level_TP_0)/((date1-Level_date0).days)
                         total_points = int(round(actual_points[1] + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://app.level.money/farm?referralCode=pwlblh"
                     elif selected_protocol == "Kyros":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-30")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        FDV = 40
+                        airdrop_pct = 10
+                        your_points = 100_000
                         actual_points,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
                         mean_daily = 1*(actual_points-Ky_TP_0)/((date1-Ky_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://boost.kyros.fi/?ref=nq3orn"
-                    elif selected_protocol == "Spark": 
+                    elif selected_protocol == "Spark":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-14")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
+                        data = requests.get(url).json()
+                        price = data.get('spark-2', {}).get('usd', 0.032)
+                        FDV = int((float(price)*977940501)/1000000)
+                        if FDV is None:
+                            FDV = 0
+                        print(FDV)
+                        airdrop_pct = 3
+                        your_points = 1_000_000
                         actual_points,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
                         mean_daily = 1*(actual_points-Sp_TP_0)/((date1-Sp_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))   
                         referral = "https://app.spark.fi/points/8KBVQB"
                     elif selected_protocol == "Gaib":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-14")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        airdrop_pct = 5
+                        your_points = 1_000_000
                         actual_points,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
                         mean_daily = 1*(actual_points-Gaib_TP_0)/((date1-Gaib_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
+                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
+                else:
+                    if selected_protocol == "Backpack":
+                        referral = "https://backpack.exchange/join/jj2kkdp1"
+                    elif selected_protocol == "Level":
+                        referral = "https://app.level.money/farm?referralCode=pwlblh"
+                    elif selected_protocol == "Kyros":
+                        referral = "https://boost.kyros.fi/?ref=nq3orn"
+                    elif selected_protocol == "Spark":
+                        referral = "https://app.spark.fi/points/8KBVQB"
+                    elif selected_protocol == "Gaib":
                         referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
 
             FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
@@ -1360,7 +1426,14 @@ with col_content:
         with col2:
             ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
         with col3:
-            Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0, value=300, step=1) * 1_000_000
+            url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
+            data = requests.get(url).json()
+            price = data.get('spark-2', {}).get('usd', 0.032)
+            print(price)
+            FDV = int(float(price)*977940501)
+            if FDV is None:
+                FDV = 0
+            Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0, value=300, step=1) * FDV
         with col4:
             Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
