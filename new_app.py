@@ -1114,7 +1114,6 @@ with col_content:
                         FDV = int((float(price)*977940501)/1000000)
                         if FDV is None:
                             FDV = 0
-                        print(FDV)
                         airdrop_pct = 3
                         your_points = 1_000_000
                         actual_points,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
@@ -1430,10 +1429,11 @@ with col_content:
             data = requests.get(url).json()
             price = data.get('spark-2', {}).get('usd', 0.032)
             print(price)
-            FDV = int(float(price)*977940501)
-            if FDV is None:
-                FDV = 0
-            Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0, value=300, step=1) * FDV
+            SpFDV = (float(price)*977940501)/1_000_000
+            if SpFDV is None:
+                SpFDV = 0
+            print(SpFDV)
+            Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0.0, value= SpFDV, step=1.0) * 1_000_000
         with col4:
             Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
@@ -3063,7 +3063,7 @@ with col_content:
 
         protocols_bridge_swap = {
             "EVM": [
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1937203304183832576/CBRGiBg5_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
                 {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1930642162984579072/NtYd0Egd_400x400.png"},
                 {"name": "Uniswap", "site": "https://uniswap.org", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1831348758753206272/y2Z0hMrl_400x400.jpg"},
                 {"name": "Swaps.io", "site": "https://swaps.io?ref=q7kMylhY2EY", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1710931572667584512/GWMzqBE0_400x400.png"},
@@ -3096,7 +3096,7 @@ with col_content:
                 {"name": "Kamino", "site": "https://swap.kamino.finance/swap/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1800478667040002048/8bUg0jRH_400x400.jpg"},
                 {"name": "Orca", "site": "https://www.orca.so/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1942349518894432256/QNyNnzPY_400x400.png"},
                 {"name": "Stabble", "site": "https://app.stabble.org/?referrer=fleming25", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1876267708238434304/8J3u2h6I_400x400.jpg"},
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1937203304183832576/CBRGiBg5_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
                 {"name": "Portal Bridge", "site": "https://portalbridge.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1927411080172593152/n_qpHIq7_400x400.jpg"},
                 {"name": "Mayan", "site": "https://swap.mayan.finance/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1891499635597856769/5BMo_JQJ_400x400.jpg"},
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
@@ -3118,7 +3118,7 @@ with col_content:
                 {"name": "Owlto", "site": "https://owlto.finance/?ref=0xa786817bE0B3FC4385E9F93140B513c9846C6f74", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1886736859054923778/Iv098oCX_400x400.jpg"},
             ],
             "Eclipse": [
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1937203304183832576/CBRGiBg5_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
                 {"name": "Invariant", "site": "https://eclipse.invariant.app/points", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1842564007770693632/pW6YmToL_400x400.jpg"},
                 {"name": "Orca", "site": "https://www.orca.so/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1942349518894432256/QNyNnzPY_400x400.png"},
                 {"name": "Eclipse Bridge", "site": "https://app.eclipse.xyz/bridge?target=deposit", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1816156021519466496/FBQWKnR4_400x400.jpg"},     
@@ -3147,7 +3147,7 @@ with col_content:
             ],
             "Monad": [
                 {"name": "Jumper Exchange", "site": "https://jumper.exchange",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1930642162984579072/NtYd0Egd_400x400.png"},
-                {"name": "Relay", "site": "https://relay.link/bridge",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1937203304183832576/CBRGiBg5_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
                 {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
             ],
             "Sonic Labs": [
@@ -3495,7 +3495,7 @@ with col_content:
             {"network": "Opnet", "token": "Opnet", "image":"https://pbs.twimg.com/profile_images/1817743953627660289/7HObLZyL_400x400.jpg", "sites": ["https://faucet.opnet.org","","","",""]},
             {"network": "Campnetwork", "token": "Campnetwork", "image":"https://pbs.twimg.com/profile_images/1774932612160557056/QOyzwbO2_400x400.jpg", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
             {"network": "Somnia", "token": "Somnia", "image":"https://pbs.twimg.com/profile_images/1896736794810458112/9tsFttK2_400x400.jpg", "sites": ["https://testnet.somnia.network/","https://www.somnia.domains/faucet","","",""]},
-            {"network": "Moonveil", "token": "Moonveil", "image":"https://pbs.twimg.com/profile_images/1789490763933577216/njozvdjD_400x400.jpg", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
+            {"network": "Moonveil", "token": "Moonveil", "image":"https://pbs.twimg.com/profile_images/1935215139734908928/E_mmN003_400x400.png", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
             {"network": "Sahara", "token": "Sahara", "image":"https://pbs.twimg.com/profile_images/1871431718198239232/2LNyhe05_400x400.jpg", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
             {"network": "MegaETH", "token": "MegaETH", "image":"https://pbs.twimg.com/profile_images/1861751545790070784/KvlxTzAq_400x400.jpg", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
             {"network": "Xion", "token": "Xion", "image":"https://pbs.twimg.com/profile_images/1881756422507024384/Huw5cTrb_400x400.jpg", "sites": ["https://faucet.xion.burnt.com/", "https://web3.okx.com/pt-br/faucet","","",""]},
@@ -3505,7 +3505,7 @@ with col_content:
             {"network": "Monad", "token": "Monad", "image":"https://pbs.twimg.com/profile_images/1877532281419739137/I_t8rg_V_400x400.jpg", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
             {"network": "Sui", "token": "SUI", "image":"https://pbs.twimg.com/profile_images/1928528183466373120/4xpp6RSr_400x400.jpg", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
             {"network": "Ethereum", "token": "USDC, EURC (Sepolia)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://faucet.circle.com/","","","",""]},
-            {"network": "Sei", "token": "SEI", "image":"https://pbs.twimg.com/profile_images/1873839225914716160/w8650_qp_400x400.jpg", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
+            {"network": "Sei", "token": "SEI", "image":"https://pbs.twimg.com/profile_images/1938635626766565380/l5P2O5jF_400x400.jpg", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
             {"network": "Babylon", "token": "Babylon Testnet", "image":"https://pbs.twimg.com/profile_images/1877578455576948736/q0GnBs9F_400x400.jpg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
             {"network": "Google Web3 Faucet", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1754606338460487681/bWupXdxo_400x400.jpg", "sites": ["https://cloud.google.com/application/web3","","","",""]},
             {"network": "Chainlink", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1800426318099595264/N7yf_kOD_400x400.jpg", "sites": ["https://faucets.chain.link/","","","",""]},
