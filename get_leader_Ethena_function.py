@@ -6,8 +6,6 @@ def get_ethena_Data():
     # Definindo os cabeçalhos da requisição
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
-        # Se for necessário, adicione seu token de autenticação aqui
-        # 'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
     }
 
     try:
