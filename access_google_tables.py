@@ -13,9 +13,10 @@ def get_data_from_google_sheets():
     
     if response.status_code == 200:
         data = response.json()
-        total_points = response['values'][0][0]
+        total_points = data['values'][0][0]
         return total_points
     else:
+        st.error(f"Erro na requisição: {response.status_code}")
         return None
 
 # Chama a função para puxar os dados
