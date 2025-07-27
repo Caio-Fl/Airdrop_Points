@@ -35,13 +35,13 @@ def get_ethena_Data():
 
         else:
             print(f"Erro ao acessar API Ethena. Status code: {response.status_code}")
-            total_points = get_data_from_google_sheets()
+            total_points = int(get_data_from_google_sheets())
             total_wallets = 743444
             top100 = 0.5301
             return total_points, total_wallets, top100
 
     except requests.exceptions.RequestException as e:
-        total_points = get_data_from_google_sheets()
+        total_points = int(get_data_from_google_sheets())
         total_wallets = 743444
         top100 = 0.5301
         return total_points, total_wallets, top100
