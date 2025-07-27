@@ -1,5 +1,6 @@
 def get_ethena_Data():
     import requests
+    from access_google_tables import get_data_from_google_sheets
 
     url = "https://app.ethena.fi/api/leaderboard"
 
@@ -34,7 +35,10 @@ def get_ethena_Data():
 
         else:
             print(f"Erro ao acessar API Ethena. Status code: {response.status_code}")
-            return None, None, None
+            total_points = get_data_from_google_sheets()
+            total_wallets = 743444
+            top100 = 0.5301
+            return total_points, total_wallets, top100
 
     except requests.exceptions.RequestException as e:
         print(f"Erro na requisição: {e}")
