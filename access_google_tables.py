@@ -10,14 +10,12 @@ def get_data_from_google_sheets():
 
     # Substitua YOUR_API_KEY pela sua chave de API do Google
     response = requests.get(url)
-    print(response)
     
     if response.status_code == 200:
         data = response.json()
-        st.write(data)  # Exibe os dados no Streamlit
-        return data
+        total_points = response['values'][0][0]
+        return total_points
     else:
-        st.error(f"Erro na requisição: {response.status_code}")
         return None
 
 # Chama a função para puxar os dados
