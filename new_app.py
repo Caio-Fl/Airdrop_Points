@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import time
 from datetime import datetime, timezone
-from get_leader_OpenEden_function import get_leader_OpenEden_function
+from get_leader_Ethena_function import get_ethena_Data
 from get_leader_Level_function import get_leader_Level_function
 from get_Leader_Spark_Data import get_Leader_Spark_Data
 from get_fragmetric_data import get_fragmetric_data
@@ -852,13 +852,13 @@ with col_content:
 
     # Inicialização de parâmetros de cada protocolo
     i = 0
-    # OpenEden
-    Open_Data = []
-    Open_Multipleir = 10
-    Open_Boost = 1.05
-    Open_TP_0 = 9851534492
-    Open_pts_token = 1
-    Open_date0 = datetime.strptime("2025-04-09T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+    # Ethena
+    Ena_Data = []
+    Ena_Multipleir = 25
+    Ena_Boost = 1.10
+    Ena_TP_0 = 17600000000000
+    Ena_pts_token = 1
+    Ena_date0 = datetime.strptime("2025-07-07T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
     # Level
     Level_Data = []
@@ -1083,7 +1083,7 @@ with col_content:
                         FDV = 100
                         airdrop_pct = 5
                         your_points = 1_000_000_000
-                        tags, actual_points, time_Open, time_Level,top100,total_users = enviar_dados()
+                        tags, actual_points, time_Ena, time_Level,top100,total_users = enviar_dados()
                         mean_daily = 1*(actual_points[1]-Level_TP_0)/((date1-Level_date0).days)
                         total_points = int(round(actual_points[1] + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://app.level.money/farm?referralCode=pwlblh"
@@ -1419,12 +1419,14 @@ with col_content:
 
         # Inputs: FDV
         st.markdown("#### Expected FDV in TGE")
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
         with col1:
-            Level_fdv = st.number_input("Level FDV at TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
+            Ena_fdv = st.number_input("Ethena FDV at TGE ($M):", min_value=0, value=5000, step=1) * 1_000_000
         with col2:
-            ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
+            Level_fdv = st.number_input("Level FDV at TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
         with col3:
+            ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
+        with col4:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
             data = requests.get(url).json()
             price = data.get('spark-2', {}).get('usd', 0.032)
@@ -1434,20 +1436,23 @@ with col_content:
                 SpFDV = 0
             print(SpFDV)
             Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0.0, value= SpFDV, step=1.0) * 1_000_000
-        with col4:
+        with col5:
             Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
         # Inputs: TGE Dates
         st.markdown("#### Expected TGE Dates")
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
         with col1:
-            Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-24")
+            Ena_l_date = st.text_input("📅 Ethena TGE Date:", value="2025-09-25")
         with col2:
-            Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-07-30")  
+            Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-24")
         with col3:
-            Sp_l_date = st.text_input("📅 Spark TGE Date:", value="2025-08-14")
+            Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-07-30")  
         with col4:
+            Sp_l_date = st.text_input("📅 Spark TGE Date:", value="2025-08-14")
+        with col5:
             Gaib_l_date = st.text_input("📅 Gaib TGE Date:", value="2025-08-14")
+
         
         st.markdown("""
         <style>
@@ -1478,32 +1483,33 @@ with col_content:
             with st.spinner('Loading Data and Calculating Parameters...'):
                 #try: 
                 # Busca Informações no Defillama
-                #Open_tvl,Open_amount,Open_leadInvestors,Open_otherInvestors = get_defillama_info("openeden","Ethereum")
+                Ena_tvl,Ena_amount,Ena_leadInvestors,Ena_otherInvestors = get_defillama_info("ethena","Ethereum")
                 Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
                 Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
                 Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
-                Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("Spark","Ethereum")
+                Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("spark","Ethereum")
                 
                 # Busca dados dos protocolos em suas respectivas API's
                 tags, values, time_Open, time_Level,top100,total_users = enviar_dados()
+                Ena_accured,Ena_total_users, Ena_top100p = get_ethena_Data()
                 Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
                 Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
                 Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
                 Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
-                
+                print(Ena_accured,Ena_total_users, Ena_top100p)
                 # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
-                #Open_ytMul,Open_unApy,Open_impApy,Open_feeRate,Open_swapFee,Open_ytRoi,Open_expiry,Open_priceImpact = get_Pendle_Data("0xa77c0de4d26b7c97d1d42abd6733201206122e25","0x42E2BA2bAb73650442F0624297190fAb219BB5d5")
+                Ena_ytMul,Ena_unApy,Ena_impApy,Ena_feeRate,Ena_swapFee,Ena_ytRoi,Ena_expiry,Ena_priceImpact = get_Pendle_Data("0xa36b60a14a1a5247912584768c6e53e1a269a9f7","0x029d6247adb0a57138c62e3019c92d3dfc9c1840")
                 Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
                 Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
                 ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
                 Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
                 Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
-
+                print(Ena_ytMul,Ena_unApy)
                 # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
-                date_obj = datetime.strptime(time_Open, "%Y-%m-%d %H:%M:%S")
+                date_obj = datetime.strptime(time_Level, "%Y-%m-%d %H:%M:%S")
                 date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
                 date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                #date2 = datetime.strptime(Open_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                date2 = datetime.strptime(Ena_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date3 = datetime.strptime(Level_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1511,21 +1517,21 @@ with col_content:
                 date7 = datetime.strptime(Gaib_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 
                 # Calcula os parâmetros de cada Protocolo
-                # OpenEden
-                #Open_date_tge = datetime.strptime((Open_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                #Open_mean_daily = 1.3*(values[0]-Open_TP_0)/((date1-Open_date0).days)
-                #Open_points_tge = round(values[0] + (((Open_date_tge-date1).days)*Open_mean_daily),0)
-                #Open_points_per_token = round(Open_points_tge/(tsp*drop/100),2)
-                #Open_farmed_yield = round(invested*Open_ytMul*Open_unApy*(date2-date1).days/365,2)
-                #Open_daily_pts_farmed = round(invested*Open_ytMul*Open_Multipleir*Open_Boost*Open_pts_token,2)
-                #Open_total_pts_farmed = round(Open_daily_pts_farmed*(date2-date1).days,2)
-                #Open_etimated_tokens = round(Open_total_pts_farmed/Open_points_per_token,2)
-                #Open_airdrop_value = round((Open_fdv/tsp)*Open_etimated_tokens,2)
-                #Open_cost = abs(round((Open_farmed_yield - invested - (invested*abs(Open_priceImpact))),2))
-                #Open_profit = round((Open_airdrop_value - Open_cost),2)
-                #Open_ROI = round((100*Open_profit/Open_cost),2)
+                # EnaEden
+                Ena_date_tge = datetime.strptime((Ena_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                Ena_mean_daily = 1.3*(Ena_accured-Ena_TP_0)/((date1-Ena_date0).days)
+                Ena_points_tge = round(Ena_accured + (((Ena_date_tge-date1).days)*Ena_mean_daily),0)
+                Ena_points_per_token = round(Ena_points_tge/(tsp*drop/100),2)
+                Ena_farmed_yield = round(invested*Ena_ytMul*Ena_unApy*(date2-date1).days/365,2)
+                Ena_daily_pts_farmed = round(invested*Ena_ytMul*Ena_Multipleir*Ena_Boost*Ena_pts_token,2)
+                Ena_total_pts_farmed = round(Ena_daily_pts_farmed*(date2-date1).days,2)
+                Ena_etimated_tokens = round(Ena_total_pts_farmed/Ena_points_per_token,2)
+                Ena_airdrop_value = round((Ena_fdv/tsp)*Ena_etimated_tokens,2)
+                Ena_cost = abs(round((Ena_farmed_yield - invested - (invested*abs(Ena_priceImpact))),2))
+                Ena_profit = round((Ena_airdrop_value - Ena_cost),2)
+                Ena_ROI = round((100*Ena_profit/Ena_cost),2)
                 
-                #Open_grade = protocol_rate(Open_tvl,(100*top100[0]),Open_ROI,(100*Open_mean_daily/values[0]),total_users[0],"bom")
+                Ena_grade = protocol_rate(Ena_tvl,(100*Ena_top100p),Ena_ROI,(100*Ena_mean_daily/Ena_accured),total_users[0],"bom")
                 
                 # Level
                 Level_date_tge = datetime.strptime((Level_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1610,6 +1616,37 @@ with col_content:
                 #    print("Error in YT Data Request")
 
             protocolos = {
+                "Ethena sUSDE": {
+                    "Imagem": "https://pbs.twimg.com/profile_images/1684292904599126016/f0ChONgU_400x400.png",
+                    "Logo": "https://pbs.twimg.com/profile_images/1684292904599126016/f0ChONgU_400x400.png",
+                    "pureLink": "https://app.ethena.fi/join/yp9pg",
+                    "Link": "<a href='https://app.ethena.fi/join/yp9pg' target='_blank' style='color:#FFA500;'>More info</a>",
+                    "Grade": f"{Ena_grade}",
+                    "TVL": f"{Ena_tvl} M",
+                    "Last Update": f"{time_Level}",
+                    "Expiry": f"{date3.date()}",
+                    "Total Points Farmed": f"{round(Ena_accured,0)}",
+                    "YT Multiplier": f"{round(Ena_ytMul,3)}",
+                    "YT APY": f"{round(Ena_unApy*100,2)}",
+                    "Time Until Expiration": f"{(date3-date1)}",
+                    "Protocol YT Multiplier": f"{Ena_Multipleir}",
+                    "Protocol Referral Boost": f"{round((Ena_Boost-1),2)*100} %",
+                    "Equivalent YT Received": f"$ {round(invested*Ena_ytMul,2)}",
+                    "Daily Points Farmed": f"{Ena_daily_pts_farmed}",
+                    "Total Points Farmed in YT": f"{Ena_total_pts_farmed}",
+                    "Top 100 Concentration": f"{round(100*Ena_top100p,2)}",
+                    "Total User": f"{Ena_total_users}",
+                    "Farmed Yield in YT": f"$ {Ena_farmed_yield}",
+                    "Mean Daily Points": f"{round(Ena_mean_daily,0)}",
+                    "Estimated Points in TGE": f"{round(Ena_points_tge,0)}",
+                    "Points per Token": f"{Ena_points_per_token}",
+                    "Estimated FDV in TGE": f"{Ena_fdv}",
+                    "Estimated Token Price": f"$ {round(Ena_fdv/tsp,2)}",
+                    "Estimated Tokens Airdrop": f"{Ena_etimated_tokens}",
+                    "Estimated Airdrop Value": f"$ {Ena_airdrop_value}",
+                    "Expected Profit": f"$ {Ena_profit}",
+                    "Expected ROI": f"{Ena_ROI} %"      
+                },
                 "Level": {
                     "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/lev.jpg",
                     "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
@@ -1635,7 +1672,7 @@ with col_content:
                     "Estimated Points in TGE": f"{round(Level_points_tge,0)}",
                     "Points per Token": f"{Level_points_per_token}",
                     "Estimated FDV in TGE": f"{Level_fdv}",
-                    "Estimated Token Price": f"$ {Level_fdv/tsp}",
+                    "Estimated Token Price": f"$ {round(Level_fdv/tsp,2)}",
                     "Estimated Tokens Airdrop": f"{Level_etimated_tokens}",
                     "Estimated Airdrop Value": f"$ {Level_airdrop_value}",
                     "Expected Profit": f"$ {Level_profit}",
@@ -1699,7 +1736,7 @@ with col_content:
                     "Estimated Points in TGE": f"{round(Sp_points_tge,0)}",
                     "Points per Token": f"{Sp_points_per_token}",
                     "Estimated FDV in TGE": f"{Sp_fdv}",
-                    "Estimated Token Price": f"$ {Sp_fdv/10000000000}",
+                    "Estimated Token Price": f"$ {round(Sp_fdv/10000000000)}",
                     "Estimated Tokens Airdrop": f"{Sp_etimated_tokens}",
                     "Estimated Airdrop Value": f"$ {Sp_airdrop_value}",
                     "Expected Profit": f"$ {Sp_profit}",
@@ -1730,7 +1767,7 @@ with col_content:
                     "Estimated Points in TGE": f"{round(Gaib_points_tge,0)}",
                     "Points per Token": f"{Gaib_points_per_token}",
                     "Estimated FDV in TGE": f"{Gaib_fdv}",
-                    "Estimated Token Price": f"$ {Gaib_fdv/tsp}",
+                    "Estimated Token Price": f"$ {round(Gaib_fdv/tsp,2)}",
                     "Estimated Tokens Airdrop": f"{Gaib_etimated_tokens}",
                     "Estimated Airdrop Value": f"$ {Gaib_airdrop_value}",
                     "Expected Profit": f"$ {Gaib_profit}",
