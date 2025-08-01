@@ -360,11 +360,11 @@ def identificar_congestao(df: pd.DataFrame, timeframe: str) -> bool:
 
     # Parâmetros por timeframe
     limites_por_tf = {
-        "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.1, "atraso": 8},
-        "15m": {"dist_pct_max": 1, "inclinacao_max": 0.15, "atraso": 5},
-        "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.25, "atraso": 3},
-        "4h": {"dist_pct_max": 2, "inclinacao_max": 0.35, "atraso": 3},
-        "1d": {"dist_pct_max": 2.5, "inclinacao_max": 0.4, "atraso": 2}
+        "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.15, "atraso": 8},
+        "15m": {"dist_pct_max": 1, "inclinacao_max": 0.2, "atraso": 5},
+        "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.3, "atraso": 3},
+        "4h": {"dist_pct_max": 2, "inclinacao_max": 0.4, "atraso": 3},
+        "1d": {"dist_pct_max": 2.5, "inclinacao_max": 0.5, "atraso": 2}
     }
 
     # Parâmetros default se timeframe não for reconhecido
@@ -449,9 +449,8 @@ tickers = response.json()
 # Extrai a lista de symbols
 symbol = sorted([ticker["symbol"] for ticker in tickers])
 
-col1, col2, col3, col4 = st.columns([0.15, 0.5, 2,0.15]) # layout da página em colunas
-with col2:
-        
+col1, col2, col3, col4 = st.columns([0.03, 1.5, 0.5,0.03]) # layout da página em colunas
+with col3:
 
         # Mostra no selectbox
         evaluate_all_markets = st.checkbox("Verify All Markets", value=True)
@@ -460,14 +459,24 @@ with col2:
         else:
             sym = symbol
 
-        start = st.button("🚀 Start Bot")
-        stop = st.button("🛑 Stop Bot")
+        cola, colb = st.columns([1, 1])
+        with cola:
+            start = st.button("🚀 Start Bot")
+        with colb:
+            stop = st.button("🛑 Stop Bot")
         
         # 🎛 Configurações do usuário
         
         interval = st.selectbox("Interval:", ["5m", "15m", "1h", "4h"], index=1)
-
-        period_hours = st.slider("Period (hours):", 48, 900, 360)
+        if interval == "15m":
+            periods = 360
+        elif interval == "1h":
+            periods = 720
+        elif interval == "4h":
+            periods = 890
+        else:
+            periods = 120
+        period_hours = st.slider("Period (hours):", 48, 900, periods)
         price_type = st.selectbox("Price Type:", ["LastPrice", "IndexPrice", "MarkPrice"], index=0)
         tolerancia_pct = st.number_input("Entry Tolerancy (%)", value=0.25)
         calcular_stop = st.checkbox("Auto Calculate Stop Loss and Take Profit", value=True)
@@ -503,7 +512,7 @@ with col2:
         if "csv_logs" not in st.session_state:
             st.session_state.csv_logs = []
 
-with col3:
+with col2:
     
     if "placeholder_chart" not in st.session_state:
         st.session_state.placeholder_chart = st.empty()
@@ -559,7 +568,7 @@ with col3:
                         df['BB_Upper'] = df['BB_Middle'] + bb_std * df['BB_Std']
                         df['BB_Lower'] = df['BB_Middle'] - bb_std * df['BB_Std']
 
-                        # Verifica se nos últimos 5 candles o preço atingiu ou passou as EMAs
+                        # Verifica se nos últimos 10 candles o preço atingiu ou passou as EMAs
                         last5 = df.tail(10)
                         tolerancia = 0.01 * tolerancia_pct / 100
 
@@ -748,6 +757,8 @@ with col3:
                             yaxis=dict(title="Price (USD)",domain=[0.25, 1]),
                             yaxis2=dict(title="Volume", domain=[0, 0.20], side='right', showgrid=False)
                         )
+                        fig.update_xaxes(range=[df["start"].iloc[-400], df["start"].iloc[-1]])
+                        
 
                         # Confirma que a pasta existe
                         if not os.path.exists(pasta_graficos):
