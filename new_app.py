@@ -1445,9 +1445,9 @@ with col_content:
         with col1:
             Ena_l_date = st.text_input("📅 Ethena TGE Date:", value="2025-09-25")
         with col2:
-            Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-24")
+            Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-30")
         with col3:
-            Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-07-30")  
+            Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-09-30")  
         with col4:
             Sp_l_date = st.text_input("📅 Spark TGE Date:", value="2025-08-14")
         with col5:
