@@ -2039,8 +2039,8 @@ with col_content:
 
     elif st.session_state.pagina == "📈 Pendle APY Prediction":
         #id's = 1 - ETH , 10 OP , 56 - BNB, 146 - SONIC LABS, 5000 - Mantle, 8453 - Base, 42161 - Arb, 80094 -BERA
-        ids = [1, 56, 146, 5000, 8453, 42161, 80094, 10]
-        nets = ["Ethereum", "BNB Chain", "Sonic Labs", "Mantle", "Base", "Arbitrum", "Berachain", "Optimism"]
+        ids = [1, 56, 146, 5000, 8453, 42161, 80094, 10, 999]
+        nets = ["Ethereum", "BNB Chain", "Sonic Labs", "Mantle", "Base", "Arbitrum", "Berachain", "Optimism", "Hyper"]
 
         all_markets_list = []
 
