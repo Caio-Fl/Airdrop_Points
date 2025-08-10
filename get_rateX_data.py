@@ -11,15 +11,16 @@ def get_rateX_data(protocol):
             "Accept": "*/*"
     }
     if protocol == "kyros":
-        qS = 50 #kySOL_querySymbol = 15
+        qS = 41 #kySOL_querySymbol = 15
         qT = 40 #kySOL_queryTrade = 20
     else:
         qS = 22 #ragSOL_querySymbol = 21
         qT = 24 #fragSOL_queryTrade = 21
-    payload = {"serverName": "AdminSvr", "method": "querySymbol", "content": {"cid": "4c00d4ca-b0e8-ebc8-da27-0ac0120b470a"}}#{"serverName":"TradeFRAGSOLSvr","method":"dc.trade.dprice","content":{"cid":"e59573e8-3c48-163d-4a11-902b566b0e20"}}
+    payload = {"serverName":"AdminSvr","method":"querySymbol","content":{"cid":"fad54131-e9a6-b7ae-95fb-2117cbc877a2"}}#{"serverName":"TradeFRAGSOLSvr","method":"dc.trade.dprice","content":{"cid":"e59573e8-3c48-163d-4a11-902b566b0e20"}}
     url = f"https://api.rate-x.io/"
     response = requests.post(url, json=payload, headers=headers)
     data = response.json()
+    print(data)
     rateXInfoarray = data.get("data", {}).get("symbols", [{}])
     protocolMult = rateXInfoarray[qS].get("partners_reward_boost", {})
     Multiplier = float(protocolMult.split(';')[0])

@@ -721,6 +721,7 @@ with col2:
                                     take_profit = price * (1 - take_profit_pct/100)
 
                         # Gráfico
+                        
                         fig = go.Figure()
                         fig.add_trace(go.Candlestick(
                             x=df["start"], open=df["open"], high=df["high"],
@@ -757,9 +758,12 @@ with col2:
                             yaxis=dict(title="Price (USD)",domain=[0.25, 1]),
                             yaxis2=dict(title="Volume", domain=[0, 0.20], side='right', showgrid=False)
                         )
-                        fig.update_xaxes(range=[df["start"].iloc[-400], df["start"].iloc[-1]])
+                        try:
+                            fig.update_xaxes(range=[df["start"].iloc[-300], df["start"].iloc[-1]])
+                        except:
+                            fig.update_xaxes(range=[df["start"].iloc[-50], df["start"].iloc[-1]])
                         
-
+                        
                         # Confirma que a pasta existe
                         if not os.path.exists(pasta_graficos):
                             os.makedirs(pasta_graficos)
