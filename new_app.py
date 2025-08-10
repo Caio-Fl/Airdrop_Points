@@ -2895,8 +2895,8 @@ with col_content:
         )
 
     elif st.session_state.pagina == "✅ Last Claims and Checkers":
-        code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.G01IGX"
-        code2=".ueBpDmaelTgSaI0Oq6Q6ll4XvjeH5b6ycRUYTc"
+        code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.GVURiL"
+        code2=".yIBMPG6sNlKSx4y4tAmkMTuBvss4tbaGfjpcGs"
         
         headers = {
             "Authorization" : code+code2
