@@ -1146,7 +1146,7 @@ with col_content:
                         referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
 
             FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
-            airdrop_pct = st.number_input("Supply % for Airdrop", value=int(airdrop_pct), step=1)
+            airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct), step=1.0)
             total_points = st.number_input("Estimated Total Points Farmed at the TGE", value=total_points, step=1)
             your_points = st.number_input("Your Points", value=your_points, step=1)
         
