@@ -3915,11 +3915,9 @@ with col_content:
         }}
         .container-block {{
             width: 1272px;
-            display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
-            width: 100%;
             overflow: visible;
             padding: 10px;
             box-sizing: border-box;
