@@ -3894,7 +3894,7 @@ with col_content:
         blocks_html = ""
         for protocol in protocols_revoke[selected_network]:
             blocks_html += f"""
-            <div class="container-block" style="overflow: hidden;width: 1272px;">
+            <div class="container-block" style="overflow: hidden;">
                 <a href="{protocol['site']}" target="_blank" class="footer-link">
                     <div class="footer-wrapper">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
@@ -3915,8 +3915,8 @@ with col_content:
         }}
         .container-block {{
             display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
+            flex-wrap: nowrap; 
+            justify-content: flex;
             align-items: center;
             gap: 20px;
             box-sizing: border-box;
@@ -4008,10 +4008,14 @@ with col_content:
         .footer-link:hover {{
             color: inherit;
         }}
+        .fixed-width {{
+            width: 1272px;
+            overflow: hidden;
+        }}
         </style>
 
         <div class="container-externa">
-            <div class="container-block" style="width: 1272px; overflow: hidden;">
+            <div class="container-block fixed-width">
                 {blocks_html}
             </div>
         </div>
