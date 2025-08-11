@@ -3924,6 +3924,7 @@ with col_content:
             font-size: 22px;
             color: white;
             margin: 0px 0;
+            overflow-x: hidden;
         }}
         .protocol-block {{
             width: 100%;
@@ -3938,6 +3939,7 @@ with col_content:
             font-size: 22px;
             color: white;
             margin: 0px 0;
+            overflow-x: hidden;
         }}
         .footer-wrapper {{
             width: 300px;
