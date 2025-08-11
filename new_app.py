@@ -293,16 +293,6 @@ body, html, .stApp {
     display: flex;
     flex-direction: column;
 }
-.container-block {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  width: 100%;
-  overflow: visible;
-  padding: 10px;
-  box-sizing: border-box;
-}
 .block-container {
     flex: 1 !important;
     display: flex;
@@ -3922,6 +3912,18 @@ with col_content:
             0%   {{ background-position: 0% 50%; }}
             50%  {{ background-position: 100% 50%; }}
             100% {{ background-position: 0% 50%; }}
+        }}
+        .container-block {{
+            width: 1272px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            overflow: visible;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
         }}
         .container-externa {{
             border-radius: 12px;
