@@ -3914,33 +3914,34 @@ with col_content:
             100% {{ background-position: 0% 50%; }}
         }}
         .container-externa {{
-            width: 1272px;
+            width: 100%; /* ocupa toda a largura disponível */
+            max-width: 1272px; /* limite máximo opcional */
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
             gap: 0px;
             display: flex;
-            justify-content: left;
+            justify-content: flex-start;
             font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
             font-size: 22px;
             color: white;
             margin: 0px 0;
-            overflow-x: hidden;
+            overflow-x: auto; /* rolagem horizontal se precisar */
         }}
         .protocol-block {{
-            min-width: 1272px;
+            flex: 1; /* ajusta automaticamente */
             border-radius: 12px;
             padding: 25px;
             margin-top: 0px;
             background-color: rgba(35, 36, 41, 0.85);
             display: flex;
             justify-content: flex-start;
-            gap: 0px; /* 👈 distância fixa entre os blocos internos */
+            gap: 0px;
             font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
             font-size: 22px;
             color: white;
             margin: 0px 0;
-            overflow-x: hidden;
+            overflow-x: auto; /* permite rolar conteúdo dentro */
         }}
         .footer-wrapper {{
             width: 300px;
