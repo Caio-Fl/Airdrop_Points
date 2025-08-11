@@ -3920,9 +3920,10 @@ with col_content:
             align-items: center;
             gap: 20px;
             box-sizing: border-box;
+            width: max-content;
         }}
         .container-externa {{
-            width: 1200px;
+            width:100%;
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
@@ -3935,7 +3936,7 @@ with col_content:
             margin: 0px 0;
         }}
         .protocol-block {{
-            width: 1200px;
+            width: 1270px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 0px;
