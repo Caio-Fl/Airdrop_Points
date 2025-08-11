@@ -3914,10 +3914,11 @@ with col_content:
             100% {{ background-position: 0% 50%; }}
         }}
         .container-block {{
-            width: 1272px;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 0px;
+            justify-content: flex-start;
+            align-items: center;
             overflow: visible;
             padding: 10px;
             box-sizing: border-box;
