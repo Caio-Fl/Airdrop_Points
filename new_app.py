@@ -3894,12 +3894,14 @@ with col_content:
         blocks_html = ""
         for protocol in protocols_revoke[selected_network]:
             blocks_html += f"""
+            <div class="container-block">
                 <a href="{protocol['site']}" target="_blank" class="footer-link">
                     <div class="footer-wrapper">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
                         <strong style="text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;">{protocol['name']}</strong>
                     </div>
                 </a>
+            </div>
             """
         
 
@@ -3912,6 +3914,7 @@ with col_content:
             100% {{ background-position: 0% 50%; }}
         }}
         .container-block {{
+            width: 1272px;
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -3920,6 +3923,7 @@ with col_content:
             box-sizing: border-box;
         }}
         .container-externa {{
+            width: 1200px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
@@ -3932,8 +3936,7 @@ with col_content:
             margin: 0px 0;
         }}
         .protocol-block {{
-            width: 100%;
-            max-width: 1272px;
+            width: 1200px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 0px;
