@@ -38,6 +38,14 @@ import base64
 os.environ["MISTRAL_API_KEY"] = "3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"
 api_key = os.getenv("MISTRAL_API_KEY")
 
+# Configuração da página (sempre primeiro!)
+st.set_page_config(
+    page_title="Airdrops Monitor",
+    page_icon="🪂",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
+
 def mistral_AI(question,language,model,personality):
 
     #api_key = os.environ["3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"]
@@ -249,13 +257,44 @@ def set_background(image_path):
 # --- Configurações da Página ---
 #st.set_page_config(page_title="Pendle Airdrop Farm", layout="wide")
 
-# Configuração da página (sempre primeiro!)
-st.set_page_config(
-    page_title="Airdrops Monitor",
-    page_icon="🪂",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-)
+# Força responsividade no layout
+st.markdown("""
+<style>
+/* Ajusta container principal */
+.block-container {
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/* Evita corte lateral em elementos */
+.element-container {
+    max-width: 100% !important;
+}
+
+/* Responsividade do streamlit-option-menu */
+nav[data-testid="stSidebarNav"] {
+    max-width: 100% !important;
+}
+
+/* Evita que textos longos no menu quebrem layout */
+.css-1d391kg, .css-1d391kg div, .css-1d391kg label {
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+
+/* Botões e caixas de seleção ocupam largura total */
+.stButton>button, .stSelectbox>div, .stTextInput>div {
+    width: 100% !important;
+}
+
+/* Corrige largura de tabelas */
+[data-testid="stDataFrameResizable"] {
+    max-width: 100% !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 set_background("min7.jpg")
 # CSS customizado buttons, html, body, stApp
 st.markdown("""
