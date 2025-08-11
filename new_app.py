@@ -3914,6 +3914,7 @@ with col_content:
             100% {{ background-position: 0% 50%; }}
         }}
         .container-externa {{
+            width: 1272px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
