@@ -3894,7 +3894,7 @@ with col_content:
         blocks_html = ""
         for protocol in protocols_revoke[selected_network]:
             blocks_html += f"""
-            <div class="container-block">
+            <div class="container-block" style="overflow: hidden;width: 1272px;">
                 <a href="{protocol['site']}" target="_blank" class="footer-link">
                     <div class="footer-wrapper">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
