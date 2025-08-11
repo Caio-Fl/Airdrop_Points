@@ -293,6 +293,16 @@ body, html, .stApp {
     display: flex;
     flex-direction: column;
 }
+.container-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow: visible;
+  padding: 10px;
+  box-sizing: border-box;
+}
 .block-container {
     flex: 1 !important;
     display: flex;
