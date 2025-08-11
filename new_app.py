@@ -3894,7 +3894,7 @@ with col_content:
         blocks_html = ""
         for protocol in protocols_revoke[selected_network]:
             blocks_html += f"""
-            <div class="container-block">
+            <div class="custom-container">
                 <a href="{protocol['site']}" target="_blank" class="footer-link">
                     <div class="footer-wrapper">
                         <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
@@ -3913,8 +3913,22 @@ with col_content:
             50%  {{ background-position: 100% 50%; }}
             100% {{ background-position: 0% 50%; }}
         }}
+        .custom-container {{
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            background-color: rgba(35, 36, 41, 0.85);
+            border: 1px solid #14ffe9; /* borda neon */
+            box-shadow: 0 0 10px #14ffe9; /* brilho neon suave */
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            font-size: 22px;
+            color: white;
+            overflow-x: auto; /* permitir scroll horizontal */
+            white-space: nowrap; /* impedir quebra de linha */
+            display: flex;
+            gap: 20px; /* espaçamento entre os blocos */
+        }}
         .container-externa {{
-            width: 1272px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
