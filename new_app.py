@@ -3914,12 +3914,11 @@ with col_content:
             100% {{ background-position: 0% 50%; }}
         }}
         .container-block {{
-            width: 1272px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: flex-start;
             align-items: center;
-            overflow: visible;
-            padding: 10px;
+            gap: 20px;
             box-sizing: border-box;
         }}
         .container-externa {{
@@ -4012,7 +4011,9 @@ with col_content:
         </style>
 
         <div class="container-externa">
-            {blocks_html}
+            <div class="container-block" style="width: 1272px; overflow: hidden;">
+                {blocks_html}
+            </div>
         </div>
         """
         components.html(full_html, height=400, scrolling=True)
