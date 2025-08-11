@@ -1334,7 +1334,7 @@ with col_content:
 
 
         # Renderiza o HTML customizado
-        components.html(full_html, height=400, scrolling=False)
+        components.html(full_html, height=400, width=1300, scrolling=False)
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 
@@ -2376,7 +2376,7 @@ with col_content:
                 </div>
             """
 
-            components.html(full_html, height=1200, scrolling=True)
+            components.html(full_html, height=1200, width=1300, scrolling=True)
 
 
         
@@ -2782,7 +2782,7 @@ with col_content:
             {blocks_html}
         </div>
         """
-        components.html(full_html, height=4200, scrolling=False)
+        components.html(full_html, height=4200, width=1300, scrolling=False)
 
     elif st.session_state.pagina == "📊 Comparative YT Table":
 
@@ -3442,7 +3442,7 @@ with col_content:
             {blocks_html}
         </div>
         """
-        components.html(full_html, height=3200, scrolling=False)
+        components.html(full_html, height=3200, width=1300, scrolling=False)
 
     elif st.session_state.pagina == "🚰 Faucets":
         st.markdown(
@@ -3716,7 +3716,7 @@ with col_content:
             {blocks_html}
         </div>
         """
-        components.html(full_html, height=3300, scrolling=False)
+        components.html(full_html, height=3300, width=1300, scrolling=False)
 
     elif st.session_state.pagina == "⛔ Revoke Contract":
 
@@ -4005,7 +4005,7 @@ with col_content:
             {blocks_html}
         </div>
         """
-        components.html(full_html, height=400, width=1200, scrolling=True)
+        components.html(full_html, height=400, width=1300, scrolling=True)
 
     elif st.session_state.pagina == "⚠️ Avoiding Scams":
             st.markdown(
