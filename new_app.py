@@ -4015,7 +4015,7 @@ with col_content:
         </style>
 
         <div class="container-externa">
-            <div class="container-block fixed-width">
+            <div class="container-block">
                 {blocks_html}
             </div>
         </div>
