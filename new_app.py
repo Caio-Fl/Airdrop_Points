@@ -3928,7 +3928,7 @@ with col_content:
             overflow-x: hidden;
         }}
         .protocol-block {{
-            width: 100%;
+            min-width: 1272px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 0px;
