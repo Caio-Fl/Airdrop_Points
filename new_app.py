@@ -3927,7 +3927,6 @@ with col_content:
         }}
         .protocol-block {{
             width: 100%;
-            max-width: 1272px;
             border-radius: 12px;
             padding: 25px;
             margin-top: 0px;
