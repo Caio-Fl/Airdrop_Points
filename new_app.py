@@ -1120,17 +1120,17 @@ with col_content:
                         mean_daily = 1*(actual_points-Sp_TP_0)/((date1-Sp_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))   
                         referral = "https://app.spark.fi/points/8KBVQB"
-                    elif selected_protocol == "Gaib":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-14")
+                    elif selected_protocol == "Ethena":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-25")
                         date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                         today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
                         date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
                         date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
                         date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        airdrop_pct = 5
-                        your_points = 1_000_000
-                        actual_points,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
-                        mean_daily = 1*(actual_points-Gaib_TP_0)/((date1-Gaib_date0).days)
+                        airdrop_pct = 3.5
+                        your_points = 10_000_000
+                        actual_points,Ena_total_users, Ena_top100p = get_ethena_Data()
+                        mean_daily = 1*(actual_points-Ena_TP_0)/((date1-Ena_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
                 else:
@@ -1142,8 +1142,8 @@ with col_content:
                         referral = "https://boost.kyros.fi/?ref=nq3orn"
                     elif selected_protocol == "Spark":
                         referral = "https://app.spark.fi/points/8KBVQB"
-                    elif selected_protocol == "Gaib":
-                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
+                    elif selected_protocol == "Ethena":
+                        referral = "app.ethena.fi/join/yp9pg"
 
             FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
             airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct), step=1.0)
@@ -1436,8 +1436,8 @@ with col_content:
                 SpFDV = 0
             print(SpFDV)
             Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0.0, value= SpFDV, step=1.0) * 1_000_000
-        with col5:
-            Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
+        #with col5:
+            #Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
         # Inputs: TGE Dates
         st.markdown("#### Expected TGE Dates")
@@ -1450,8 +1450,8 @@ with col_content:
             Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-09-30")  
         with col4:
             Sp_l_date = st.text_input("📅 Spark TGE Date:", value="2025-08-14")
-        with col5:
-            Gaib_l_date = st.text_input("📅 Gaib TGE Date:", value="2025-08-14")
+        #with col5:
+            #Gaib_l_date = st.text_input("📅 Gaib TGE Date:", value="2025-08-14")
 
         
         st.markdown("""
@@ -1495,7 +1495,7 @@ with col_content:
                 #Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
                 Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
                 Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
-                Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
+                #Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
                 print(Ena_accured,Ena_total_users, Ena_top100p)
                 # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
                 Ena_ytMul,Ena_unApy,Ena_impApy,Ena_feeRate,Ena_swapFee,Ena_ytRoi,Ena_expiry,Ena_priceImpact = get_Pendle_Data("0xa36b60a14a1a5247912584768c6e53e1a269a9f7","0x029d6247adb0a57138c62e3019c92d3dfc9c1840")
@@ -1503,7 +1503,7 @@ with col_content:
                 #Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
                 ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
                 Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
-                Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
+                #Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
                 print(Ena_ytMul,Ena_unApy)
                 # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
                 date_obj = datetime.strptime(time_Level, "%Y-%m-%d %H:%M:%S")
@@ -1598,20 +1598,20 @@ with col_content:
                 Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"bom")
 
                 # Gaib
-                Gaib_date_tge = datetime.strptime((Gaib_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                Gaib_mean_daily = 1.3*(Gaib_accured - Gaib_TP_0)/((date1-Gaib_date0).days)
-                Gaib_points_tge = round(Gaib_accured + (((Gaib_date_tge-date1).days)*Gaib_mean_daily),0)
-                Gaib_points_per_token = round(Gaib_points_tge/((tsp)*drop/100),2)
-                Gaib_farmed_yield = round(invested*Gaib_ytMul*Sp_unApy*(date6-date1).days/365,2)
-                Gaib_daily_pts_farmed = round(invested*Gaib_ytMul*Gaib_Multipleir*Gaib_Boost*Gaib_pts_token,2)
-                Gaib_total_pts_farmed = round(Gaib_daily_pts_farmed*(date7-date1).days,2)
-                Gaib_etimated_tokens = round(Gaib_total_pts_farmed/Gaib_points_per_token,2)
-                Gaib_airdrop_value = round((Gaib_fdv/tsp)*Gaib_etimated_tokens,2)
-                Gaib_cost = abs(round((Gaib_farmed_yield - invested - (invested*abs(Gaib_priceImpact))),2))
-                Gaib_profit = round((Gaib_airdrop_value - Gaib_cost),2)
-                Gaib_ROI = round((100*Gaib_profit/Gaib_cost),2)
+                #Gaib_date_tge = datetime.strptime((Gaib_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                #Gaib_mean_daily = 1.3*(Gaib_accured - Gaib_TP_0)/((date1-Gaib_date0).days)
+                #Gaib_points_tge = round(Gaib_accured + (((Gaib_date_tge-date1).days)*Gaib_mean_daily),0)
+                #Gaib_points_per_token = round(Gaib_points_tge/((tsp)*drop/100),2)
+                #Gaib_farmed_yield = round(invested*Gaib_ytMul*Sp_unApy*(date6-date1).days/365,2)
+                #Gaib_daily_pts_farmed = round(invested*Gaib_ytMul*Gaib_Multipleir*Gaib_Boost*Gaib_pts_token,2)
+                #Gaib_total_pts_farmed = round(Gaib_daily_pts_farmed*(date7-date1).days,2)
+                #Gaib_etimated_tokens = round(Gaib_total_pts_farmed/Gaib_points_per_token,2)
+                #Gaib_airdrop_value = round((Gaib_fdv/tsp)*Gaib_etimated_tokens,2)
+                #Gaib_cost = abs(round((Gaib_farmed_yield - invested - (invested*abs(Gaib_priceImpact))),2))
+                #Gaib_profit = round((Gaib_airdrop_value - Gaib_cost),2)
+                #Gaib_ROI = round((100*Gaib_profit/Gaib_cost),2)
 
-                Gaib_grade = protocol_rate(Gaib_tvl,(100*Gaib_top100p),Gaib_ROI,(100*Gaib_mean_daily/Gaib_accured),Gaib_total_users,"muito bom")
+                #Gaib_grade = protocol_rate(Gaib_tvl,(100*Gaib_top100p),Gaib_ROI,(100*Gaib_mean_daily/Gaib_accured),Gaib_total_users,"muito bom")
                 #except:
                 #    print("Error in YT Data Request")
 
@@ -1742,37 +1742,6 @@ with col_content:
                     "Expected Profit": f"$ {Sp_profit}",
                     "Expected ROI": f"{Sp_ROI} %"      
                 },
-                "Gaib": {
-                    "Imagem": "https://pbs.twimg.com/profile_images/1882466326423470082/ZttuZmOg_400x400.jpg",
-                    "Logo": "https://pbs.twimg.com/profile_images/1882466326423470082/ZttuZmOg_400x400.jpg",
-                    "pureLink": "https://aid.gaib.ai/explore?invite=BF96D68D",
-                    "Link": "<a href='https://aid.gaib.ai/explore?invite=BF96D68D' target='_blank' style='color:#FFA500;'>More info</a> - <a href='https://app.pendle.finance/trade/markets/0x47306e3cb4e325042556864b38aa0cbe8d928be5/swap?view=yt&py=output&chain=ethereum' target='_blank'>🔗 Pendle </a>",
-                    "Grade": f"{Gaib_grade}",
-                    "TVL": f"{Gaib_tvl} M",
-                    "Last Update": f"{time_Level}",
-                    "Expiry": f"{date7.date()}",
-                    "Total Points Farmed": f"{round(Gaib_accured,0)}",
-                    "YT Multiplier": f"{round(Gaib_ytMul,3)}",
-                    "YT APY": f"{round(Gaib_unApy*100,2)}",
-                    "Time Until Expiration": f"{(date7-date1)}",
-                    "Protocol YT Multiplier": f"{Gaib_Multipleir}",
-                    "Protocol Referral Boost": f"{round((Gaib_Boost-1),2)*100} %",
-                    "Equivalent YT Received": f"$ {round(invested*Gaib_ytMul,2)}",
-                    "Daily Points Farmed": f"{Gaib_daily_pts_farmed}",
-                    "Total Points Farmed in YT": f"{Gaib_total_pts_farmed}",
-                    "Top 100 Concentration": f"{round(100*Gaib_top100p,2)}",
-                    "Total User": f"{Gaib_total_users}",
-                    "Farmed Yield in YT": f"$ {Gaib_farmed_yield}",
-                    "Mean Daily Points": f"{round(Gaib_mean_daily,0)}",
-                    "Estimated Points in TGE": f"{round(Gaib_points_tge,0)}",
-                    "Points per Token": f"{Gaib_points_per_token}",
-                    "Estimated FDV in TGE": f"{Gaib_fdv}",
-                    "Estimated Token Price": f"$ {round(Gaib_fdv/tsp,2)}",
-                    "Estimated Tokens Airdrop": f"{Gaib_etimated_tokens}",
-                    "Estimated Airdrop Value": f"$ {Gaib_airdrop_value}",
-                    "Expected Profit": f"$ {Gaib_profit}",
-                    "Expected ROI": f"{Gaib_ROI} %"      
-                }
             }
             
         # --- Salvar automaticamente sem botão ---
