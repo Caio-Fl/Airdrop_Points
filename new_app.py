@@ -1127,6 +1127,7 @@ with col_content:
                         date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
                         date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
                         date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        FDV = 15000
                         airdrop_pct = 3.5
                         your_points = 10_000_000
                         actual_points,Ena_total_users, Ena_top100p = get_ethena_Data()
