@@ -1133,7 +1133,7 @@ with col_content:
                         actual_points,Ena_total_users, Ena_top100p = get_ethena_Data()
                         mean_daily = 1*(actual_points-Ena_TP_0)/((date1-Ena_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
+                        referral = "https://app.spark.fi/points/8KBVQB"
                 else:
                     if selected_protocol == "Backpack":
                         referral = "https://backpack.exchange/join/jj2kkdp1"
