@@ -1,0 +1,4 @@
+from get_leader_OpenEden_function import get_leader_OpenEden_function
+
+
+total_accured,top100p,count = get_leader_OpenEden_function()

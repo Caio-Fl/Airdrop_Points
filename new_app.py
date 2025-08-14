@@ -1068,8 +1068,8 @@ with col_content:
                         FDV = 1000
                         airdrop_pct = 15
                         your_points = 1_000
-                        actual_points = 110_046_628
-                        mean_daily = 11_400_000/7
+                        actual_points = 150_046_628
+                        mean_daily = 10_000_000/7
                         print(mean_daily,(date_tge_format-date1).days)
                         total_points = int(round(actual_points + 4_261_285 + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://backpack.exchange/join/jj2kkdp1"
@@ -1134,6 +1134,20 @@ with col_content:
                         mean_daily = 1*(actual_points-Ena_TP_0)/((date1-Ena_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "app.ethena.fi/join/yp9pg"
+                    elif selected_protocol == "Gaib":
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-17")
+                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
+                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        FDV = 50
+                        airdrop_pct = 5
+                        your_points = 1_000_000
+                        actual_points,Gaib_total_users, Gaib_top100p, tvl = get_leader_Gaib_function()
+                        mean_daily = 1*(actual_points-Gaib_TP_0)/((date1-Gaib_date0).days)
+                        total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
+                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
                 else:
                     if selected_protocol == "Backpack":
                         referral = "https://backpack.exchange/join/jj2kkdp1"
@@ -1145,6 +1159,8 @@ with col_content:
                         referral = "https://app.spark.fi/points/8KBVQB"
                     elif selected_protocol == "Ethena":
                         referral = "app.ethena.fi/join/yp9pg"
+                    elif selected_protocol == "Gaib":
+                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
 
             FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
             airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct), step=1.0)
