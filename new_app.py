@@ -1045,7 +1045,7 @@ with col_content:
         total_actual_points = 0
 
         # --- Lista de protocolos ---
-        protocolos = ["Any", "Backpack", "Level", "Kyros", "Spark", "Ethena"]
+        protocolos = ["Any", "Backpack", "Level", "Kyros", "Spark", "Ethena", "Gaib"]
 
         # --- Bloco com estilo aplicado apenas aqui ---
         st.markdown('<div class="custom-columns">', unsafe_allow_html=True)
