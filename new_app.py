@@ -1531,7 +1531,7 @@ with col_content:
                 #date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date6 = datetime.strptime(Sp_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                date7 = datetime.strptime(Gaib_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                ##date7 = datetime.strptime(Gaib_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 
                 # Calcula os parâmetros de cada Protocolo
                 # EnaEden
