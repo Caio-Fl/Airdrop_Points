@@ -1059,7 +1059,7 @@ with col_content:
                 auto_fill_actual = st.checkbox(f"Auto-fill Total Actual {selected_protocol} Points", value=True)
                 if auto_fill_actual:
                     if selected_protocol == "Backpack":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-12")
+                        date_tge = st.text_input("📅 TGE Date:", value="2025-12-12")
                         date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                         today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
                         date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
