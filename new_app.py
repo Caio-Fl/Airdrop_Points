@@ -1599,20 +1599,20 @@ with col_content:
                 Ky_grade = protocol_rate(Ky_tvl,(100*Ky_top100p),Ky_ROI,(100*Ky_mean_daily/Ky_accured),Ky_total_users,"bom")
 
                 # Spark
-                Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
-                Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
-                Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
-                Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
-                Sp_daily_pts_farmed = round(invested*Sp_ytMul*Sp_Multipleir*Sp_Boost*Sp_pts_token,2)
-                Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
-                Sp_etimated_tokens = round(Sp_total_pts_farmed/Sp_points_per_token,2)
-                Sp_airdrop_value = round((Sp_fdv/10000000000)*Sp_etimated_tokens,2)
-                Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*abs(Sp_priceImpact))),2))
-                Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
-                Sp_ROI = round((100*Sp_profit/Sp_cost),2)
+                #Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                #Sp_mean_daily = 1.3*(Sp_accured - Sp_TP_0)/((date1-Sp_date0).days)
+                #Sp_points_tge = round(Sp_accured + (((Sp_date_tge-date1).days)*Sp_mean_daily),0)
+                #Sp_points_per_token = round(Sp_points_tge/(10000000000*drop/100),2)
+                #Sp_farmed_yield = round(invested*Sp_ytMul*Sp_unApy*(date6-date1).days/365,2)
+                #Sp_daily_pts_farmed = round(invested*Sp_ytMul*Sp_Multipleir*Sp_Boost*Sp_pts_token,2)
+                #Sp_total_pts_farmed = round(Sp_daily_pts_farmed*(date6-date1).days,2)
+                #Sp_etimated_tokens = round(Sp_total_pts_farmed/Sp_points_per_token,2)
+                #Sp_airdrop_value = round((Sp_fdv/10000000000)*Sp_etimated_tokens,2)
+                #Sp_cost = abs(round((Sp_farmed_yield - invested - (invested*abs(Sp_priceImpact))),2))
+                #Sp_profit = round((Sp_airdrop_value - Sp_cost),2)
+                #Sp_ROI = round((100*Sp_profit/Sp_cost),2)
 
-                Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"bom")
+                #Sp_grade = protocol_rate(Sp_tvl,(100*Sp_top100p),Sp_ROI,(100*Sp_mean_daily/Sp_accured),Sp_total_users,"bom")
 
                 # Gaib
                 #Gaib_date_tge = datetime.strptime((Gaib_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1727,37 +1727,6 @@ with col_content:
                     "Estimated Airdrop Value": f"$ {Ky_airdrop_value}",
                     "Expected Profit": f"$ {Ky_profit}",
                     "Expected ROI": f"{Ky_ROI} %"   
-                },
-                "Spark (T.Sup.: 10 Bi)": {
-                    "Imagem": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
-                    "Logo": "https://pbs.twimg.com/profile_images/1856332015341084672/lF5ZZXRm_400x400.jpg",
-                    "pureLink": "https://app.spark.fi/points/8KBVQB",
-                    "Link": "<a href='https://app.spark.fi/points/8KBVQB' target='_blank' style='color:#FFA500;'>More info</a> - <a href='https://app.pendle.finance/trade/markets/0xdace1121e10500e9e29d071f01593fd76b000f08/swap?view=yt&py=output&chain=ethereum&chart=apy&page=1&trades=orders' target='_blank'>🔗 Pendle </a>",
-                    "Grade": f"{Sp_grade}",
-                    "TVL": f"{Sp_tvl} M",
-                    "Last Update": f"{time_Level}",
-                    "Expiry": f"{date6.date()}",
-                    "Total Points Farmed": f"{round(Sp_accured,0)}",
-                    "YT Multiplier": f"{round(Sp_ytMul,3)}",
-                    "YT APY": f"{round(Sp_unApy*100,2)}",
-                    "Time Until Expiration": f"{(date6-date1)}",
-                    "Protocol YT Multiplier": f"{Sp_Multipleir}",
-                    "Protocol Referral Boost": f"{round((Sp_Boost-1),2)*100} %",
-                    "Equivalent YT Received": f"$ {round(invested*Sp_ytMul,2)}",
-                    "Daily Points Farmed": f"{Sp_daily_pts_farmed}",
-                    "Total Points Farmed in YT": f"{Sp_total_pts_farmed}",
-                    "Top 100 Concentration": f"{round(100*Sp_top100p,2)}",
-                    "Total User": f"{Sp_total_users}",
-                    "Farmed Yield in YT": f"$ {Sp_farmed_yield}",
-                    "Mean Daily Points": f"{round(Sp_mean_daily,0)}",
-                    "Estimated Points in TGE": f"{round(Sp_points_tge,0)}",
-                    "Points per Token": f"{Sp_points_per_token}",
-                    "Estimated FDV in TGE": f"{Sp_fdv}",
-                    "Estimated Token Price": f"$ {round(Sp_fdv/10000000000)}",
-                    "Estimated Tokens Airdrop": f"{Sp_etimated_tokens}",
-                    "Estimated Airdrop Value": f"$ {Sp_airdrop_value}",
-                    "Expected Profit": f"$ {Sp_profit}",
-                    "Expected ROI": f"{Sp_ROI} %"      
                 },
             }
             
