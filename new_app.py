@@ -2890,18 +2890,22 @@ with col_content:
         blocks_html = ""
         texto_html = ""
         for i, bloco in enumerate(blocos):
+            print(bloco)
             texto_html += markdown_to_html(bloco)
-            texto_html += "<br>"
+            texto_html += "<br><br>"
+        print(texto_html)
         st.markdown(f"""
         <style>
             .airdrop-box {{
+                width: 100%;
+                max-width: 1450px;
                 position: relative;
                 z-index: 1;
                 border-radius: 12px;
                 padding: 25px;
                 margin: 20px 0 40px 0;
                 background: #111827;
-                display: flex;
+                display: flex-start;
                 flex-direction: column;
                 gap: 30px;
                 font-size: 22px;
