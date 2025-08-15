@@ -1436,37 +1436,35 @@ with col_content:
 
         # Inputs: FDV
         st.markdown("#### Expected FDV in TGE")
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3 = st.columns(3)
         with col1:
             Ena_fdv = st.number_input("Ethena FDV at TGE ($M):", min_value=0, value=5000, step=1) * 1_000_000
         with col2:
             Level_fdv = st.number_input("Level FDV at TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
         with col3:
             ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
-        with col4:
-            url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
-            data = requests.get(url).json()
-            price = data.get('spark-2', {}).get('usd', 0.032)
-            print(price)
-            SpFDV = (float(price)*977940501)/1_000_000
-            if SpFDV is None:
-                SpFDV = 0
-            print(SpFDV)
-            Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0.0, value= SpFDV, step=1.0) * 1_000_000
+        #with col4:
+            #url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
+            #data = requests.get(url).json()
+            #price = data.get('spark-2', {}).get('usd', 0.032)
+            #print(price)
+            #SpFDV = (float(price)*977940501)/1_000_000
+            #if SpFDV is None:
+            #    SpFDV = 0
+            #print(SpFDV)
+            #Sp_fdv = st.number_input("Spark FDV ($M):", min_value=0.0, value= SpFDV, step=1.0) * 1_000_000
         #with col5:
             #Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
         # Inputs: TGE Dates
         st.markdown("#### Expected TGE Dates")
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3 = st.columns(3)
         with col1:
             Ena_l_date = st.text_input("📅 Ethena TGE Date:", value="2025-09-25")
         with col2:
             Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-30")
         with col3:
             Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-09-30")  
-        with col4:
-            Sp_l_date = st.text_input("📅 Spark TGE Date:", value="2025-08-14")
         #with col5:
             #Gaib_l_date = st.text_input("📅 Gaib TGE Date:", value="2025-08-14")
 
@@ -1504,14 +1502,14 @@ with col_content:
                 Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
                 #Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
                 Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
-                Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("spark","Ethereum")
+                #Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("spark","Ethereum")
                 
                 # Busca dados dos protocolos em suas respectivas API's
                 tags, values, time_Open, time_Level,top100,total_users = enviar_dados()
                 Ena_accured,Ena_total_users, Ena_top100p = get_ethena_Data()
                 #Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
                 Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
-                Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
+                #Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
                 #Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
                 print(Ena_accured,Ena_total_users, Ena_top100p)
                 # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
@@ -1519,7 +1517,7 @@ with col_content:
                 Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
                 #Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
                 ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
-                Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
+                #Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
                 #Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
                 print(Ena_ytMul,Ena_unApy)
                 # Formata a data atual e as datas de TGE (informadas pelo usuário) para que possam ser subtraídas
@@ -1530,7 +1528,7 @@ with col_content:
                 date3 = datetime.strptime(Level_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 #date4 = datetime.strptime(Frag_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 date5 = datetime.strptime(ky_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                date6 = datetime.strptime(Sp_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                #date6 = datetime.strptime(Sp_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 ##date7 = datetime.strptime(Gaib_expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 
                 # Calcula os parâmetros de cada Protocolo
