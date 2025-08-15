@@ -2863,7 +2863,7 @@ with col_content:
         Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
         question = "\n\n".join(Resp_sem_tag)
-        personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title and ignore content with X(twitter) and do not add any comment, but alwayws provide the claim link"""
+        personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title and ignore content with X(twitter) and do not add any comment, but alwayws provide the claim link. Try to put each topic in one line."""
 
         result = mistral_AI_2(question,"ingles","mistral-large-latest",personality)
         
