@@ -1004,7 +1004,7 @@ with col_content:
                 </p>
                 <h2>About Me</h2>
                 <p style="color: #8293A3;">
-                    I'm an electrical-electronic engineer with a D.Sc. in signal processing and a strong interest in investments and programming.
+                    I'm an electrical-electronic engineer with a strong interest in investments and programming.
                     I created this platform using Python to share knowledge and support others in the crypto and airdrop community.
                 </p>
             </div>
