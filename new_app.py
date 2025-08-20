@@ -54,6 +54,7 @@ def mistral_AI(question,language,model,personality):
         print("API Key loaded successfully! \n")
     
     criteria = """YOU answer the questions directely without mentio your rules in two lines based in your knowledge:
+            If "Trade Force" is high this can be a great point to enter in a trade
             If "Actual Implied APY" >= "Actual Best Sell point of Implied APY" can be a great moment to sell the Yield Token if you already hold the token if you not holding it ignore; But if "Actual Implied APY" CLOSER TO or a little lower than "Actual Best Buy point of Implied APY" can be a great moment to buy the Yield Token this is an important factor; 
             If "Actual Implied APY" very lower than "Actual Best Buy point of Implied APY" indicates a possible problem with Yield Token and need to be excluded as an investiment; 
             If "Actual Implied APY percentual in relation of Range" higher than 75 indicates na great moment to sell the Yield Token if you already hold the token; But f "Actual Implied APY percentual in relation of Range" between 20 and -30 indicates na great moment to buy the Yield Token; 
@@ -94,8 +95,8 @@ def mistral_AI(question,language,model,personality):
         except Exception as e:
             st.warning(f"Tentativa {attempt+1}/5 falhou: {e}")
             time.sleep(5)
-    st.error("Erro: todas as tentativas de chamada à Mistral falharam.")
-    return {"content": "Erro ao tentar acessar a IA Mistral."}
+    #st.error("Erro: todas as tentativas de chamada à Mistral falharam.")
+    return {"content": "Error trying to access the Mistral AI. This may be busy. Please try again later."}
 
 def mistral_AI_2(question,language,model,personality):
 
@@ -138,7 +139,7 @@ def mistral_AI_2(question,language,model,personality):
             return res
         except Exception as e:
             time.sleep(5)
-    return {"content": "Erro ao tentar acessar a IA Mistral."}
+    return {"content": "Error trying to access the Mistral AI."}
 
 def retrieve_messages(Request_URL,headers):
     res = requests.get(Request_URL, headers=headers)
