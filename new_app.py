@@ -2213,7 +2213,7 @@ with col_content:
                 According to the data description: {description}"""
             h = implied_apy#[(len(implied_apy)-50):-1]
             question_2 = f"""
-                Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not. Also consider {delta} to expiry is of high risk?
+                Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not, considering is the price is next to the actual best Buy point. Also consider {delta} to expiry is of high risk?
                 Historical Implied APY = {[round(x, 2) for x in h]}
                 the Underlying APY is {round(underlying_apy[-1],2)}
             """
@@ -2906,6 +2906,7 @@ with col_content:
                 margin: 20px 0 40px 0;
                 background: #111827;
                 display: flex-start;
+                    
                 flex-direction: column;
                 gap: 30px;
                 font-size: 22px;
