@@ -2211,7 +2211,7 @@ with col_content:
             question_1 = f"""faced with two possible scenarios (answer in few lines):
                 1st If I already have the YT token and I want to know if it is a good time to sell it?
                 2nd If I don't have the YT token and I want to know if it is a good time to buy it, considering "Actual Underlying APY" next to "Actual Best Buy point of Implied APY" lower line, or if I should wait for a better opportunity?
-                3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than "-35" percent (consider the ROI signal)?
+                3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than "-35" percent (consider the YT ROI signal in comparison)?
                 According to the data description: {description}"""
             h = implied_apy#[(len(implied_apy)-50):-1]
             question_2 = f"""
