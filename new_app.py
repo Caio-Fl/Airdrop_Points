@@ -306,7 +306,7 @@ body, html, .stApp {
     display: block;
     width: 100%;
     max-width: 320px;
-    min-width: 270px;
+    min-width: 280px;
     box-sizing: border-box;
     padding: 2px 20px;
     white-space: nowrap;
