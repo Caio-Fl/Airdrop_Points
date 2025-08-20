@@ -38,5 +38,6 @@ def barra_compra_venda(valor, valor_medido,limite=100):
     ax.set_xticks([])
     ax.axis('off')
     plt.tight_layout()
+    force = (round(valor,1))
 
-    return fig
+    return fig, force
