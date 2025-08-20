@@ -2208,12 +2208,12 @@ with col_content:
             """
             question_1 = f"""faced with two possible scenarios (answer in few lines):
                 1st If I already have the YT token and I want to know if it is a good time to sell it?
-                2nd If I don't have the YT token and I want to know if it is a good time to buy it, considering Actual Best Buy point of Implied APY, or if I should wait for a better opportunity?
+                2nd If I don't have the YT token and I want to know if it is a good time to buy it, considering Actual Best Buy point of Implied APY lower line, or if I should wait for a better opportunity?
                 3nd If i want to farm point to airdrop of YT token protocol the YT Protocol Multiplier High and the YT ROI is higher than -35 percent?
                 According to the data description: {description}"""
             h = implied_apy#[(len(implied_apy)-50):-1]
             question_2 = f"""
-                Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not, considering Actual Best Buy point of Implied APY. Also consider {delta} to expiry is of high risk?
+                Verify the historical of implied APY and analysis if is this a good momment to Buy the YT to trade it or not, considering Actual Best Buy point of Implied APY lower tendency line as a great point to consider a trade. Also consider {delta} to expiry is of high risk?
                 Historical Implied APY = {[round(x, 2) for x in h]}
                 the Underlying APY is {round(underlying_apy[-1],2)}
             """
