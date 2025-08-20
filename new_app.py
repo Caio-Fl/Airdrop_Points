@@ -93,7 +93,7 @@ def mistral_AI(question,language,model,personality):
                 res = {"content" : ''}
             return res
         except Exception as e:
-            st.warning(f"Tentativa {attempt+1}/5 falhou: {e}")
+            #st.warning(f"Tentativa {attempt+1}/5 falhou: {e}")
             time.sleep(5)
     #st.error("Erro: todas as tentativas de chamada à Mistral falharam.")
     return {"content": "Error trying to access the Mistral AI. This may be busy. Please try again later."}
@@ -2196,7 +2196,7 @@ with col_content:
             Actual Best Sell point of Implied APY = {round(upper_line[-1],2)}
             Actual Mean Implied APY = {round(trend_line[-1],2)}
             Actual Best Buy point of Implied APY = {round(lower_line[-1],2)}
-            Trade Force = {force}
+            Trade Force = {(-1)*force}
             Mean Implied APY percentual in relation of Range = {round(trend_perc,2)}
             Actual Implied APY percentual in relation of Range = {round(actual_perc,2)}
             Time to expiry and YT value goes to zero = {expiry_date}
