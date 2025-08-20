@@ -389,7 +389,8 @@ button:focus {
     padding: 20px 20px 20px 20px;
 }
 .menu-column {
-    padding-right: 20px;   
+    padding-right: 20px; 
+    min-width: 300px;  
 }
 </style>
 """, unsafe_allow_html=True)
@@ -628,10 +629,10 @@ st.markdown("""
 <div class="marquee-container">
   <div class="marquee-text">
     🚨 Last News: 
-    <a href='https://claims.eclipse.xyz/' target='_blank' style='color:black;'>Eclipse Airdrop Checker!</a> / 
-    <a href='https://claim.caldera.foundation/' target='_blank' style='color:black;'>Caldera Airdrop Checker!</a> /         
-    <a href='https://airdrop.sunriselayer.io/' target='_blank' style='color:black;'>Verify if you have tokens to receive in Sunrise Airdrop!</a> / 
-    <a href='https://btcsol.co/' target='_blank' style='color:black;'>If you participated in Zeus activities, you may receive more!</a> / 
+    <a href='https://claim.reservoir.xyz/claim/' target='_blank' style='color:black;'>Reservoir’s airdrop is open!</a> / 
+    <a href='https://claim.hyperlane.foundation/' target='_blank' style='color:black;'>Hyperlane’s token claim is now live!</a> /         
+    <a href='https://bless.network/dashboard/airdrops' target='_blank' style='color:black;'>Bless extended its registration to airdrop!</a> / 
+    <a href='https://airdrop.mitosis.org/flow' target='_blank' style='color:black;'>Mitosis airdrop eligibility!</a> / 
   </div>
 </div>
 """, unsafe_allow_html=True)
