@@ -775,7 +775,7 @@ if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
 elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
 
-opcao = st.sidebar.radio(pagina_atual, options, index=1)
+opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
 print(pagina_atual)
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
