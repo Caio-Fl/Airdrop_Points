@@ -741,7 +741,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
+options = ["🏠 Welcome", "🧮 Airdrop Calculator","🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
