@@ -629,8 +629,7 @@ st.markdown("""
   <div class="marquee-text">
     🚨 Last News: 
     <a href='https://claim.reservoir.xyz/claim/' target='_blank' style='color:black;'>Reservoir’s airdrop is open!</a> / 
-    <a href='https://claim.hyperlane.foundation/' target='_blank' style='color:black;'>Hyperlane’s token claim is now live!</a> /         
-    <a href='https://bless.network/dashboard/airdrops' target='_blank' style='color:black;'>Bless extended its registration to airdrop!</a> / 
+    <a href='https://claim.hyperlane.foundation/' target='_blank' style='color:black;'>Hyperlane’s token claim is now live!</a> /
     <a href='https://airdrop.mitosis.org/flow' target='_blank' style='color:black;'>Mitosis airdrop eligibility!</a> / 
   </div>
 </div>
@@ -746,7 +745,7 @@ options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "�
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
-opcao = st.sidebar.radio("", options, index=1)
+
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
@@ -1352,7 +1351,7 @@ with col_content:
 
 
         # Renderiza o HTML customizado
-        components.html(full_html, height=400, width=1300, scrolling=False)
+        components.html(full_html, height=400, width=1900, scrolling=False)
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 

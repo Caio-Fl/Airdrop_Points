@@ -30,6 +30,26 @@ def get_ethena(wallet: str):
     data = safe_request(url)
     return data["queryWallet"][0] if data and data.get("queryWallet") else None
 
+def get_ethereal(wallet: str):
+    url = f"https://deposit-api.ethereal.trade/v1/account/{wallet}"
+    data = safe_request(url)
+    if data:
+        try:
+            current_points = int(data["accounts"][0]["points"]) / 1e18
+            season0_points = int(data["accountsS0"][0]["points"]) / 1e18
+            rank = data.get("rank", "N/A")
+            rank_s0 = data.get("rankS0", "N/A")
+            return {
+                "totalPoints": current_points,
+                "season0Points": season0_points,
+                "rank": rank,
+                "rank_s0": rank_s0,
+                "raw": data
+            }
+        except Exception as e:
+            st.error(f"Erro ao processar dados da Ethereal: {e}")
+    return None
+
 def get_hylo(wallet: str):
     url = "https://hylo.so/api/user-points"
     return safe_request(url, params={"address": wallet}, use_scraper=True)
@@ -175,21 +195,55 @@ def get_ranger(wallet: str):
         }
     return None
 
+def get_lombard(wallet: str):
+    url = f"https://mainnet.prod.lombard.finance/api/v1/referral-system/season-1/points/{wallet}"
+    data = safe_request(url)
+    if data:
+        return {
+            "holding_points": data.get("holding_points", 0),
+            "protocol_points": data.get("protocol_points", 0),
+            "badges": data.get("badges", 0),
+            "total": data.get("total", 0),
+            "total_without_badges": data.get("total_without_badges", 0),
+            "protocol_points_map": data.get("protocol_points_map", {}),
+            "raw": data
+        }
+    return None
+
+def get_plume(wallet: str):
+    url = f"https://portal-api.plume.org/api/v1/stats/pp-totals?walletAddress={wallet}"
+    data = safe_request(url)
+    if data and "data" in data and data["data"].get("ppScores"):
+        pp = data["data"]["ppScores"]
+        return {
+            "active_total_xp": pp["activeXp"].get("totalXp", 0),
+            "user_xp": pp["activeXp"].get("userSelfXp", 0),
+            "referral_bonus_xp": pp["activeXp"].get("referralBonusXp", 0),
+            "prev_total_xp": pp["prevXp"].get("totalXp", 0),
+            "top3_points_deltas": pp.get("top3PointsDeltasStrings", []),
+            "date": pp["activeXp"].get("dateStr", ""),
+            "raw": data
+        }
+    return None
+
 
 # -------------------------
 # 🔹 PROTOCOLS CONFIG
 # -------------------------
 protocols = {
     "🟣 Ethena": lambda w: get_ethena(w),
+    "🟣 Ethereal": lambda w: get_ethereal(w),
     "🟣 Hylo": lambda w: get_hylo(w),
     "🟣 Level": lambda w: get_level(w),
     "🟣 Noon": lambda w: get_noon(w),
+    "🟣 Plume": lambda w: get_plume(w),
     "🟣 Kyros": lambda w: get_kyros(w),
     "🟣 Triad": lambda w: get_triad(w),
     "🟣 Kinetiq": lambda w: get_kinetiq(w),
     "🟣 Hyperbeat": lambda w: get_hyperbeat(w),
     "🟣 RateX": lambda w: get_ratex(w),
     "🟣 Ranger": lambda w: get_ranger(w),
+    "🟣 Lombard": lambda w: get_lombard(w),
 }
 
 # -------------------------
@@ -217,7 +271,7 @@ if wallet:
                     col5.metric("🚀 Boost", f"{data.get('accumulatedBoostShards', 0):,.0f}")
                     col6.metric("🌐 L2", f"{data.get('accumulatedL2Shards', 0):,.0f}")
 
-                    st.subheader("🎯 Protocol Points")
+                    st.subheader("🎯 Associated Protocol Points")
                     st.write(
                         f"Derive: **{data.get('accumDerivePts', 0):,.0f}** | "
                         f"Echelon: **{data.get('accumEchelonPts', 0):,.0f}** | "
@@ -225,6 +279,11 @@ if wallet:
                         f"Terminal: **{data.get('accumTerminalPts', 0):,.0f}** | "
                         f"Strata: **{data.get('accumStrataPts', 0):,.0f}**"
                     )
+                
+                elif name == "🟣 Ethereal":
+                    st.metric("🌟 Total XP", f"{data['totalPoints']:,.2f}")
+                    st.metric("🏆 Global Rank", data["rank"])
+                    st.metric("🏆 Global Rank S0", data["rank_s0"])
 
                 elif name == "🟣 Level":
                     lb = data.get("leaderboard", [{}])[0].get("balance", {})
@@ -240,6 +299,10 @@ if wallet:
                     st.metric("🌟 Total Points", f"{data['totalPoints']:,.2f}")
                     st.metric("⏱️ Last 24h", f"{data['last24h']:,.2f}")
                     st.metric("🔗 USN Protocol Total", f"{data['usn_total']:,.2f}")
+
+                elif name == "🟣 Plume":
+                    st.metric("🌟 XP Ativo (total)", f"{data['active_total_xp']:,}")
+                    st.metric("🌐 Bônus por Indicação", f"{data['referral_bonus_xp']:,}")
 
                 elif name == "🟣 Hylo":
                     st.metric("🌟 Total Points", f"{data.get('totalPoints', 0):,.2f}")
@@ -270,8 +333,18 @@ if wallet:
                         if others:
                             df = pd.DataFrame(others)
                             df = df[["name", "symbol", "balance", "usdValue", "description"]]  # colunas principais
-                            st.subheader("Outros Projetos")
-                            st.dataframe(df, use_container_width=True)
+                            st.subheader("🎯 Associated Protocol Points")
+                            # 🔽 Linha formatada com os pontos dos protocolos
+                            protocolos = {p["name"]: float(p["balance"]) for p in data["details"]}
+                            st.write(
+                                f"Hyperbeat: **{protocolos.get('Hyperbeat', 0):,.5f}** | "
+                                f"Kittenswap: **{protocolos.get('Kittenswap', 0):,.0f}** | "
+                                f"Hyperswap: **{protocolos.get('Hyperswap', 0):,.0f}** | "
+                                f"Hyperlend: **{protocolos.get('Hyperlend', 0):,.0f}** | "
+                                f"Felix: **{protocolos.get('Felix', 0):,.0f}** | "
+                                f"Upshift: **{protocolos.get('Upshift', 0):,.0f}** | "
+                                f"Hyperdrive: **{protocolos.get('Hyperdrive', 0):,.0f}**"
+                            )
                     except:
                         st.warning("⚠️ No data to this Wallet!")
                 
@@ -315,6 +388,11 @@ if wallet:
                     st.metric("🎯 Reward %", f"{data['reward_percentage']}%")
                     st.metric("🎯 Spot Reward %", f"{data['spot_reward_percentage']}%")
 
+                elif name == "🟣 Lombard":
+                    st.metric("🌟 Total Points", f"{data['total']:,.2f}")
+                    st.metric("💼 Holding Points", f"{data['holding_points']:,.6f}")
+                    st.metric("⭐ Protocol Points", f"{data['protocol_points']:,.2f}")
+                    st.metric("🎖️ Badges Points", f"{data['badges']:,}")
 
                 else:
                     st.json(data)

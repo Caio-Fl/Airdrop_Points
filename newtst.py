@@ -1,35 +1,25 @@
 import requests
+import json
 
-def get_all_total_points(asset="weETH", limit=100):
-    url = "https://api.expedition.mitosis.org/v1/epoch/leaderboard"
-    offset = 0
-    total_sum = 0.0
-    total_wallets = 0
+# Endereço da carteira
+address = "0x2A78c88C4012544D11E41736505B8D67abBA0532"
 
-    while True:
-        params = {"asset": asset, "limit": limit, "offset": offset}
-        res = requests.get(url, params=params)
+# Endpoint da API da Lombard
+url = f"https://mainnet.prod.lombard.finance/api/v1/referral-system/season-1/points/{address}"
 
-        if res.status_code != 200:
-            raise Exception(f"Erro na requisição: {res.status_code}")
+# Requisição
+response = requests.get(url)
+response.raise_for_status()
+data = response.json()
 
-        data = res.json()
-        items = data.get("items", [])
+# Exibindo os dados principais
+print(f"\n🔷 Total de Pontos: {data['total']:,.2f}")
+print(f"🔹 Total sem Badges: {data['total_without_badges']:,.2f}")
+print(f"🎖️ Badges: {data['badges']:,.0f}")
+print(f"💼 Holding Points: {data['holding_points']:,.6f}")
+print(f"📊 Protocol Points: {data['protocol_points']:,.2f}")
 
-        if not items:
-            break  # terminou as páginas
-
-        # somar pontos da página
-        total_sum += sum(float(item["totalPoints"]) for item in items)
-        total_wallets += len(items)
-
-        # ir pra próxima página
-        offset += limit
-
-    return total_sum, total_wallets
-
-if __name__ == "__main__":
-    total, wallets = get_all_total_points("weETH")
-    print(f"Soma total dos pontos: {total}")
-    print(f"Total de wallets: {wallets}")
-    print(f"Média de pontos por wallet: {total / wallets if wallets else 0}")
+# Exibindo o breakdown dos pontos por protocolo
+print("\n📋 Distribuição por Protocolo:")
+for protocol, points in data.get("protocol_points_map", {}).items():
+    print(f" - {protocol}: {points:,.2f}")
