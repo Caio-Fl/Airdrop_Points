@@ -745,7 +745,7 @@ options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "�
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
-
+opcao = st.sidebar.radio("", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
@@ -1348,7 +1348,6 @@ with col_content:
         </body>
         </html>
         """
-
 
         # Renderiza o HTML customizado
         components.html(full_html, height=400, width=1900, scrolling=False)
