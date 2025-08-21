@@ -745,7 +745,7 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator","🌾 Farm with YT", "📊 
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
-opcao = st.sidebar.radio("Welcome", options, index=1)
+
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
@@ -770,7 +770,7 @@ print(pagina_atual)
 # Validação para garantir página válida no session_state
 if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
     st.session_state.pagina = list(PAGES.keys())[0]
-
+opcao = st.sidebar.radio(pagina_atual, options, index=1)
 # Sincroniza session_state com query_params, se válido
 elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
