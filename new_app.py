@@ -745,7 +745,7 @@ options = ["🏠 Welcome", "🌾 Farm with YT", "📊 Comparative YT Table", "�
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
-opcao = st.sidebar.radio("", options, index=1)
+opcao = st.sidebar.radio("Welcome", options, index=1)
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 
