@@ -766,7 +766,7 @@ PAGES = {
     
 ### Lê parâmetro da URL
 pagina_atual = st.query_params.get("pagina", [list(PAGES.keys())[0]])[0]
-
+print(pagina_atual)
 # Validação para garantir página válida no session_state
 if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
     st.session_state.pagina = list(PAGES.keys())[0]
@@ -774,7 +774,7 @@ if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
 # Sincroniza session_state com query_params, se válido
 elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
- 
+print(pagina_atual)
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
 
@@ -790,6 +790,7 @@ with col_left:
         if st.button(pagina, key=pagina):
             emoji = pagina.split()[0]
             label = " ".join(pagina.split()[1:])
+            print(pagina_atual)
             st.session_state.pagina = pagina
             st.query_params.update({"pagina": pagina})
     st.markdown('</div>', unsafe_allow_html=True)
