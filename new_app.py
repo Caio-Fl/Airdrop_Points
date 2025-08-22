@@ -769,16 +769,21 @@ PAGES = {
 }
     
 # -------------------------
-# 🔹 Leitura inicial da página
+# 🔹 Estado & URL (session_state = fonte de verdade)
 # -------------------------
-pagina_atual = st.query_params.get("pagina", list(PAGES.keys())[0])
+DEFAULT_PAGE = list(PAGES.keys())[0]
 
+# Lê ?pagina= apenas se estiver presente e for válida
+qp = st.query_params.get("pagina", None)
+
+# Inicializa a página uma única vez
 if "pagina" not in st.session_state:
-    st.session_state.pagina = pagina_atual
+    st.session_state.pagina = qp if isinstance(qp, str) and qp in PAGES else DEFAULT_PAGE
+else:
+    # Só sincroniza a partir da URL se a URL tiver um valor válido e diferente do estado atual
+    if isinstance(qp, str) and qp in PAGES and qp != st.session_state.pagina:
+        st.session_state.pagina = qp
 
-# Se query_params mudar externamente → sincroniza
-elif pagina_atual != st.session_state.pagina:
-    st.session_state.pagina = pagina_atual
 
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
@@ -792,12 +797,12 @@ with col_left:
     emoji = list(PAGES.keys())[1].split()[0]
     label = " ".join(list(PAGES.keys())[0].split()[1:])
     for pagina in PAGES:
-        if st.button(pagina, key=pagina):
-            emoji = pagina.split()[0]
-            label = " ".join(pagina.split()[1:])
-            print(pagina_atual)
-            st.session_state.pagina = pagina
-            st.query_params.update({"pagina": pagina})
+        is_active = (st.session_state.pagina == pagina)
+        if st.button(pagina, key=f"btn-{pagina}"):
+            if not is_active:
+                st.session_state.pagina = pagina         # muda a página (estado é a verdade)
+                st.query_params["pagina"] = pagina       # espelha na URL
+                st.rerun()     
     st.markdown('</div>', unsafe_allow_html=True)
 
 
