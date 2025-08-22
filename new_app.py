@@ -748,7 +748,9 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Chec
 
 st.markdown("\n\n")
 st.sidebar.markdown("---")
-
+opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "🏠 Welcome"
 
 PAGES = {
     "🏠 Welcome": "",
@@ -767,21 +769,16 @@ PAGES = {
 }
     
 # -------------------------
-# 🔹 Estado & URL (session_state = fonte de verdade)
+# 🔹 Leitura inicial da página
 # -------------------------
-DEFAULT_PAGE = list(PAGES.keys())[0]
+pagina_atual = st.query_params.get("pagina", list(PAGES.keys())[0])
 
-# Lê ?pagina= apenas se estiver presente e for válida
-qp = st.query_params.get("pagina", None)
-
-# Inicializa a página uma única vez
 if "pagina" not in st.session_state:
-    st.session_state.pagina = qp if isinstance(qp, str) and qp in PAGES else DEFAULT_PAGE
-else:
-    # Só sincroniza a partir da URL se a URL tiver um valor válido e diferente do estado atual
-    if isinstance(qp, str) and qp in PAGES and qp != st.session_state.pagina:
-        st.session_state.pagina = qp
+    st.session_state.pagina = pagina_atual
 
+# Se query_params mudar externamente → sincroniza
+elif pagina_atual != st.session_state.pagina:
+    st.session_state.pagina = pagina_atual
 
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
@@ -795,30 +792,13 @@ with col_left:
     emoji = list(PAGES.keys())[1].split()[0]
     label = " ".join(list(PAGES.keys())[0].split()[1:])
     for pagina in PAGES:
-        is_active = (st.session_state.pagina == pagina)
-        if st.button(pagina, key=f"btn-{pagina}"):
-            if not is_active:
-                st.session_state.pagina = pagina         # muda a página (estado é a verdade)
-                st.query_params["pagina"] = pagina       # espelha na URL
-                st.rerun()     
+        if st.button(pagina, key=pagina):
+            emoji = pagina.split()[0]
+            label = " ".join(pagina.split()[1:])
+            print(pagina_atual)
+            st.session_state.pagina = pagina
+            st.query_params.update({"pagina": pagina})
     st.markdown('</div>', unsafe_allow_html=True)
-
-# Sincronizado com a página atual
-opcao = st.sidebar.radio(
-    "Menu",
-    options,
-    index=options.index(st.session_state.get("pagina", DEFAULT_PAGE)),
-    key="radio_menu"
-)
-if opcao != st.session_state.pagina:
-    st.session_state.pagina = opcao
-    st.query_params["pagina"] = opcao
-    st.rerun()
-# -------------------------
-# 🔹 Conteúdo da página
-# -------------------------
-pagina_atual = st.session_state.pagina
-st.write(f"📌 Página atual: {pagina_atual}")
 
 # Conteúdo principal
 st.markdown("""
