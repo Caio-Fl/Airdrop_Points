@@ -748,17 +748,7 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Chec
 
 st.markdown("\n\n")
 st.sidebar.markdown("---")
-# Sincronizado com a página atual
-opcao = st.sidebar.radio(
-    "Menu",
-    options,
-    index=options.index(st.session_state.get("pagina", DEFAULT_PAGE)),
-    key="radio_menu"
-)
-if opcao != st.session_state.pagina:
-    st.session_state.pagina = opcao
-    st.query_params["pagina"] = opcao
-    st.rerun()
+
 
 PAGES = {
     "🏠 Welcome": "",
@@ -813,7 +803,17 @@ with col_left:
                 st.rerun()     
     st.markdown('</div>', unsafe_allow_html=True)
 
-
+# Sincronizado com a página atual
+opcao = st.sidebar.radio(
+    "Menu",
+    options,
+    index=options.index(st.session_state.get("pagina", DEFAULT_PAGE)),
+    key="radio_menu"
+)
+if opcao != st.session_state.pagina:
+    st.session_state.pagina = opcao
+    st.query_params["pagina"] = opcao
+    st.rerun()
 # -------------------------
 # 🔹 Conteúdo da página
 # -------------------------
