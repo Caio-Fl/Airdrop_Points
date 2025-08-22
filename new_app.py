@@ -749,7 +749,8 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Chec
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
-
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "🏠 Welcome"
 
 PAGES = {
     "🏠 Welcome": "",
@@ -770,8 +771,8 @@ PAGES = {
 # -------------------------
 # 🔹 Leitura inicial da página
 # -------------------------
-pagina_atual =  pagina_atual = st.session_state.get("pagina", list(PAGES.keys())[0])#st.session_state["pagina"] #st.query_params.get("pagina", [list(PAGES.keys())[0]])#st.query_params.get("pagina", list(PAGES.keys())[0])
-
+pagina_atual =  st.session_state["pagina"] #st.query_params.get("pagina", [list(PAGES.keys())[0]])#st.query_params.get("pagina", list(PAGES.keys())[0])
+print(pagina_atual)
 if "pagina" not in st.session_state:
     st.session_state.pagina = pagina_atual
 
@@ -820,6 +821,9 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+
+# Remove emojis ou símbolos no início da string
+clean_label = re.sub(r'^[^\w\s]+', '', pagina_atual).strip()
 
 with col_content:
     #st.markdown(f"### {st.session_state.pagina}")
