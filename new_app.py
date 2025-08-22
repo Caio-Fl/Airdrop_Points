@@ -748,9 +748,17 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Chec
 
 st.markdown("\n\n")
 st.sidebar.markdown("---")
-opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
-if "pagina" not in st.session_state:
-    st.session_state.pagina = "🏠 Welcome"
+# Sincronizado com a página atual
+opcao = st.sidebar.radio(
+    "Menu",
+    options,
+    index=options.index(st.session_state.get("pagina", DEFAULT_PAGE)),
+    key="radio_menu"
+)
+if opcao != st.session_state.pagina:
+    st.session_state.pagina = opcao
+    st.query_params["pagina"] = opcao
+    st.rerun()
 
 PAGES = {
     "🏠 Welcome": "",
