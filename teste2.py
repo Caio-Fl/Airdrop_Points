@@ -1,91 +1,111 @@
-import pandas as pd
-import plotly.express as px
 import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
 
 # -----------------------------
-# ⚡ Configuração inicial
+# 📂 CSV Upload
 # -----------------------------
-st.set_page_config(page_title="📊 Análise de Volume Semanal", layout="wide")
-st.title("📊 Análise de Volume Total por Semana (início quinta 21h)")
-
-# -----------------------------
-# 📂 Upload do CSV
-# -----------------------------
-uploaded_file = st.file_uploader("Carregue o arquivo CSV", type=["csv"])
+uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
 
 if uploaded_file is not None:
     # -----------------------------
-    # 1) Leitura do CSV
+    # 1) Read CSV
     # -----------------------------
     df = pd.read_csv(uploaded_file)
 
     # -----------------------------
-    # 2) Conversão do timestamp
+    # 2) Convert timestamp
     # -----------------------------
     df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+    df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
 
     # -----------------------------
-    # 3) Calcular volume (price * quantity)
+    # 3) Calculate volume
     # -----------------------------
     df["volume"] = df["price"] * df["quantity"]
 
     # -----------------------------
-    # 🔹 Seleção do token
+    # 4) Token selection
     # -----------------------------
     if "symbol" in df.columns:
-        tokens_disponiveis = df["symbol"].unique().tolist()
-        token_escolhido = st.selectbox("Selecione o Token para análise", ["Todos"] + tokens_disponiveis)
-
-        if token_escolhido != "Todos":
-            df = df[df["symbol"] == token_escolhido]
+        available_tokens = df["symbol"].unique().tolist()
+        selected_token = st.selectbox("Select Token for analysis", ["All"] + available_tokens)
+        if selected_token != "All":
+            df = df[df["symbol"] == selected_token]
     else:
-        st.warning("⚠️ O arquivo não possui a coluna 'symbol'. A filtragem por token não será aplicada.")
+        st.warning("⚠️ Column 'symbol' not found. Token filtering will not be applied.")
+        selected_token = "All"
 
     # -----------------------------
-    # 4) Ajuste da semana (quinta 21h)
+    # 5) Adjust to Thursday 9PM start of week
     # -----------------------------
-    df["adjusted_timestamp"] = df["timestamp"] - pd.Timedelta(hours=21)
-
-    weekly_volume = (
-        df.groupby(pd.Grouper(key="adjusted_timestamp", freq="W-THU"))["volume"]
-        .sum()
-        .reset_index()
-    )
-    weekly_volume["week_start"] = weekly_volume["adjusted_timestamp"] + pd.Timedelta(hours=21)
+    df["week"] = (df["timestamp_naive"] - pd.Timedelta(hours=21)).dt.to_period("W-THU").dt.start_time + pd.Timedelta(hours=21)
 
     # -----------------------------
-    # 5) Volume total acumulado
+    # 6) Weekly Aggregation
     # -----------------------------
-    total_volume = weekly_volume["volume"].sum()
+    weekly_volume = df.groupby("week")["volume"].sum().reset_index()
+    weekly_trades = df.groupby("week")["volume"].count().reset_index().rename(columns={"volume": "num_trades"})
+    weekly_summary = pd.merge(weekly_volume, weekly_trades, on="week")
 
     # -----------------------------
-    # 6) Mostrar resultados
+    # 7) Show Table
     # -----------------------------
-    st.subheader("📊 Volume por Semana")
-    st.dataframe(weekly_volume[["week_start", "volume"]])
+    st.subheader("📊 Weekly Summary")
+    st.dataframe(weekly_summary)
 
-    st.metric(label="🔹 Volume Total Acumulado", value=f"{total_volume:,.2f}")
+    st.metric(label="🔹 Total Accumulated Volume", value=f"{weekly_summary['volume'].sum():,.2f}")
 
     # -----------------------------
-    # 7) Gráfico interativo Plotly
+    # 8) Combined Chart (Side-by-side Bars, Dual Axis)
     # -----------------------------
-    fig = px.bar(
-        weekly_volume,
-        x="week_start",
-        y="volume",
-        title=f"Volume total por semana (início quinta 21h) - {token_escolhido}",
-        labels={"week_start": "Semana", "volume": "Volume"},
-        text_auto=".2s",
-    )
+    fig = go.Figure()
 
-    fig.update_traces(marker_color="skyblue", marker_line_color="black", marker_line_width=1.2)
+    # Volume - Left Axis
+    fig.add_trace(go.Bar(
+        x=weekly_summary["week"],
+        y=weekly_summary["volume"],
+        name="Volume",
+        marker_color="skyblue",
+        offsetgroup=0,
+        yaxis="y"
+    ))
+
+    # Trades - Right Axis
+    fig.add_trace(go.Bar(
+        x=weekly_summary["week"],
+        y=weekly_summary["num_trades"],
+        name="Number of Trades",
+        marker_color="orange",
+        offsetgroup=1,
+        yaxis="y2"
+    ))
+
     fig.update_layout(
-        width=900, height=350,  # tamanho compacto
-        margin=dict(l=40, r=40, t=40, b=40),
-        title_x=0.5  # centraliza título
+        title=dict(
+            text=f"📊 Weekly Volume and Number of Trades (Starting Thursday 9PM) - {selected_token}",
+            x=0.5,
+            xanchor="center"
+        ),
+        xaxis=dict(title="Week"),
+        yaxis=dict(
+            title=dict(text="Volume", font=dict(color="skyblue")),
+            tickfont=dict(color="skyblue")
+        ),
+        yaxis2=dict(
+            title=dict(text="Number of Trades", font=dict(color="orange")),
+            tickfont=dict(color="orange"),
+            overlaying="y",
+            side="right"
+        ),
+        barmode="group",
+        legend=dict(x=0.5, xanchor="center", orientation="h"),
+        width=950,
+        height=500,
+        margin=dict(l=50, r=50, t=60, b=50)
     )
 
     st.plotly_chart(fig, use_container_width=False)
 
 else:
-    st.info("📥 Por favor, carregue um arquivo CSV para iniciar a análise.")
+    st.info("📥 Please upload a CSV file to begin analysis.")

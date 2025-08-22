@@ -1375,190 +1375,157 @@ with col_content:
         uploaded_file = st.file_uploader(label="", type=["csv"])
 
         if uploaded_file is not None:
-            # -----------------------------
-            # 1) Leitura do CSV
-            # -----------------------------
             df = pd.read_csv(uploaded_file)
-
-            # -----------------------------
-            # 2) Conversão do timestamp
-            # -----------------------------
             df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-
-            # -----------------------------
-            # 3) Calcular volume (price * quantity)
-            # -----------------------------
+            df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
             df["volume"] = df["price"] * df["quantity"]
 
-            # -----------------------------
-            # 🔹 Seleção do token
-            # -----------------------------
             if "symbol" in df.columns:
-                tokens_disponiveis = df["symbol"].unique().tolist()
-                token_escolhido = st.selectbox("Select the token:", ["All Tokens"] + tokens_disponiveis)
-
-                if token_escolhido != "All Tokens":
-                    df = df[df["symbol"] == token_escolhido]
+                tokens = df["symbol"].unique().tolist()
+                token_selected = st.selectbox("Select the token:", ["All Tokens"] + tokens)
+                if token_selected != "All Tokens":
+                    df = df[df["symbol"] == token_selected]
             else:
-                st.warning("⚠️ No 'symbol' column found into the file. The token filtering will not be applied.")
+                st.warning("⚠️ No 'symbol' column found. Token filtering will not be applied.")
+                token_selected = "All Tokens"
 
-            # -----------------------------
-            # 4) Ajuste da semana (quinta 21h)
-            # -----------------------------
-            df["adjusted_timestamp"] = df["timestamp"] - pd.Timedelta(hours=21)
+            df["week"] = (df["timestamp_naive"] - pd.Timedelta(hours=21)).dt.to_period("W-THU").dt.start_time + pd.Timedelta(hours=21)
 
-            weekly_volume = (
-                df.groupby(pd.Grouper(key="adjusted_timestamp", freq="W-THU"))["volume"]
-                .sum()
-                .reset_index()
-            )
-            weekly_volume["week_start"] = weekly_volume["adjusted_timestamp"] + pd.Timedelta(hours=21)
+            weekly_volume = df.groupby("week")["volume"].sum().reset_index()
+            weekly_trades = df.groupby("week")["volume"].count().reset_index().rename(columns={"volume": "num_trades"})
+            weekly_summary = pd.merge(weekly_volume, weekly_trades, on="week")
 
-            # -----------------------------
-            # 5) Volume total acumulado
-            # -----------------------------
-            total_volume = weekly_volume["volume"].sum()
+            total_volume = weekly_summary["volume"].sum()
 
-            # -----------------------------
-            # 6) Mostrar resultados
-            # -----------------------------
-            st.subheader("📊 Volume by Week")
-            colA1, colA2 = st.columns([1.8, 1.2])
-            with colA1:
-                st.dataframe(weekly_volume[["week_start", "volume"]])
+            st.subheader("📊 Weekly Summary")
+            col1, col2 = st.columns([1.6, 1.4])
+            with col1:
+                st.dataframe(weekly_summary.rename(columns={"week": "Week", "volume": "Volume ($)", "num_trades": "Number of Trades"}))
 
-            # -----------------------------
-            # 7) Gráfico interativo Plotly
-            # -----------------------------
-            
-            with colA2:
-                fig = px.bar(
-                    weekly_volume,
-                    x="week_start",
-                    y="volume",
-                    title=f"Total Volume by Week - {token_escolhido}",
-                    labels={"week_start": "Week", "volume": "Volume ($)"},
-                    text_auto=".2s",
-                )
+            with col2:
+                fig = go.Figure()
 
-                fig.update_traces(marker_color="skyblue", marker_line_color="black", marker_line_width=1.2)
+                fig.add_trace(go.Bar(
+                    x=weekly_summary["week"],
+                    y=weekly_summary["volume"],
+                    name="Volume ($)",
+                    marker_color="skyblue",
+                    offsetgroup=0,
+                    yaxis="y"
+                ))
+
+                fig.add_trace(go.Bar(
+                    x=weekly_summary["week"],
+                    y=weekly_summary["num_trades"],
+                    name="Number of Trades",
+                    marker_color="orange",
+                    offsetgroup=1,
+                    yaxis="y2"
+                ))
+
                 fig.update_layout(
-                    width=600, height=310,  # tamanho compacto
-                    margin=dict(l=40, r=40, t=40, b=40),
-                    title_x=0.22  # centraliza título
+                    title=dict(
+                        text=f"📊 Weekly Volume and Number of Trades - {token_selected}",
+                        x=0.5,
+                        xanchor="center"
+                    ),
+                    xaxis=dict(title="Week"),
+                    yaxis=dict(
+                        title=dict(text="Volume ($)", font=dict(color="skyblue")),
+                        tickfont=dict(color="skyblue")
+                    ),
+                    yaxis2=dict(
+                        title=dict(text="Number of Trades", font=dict(color="orange")),
+                        tickfont=dict(color="orange"),
+                        overlaying="y",
+                        side="right"
+                    ),
+                    barmode="group",
+                    legend=dict(x=0.5, y = 1.12, xanchor="center", orientation="h",yanchor="top"),
+                    width=600,
+                    height=320,
+                    margin=dict(l=40, r=40, t=50, b=40)
                 )
 
                 st.plotly_chart(fig, use_container_width=False)
-            
-                    # --- HTML completo com CSS embutido ---
+
+                total_trades = len(df)
+            # ------------------ Custom HTML Summary ------------------ #
             full_html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>
-                    body {{
-                        font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                        color: #e6edf3;
-                    }}
-                    
-                    .result-card {{
-                        background-color: #0f172a;
-                        position: absolute;
-                        border-radius: 10px;
-                        padding: 30px;
-                        margin-top: 20px;
-                        margin-bottom: 10px;
-                        maring-rigth: 10px;
-                        maring-left: 10px;
-                        font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                        width: 94.5%;
-                    }}
-                    
-                    .result-card::before {{
-                        content: "";
-                        position: absolute;
-                        top: -3px;
-                        left: -3px;
-                        right: -3px;
-                        bottom: -3px;
-                        border-radius: 10px;
-                        z-index: -1;
-                        background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
-                        background-size: 600% 600%;
-                        animation: neonBorder 6s ease infinite;
-                        padding: 6px;
-                        -webkit-mask:
-                            linear-gradient(#fff 0 0) content-box,
-                            linear-gradient(#fff 0 0);
-                        -webkit-mask-composite: xor;
-                        mask-composite: exclude;
-                    }}
-                    .metrics-grid {{
-                        font-size: 20px;
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 20px;
-                        margin-top: 20px;
-                    }}
-
-                    .metric-box {{
-                        background-color: #1e293b;
-                        padding: 20px;
-                        border-radius: 12px;
-                        flex: 1 1 200px;
-                        min-width: 200px;
-                    }}
-
-                    .metric-label {{
-                        font-size: 20px;
-                        color: #cccccc;
-                        margin-bottom: 6px;
-                    }}
-
-                    .metric-value {{
-                        font-size: 1.6em;
-                        color: #00ffae;
-                        font-weight: bold;
-                    }}
-
-                    .note {{
-                        margin-top: 30px;
-                        font-size: 18px;
-                        color: #d1d5db;
-                    }}
-
-                    @keyframes neonBorder {{
-                        0%   {{ background-position: 0% 50%; }}
-                        50%  {{ background-position: 100% 50%; }}
-                        100% {{ background-position: 0% 50%; }}
-                    }}
-
-                </style>
-            </head>
-            <body>
-
-                <div class="result-card">
-                    <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_escolhido}</h3>
-
-                    <div class="metrics-grid">
+            <div class="result-card">
+                <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_selected}</h3>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">Total Volume ($)</div>
+                        <div class="metric-value">${total_volume:,.2f}</div>
+                    </div>
                         <div class="metric-box">
-                            <div class="metric-label">Total Volume ($)</div>
-                            <div class="metric-value">${total_volume:,.2f}</div>
-                        </div>
+                        <div class="metric-label">Total Trades</div>
+                        <div class="metric-value">{total_trades}</div>
                     </div>
                 </div>
-
-            </body>
-            </html>
+            </div>
+            <style>
+                .result-card {{
+                    background-color: #0f172a;
+                    border-radius: 10px;
+                    padding: 30px;
+                    margin-top: 20px;
+                    width: 94.5%;
+                    position: relative;
+                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                }}
+                .result-card::before {{
+                    content: "";
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
+                    border-radius: 10px;
+                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                    background-size: 600% 600%;
+                    animation: neonBorder 6s ease infinite;
+                    z-index: -1;
+                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                }}
+                .metrics-grid {{
+                    font-size: 20px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    margin-top: 20px;
+                }}
+                .metric-box {{
+                    background-color: #1e293b;
+                    padding: 20px;
+                    border-radius: 12px;
+                    flex: 1 1 200px;
+                    min-width: 200px;
+                }}
+                .metric-label {{
+                    font-size: 20px;
+                    color: #cccccc;
+                    margin-bottom: 6px;
+                }}
+                .metric-value {{
+                    font-size: 1.6em;
+                    color: #00ffae;
+                    font-weight: bold;
+                }}
+                @keyframes neonBorder {{
+                    0%   {{ background-position: 0% 50%; }}
+                    50%  {{ background-position: 100% 50%; }}
+                    100% {{ background-position: 0% 50%; }}
+                }}
+            </style>
             """
-
-            # Renderiza o HTML customizado
             components.html(full_html, height=400, width=1900, scrolling=False)
 
         else:
             st.info("📥 Please, load your CSV Trade File from Backpack.")
-
-
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 
