@@ -1543,7 +1543,7 @@ with col_content:
                     <div class="metrics-grid">
                         <div class="metric-box">
                             <div class="metric-label">Total Volume ($)</div>
-                            <div class="metric-value">${total_volume:,.2f}M</div>
+                            <div class="metric-value">${total_volume:,.2f}</div>
                         </div>
                     </div>
                 </div>
