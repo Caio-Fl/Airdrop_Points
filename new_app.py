@@ -795,7 +795,6 @@ with col_left:
         if st.button(pagina, key=pagina):
             emoji = pagina.split()[0]
             label = " ".join(pagina.split()[1:])
-            print(pagina_atual)
             st.session_state.pagina = pagina
             st.query_params.update({"pagina": pagina})
     st.markdown('</div>', unsafe_allow_html=True)
@@ -1359,6 +1358,7 @@ with col_content:
         components.html(full_html, height=400, width=1900, scrolling=False)
 
     elif st.session_state.pagina == "🎒 BackPack Volume Check":
+        st.session_state.pagina = pagina
         # -----------------------------
         # 📂 Upload do CSV
         # -----------------------------
