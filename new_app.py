@@ -789,7 +789,7 @@ col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 7,2.1]
 # Menu lateral com botões
 with col_left:
     st.markdown('<div class="menu-column">', unsafe_allow_html=True)
-    emoji = list(PAGES.keys())[1].split()[0]
+    emoji = list(PAGES.keys())[1].split()[0] 
     label = " ".join(list(PAGES.keys())[0].split()[1:])
     for pagina in PAGES:
         if st.button(pagina, key=pagina):
@@ -820,9 +820,15 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+
+emoji_to_find = emoji
+
+for key in PAGES:
+    if key.startswith(emoji_to_find):
+        lab = key.split(" ", 1)[1]  # Remove o emoji
 with col_content:
     #st.markdown(f"### {st.session_state.pagina}")
-    st.markdown(f'<div class="page-name"><span class="emoji-gray">{emoji}</span>{label}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="page-name"><span class="emoji-gray">{emoji}</span>{lab}</div>', unsafe_allow_html=True)
 
     # --- Dados dos Protocolos ---
     # Armazena a hora da primeira execução na sessão do usuário
@@ -1358,7 +1364,7 @@ with col_content:
         components.html(full_html, height=400, width=1900, scrolling=False)
 
     elif st.session_state.pagina == "🎒 BackPack Volume Check":
-        st.session_state.pagina = pagina
+        
         # -----------------------------
         # 📂 Upload do CSV
         # -----------------------------
@@ -1421,6 +1427,7 @@ with col_content:
             # -----------------------------
             # 7) Gráfico interativo Plotly
             # -----------------------------
+            
             with colA2:
                 fig = px.bar(
                     weekly_volume,
@@ -1439,114 +1446,116 @@ with col_content:
                 )
 
                 st.plotly_chart(fig, use_container_width=False)
+            
+                    # --- HTML completo com CSS embutido ---
+            full_html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                        color: #e6edf3;
+                    }}
+                    
+                    .result-card {{
+                        background-color: #0f172a;
+                        position: absolute;
+                        border-radius: 10px;
+                        padding: 30px;
+                        margin-top: 20px;
+                        margin-bottom: 10px;
+                        maring-rigth: 10px;
+                        maring-left: 10px;
+                        font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                        width: 94.5%;
+                    }}
+                    
+                    .result-card::before {{
+                        content: "";
+                        position: absolute;
+                        top: -3px;
+                        left: -3px;
+                        right: -3px;
+                        bottom: -3px;
+                        border-radius: 10px;
+                        z-index: -1;
+                        background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                        background-size: 600% 600%;
+                        animation: neonBorder 6s ease infinite;
+                        padding: 6px;
+                        -webkit-mask:
+                            linear-gradient(#fff 0 0) content-box,
+                            linear-gradient(#fff 0 0);
+                        -webkit-mask-composite: xor;
+                        mask-composite: exclude;
+                    }}
+                    .metrics-grid {{
+                        font-size: 20px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 20px;
+                        margin-top: 20px;
+                    }}
+
+                    .metric-box {{
+                        background-color: #1e293b;
+                        padding: 20px;
+                        border-radius: 12px;
+                        flex: 1 1 200px;
+                        min-width: 200px;
+                    }}
+
+                    .metric-label {{
+                        font-size: 20px;
+                        color: #cccccc;
+                        margin-bottom: 6px;
+                    }}
+
+                    .metric-value {{
+                        font-size: 1.6em;
+                        color: #00ffae;
+                        font-weight: bold;
+                    }}
+
+                    .note {{
+                        margin-top: 30px;
+                        font-size: 18px;
+                        color: #d1d5db;
+                    }}
+
+                    @keyframes neonBorder {{
+                        0%   {{ background-position: 0% 50%; }}
+                        50%  {{ background-position: 100% 50%; }}
+                        100% {{ background-position: 0% 50%; }}
+                    }}
+
+                </style>
+            </head>
+            <body>
+
+                <div class="result-card">
+                    <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_escolhido}</h3>
+
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-label">Total Volume ($)</div>
+                            <div class="metric-value">${total_volume:,.2f}M</div>
+                        </div>
+                    </div>
+                </div>
+
+            </body>
+            </html>
+            """
+
+            # Renderiza o HTML customizado
+            components.html(full_html, height=400, width=1900, scrolling=False)
 
         else:
             st.info("📥 Please, load your CSV Trade File from Backpack.")
 
-        # --- HTML completo com CSS embutido ---
-        full_html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                body {{
-                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                    color: #e6edf3;
-                }}
-                
-                .result-card {{
-                    background-color: #0f172a;
-                    position: absolute;
-                    border-radius: 10px;
-                    padding: 30px;
-                    margin-top: 20px;
-                    margin-bottom: 10px;
-                    maring-rigth: 10px;
-                    maring-left: 10px;
-                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                    width: 94.5%;
-                }}
-                
-                .result-card::before {{
-                    content: "";
-                    position: absolute;
-                    top: -3px;
-                    left: -3px;
-                    right: -3px;
-                    bottom: -3px;
-                    border-radius: 10px;
-                    z-index: -1;
-                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
-                    background-size: 600% 600%;
-                    animation: neonBorder 6s ease infinite;
-                    padding: 6px;
-                    -webkit-mask:
-                        linear-gradient(#fff 0 0) content-box,
-                        linear-gradient(#fff 0 0);
-                    -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-                }}
-                .metrics-grid {{
-                    font-size: 20px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    margin-top: 20px;
-                }}
 
-                .metric-box {{
-                    background-color: #1e293b;
-                    padding: 20px;
-                    border-radius: 12px;
-                    flex: 1 1 200px;
-                    min-width: 200px;
-                }}
-
-                .metric-label {{
-                    font-size: 20px;
-                    color: #cccccc;
-                    margin-bottom: 6px;
-                }}
-
-                .metric-value {{
-                    font-size: 1.6em;
-                    color: #00ffae;
-                    font-weight: bold;
-                }}
-
-                .note {{
-                    margin-top: 30px;
-                    font-size: 18px;
-                    color: #d1d5db;
-                }}
-
-                @keyframes neonBorder {{
-                    0%   {{ background-position: 0% 50%; }}
-                    50%  {{ background-position: 100% 50%; }}
-                    100% {{ background-position: 0% 50%; }}
-                }}
-
-            </style>
-        </head>
-        <body>
-
-            <div class="result-card">
-                <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_escolhido}</h3>
-
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Total Volume ($)</div>
-                        <div class="metric-value">${total_volume:,.2f}M</div>
-                    </div>
-                </div>
-            </div>
-
-        </body>
-        </html>
-        """
-
-        # Renderiza o HTML customizado
-        components.html(full_html, height=400, width=1900, scrolling=False)
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 
