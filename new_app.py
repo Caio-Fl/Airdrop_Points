@@ -741,17 +741,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-options = ["🏠 Welcome", "🧮 Airdrop Calculator","🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
+options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
            "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
 st.markdown("\n\n")
 st.sidebar.markdown("---")
+opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "🏠 Welcome"
 
 PAGES = {
     "🏠 Welcome": "",
     "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
+    "🎒 BackPack Volume Check": "Check your BackPack Volume.",
     "🌾 Farm with YT": "Yield farming with YouTube strategies.",
     "📊 Comparative YT Table": "Compare YouTube farming strategies.",
     "📈 Pendle APY Prediction": "Pendle APY forecast and trends.",
@@ -766,16 +770,15 @@ PAGES = {
     
 ### Lê parâmetro da URL
 pagina_atual = st.query_params.get("pagina", [list(PAGES.keys())[0]])[0]
-print(pagina_atual)
 # Validação para garantir página válida no session_state
 if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
     st.session_state.pagina = list(PAGES.keys())[0]
-
+    
 # Sincroniza session_state com query_params, se válido
 elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
 
-opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
+
 print(pagina_atual)
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
@@ -1346,6 +1349,196 @@ with col_content:
                 <p class="note">
                     <strong>Note:</strong> This is just a simulation based on your assumptions. The actual airdrop value may vary significantly depending on various factors such as launch price, final tokenomics, and total number of participants.
                 </p>
+            </div>
+
+        </body>
+        </html>
+        """
+
+        # Renderiza o HTML customizado
+        components.html(full_html, height=400, width=1900, scrolling=False)
+
+    elif st.session_state.pagina == "🎒 BackPack Volume Check":
+        # -----------------------------
+        # 📂 Upload do CSV
+        # -----------------------------
+        st.markdown('Load your trade history from 🎒[Backpack](https://backpack.exchange/join/jj2kkdp1)')
+        uploaded_file = st.file_uploader(label="", type=["csv"])
+
+        if uploaded_file is not None:
+            # -----------------------------
+            # 1) Leitura do CSV
+            # -----------------------------
+            df = pd.read_csv(uploaded_file)
+
+            # -----------------------------
+            # 2) Conversão do timestamp
+            # -----------------------------
+            df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+
+            # -----------------------------
+            # 3) Calcular volume (price * quantity)
+            # -----------------------------
+            df["volume"] = df["price"] * df["quantity"]
+
+            # -----------------------------
+            # 🔹 Seleção do token
+            # -----------------------------
+            if "symbol" in df.columns:
+                tokens_disponiveis = df["symbol"].unique().tolist()
+                token_escolhido = st.selectbox("Select the token:", ["All Tokens"] + tokens_disponiveis)
+
+                if token_escolhido != "All Tokens":
+                    df = df[df["symbol"] == token_escolhido]
+            else:
+                st.warning("⚠️ No 'symbol' column found into the file. The token filtering will not be applied.")
+
+            # -----------------------------
+            # 4) Ajuste da semana (quinta 21h)
+            # -----------------------------
+            df["adjusted_timestamp"] = df["timestamp"] - pd.Timedelta(hours=21)
+
+            weekly_volume = (
+                df.groupby(pd.Grouper(key="adjusted_timestamp", freq="W-THU"))["volume"]
+                .sum()
+                .reset_index()
+            )
+            weekly_volume["week_start"] = weekly_volume["adjusted_timestamp"] + pd.Timedelta(hours=21)
+
+            # -----------------------------
+            # 5) Volume total acumulado
+            # -----------------------------
+            total_volume = weekly_volume["volume"].sum()
+
+            # -----------------------------
+            # 6) Mostrar resultados
+            # -----------------------------
+            st.subheader("📊 Volume by Week")
+            colA1, colA2 = st.columns([1.8, 1.2])
+            with colA1:
+                st.dataframe(weekly_volume[["week_start", "volume"]])
+
+            # -----------------------------
+            # 7) Gráfico interativo Plotly
+            # -----------------------------
+            with colA2:
+                fig = px.bar(
+                    weekly_volume,
+                    x="week_start",
+                    y="volume",
+                    title=f"Total Volume by Week - {token_escolhido}",
+                    labels={"week_start": "Week", "volume": "Volume ($)"},
+                    text_auto=".2s",
+                )
+
+                fig.update_traces(marker_color="skyblue", marker_line_color="black", marker_line_width=1.2)
+                fig.update_layout(
+                    width=600, height=310,  # tamanho compacto
+                    margin=dict(l=40, r=40, t=40, b=40),
+                    title_x=0.22  # centraliza título
+                )
+
+                st.plotly_chart(fig, use_container_width=False)
+
+        else:
+            st.info("📥 Please, load your CSV Trade File from Backpack.")
+
+        # --- HTML completo com CSS embutido ---
+        full_html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    color: #e6edf3;
+                }}
+                
+                .result-card {{
+                    background-color: #0f172a;
+                    position: absolute;
+                    border-radius: 10px;
+                    padding: 30px;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    maring-rigth: 10px;
+                    maring-left: 10px;
+                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    width: 94.5%;
+                }}
+                
+                .result-card::before {{
+                    content: "";
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
+                    border-radius: 10px;
+                    z-index: -1;
+                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                    background-size: 600% 600%;
+                    animation: neonBorder 6s ease infinite;
+                    padding: 6px;
+                    -webkit-mask:
+                        linear-gradient(#fff 0 0) content-box,
+                        linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                }}
+                .metrics-grid {{
+                    font-size: 20px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    margin-top: 20px;
+                }}
+
+                .metric-box {{
+                    background-color: #1e293b;
+                    padding: 20px;
+                    border-radius: 12px;
+                    flex: 1 1 200px;
+                    min-width: 200px;
+                }}
+
+                .metric-label {{
+                    font-size: 20px;
+                    color: #cccccc;
+                    margin-bottom: 6px;
+                }}
+
+                .metric-value {{
+                    font-size: 1.6em;
+                    color: #00ffae;
+                    font-weight: bold;
+                }}
+
+                .note {{
+                    margin-top: 30px;
+                    font-size: 18px;
+                    color: #d1d5db;
+                }}
+
+                @keyframes neonBorder {{
+                    0%   {{ background-position: 0% 50%; }}
+                    50%  {{ background-position: 100% 50%; }}
+                    100% {{ background-position: 0% 50%; }}
+                }}
+
+            </style>
+        </head>
+        <body>
+
+            <div class="result-card">
+                <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_escolhido}</h3>
+
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">Total Volume ($)</div>
+                        <div class="metric-value">${total_volume:,.2f}M</div>
+                    </div>
+                </div>
             </div>
 
         </body>

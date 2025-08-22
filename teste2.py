@@ -30,6 +30,18 @@ if uploaded_file is not None:
     df["volume"] = df["price"] * df["quantity"]
 
     # -----------------------------
+    # 🔹 Seleção do token
+    # -----------------------------
+    if "symbol" in df.columns:
+        tokens_disponiveis = df["symbol"].unique().tolist()
+        token_escolhido = st.selectbox("Selecione o Token para análise", ["Todos"] + tokens_disponiveis)
+
+        if token_escolhido != "Todos":
+            df = df[df["symbol"] == token_escolhido]
+    else:
+        st.warning("⚠️ O arquivo não possui a coluna 'symbol'. A filtragem por token não será aplicada.")
+
+    # -----------------------------
     # 4) Ajuste da semana (quinta 21h)
     # -----------------------------
     df["adjusted_timestamp"] = df["timestamp"] - pd.Timedelta(hours=21)
@@ -61,7 +73,7 @@ if uploaded_file is not None:
         weekly_volume,
         x="week_start",
         y="volume",
-        title="Volume total por semana (início quinta 21h)",
+        title=f"Volume total por semana (início quinta 21h) - {token_escolhido}",
         labels={"week_start": "Semana", "volume": "Volume"},
         text_auto=".2s",
     )
@@ -72,8 +84,6 @@ if uploaded_file is not None:
         margin=dict(l=40, r=40, t=40, b=40),
         title_x=0.5  # centraliza título
     )
-
-    # Centralizar no painel
 
     st.plotly_chart(fig, use_container_width=False)
 
