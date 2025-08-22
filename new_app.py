@@ -749,8 +749,7 @@ options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🎒 BackPack Volume Chec
 st.markdown("\n\n")
 st.sidebar.markdown("---")
 opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
-if "pagina" not in st.session_state:
-    st.session_state.pagina = "🏠 Welcome"
+
 
 PAGES = {
     "🏠 Welcome": "",
@@ -771,13 +770,13 @@ PAGES = {
 # -------------------------
 # 🔹 Leitura inicial da página
 # -------------------------
-pagina_atual = st.query_params.get("pagina", list(PAGES.keys())[0])
+pagina_atual =  st.session_state["pagina"] #st.query_params.get("pagina", [list(PAGES.keys())[0]])#st.query_params.get("pagina", list(PAGES.keys())[0])
 
 if "pagina" not in st.session_state:
     st.session_state.pagina = pagina_atual
 
 # Se query_params mudar externamente → sincroniza
-elif pagina_atual != st.session_state.pagina:
+elif st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
 
 # Container externo
@@ -789,8 +788,9 @@ col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 7,2.1]
 # Menu lateral com botões
 with col_left:
     st.markdown('<div class="menu-column">', unsafe_allow_html=True)
-    emoji = list(PAGES.keys())[1].split()[0] 
-    label = " ".join(list(PAGES.keys())[0].split()[1:])
+    match = re.match(r'^([^\w\s]+)', pagina_atual)
+    emoji = match.group(1) if match else '' #list(PAGES.keys())[1].split()[0] 
+    label = re.sub(r'^[^\w\s]+', '', pagina_atual).strip()#" ".join(list(PAGES.keys())[0].split()[1:])
     for pagina in PAGES:
         if st.button(pagina, key=pagina):
             emoji = pagina.split()[0]
@@ -821,14 +821,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-emoji_to_find = emoji
-
-for key in PAGES:
-    if key.startswith(emoji_to_find):
-        lab = key.split(" ", 1)[1]  # Remove o emoji
 with col_content:
     #st.markdown(f"### {st.session_state.pagina}")
-    st.markdown(f'<div class="page-name"><span class="emoji-gray">{emoji}</span>{lab}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="page-name"><span class="emoji-gray">{emoji}</span>{label}</div>', unsafe_allow_html=True)
 
     # --- Dados dos Protocolos ---
     # Armazena a hora da primeira execução na sessão do usuário
