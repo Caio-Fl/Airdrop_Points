@@ -770,7 +770,7 @@ PAGES = {
 # -------------------------
 # 🔹 Leitura inicial da página
 # -------------------------
-pagina_atual =  st.session_state["pagina"] #st.query_params.get("pagina", [list(PAGES.keys())[0]])#st.query_params.get("pagina", list(PAGES.keys())[0])
+pagina_atual =  pagina_atual = st.session_state.get("pagina", list(PAGES.keys())[0])#st.session_state["pagina"] #st.query_params.get("pagina", [list(PAGES.keys())[0]])#st.query_params.get("pagina", list(PAGES.keys())[0])
 
 if "pagina" not in st.session_state:
     st.session_state.pagina = pagina_atual
