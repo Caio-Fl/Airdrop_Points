@@ -768,19 +768,18 @@ PAGES = {
     "⚠️ Avoiding Scams": "Tips and tools to avoid scams."
 }
     
-# Lê parâmetro da URL
+# -------------------------
+# 🔹 Leitura inicial da página
+# -------------------------
 pagina_atual = st.query_params.get("pagina", list(PAGES.keys())[0])
 
-# Validação para garantir página válida no session_state
-if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
-    st.session_state.pagina = list(PAGES.keys())[0]
-
-# Sincroniza session_state com query_params, se válido
-elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
+if "pagina" not in st.session_state:
     st.session_state.pagina = pagina_atual
 
+# Se query_params mudar externamente → sincroniza
+elif pagina_atual != st.session_state.pagina:
+    st.session_state.pagina = pagina_atual
 
-print(pagina_atual)
 # Container externo
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
 
@@ -800,6 +799,13 @@ with col_left:
             st.session_state.pagina = pagina
             st.query_params.update({"pagina": pagina})
     st.markdown('</div>', unsafe_allow_html=True)
+
+
+# -------------------------
+# 🔹 Conteúdo da página
+# -------------------------
+pagina_atual = st.session_state.pagina
+st.write(f"📌 Página atual: {pagina_atual}")
 
 # Conteúdo principal
 st.markdown("""
