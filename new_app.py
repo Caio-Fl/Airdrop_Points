@@ -768,12 +768,13 @@ PAGES = {
     "⚠️ Avoiding Scams": "Tips and tools to avoid scams."
 }
     
-### Lê parâmetro da URL
-pagina_atual = st.query_params.get("pagina", [list(PAGES.keys())[0]])[0]
+# Lê parâmetro da URL
+pagina_atual = st.query_params.get("pagina", list(PAGES.keys())[0])
+
 # Validação para garantir página válida no session_state
 if "pagina" not in st.session_state or st.session_state.pagina not in PAGES:
     st.session_state.pagina = list(PAGES.keys())[0]
-    
+
 # Sincroniza session_state com query_params, se válido
 elif pagina_atual in PAGES and st.session_state.pagina != pagina_atual:
     st.session_state.pagina = pagina_atual
