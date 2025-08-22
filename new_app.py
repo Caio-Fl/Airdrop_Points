@@ -1368,7 +1368,10 @@ with col_content:
         # -----------------------------
         # 📂 Upload do CSV
         # -----------------------------
-        st.markdown('Load your trade history from 🎒[Backpack](https://backpack.exchange/join/jj2kkdp1)')
+        st.markdown(
+            '<p style="font-size:22px;">Load your trade history from 🎒<a href="https://backpack.exchange/join/jj2kkdp1" target="_blank">Backpack</a></p>',
+            unsafe_allow_html=True
+        )
         uploaded_file = st.file_uploader(label="", type=["csv"])
 
         if uploaded_file is not None:
