@@ -89,6 +89,18 @@ def get_noon(wallet: str):
             return None
     return None
 
+def get_yieldfi_points(wallet: str):
+    url = f"https://ctrl.yield.fi/u/points/{wallet}"
+    data = safe_request(url, use_scraper=True)  # ou False, dependendo do caso
+    if data:
+        # aqui você adapta conforme o formato real retornado, por exemplo:
+        total_points = data.get("totalPoints", None)
+        return {
+            "totalPoints": total_points,
+            "raw": data
+        }
+    return None
+
 def get_kyros(wallet: str):
     url = f"https://points-api.kyros.fi/score?wallet={wallet}"
     data = safe_request(url)
@@ -226,6 +238,18 @@ def get_plume(wallet: str):
         }
     return None
 
+def get_prjx(wallet: str):
+    url = f"https://api.prjx.com/scorecard/impersonate/{wallet}?format=json"
+    data = safe_request(url)
+    if data and data.get("stats"):
+        return {
+            "totalPoints": data["stats"].get("totalPoints", 0),
+            "rank": data["stats"].get("rank", "N/A"),
+            "referrals": data["stats"].get("totalReferrals", 0),
+            "raw": data
+        }
+    return None
+
 
 # -------------------------
 # 🔹 PROTOCOLS CONFIG
@@ -237,12 +261,13 @@ protocols = {
     "🟣 Level": lambda w: get_level(w),
     "🟣 Noon": lambda w: get_noon(w),
     "🟣 Plume": lambda w: get_plume(w),
+    "🟣 YieldFi": lambda w: get_yieldfi_points(w),
     "🟣 Kyros": lambda w: get_kyros(w),
     "🟣 Triad": lambda w: get_triad(w),
     "🟣 Kinetiq": lambda w: get_kinetiq(w),
     "🟣 Hyperbeat": lambda w: get_hyperbeat(w),
+    "🟣 Project X": lambda w: get_prjx(w),
     "🟣 RateX": lambda w: get_ratex(w),
-    "🟣 Ranger": lambda w: get_ranger(w),
     "🟣 Lombard": lambda w: get_lombard(w),
 }
 
@@ -304,6 +329,12 @@ if wallet:
                     st.metric("🌟 XP Ativo (total)", f"{data['active_total_xp']:,}")
                     st.metric("🌐 Bônus por Indicação", f"{data['referral_bonus_xp']:,}")
 
+                elif name == "🟣 YieldFi":
+                    try:
+                        st.metric("🌟 Total YieldFi Points", f"{data['totalPoints']:,}")
+                    except:
+                        st.warning(f"⚠️ No data was found to {name}.")
+
                 elif name == "🟣 Hylo":
                     st.metric("🌟 Total Points", f"{data.get('totalPoints', 0):,.2f}")
                     st.metric("🏆 Global Rank", data.get("globalRank", "N/A"))
@@ -327,7 +358,7 @@ if wallet:
                 elif name == "🟣 Hyperbeat":
                     try:
                         hyperbeat = next((p for p in data["details"] if p["name"] == "Hyperbeat"), None)
-                        st.metric("🌟 Hyperbeat Points", f"{float(hyperbeat['balance']):,.2f}")
+                        st.metric("🌟 Hyperbeat Points", f"{float(hyperbeat['balance']):,.5f}")
                         # 2) Criar tabela com os demais
                         others = [p for p in data["details"] if p["name"] != "Hyperbeat"]
                         if others:
@@ -346,7 +377,12 @@ if wallet:
                                 f"Hyperdrive: **{protocolos.get('Hyperdrive', 0):,.0f}**"
                             )
                     except:
-                        st.warning("⚠️ No data to this Wallet!")
+                        st.warning(f"⚠️ No data was found to {name}.")
+
+                elif name == "🟣 Project X":
+                    st.metric("🌟 Total Points", f"{data['totalPoints']:,.2f}")
+                    st.metric("🏆 Global Rank", data["rank"])
+                    st.metric("👥 Referrals", f"{data['referrals']:,}")
                 
                 elif name == "🟣 Perena":
                     st.metric("🌟 Total Points", f"{data['total']:,.2f}")
@@ -400,7 +436,7 @@ if wallet:
                 with st.expander("📄 JSON Bruto"):
                     st.json(data)
             else:
-                st.warning(f"⚠️ Não foi possível carregar dados de {name}.")
+                st.warning(f"⚠️ No data was found to {name}.")
 
                 with st.expander("📄 JSON Bruto"):
                     st.json(data)
