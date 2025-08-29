@@ -9,3 +9,4 @@ langchain-core
 langchain-mistralai
 mistralai
 dotenv
+cloudscraper
