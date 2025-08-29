@@ -1369,6 +1369,12 @@ with col_content:
         # -------------------------
         # 🔹 HELPER
         # -------------------------
+        def safe_num(value, decimals=2):
+            try:
+                return f"{float(value or 0):,.{decimals}f}"
+            except:
+                return "0.00"
+    
         def safe_request(url, params=None, payload=None, use_scraper=False, method="GET"):
             try:
                 scraper = cloudscraper.create_scraper() if use_scraper else requests
@@ -1394,7 +1400,12 @@ with col_content:
                     return {
                         "points": d.get("accumulatedTotalShardsEarned", 0),
                         "referrals": d.get("accumulatedReferralsShards", 0),
-                        "extra": f"<br>💎 Pendle: {d.get('accumulatedPendleShards',0):,.2f} / 🌱 Restaking: {d.get('accumulatedRestakingShards', 0):,.0f}</br> <br> 🚀 Boost: {d.get('accumulatedBoostShards', 0):,.0f} / 🌐 L2: {d.get('accumulatedL2Shards', 0):,.0f} </br>",
+                        "extra": (
+                            f"<br>💎 Pendle: {safe_num(d.get('accumulatedPendleShards'),2)} / "
+                            f"🌱 Restaking: {safe_num(d.get('accumulatedRestakingShards'),0)}</br> "
+                            f"<br> 🚀 Boost: {safe_num(d.get('accumulatedBoostShards'),0)} / "
+                            f"🌐 L2: {safe_num(d.get('accumulatedL2Shards'),0)}</br>"
+                        ),
                         "raw": data
                     }
                 except:
