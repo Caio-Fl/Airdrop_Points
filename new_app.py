@@ -1575,7 +1575,7 @@ with col_content:
             if data:
                 return {
                     "points": data.get("total",0),
-                    "extra": f"<br>🎖️ Badges Points: {data.get('badges',0)} / 💼 Holding Points: {data.get('holding_points'):,.2f}</br> <br> </br>",
+                    "extra": f"<br>🎖️ Badges Points: {safe_num(data.get('badges_points'))}</br> <br> </br>",
                     "raw": data
                 }
             return None
