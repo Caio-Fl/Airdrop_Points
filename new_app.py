@@ -1374,6 +1374,21 @@ with col_content:
                 return f"{float(value or 0):,.{decimals}f}"
             except:
                 return "0.00"
+        
+        def safe_request_simple(url, timeout=10):
+            """Request seguro usando apenas requests"""
+            try:
+                res = requests.get(url, timeout=timeout)
+                res.raise_for_status()
+                if not res.text.strip():
+                    return None
+                return res.json()
+            except requests.RequestException as e:
+                print(f"Erro de requisição: {e}")
+                return None
+            except ValueError as e:
+                print(f"Erro ao parsear JSON: {e}")
+                return None
     
         def safe_request(url, params=None, payload=None, use_scraper=False, method="GET"):
             try:
@@ -1393,7 +1408,7 @@ with col_content:
         # -------------------------
         def get_ethena(wallet: str):
             url = f"https://app.ethena.fi/api/referral/get-referree?address={wallet}"
-            data = safe_request(url)
+            data = safe_request_simple(url)
             print(data)
             if data and data.get("queryWallet"):
                 d = data["queryWallet"][0]
