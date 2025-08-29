@@ -1394,6 +1394,7 @@ with col_content:
         def get_ethena(wallet: str):
             url = f"https://app.ethena.fi/api/referral/get-referree?address={wallet}"
             data = safe_request(url)
+            print(data)
             if data and data.get("queryWallet"):
                 d = data["queryWallet"][0]
                 try:
@@ -1401,10 +1402,10 @@ with col_content:
                         "points": d.get("accumulatedTotalShardsEarned", 0),
                         "referrals": d.get("accumulatedReferralsShards", 0),
                         "extra": (
-                            f"<br>💎 Pendle: {safe_num(d.get('accumulatedPendleShards'),2)} / "
-                            f"🌱 Restaking: {safe_num(d.get('accumulatedRestakingShards'),0)}</br> "
-                            f"<br> 🚀 Boost: {safe_num(d.get('accumulatedBoostShards'),0)} / "
-                            f"🌐 L2: {safe_num(d.get('accumulatedL2Shards'),0)}</br>"
+                            f"<br>💎 Pendle: {safe_num(d.get('accumulatedPendleShards'), 2)} / "
+                            f"🌱 Restaking: {safe_num(d.get('accumulatedRestakingShards'), 0)}</br> "
+                            f"<br>🚀 Boost: {safe_num(d.get('accumulatedBoostShards'), 0)} / "
+                            f"🌐 L2: {safe_num(d.get('accumulatedL2Shards'), 0)}</br>"
                         ),
                         "raw": data
                     }
