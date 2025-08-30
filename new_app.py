@@ -1379,6 +1379,7 @@ with col_content:
             """Request seguro usando apenas requests"""
             try:
                 res = requests.get(url, timeout=timeout)
+                print(res)
                 res.raise_for_status()
                 if not res.text.strip():
                     return None
