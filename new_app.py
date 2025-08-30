@@ -33,6 +33,7 @@ from mistralai.models import UserMessage
 from mistralai.models import File
 load_dotenv("apikey.env")  # Load .env file
 import os
+import io
 import base64
 import cloudscraper
 #from mistralai.client import MistralClient
@@ -1410,7 +1411,6 @@ with col_content:
         def get_ethena(wallet: str):
             url = f"https://app.ethena.fi/api/referral/get-referree?address={wallet}"
             data = safe_request_simple(url)
-            print(data)
             if data and data.get("queryWallet"):
                 d = data["queryWallet"][0]
                 try:
@@ -1462,13 +1462,16 @@ with col_content:
             url = f"https://api.level.money/v1/xp/balances/leaderboard?page=1&take=1&referral=false&addresses={wallet}"
             data = safe_request(url)
             if data and data.get("leaderboard"):
-                lb = data["leaderboard"][0]["balance"]
-                return {
-                    "points": int(lb.get("accrued", 0)),
-                    "rank": data.get("rank", "N/A"),
-                    "extra": f"<br>👥 Referral Points: {int(lb.get('fromReferrals',0)):,.2f}</br>  <br> </br>",
-                    "raw": data
-                }
+                try:
+                    lb = data["leaderboard"][0]["balance"]
+                    return {
+                        "points": int(lb.get("accrued", 0)),
+                        "rank": data.get("rank", "N/A"),
+                        "extra": f"<br>👥 Referral Points: {int(lb.get('fromReferrals',0)):,.2f}</br>  <br> </br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_noon(wallet: str):
@@ -1491,82 +1494,103 @@ with col_content:
             url = f"https://portal-api.plume.org/api/v1/stats/pp-totals?walletAddress={wallet}"
             data = safe_request(url)
             if data and "data" in data and data["data"].get("ppScores"):
-                pp = data["data"]["ppScores"]
-                return {
-                    "points": pp["activeXp"].get("totalXp",0),
-                    "extra": f"<br>👥 Referral Points: {pp['activeXp'].get('referralBonusXp',0):,.2f}</br>",
-                    "raw": data
-                }
+                try:
+                    pp = data["data"]["ppScores"]
+                    return {
+                        "points": pp["activeXp"].get("totalXp",0),
+                        "extra": f"<br>👥 Referral Points: {pp['activeXp'].get('referralBonusXp',0):,.2f}</br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_yieldfi_points(wallet: str):
             url = f"https://ctrl.yield.fi/u/points/{wallet}"
             data = safe_request(url, use_scraper=True)
             if data:
-                return {
-                    "points": data.get("totalPoints",0),
-                    "extra": f"<br></br> <br></br>",
-                    "raw": data
-                }
+                try:
+                    return {
+                        "points": data.get("totalPoints",0),
+                        "extra": f"<br></br> <br></br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_kyros(wallet: str):
             url = f"https://points-api.kyros.fi/score?wallet={wallet}"
             data = safe_request(url)
             if data:
-                return {
-                    "points": data.get("points",0),
-                    "rank": data.get("rank","N/A"),
-                    "extra": f"<br>👥 Referral Points: {data.get('referralPoints',0):,.2f}</br> <br> </br>",
-                    "raw": data
-                }
+                try:
+                    return {
+                        "points": data.get("points",0),
+                        "rank": data.get("rank","N/A"),
+                        "extra": f"<br>👥 Referral Points: {data.get('referralPoints',0):,.2f}</br> <br> </br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_triad(wallet: str):
             url = f"https://beta.triadfi.co/user/{wallet}/rank"
             data = safe_request(url, use_scraper=True)
             if data:
-                return {
-                    "points": data.get("points",0),
-                    "rank": data.get("rank","N/A"),
-                    "extra": f"<br>TRD Staked: {data.get('trdStaked',0):,.2f}</br> <br> </br>",
-                    "raw": data
-                }
+                try:
+                    return {
+                        "points": data.get("points",0),
+                        "rank": data.get("rank","N/A"),
+                        "extra": f"<br>TRD Staked: {data.get('trdStaked',0):,.2f}</br> <br> </br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_kinetiq(wallet: str):
             url = f"https://kinetiq.xyz/api/points/{wallet}?chainId=999"
             data = safe_request(url)
             if data:
-                return {
-                    "points": data.get("points",0),
-                    "extra": f"<br>⭐ Tier: {data.get('tier','N/A')}</br> <br> </br>",
-                    "raw": data
-                }
+                try:
+                    return {
+                        "points": data.get("points",0),
+                        "extra": f"<br>⭐ Tier: {data.get('tier','N/A')}</br> <br> </br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_hyperbeat(wallet: str):
             url = f"https://app.hyperbeat.org/api/hyperfolio/points?address={wallet}"
             data = safe_request(url)
             if data and "points" in data:
-                total = sum(float(p.get("balance",0)) for p in data["points"])
-                return {
-                    "points": total,
-                    "extra": f"<br> Kittenswap: {data.get('Kittenswap', 0):,.2f} / Hyperswap: {data.get('Hyperswap', 0):,.2f} / Hyperlend: {data.get('Hyperlend', 0):,.2f}</br> <br> Felix: {data.get('Felix', 0):,.2f} / Upshift: {data.get('Upshift', 0):,.2f} / Hyperdrive: {data.get('Hyperdrive', 0):,.2f}</br>",
-                    "raw": data
-                }
+                try:
+                    total = sum(float(p.get("balance",0)) for p in data["points"])
+                    return {
+                        "points": total,
+                        "extra": f"<br> Kittenswap: {data.get('Kittenswap', 0):,.2f} / Hyperswap: {data.get('Hyperswap', 0):,.2f} / Hyperlend: {data.get('Hyperlend', 0):,.2f}</br> <br> Felix: {data.get('Felix', 0):,.2f} / Upshift: {data.get('Upshift', 0):,.2f} / Hyperdrive: {data.get('Hyperdrive', 0):,.2f}</br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_prjx(wallet: str):
             url = f"https://api.prjx.com/scorecard/impersonate/{wallet}?format=json"
             data = safe_request(url)
             if data and data.get("stats"):
-                return {
-                    "points": data["stats"].get("totalPoints",0),
-                    "rank": data["stats"].get("rank","N/A"),
-                    "extra": f"<br>👥 Referrals Points: {data['stats'].get('totalReferrals',0):,.2f}</br> <br> </br>",
-                    "raw": data
-                }
+                try:
+                    return {
+                        "points": data["stats"].get("totalPoints",0),
+                        "rank": data["stats"].get("rank","N/A"),
+                        "extra": f"<br>👥 Referrals Points: {data['stats'].get('totalReferrals',0):,.2f}</br> <br> </br>",
+                        "raw": data
+                    }
+                except:
+                    return None
             return None
 
         def get_ratex(wallet: str):
@@ -1728,13 +1752,45 @@ with col_content:
         </style>
         """, unsafe_allow_html=True)
 
+        def generate_airdrop_excel(wallets_data):
+            # Criar um writer para escrever no arquivo Excel
+            writer = pd.ExcelWriter('airdrop_data.xlsx', engine='openpyxl')
+            
+            # Iterando sobre as wallets e criando uma aba para cada wallet
+            for wallet, protocols in wallets_data.items():
+                # Lista para armazenar os dados dos protocolos para a wallet
+                wallet_data = []
+                
+                for proto in protocols:
+                    # Adicionando os dados do protocolo
+                    wallet_data.append({
+                        "Protocol": proto['name'],
+                        "Points": f"{proto['points']:,}",
+                        "Rank": proto['rank'],
+                        "Extra": proto['extra'],
+                        "Site": proto['site']
+                    })
+                
+                # Convertendo os dados da wallet para um DataFrame
+                df = pd.DataFrame(wallet_data)
+                
+                # Adicionando os dados da wallet na aba do Excel
+                df.to_excel(writer, sheet_name=wallet, index=False)
+            
+            # Salvando o arquivo Excel no buffer
+            with io.BytesIO() as buf:
+                writer.save()
+                buf.seek(0)
+                return buf.getvalue()
+
         # -------------------------
         # 🔹 RENDER COM LAYOUT NEON
         # -------------------------
+        wallets_data = {}
         if wallets_input:
             wallets = [w.strip() for w in wallets_input.split(",") if w.strip()]
             tabs = st.tabs(wallets)  # cria uma aba para cada wallet
-
+            protocol_data = []
             for i, wallet in enumerate(wallets):
                 with tabs[i]:
 
@@ -1747,6 +1803,15 @@ with col_content:
                         points = f"{data.get('points', 0):,.2f}"
                         rank = data.get("rank", "N/A")
                         extra = f"<p>{data.get('extra', '')}</p>"
+
+                        protocol_data.append({
+                            'name': proto['name'],
+                            'points': data.get('points', 0),
+                            'rank': rank,
+                            'extra': extra,
+                            'site': proto['site']
+                        })
+                        wallets_data[wallet] = protocol_data
 
                         blocks_html += f"""
                         <div class="container-block" style="overflow: hidden;">
@@ -1900,8 +1965,17 @@ with col_content:
                         {blocks_html}
                     </div>
                     """
-
+            
                     components.html(full_html, height=1800, width=1900, scrolling=False)
+        print(wallets_data)
+        if wallets_data:
+            excel_file = generate_airdrop_excel(wallets_data)
+            st.download_button(
+                label="Baixar Airdrop Excel",
+                data=excel_file,
+                file_name='airdrop_data.xlsx',
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
 
     elif st.session_state.pagina == "🎒 BackPack Volume Check":
         
@@ -1914,11 +1988,14 @@ with col_content:
         )
         uploaded_file = st.file_uploader(label="", type=["csv"])
 
+        
+
         if uploaded_file is not None:
             df = pd.read_csv(uploaded_file)
             df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
             df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
             df["volume"] = df["price"] * df["quantity"]
+            df["fee"] = pd.to_numeric(df["fee"], errors="coerce").fillna(0)
 
             if "symbol" in df.columns:
                 tokens = df["symbol"].unique().tolist()
@@ -1934,13 +2011,20 @@ with col_content:
             weekly_volume = df.groupby("week")["volume"].sum().reset_index()
             weekly_trades = df.groupby("week")["volume"].count().reset_index().rename(columns={"volume": "num_trades"})
             weekly_summary = pd.merge(weekly_volume, weekly_trades, on="week")
+            weekly_fees = df.groupby("week")["fee"].sum().reset_index().rename(columns={"fee": "fees_paid"})
 
             total_volume = weekly_summary["volume"].sum()
+
+            weekly_summary = weekly_volume.merge(weekly_trades, on="week").merge(weekly_fees, on="week")
+            total_fees = weekly_summary["fees_paid"].sum()
+
+
+            
 
             st.subheader("📊 Weekly Summary")
             col1, col2 = st.columns([1.6, 1.4])
             with col1:
-                st.dataframe(weekly_summary.rename(columns={"week": "Week", "volume": "Volume ($)", "num_trades": "Number of Trades"}))
+                st.dataframe(weekly_summary.rename(columns={"week": "Week", "volume": "Volume ($)", "num_trades": "Number of Trades", "fees_paid": "Fees Paid ($)"}))
 
             with col2:
                 fig = go.Figure()
@@ -1996,12 +2080,16 @@ with col_content:
                 <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_selected}</h3>
                 <div class="metrics-grid">
                     <div class="metric-box">
-                        <div class="metric-label">Total Volume ($)</div>
+                        <div class="metric-label">Total Volume</div>
                         <div class="metric-value">${total_volume:,.2f}</div>
                     </div>
-                        <div class="metric-box">
+                    <div class="metric-box">
                         <div class="metric-label">Total Trades</div>
                         <div class="metric-value">{total_trades}</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total Fees</div>
+                        <div class="metric-value">${total_fees:,.2f}</div>
                     </div>
                 </div>
             </div>
