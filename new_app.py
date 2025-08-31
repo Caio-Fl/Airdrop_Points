@@ -36,6 +36,11 @@ import os
 import io
 import base64
 import cloudscraper
+import re
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Alignment, Font
 #from mistralai.client import MistralClient
 os.environ["MISTRAL_API_KEY"] = "3DwmTII9fJMoAJRN8XoXf1Wg6aMKg7tu"
 api_key = os.getenv("MISTRAL_API_KEY")
@@ -1628,7 +1633,7 @@ with col_content:
         protocols = [
             {
                 "name": "Ethena",
-                "site": "app.ethena.fi/join/yp9pg",
+                "site": "https://app.ethena.fi/join/yp9pg",
                 "image": "https://pbs.twimg.com/profile_images/1684292904599126016/f0ChONgU_400x400.png",
                 "fetch": get_ethena,
             },
@@ -1753,35 +1758,62 @@ with col_content:
         """, unsafe_allow_html=True)
 
         def generate_airdrop_excel(wallets_data):
-            # Criar um writer para escrever no arquivo Excel
-            writer = pd.ExcelWriter('airdrop_data.xlsx', engine='openpyxl')
-            
-            # Iterando sobre as wallets e criando uma aba para cada wallet
+
+            # Criar workbook em branco
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Airdrops"
+
+             # Ajuste de largura das colunas
+            column_widths = {"A": 10, "B": 12, "C": 10, "D": 90, "E": 60}
+            for col_letter, width in column_widths.items():
+                ws.column_dimensions[col_letter].width = width
+
+            current_row = 1
             for wallet, protocols in wallets_data.items():
-                # Lista para armazenar os dados dos protocolos para a wallet
-                wallet_data = []
-                
-                for proto in protocols:
-                    # Adicionando os dados do protocolo
-                    wallet_data.append({
-                        "Protocol": proto['name'],
-                        "Points": f"{proto['points']:,}",
-                        "Rank": proto['rank'],
-                        "Extra": proto['extra'],
-                        "Site": proto['site']
-                    })
-                
-                # Convertendo os dados da wallet para um DataFrame
-                df = pd.DataFrame(wallet_data)
-                
-                # Adicionando os dados da wallet na aba do Excel
-                df.to_excel(writer, sheet_name=wallet, index=False)
-            
-            # Salvando o arquivo Excel no buffer
-            with io.BytesIO() as buf:
-                writer.save()
-                buf.seek(0)
-                return buf.getvalue()
+                if not protocols:
+                    continue
+
+                # Linha com o título da wallet
+                ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=5)
+                cell = ws.cell(row=current_row, column=1)
+                cell.value = f"Wallet: {wallet}"
+                cell.font = Font(bold=True, size=12)
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                current_row += 1
+
+                # Cabeçalho
+                headers = ["name", "points", "rank", "extra", "site"]
+                for col, h in enumerate(headers, 1):
+                    ws.cell(row=current_row, column=col, value=h).font = Font(bold=True)
+                current_row += 1
+
+                # Dados da wallet
+                df_wallet = pd.DataFrame(protocols)
+                for r in df_wallet.itertuples(index=False):
+                    for c, v in enumerate(r, 1):
+                        ws.cell(row=current_row, column=c, value=v)
+                    current_row += 1
+
+                # Linha em branco entre wallets
+                current_row += 1
+
+            # Salvar no buffer
+            output = io.BytesIO()
+            wb.save(output)
+            output.seek(0)
+            return output.getvalue()
+
+        
+        # ===========================
+        # 🧹 Limpar tags HTML (<p>, <br>, etc.)
+        # ===========================
+        def clean_html(text):
+            if pd.isna(text):
+                return ""
+            # remove <p>, <br>, etc.
+            text = re.sub(r"<.*?>", " ", str(text))
+            return text.strip()
 
         # -------------------------
         # 🔹 RENDER COM LAYOUT NEON
@@ -1790,10 +1822,10 @@ with col_content:
         if wallets_input:
             wallets = [w.strip() for w in wallets_input.split(",") if w.strip()]
             tabs = st.tabs(wallets)  # cria uma aba para cada wallet
-            protocol_data = []
+
             for i, wallet in enumerate(wallets):
                 with tabs[i]:
-
+                    protocol_data = []  # lista limpa para cada wallet
                     blocks_html = ""
                     for proto in protocols:
                         data = proto["fetch"](wallet)
@@ -1802,33 +1834,34 @@ with col_content:
 
                         points = f"{data.get('points', 0):,.2f}"
                         rank = data.get("rank", "N/A")
-                        extra = f"<p>{data.get('extra', '')}</p>"
+                        raw_extra = data.get("extra", "")
+                        clean_extra = re.sub(r"<.*?>", " ", str(raw_extra)).strip()
 
                         protocol_data.append({
                             'name': proto['name'],
                             'points': data.get('points', 0),
                             'rank': rank,
-                            'extra': extra,
+                            'extra': clean_extra,
                             'site': proto['site']
                         })
-                        wallets_data[wallet] = protocol_data
 
+                        # Monta HTML
                         blocks_html += f"""
-                        <div class="container-block" style="overflow: hidden;">
+                        <div class="container-block">
                             <div class="header-wrapper">
                                 <img src="{proto['image']}" width="50" height="50" style="border-radius: 50%;">
-                                <div>
-                                    <strong style="text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;">{proto['name']}</strong>
-                                </div>
+                                <div><strong>{proto['name']}</strong></div>
                             </div>
                             <div class="footer-wrapper">
-                                <p><strong>🌟 Points: {points}</strong></p>
-                                <p><strong>🏆 Rank: {rank}</strong></p>
-                                <div style="font-size: 12px;">{extra}</div>
-                                <p><strong>🌐 Site: <a href="{proto['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></strong></p>
+                                <p>🌟 Points: {points}</p>
+                                <p>🏆 Rank: {rank}</p>
+                                <p>🌐 Site: <a href="{proto['site']}" target="_blank">Visit Protocol</a></p>
                             </div>
                         </div>
                         """
+
+                    # salva somente depois que todos os protocolos da wallet foram processados
+                    wallets_data[wallet] = protocol_data
 
                     # HTML completo com o mesmo CSS neon
                     full_html = f"""
@@ -1967,15 +2000,15 @@ with col_content:
                     """
             
                     components.html(full_html, height=1800, width=1900, scrolling=False)
-        print(wallets_data)
-        if wallets_data:
-            excel_file = generate_airdrop_excel(wallets_data)
-            st.download_button(
-                label="Baixar Airdrop Excel",
-                data=excel_file,
-                file_name='airdrop_data.xlsx',
-                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            )
+
+            if wallets_data:
+                excel_file = generate_airdrop_excel(wallets_data)
+                st.download_button(
+                    label="📥 Baixar Airdrop Excel",
+                    data=excel_file,
+                    file_name="airdrop_data.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
 
     elif st.session_state.pagina == "🎒 BackPack Volume Check":
         
@@ -2016,10 +2049,7 @@ with col_content:
             total_volume = weekly_summary["volume"].sum()
 
             weekly_summary = weekly_volume.merge(weekly_trades, on="week").merge(weekly_fees, on="week")
-            total_fees = weekly_summary["fees_paid"].sum()
-
-
-            
+            total_fees = weekly_summary["fees_paid"].sum() 
 
             st.subheader("📊 Weekly Summary")
             col1, col2 = st.columns([1.6, 1.4])
