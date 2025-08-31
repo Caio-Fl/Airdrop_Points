@@ -1892,7 +1892,7 @@ with col_content:
                         display: none; /* Chrome/Safari */
                     }}
                     .container-block {{
-                        width: 440px;
+                        width: 410px;
                         flex-shrink: 0; 
                         margin: 10px;
                     }}
