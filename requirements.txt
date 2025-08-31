@@ -10,3 +10,4 @@ langchain-mistralai
 mistralai
 dotenv
 cloudscraper
+openpyxl
