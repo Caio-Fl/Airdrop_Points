@@ -1892,12 +1892,12 @@ with col_content:
                         display: none; /* Chrome/Safari */
                     }}
                     .container-block {{
-                        width: 350px;
+                        width: 360px;
                         flex-shrink: 0; 
                         margin: 10px;
                     }}
                     .header-wrapper {{
-                        width: 300px;
+                        width: 290px;
                         padding: 30px;
                         margin-top: 10px;
                         margin-right: 15px;
@@ -1950,7 +1950,7 @@ with col_content:
                         text-decoration: none;
                     }}
                     .footer-wrapper {{
-                        width: 300px;
+                        width: 290px;
                         padding: 30px;
                         margin-top: 6px;
                         margin-bottom: 30px;
