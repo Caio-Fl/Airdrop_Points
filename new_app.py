@@ -2002,13 +2002,17 @@ with col_content:
                     components.html(full_html, height=1800, width=1900, scrolling=False)
 
             if wallets_data:
-                excel_file = generate_airdrop_excel(wallets_data)
-                st.download_button(
-                    label="📥 Baixar Airdrop Excel",
-                    data=excel_file,
-                    file_name="airdrop_data.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
+                excel_bytes = generate_airdrop_excel(wallets_data)
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:
+                    tmp.write(excel_bytes)
+                    tmp.flush()
+                    with open(tmp.name, "rb") as f:
+                        st.download_button(
+                            label="📥 Baixar Airdrop Excel",
+                            data=f,
+                            file_name="airdrop_data.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        )
 
     elif st.session_state.pagina == "🎒 BackPack Volume Check":
         
