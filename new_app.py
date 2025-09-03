@@ -1814,6 +1814,14 @@ with col_content:
             # remove <p>, <br>, etc.
             text = re.sub(r"<.*?>", " ", str(text))
             return text.strip()
+        
+        def safe_fetch(fetch_func, wallet):
+            try:
+                data = fetch_func(wallet)
+                return data if data else {}
+            except Exception as e:
+                st.warning(f"Erro ao buscar dados para {wallet}: {e}")
+                return {}
 
         # -------------------------
         # 🔹 RENDER COM LAYOUT NEON
@@ -1828,7 +1836,7 @@ with col_content:
                     protocol_data = []  # lista limpa para cada wallet
                     blocks_html = ""
                     for proto in protocols:
-                        data = proto["fetch"](wallet)
+                        data = safe_fetch(proto["fetch"], wallet)
                         if not data or data.get("points") in [None, 0, "N/A"]:
                             continue
 
