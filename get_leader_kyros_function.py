@@ -8,7 +8,7 @@ def get_leader_kyros_function():
     url = "https://points-api.kyros.fi/leaderboard" # endereço base de request dos dados
 
     response = requests.get(url)
-    print(response)
+   
     total_accured = 0 
     count = 0
     if response.status_code == 200:
@@ -31,7 +31,7 @@ def get_leader_kyros_function():
     data2 = response2.json()
     price = data2.get("kyros-restaked-sol", {}).get("usd")
     KyAsUSD = price
-    print(price)
+    
 
     url = "https://www.exponent.finance/farm/kysol-30Sep25"
     headers = {
