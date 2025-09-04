@@ -30,7 +30,7 @@ def get_leader_kyros_function():
     response2 = requests.get(url)
     data2 = response2.json()
     price = data2.get("kyros-restaked-sol", {}).get("usd")
-    KyAsUSD = price
+    KyAsUSD = float(price)
     
 
     url = "https://www.exponent.finance/farm/kysol-30Sep25"
