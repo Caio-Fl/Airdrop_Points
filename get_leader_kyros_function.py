@@ -8,6 +8,7 @@ def get_leader_kyros_function():
     url = "https://points-api.kyros.fi/leaderboard" # endereço base de request dos dados
 
     response = requests.get(url)
+    print(response)
     total_accured = 0 
     count = 0
     if response.status_code == 200:
@@ -25,11 +26,12 @@ def get_leader_kyros_function():
     top100p = top100/total_accured
     total_users = count
 
-    url = "https://xpon-json-api-staging-650968662509.europe-west3.run.app/api/tokens"
+    url = "https://api.coingecko.com/api/v3/simple/price?ids=kyros-restaked-sol&vs_currencies=usd"
     response2 = requests.get(url)
     data2 = response2.json()
-    value = data2.get("data", [])
-    KyAsUSD = value[15].get("priceUsd", 0)
+    price = data2.get("kyros-restaked-sol", {}).get("usd")
+    KyAsUSD = price
+    print(price)
 
     url = "https://www.exponent.finance/farm/kysol-30Sep25"
     headers = {
