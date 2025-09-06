@@ -2032,163 +2032,166 @@ with col_content:
         
 
         if uploaded_file is not None:
-            df = pd.read_csv(uploaded_file)
-            df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-            df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
-            df["volume"] = df["price"] * df["quantity"]
-            df["fee"] = pd.to_numeric(df["fee"], errors="coerce").fillna(0)
+            try:
+                df = pd.read_csv(uploaded_file)
+                df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+                df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
+                df["volume"] = df["price"] * df["quantity"]
+                df["fee"] = pd.to_numeric(df["fee"], errors="coerce").fillna(0)
 
-            if "symbol" in df.columns:
-                tokens = df["symbol"].unique().tolist()
-                token_selected = st.selectbox("Select the token:", ["All Tokens"] + tokens)
-                if token_selected != "All Tokens":
-                    df = df[df["symbol"] == token_selected]
-            else:
-                st.warning("⚠️ No 'symbol' column found. Token filtering will not be applied.")
-                token_selected = "All Tokens"
+                if "symbol" in df.columns:
+                    tokens = df["symbol"].unique().tolist()
+                    token_selected = st.selectbox("Select the token:", ["All Tokens"] + tokens)
+                    if token_selected != "All Tokens":
+                        df = df[df["symbol"] == token_selected]
+                else:
+                    st.warning("⚠️ No 'symbol' column found. Token filtering will not be applied.")
+                    token_selected = "All Tokens"
 
-            df["week"] = (df["timestamp_naive"] - pd.Timedelta(hours=21)).dt.to_period("W-THU").dt.start_time + pd.Timedelta(hours=21)
+                df["week"] = (df["timestamp_naive"] - pd.Timedelta(hours=21)).dt.to_period("W-THU").dt.start_time + pd.Timedelta(hours=21)
 
-            weekly_volume = df.groupby("week")["volume"].sum().reset_index()
-            weekly_trades = df.groupby("week")["volume"].count().reset_index().rename(columns={"volume": "num_trades"})
-            weekly_summary = pd.merge(weekly_volume, weekly_trades, on="week")
-            weekly_fees = df.groupby("week")["fee"].sum().reset_index().rename(columns={"fee": "fees_paid"})
+                weekly_volume = df.groupby("week")["volume"].sum().reset_index()
+                weekly_trades = df.groupby("week")["volume"].count().reset_index().rename(columns={"volume": "num_trades"})
+                weekly_summary = pd.merge(weekly_volume, weekly_trades, on="week")
+                weekly_fees = df.groupby("week")["fee"].sum().reset_index().rename(columns={"fee": "fees_paid"})
 
-            total_volume = weekly_summary["volume"].sum()
+                total_volume = weekly_summary["volume"].sum()
 
-            weekly_summary = weekly_volume.merge(weekly_trades, on="week").merge(weekly_fees, on="week")
-            total_fees = weekly_summary["fees_paid"].sum() 
+                weekly_summary = weekly_volume.merge(weekly_trades, on="week").merge(weekly_fees, on="week")
+                total_fees = weekly_summary["fees_paid"].sum() 
 
-            st.subheader("📊 Weekly Summary")
-            col1, col2 = st.columns([1.6, 1.4])
-            with col1:
-                st.dataframe(weekly_summary.rename(columns={"week": "Week", "volume": "Volume ($)", "num_trades": "Number of Trades", "fees_paid": "Fees Paid ($)"}))
+                st.subheader("📊 Weekly Summary")
+                col1, col2 = st.columns([1.6, 1.4])
+                with col1:
+                    st.dataframe(weekly_summary.rename(columns={"week": "Week", "volume": "Volume ($)", "num_trades": "Number of Trades", "fees_paid": "Fees Paid ($)"}))
 
-            with col2:
-                fig = go.Figure()
+                with col2:
+                    fig = go.Figure()
 
-                fig.add_trace(go.Bar(
-                    x=weekly_summary["week"],
-                    y=weekly_summary["volume"],
-                    name="Volume ($)",
-                    marker_color="skyblue",
-                    offsetgroup=0,
-                    yaxis="y"
-                ))
+                    fig.add_trace(go.Bar(
+                        x=weekly_summary["week"],
+                        y=weekly_summary["volume"],
+                        name="Volume ($)",
+                        marker_color="skyblue",
+                        offsetgroup=0,
+                        yaxis="y"
+                    ))
 
-                fig.add_trace(go.Bar(
-                    x=weekly_summary["week"],
-                    y=weekly_summary["num_trades"],
-                    name="Number of Trades",
-                    marker_color="orange",
-                    offsetgroup=1,
-                    yaxis="y2"
-                ))
+                    fig.add_trace(go.Bar(
+                        x=weekly_summary["week"],
+                        y=weekly_summary["num_trades"],
+                        name="Number of Trades",
+                        marker_color="orange",
+                        offsetgroup=1,
+                        yaxis="y2"
+                    ))
 
-                fig.update_layout(
-                    title=dict(
-                        text=f"📊 Weekly Volume and Number of Trades - {token_selected}",
-                        x=0.5,
-                        xanchor="center"
-                    ),
-                    xaxis=dict(title="Week"),
-                    yaxis=dict(
-                        title=dict(text="Volume ($)", font=dict(color="skyblue")),
-                        tickfont=dict(color="skyblue")
-                    ),
-                    yaxis2=dict(
-                        title=dict(text="Number of Trades", font=dict(color="orange")),
-                        tickfont=dict(color="orange"),
-                        overlaying="y",
-                        side="right"
-                    ),
-                    barmode="group",
-                    legend=dict(x=0.5, y = 1.12, xanchor="center", orientation="h",yanchor="top"),
-                    width=600,
-                    height=320,
-                    margin=dict(l=40, r=40, t=50, b=40)
-                )
+                    fig.update_layout(
+                        title=dict(
+                            text=f"📊 Weekly Volume and Number of Trades - {token_selected}",
+                            x=0.5,
+                            xanchor="center"
+                        ),
+                        xaxis=dict(title="Week"),
+                        yaxis=dict(
+                            title=dict(text="Volume ($)", font=dict(color="skyblue")),
+                            tickfont=dict(color="skyblue")
+                        ),
+                        yaxis2=dict(
+                            title=dict(text="Number of Trades", font=dict(color="orange")),
+                            tickfont=dict(color="orange"),
+                            overlaying="y",
+                            side="right"
+                        ),
+                        barmode="group",
+                        legend=dict(x=0.5, y = 1.12, xanchor="center", orientation="h",yanchor="top"),
+                        width=600,
+                        height=320,
+                        margin=dict(l=40, r=40, t=50, b=40)
+                    )
 
-                st.plotly_chart(fig, use_container_width=False)
+                    st.plotly_chart(fig, use_container_width=False)
 
-                total_trades = len(df)
-            # ------------------ Custom HTML Summary ------------------ #
-            full_html = f"""
-            <div class="result-card">
-                <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_selected}</h3>
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Total Volume</div>
-                        <div class="metric-value">${total_volume:,.2f}</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Total Trades</div>
-                        <div class="metric-value">{total_trades}</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Total Fees</div>
-                        <div class="metric-value">${total_fees:,.2f}</div>
+                    total_trades = len(df)
+                # ------------------ Custom HTML Summary ------------------ #
+                full_html = f"""
+                <div class="result-card">
+                    <h3 style="color:#00ffae;font-size:25px;">Volume Information of {token_selected}</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-label">Total Volume</div>
+                            <div class="metric-value">${total_volume:,.2f}</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Total Trades</div>
+                            <div class="metric-value">{total_trades}</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Total Fees</div>
+                            <div class="metric-value">${total_fees:,.2f}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <style>
-                .result-card {{
-                    background-color: #0f172a;
-                    border-radius: 10px;
-                    padding: 30px;
-                    margin-top: 20px;
-                    width: 94.5%;
-                    position: relative;
-                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                }}
-                .result-card::before {{
-                    content: "";
-                    position: absolute;
-                    top: -3px;
-                    left: -3px;
-                    right: -3px;
-                    bottom: -3px;
-                    border-radius: 10px;
-                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
-                    background-size: 600% 600%;
-                    animation: neonBorder 6s ease infinite;
-                    z-index: -1;
-                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                    -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-                }}
-                .metrics-grid {{
-                    font-size: 20px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    margin-top: 20px;
-                }}
-                .metric-box {{
-                    background-color: #1e293b;
-                    padding: 20px;
-                    border-radius: 12px;
-                    flex: 1 1 200px;
-                    min-width: 200px;
-                }}
-                .metric-label {{
-                    font-size: 20px;
-                    color: #cccccc;
-                    margin-bottom: 6px;
-                }}
-                .metric-value {{
-                    font-size: 1.6em;
-                    color: #00ffae;
-                    font-weight: bold;
-                }}
-                @keyframes neonBorder {{
-                    0%   {{ background-position: 0% 50%; }}
-                    50%  {{ background-position: 100% 50%; }}
-                    100% {{ background-position: 0% 50%; }}
-                }}
-            </style>
-            """
-            components.html(full_html, height=400, width=1900, scrolling=False)
+                <style>
+                    .result-card {{
+                        background-color: #0f172a;
+                        border-radius: 10px;
+                        padding: 30px;
+                        margin-top: 20px;
+                        width: 94.5%;
+                        position: relative;
+                        font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    }}
+                    .result-card::before {{
+                        content: "";
+                        position: absolute;
+                        top: -3px;
+                        left: -3px;
+                        right: -3px;
+                        bottom: -3px;
+                        border-radius: 10px;
+                        background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                        background-size: 600% 600%;
+                        animation: neonBorder 6s ease infinite;
+                        z-index: -1;
+                        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                        -webkit-mask-composite: xor;
+                        mask-composite: exclude;
+                    }}
+                    .metrics-grid {{
+                        font-size: 20px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 20px;
+                        margin-top: 20px;
+                    }}
+                    .metric-box {{
+                        background-color: #1e293b;
+                        padding: 20px;
+                        border-radius: 12px;
+                        flex: 1 1 200px;
+                        min-width: 200px;
+                    }}
+                    .metric-label {{
+                        font-size: 20px;
+                        color: #cccccc;
+                        margin-bottom: 6px;
+                    }}
+                    .metric-value {{
+                        font-size: 1.6em;
+                        color: #00ffae;
+                        font-weight: bold;
+                    }}
+                    @keyframes neonBorder {{
+                        0%   {{ background-position: 0% 50%; }}
+                        50%  {{ background-position: 100% 50%; }}
+                        100% {{ background-position: 0% 50%; }}
+                    }}
+                </style>
+                """
+                components.html(full_html, height=400, width=1900, scrolling=False)
+            except:
+                st.info("⚠️ Error in Load your file. Please, verify if you download the correct Trade history File from Backpack site and be sure to not do any modification in this file.")
 
         else:
             st.info("📥 Please, load your CSV Trade File from Backpack.")
