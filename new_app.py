@@ -2651,57 +2651,104 @@ with col_content:
             cols = st.columns(3, gap="large")
             for i, (nome, dados) in enumerate(protocolos.items()):
                 with cols[i % 3]:
-                    st.markdown(f"""
-                        <div class="airdrop-box" style="
-                            background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
-                            border: 0px double #555;
-                            box-shadow: 
-                                0 0 10px #00ff00,
-                                0 0 8px #00ff00,
-                                0 0 8px #00ff00,
-                                0 0 8px #00ff00;
-                            border-radius: 10px;
-                            width: 100%;
-                            padding: 20px;
-                            margin: 15px 0;
-                            color: white;
-                            text-align: center;
-                            font-family: 'Space Grotesk', sans-serif;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: space-between;
-                        ">
-                            <div style="border: 2px solid #444; padding: 10px; radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%); border-radius: 6px; margin: 15px 0; font-size: 25px;">
-                                <img src="{dados['Logo']}" width="70" />
-                                <div style="margin-top: 15px; font-weight: bold;">{nome}</div>
-                                <div style="border: 2px solid #444; background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);border-radius: 16px;box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 22px; text-align: center;">
-                                    <p><strong>TVL:</strong> {dados['TVL']}</p>
-                                    <p><strong>Expected ROI:</strong> {dados['Expected ROI']}</p>
-                                    <p><strong>YT Multiplier:</strong> {dados['YT Multiplier']}</p>
-                                    <p><strong>YT APY:</strong> {dados['YT APY']} %</p>
-                                    <p><strong>Boost:</strong> {dados['Protocol Referral Boost']}</p>
-                                    <p><strong>Expiry:</strong> {dados['Expiry']}</p>
-                                    <p><strong>Rating:</strong> {dados['Grade']}</p>
+                    try:
+                        st.markdown(f"""
+                            <div class="airdrop-box" style="
+                                background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+                                border: 0px double #555;
+                                box-shadow: 
+                                    0 0 10px #00ff00,
+                                    0 0 8px #00ff00,
+                                    0 0 8px #00ff00,
+                                    0 0 8px #00ff00;
+                                border-radius: 10px;
+                                width: 100%;
+                                padding: 20px;
+                                margin: 15px 0;
+                                color: white;
+                                text-align: center;
+                                font-family: 'Space Grotesk', sans-serif;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                            ">
+                                <div style="border: 2px solid #444; padding: 10px; radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%); border-radius: 6px; margin: 15px 0; font-size: 25px;">
+                                    <img src="{dados['Logo']}" width="70" />
+                                    <div style="margin-top: 15px; font-weight: bold;">{nome}</div>
+                                    <div style="border: 2px solid #444; background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);border-radius: 16px;box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 22px; text-align: center;">
+                                        <p><strong>TVL:</strong> {dados['TVL']}</p>
+                                        <p><strong>Expected ROI:</strong> {dados['Expected ROI']}</p>
+                                        <p><strong>YT Multiplier:</strong> {dados['YT Multiplier']}</p>
+                                        <p><strong>YT APY:</strong> {dados['YT APY']} %</p>
+                                        <p><strong>Boost:</strong> {dados['Protocol Referral Boost']}</p>
+                                        <p><strong>Expiry:</strong> {dados['Expiry']}</p>
+                                        <p><strong>Rating:</strong> {dados['Grade']}</p>
+                                    </div>
+                                    <a href="{dados['pureLink']}" target="_blank">
+                                        <button style="
+                                            background-color: orange;
+                                            color: black;
+                                            font-family: 'Space Grotesk', sans-serif;
+                                            padding: 10px 20px;
+                                            border: none;
+                                            border-radius: 5px;
+                                            font-size: 25px;
+                                            cursor: pointer;
+                                            margin-bottom: 10px;
+                                        "><strong>Visit Protocol</strong></button>
+                                    </a>
                                 </div>
-                                <a href="{dados['pureLink']}" target="_blank">
-                                    <button style="
-                                        background-color: orange;
-                                        color: black;
-                                        font-family: 'Space Grotesk', sans-serif;
-                                        padding: 10px 20px;
-                                        border: none;
-                                        border-radius: 5px;
-                                        font-size: 25px;
-                                        cursor: pointer;
-                                        margin-bottom: 10px;
-                                    "><strong>Visit Protocol</strong></button>
-                                </a>
                             </div>
-                        </div>
-                    """, unsafe_allow_html=True)
+                        """, unsafe_allow_html=True)
+                        
+                    except:
+
+                        st.markdown(f"""
+                            <div class="airdrop-box" style="
+                                background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);
+                                border: 0px double #555;
+                                box-shadow: 
+                                    0 0 10px #00ff00,
+                                    0 0 8px #00ff00,
+                                    0 0 8px #00ff00,
+                                    0 0 8px #00ff00;
+                                border-radius: 10px;
+                                width: 100%;
+                                padding: 20px;
+                                margin: 15px 0;
+                                color: white;
+                                text-align: center;
+                                font-family: 'Space Grotesk', sans-serif;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                            ">
+                                <div style="border: 2px solid #444; padding: 10px; radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%); border-radius: 6px; margin: 15px 0; font-size: 25px;">
+                                    <img src="{dados['Logo']}" width="70" />
+                                    <div style="margin-top: 15px; font-weight: bold;">{nome}</div>
+                                    <div style="border: 2px solid #444; background: radial-gradient(circle at top center, #2c2f35 0%, #1c1e22 100%);border-radius: 16px;box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 22px; text-align: center;">
+                                        <p><strong>TVL:</strong> {dados['TVL']}</p>
+                                        <p><strong>YT expired or in Maitenance</p>
+                                    </div>
+                                    <a href="{dados['pureLink']}" target="_blank">
+                                        <button style="
+                                            background-color: orange;
+                                            color: black;
+                                            font-family: 'Space Grotesk', sans-serif;
+                                            padding: 10px 20px;
+                                            border: none;
+                                            border-radius: 5px;
+                                            font-size: 25px;
+                                            cursor: pointer;
+                                            margin-bottom: 10px;
+                                        "><strong>Visit Protocol</strong></button>
+                                    </a>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                                                
                     # 🔘 Botão funcional View Details
-                    # Botão funcional — fora do HTML
-                    
+                        # Botão funcional — fora do HTML
                     st.markdown(
                         """
                         <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;margin-left:30px;display: flex;align-items: center;justify-content: center;'>
