@@ -2424,20 +2424,20 @@ with col_content:
                 #Frag_grade = protocol_rate(Frag_tvl,60,Frag_ROI,(100*Frag_mean_daily/Frag_accured),Frag_total_users,"top")
 
                 # Kyros
-                Ky_date_tge = datetime.strptime((Ky_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                Ky_mean_daily = 1.3*(Ky_accured-Ky_TP_0)/((date1-Ky_date0).days)
-                Ky_points_tge = round(Ky_accured + (((Ky_date_tge-date1).days)*Ky_mean_daily),0)
-                Ky_points_per_token = round(Ky_points_tge/((tsp)*2*drop/100),2)
-                Ky_farmed_yield = round((invested)*ky_ytMul*Ky_unApy*(date5-date1).days/365,2)
-                Ky_daily_pts_farmed = round((invested/KyAsUSD)*ky_ytMul*Ky_Multipleir*Ky_Boost*ky_pts_token,2)
-                Ky_total_pts_farmed = round(Ky_daily_pts_farmed*(date5-date1).days,2)
-                Ky_etimated_tokens = round(Ky_total_pts_farmed/Ky_points_per_token,2)
-                Ky_airdrop_value = round((ky_fdv/tsp)*Ky_etimated_tokens,2)
-                Ky_cost = abs(round(((Ky_farmed_yield) - invested - abs(KyAsUSD*ky_swapFee)),2))
-                Ky_profit = round((Ky_airdrop_value - Ky_cost),2)
-                Ky_ROI = round((100*Ky_profit/Ky_cost),2)
+                #Ky_date_tge = datetime.strptime((Ky_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                #Ky_mean_daily = 1.3*(Ky_accured-Ky_TP_0)/((date1-Ky_date0).days)
+                #Ky_points_tge = round(Ky_accured + (((Ky_date_tge-date1).days)*Ky_mean_daily),0)
+                #Ky_points_per_token = round(Ky_points_tge/((tsp)*2*drop/100),2)
+                #Ky_farmed_yield = round((invested)*ky_ytMul*Ky_unApy*(date5-date1).days/365,2)
+                #Ky_daily_pts_farmed = round((invested/KyAsUSD)*ky_ytMul*Ky_Multipleir*Ky_Boost*ky_pts_token,2)
+                #Ky_total_pts_farmed = round(Ky_daily_pts_farmed*(date5-date1).days,2)
+                #Ky_etimated_tokens = round(Ky_total_pts_farmed/Ky_points_per_token,2)
+                #Ky_airdrop_value = round((ky_fdv/tsp)*Ky_etimated_tokens,2)
+                #Ky_cost = abs(round(((Ky_farmed_yield) - invested - abs(KyAsUSD*ky_swapFee)),2))
+                #Ky_profit = round((Ky_airdrop_value - Ky_cost),2)
+                #Ky_ROI = round((100*Ky_profit/Ky_cost),2)
 
-                Ky_grade = protocol_rate(Ky_tvl,(100*Ky_top100p),Ky_ROI,(100*Ky_mean_daily/Ky_accured),Ky_total_users,"bom")
+                #Ky_grade = protocol_rate(Ky_tvl,(100*Ky_top100p),Ky_ROI,(100*Ky_mean_daily/Ky_accured),Ky_total_users,"bom")
 
                 # Spark
                 #Sp_date_tge = datetime.strptime((Sp_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
