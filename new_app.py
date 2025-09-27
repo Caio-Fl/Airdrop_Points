@@ -1091,20 +1091,6 @@ with col_content:
                         print(mean_daily,(date_tge_format-date1).days)
                         total_points = int(round(actual_points + 4_261_285 + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://backpack.exchange/join/jj2kkdp1"
-                    elif selected_protocol == "Level":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-30")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        FDV = 100
-                        airdrop_pct = 5
-                        your_points = 1_000_000_000
-                        tags, actual_points, time_Ena, time_Level,top100,total_users = enviar_dados()
-                        mean_daily = 1*(actual_points[1]-Level_TP_0)/((date1-Level_date0).days)
-                        total_points = int(round(actual_points[1] + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "https://app.level.money/farm?referralCode=pwlblh"
                     elif selected_protocol == "Kyros":
                         date_tge = st.text_input("📅 TGE Date:", value="2025-09-30")
                         date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -2342,7 +2328,7 @@ with col_content:
                 #try: 
                 # Busca Informações no Defillama
                 Ena_tvl,Ena_amount,Ena_leadInvestors,Ena_otherInvestors = get_defillama_info("ethena","Ethereum")
-                Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
+                #Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
                 #Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
                 Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
                 #Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("spark","Ethereum")
@@ -2357,7 +2343,7 @@ with col_content:
                 print(Ena_accured,Ena_total_users, Ena_top100p)
                 # Busca dados dos protocolos nas API's da Pendle (Rede Ethereum) e Rate-X (Rede Solana)
                 Ena_ytMul,Ena_unApy,Ena_impApy,Ena_feeRate,Ena_swapFee,Ena_ytRoi,Ena_expiry,Ena_priceImpact = get_Pendle_Data("0xa36b60a14a1a5247912584768c6e53e1a269a9f7","0x029d6247adb0a57138c62e3019c92d3dfc9c1840")
-                Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
+                #Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
                 #Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
                 ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
                 #Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
@@ -2391,21 +2377,6 @@ with col_content:
                 
                 Ena_grade = protocol_rate(Ena_tvl,(100*Ena_top100p),Ena_ROI,(100*Ena_mean_daily/Ena_accured),total_users[0],"bom")
                 
-                # Level
-                Level_date_tge = datetime.strptime((Level_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                Level_mean_daily = 1.3*(values[1]-Level_TP_0)/((date1-Level_date0).days)
-                Level_points_tge = round(values[1] + (((Level_date_tge-date1).days)*Level_mean_daily),0)
-                Level_points_per_token = round(Level_points_tge/(tsp*drop/100),2)
-                Level_farmed_yield = round(invested*Level_ytMul*Level_unApy*(date3-date1).days/365,2)
-                Level_daily_pts_farmed = round(invested*Level_ytMul*Level_Multipleir*Level_Boost*Level_pts_token,2)
-                Level_total_pts_farmed = round(Level_daily_pts_farmed*(date3-date1).days,2)
-                Level_etimated_tokens = round(Level_total_pts_farmed/Level_points_per_token,2)
-                Level_airdrop_value = round((Level_fdv/tsp)*Level_etimated_tokens,2)
-                Level_cost = abs(round((Level_farmed_yield - invested - (invested*abs(Level_priceImpact))),2))
-                Level_profit = round((Level_airdrop_value - Level_cost),2)
-                Level_ROI = round((100*Level_profit/Level_cost),2)
-
-                Level_grade = protocol_rate(Level_tvl,(100*top100[1]),Level_ROI,(100*Level_mean_daily/values[1]),total_users[1],"muito bom")
                 
                 # Fragmetric
                 #Frag_date_tge = datetime.strptime((Frag_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -2504,37 +2475,6 @@ with col_content:
                     "Estimated Airdrop Value": f"$ {Ena_airdrop_value}",
                     "Expected Profit": f"$ {Ena_profit}",
                     "Expected ROI": f"{Ena_ROI} %"      
-                },
-                "Level": {
-                    "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/lev.jpg",
-                    "Logo": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
-                    "pureLink": "https://app.level.money/farm?referralCode=pwlblh",
-                    "Link": "<a href='https://app.level.money/farm?referralCode=pwlblh' target='_blank' style='color:#FFA500;'>More info</a>",
-                    "Grade": f"{Level_grade}",
-                    "TVL": f"{Level_tvl} M",
-                    "Last Update": f"{time_Level}",
-                    "Expiry": f"{date3.date()}",
-                    "Total Points Farmed": f"{round(values[1],0)}",
-                    "YT Multiplier": f"{round(Level_ytMul,3)}",
-                    "YT APY": f"{round(Level_unApy*100,2)}",
-                    "Time Until Expiration": f"{(date3-date1)}",
-                    "Protocol YT Multiplier": f"{Level_Multipleir}",
-                    "Protocol Referral Boost": f"{round((Level_Boost-1),2)*100} %",
-                    "Equivalent YT Received": f"$ {round(invested*Level_ytMul,2)}",
-                    "Daily Points Farmed": f"{Level_daily_pts_farmed}",
-                    "Total Points Farmed in YT": f"{Level_total_pts_farmed}",
-                    "Top 100 Concentration": f"{round(100*top100[1],2)}",
-                    "Total User": f"{total_users[1]}",
-                    "Farmed Yield in YT": f"$ {Level_farmed_yield}",
-                    "Mean Daily Points": f"{round(Level_mean_daily,0)}",
-                    "Estimated Points in TGE": f"{round(Level_points_tge,0)}",
-                    "Points per Token": f"{Level_points_per_token}",
-                    "Estimated FDV in TGE": f"{Level_fdv}",
-                    "Estimated Token Price": f"$ {round(Level_fdv/tsp,2)}",
-                    "Estimated Tokens Airdrop": f"{Level_etimated_tokens}",
-                    "Estimated Airdrop Value": f"$ {Level_airdrop_value}",
-                    "Expected Profit": f"$ {Level_profit}",
-                    "Expected ROI": f"{Level_ROI} %"      
                 },
                 #"Kyros": {
                 #    "Imagem": "https://raw.githubusercontent.com/Caio-Fl/Airdrop_Points/main/kyros.jpg",

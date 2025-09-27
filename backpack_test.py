@@ -360,6 +360,7 @@ def identificar_congestao(df: pd.DataFrame, timeframe: str) -> bool:
 
     # Parâmetros por timeframe
     limites_por_tf = {
+        "1m": {"dist_pct_max": 0.35, "inclinacao_max": 0.1, "atraso": 12},
         "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.15, "atraso": 8},
         "15m": {"dist_pct_max": 1, "inclinacao_max": 0.2, "atraso": 5},
         "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.3, "atraso": 3},
@@ -643,7 +644,7 @@ with col2:
                         print(f"Recent Trend to Last {n} Candles: {tendencia_simples}")
                         print(f"Recent Trend by Regression to Last {n} Candles: {tendencia_regressao}")
                         
-                        pullback_volume = analisar_pullback_volume(df, pivot_index=n, tendencia=tendencia_recente, n=n, media_volume_window=n*5, limite_proporcao_contraria=0.70)
+                        pullback_volume = analisar_pullback_volume(df, pivot_index=len(df)-n, tendencia=tendencia_recente, n=n, media_volume_window=n*5, limite_proporcao_contraria=0.70)
                         
                         congestao, direcoes_ema = identificar_congestao(df, timeframe=interval)
                         
@@ -715,6 +716,7 @@ with col2:
                                     result = calcular_trade_levels(df, preco_entrada, tipo='SELL', p=0.2, risk_reward_ratio=ratio)
                                     stop_loss = result['stop_loss']
                                     take_profit = result['take_profit']
+
                                     print(result)
                                 else:
                                     stop_loss = price * (1 + stop_loss_pct/100)
@@ -880,9 +882,9 @@ with col2:
                                 f"\n✅ Entry: {preco_entrada:.4f}"
                                 f"\n🛡 Stop Loss: {stop_loss:.4f}"
                                 f"\n🎯 Take Profit: {take_profit:.4f}"
-                                f"🔁 Risk/Reward: {(take_profit/stop_loss):.2f}x"
-                                f"{volume_info}"
-                                f"Pullback Info: {info}"
+                                f" 🔁 Risk/Reward: {(take_profit/stop_loss):.2f}x"
+                                f" {volume_info}"
+                                f" Pullback Info: {info}"
                             )
                             
                             # Advice opcional
