@@ -2362,20 +2362,20 @@ with col_content:
                 
                 # Calcula os parâmetros de cada Protocolo
                 # EnaEden
-                Ena_date_tge = datetime.strptime((Ena_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                Ena_mean_daily = 1.3*(Ena_accured-Ena_TP_0)/((date1-Ena_date0).days)
-                Ena_points_tge = round(Ena_accured + (((Ena_date_tge-date1).days)*Ena_mean_daily),0)
-                Ena_points_per_token = round(Ena_points_tge/(tsp*drop/100),2)
-                Ena_farmed_yield = round(invested*Ena_ytMul*Ena_unApy*(date2-date1).days/365,2)
-                Ena_daily_pts_farmed = round(invested*Ena_ytMul*Ena_Multipleir*Ena_Boost*Ena_pts_token,2)
-                Ena_total_pts_farmed = round(Ena_daily_pts_farmed*(date2-date1).days,2)
-                Ena_etimated_tokens = round(Ena_total_pts_farmed/Ena_points_per_token,2)
-                Ena_airdrop_value = round((Ena_fdv/tsp)*Ena_etimated_tokens,2)
-                Ena_cost = abs(round((Ena_farmed_yield - invested - (invested*abs(Ena_priceImpact))),2))
-                Ena_profit = round((Ena_airdrop_value - Ena_cost),2)
-                Ena_ROI = round((100*Ena_profit/Ena_cost),2)
+                #Ena_date_tge = datetime.strptime((Ena_l_date+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                #Ena_mean_daily = 1.3*(Ena_accured-Ena_TP_0)/((date1-Ena_date0).days)
+                #Ena_points_tge = round(Ena_accured + (((Ena_date_tge-date1).days)*Ena_mean_daily),0)
+                #Ena_points_per_token = round(Ena_points_tge/(tsp*drop/100),2)
+                #Ena_farmed_yield = round(invested*Ena_ytMul*Ena_unApy*(date2-date1).days/365,2)
+                #Ena_daily_pts_farmed = round(invested*Ena_ytMul*Ena_Multipleir*Ena_Boost*Ena_pts_token,2)
+                #Ena_total_pts_farmed = round(Ena_daily_pts_farmed*(date2-date1).days,2)
+                #Ena_etimated_tokens = round(Ena_total_pts_farmed/Ena_points_per_token,2)
+                #Ena_airdrop_value = round((Ena_fdv/tsp)*Ena_etimated_tokens,2)
+                #Ena_cost = abs(round((Ena_farmed_yield - invested - (invested*abs(Ena_priceImpact))),2))
+                #Ena_profit = round((Ena_airdrop_value - Ena_cost),2)
+                #Ena_ROI = round((100*Ena_profit/Ena_cost),2)
                 
-                Ena_grade = protocol_rate(Ena_tvl,(100*Ena_top100p),Ena_ROI,(100*Ena_mean_daily/Ena_accured),total_users[0],"bom")
+                #Ena_grade = protocol_rate(Ena_tvl,(100*Ena_top100p),Ena_ROI,(100*Ena_mean_daily/Ena_accured),total_users[0],"bom")
                 
                 
                 # Fragmetric
