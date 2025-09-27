@@ -2264,14 +2264,14 @@ with col_content:
             drop = st.number_input("Supply for Airdrop (%):", min_value=0.0, max_value=100.0, value=5.0)
 
         # Inputs: FDV
-        st.markdown("#### Expected FDV in TGE")
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            Ena_fdv = st.number_input("Ethena FDV at TGE ($M):", min_value=0, value=5000, step=1) * 1_000_000
-        with col2:
-            Level_fdv = st.number_input("Level FDV at TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
-        with col3:
-            ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
+        st.markdown("#### No YT strategy in the Moment!")
+        #col1, col2, col3 = st.columns(3)
+        #with col1:
+        #    Ena_fdv = st.number_input("Ethena FDV at TGE ($M):", min_value=0, value=5000, step=1) * 1_000_000
+        #with col2:
+        #    Level_fdv = st.number_input("Level FDV at TGE ($M):", min_value=0, value=150, step=1) * 1_000_000
+        #with col3:
+        #    ky_fdv = st.number_input("Kyros FDV ($M):", min_value=0, value=40, step=1) * 1_000_000
         #with col4:
             #url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
             #data = requests.get(url).json()
@@ -2286,14 +2286,14 @@ with col_content:
             #Gaib_fdv = st.number_input("Gaib FDV ($M):", min_value=0, value=30, step=1) * 1_000_000
             
         # Inputs: TGE Dates
-        st.markdown("#### Expected TGE Dates")
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            Ena_l_date = st.text_input("📅 Ethena TGE Date:", value="2025-09-25")
-        with col2:
-            Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-30")
-        with col3:
-            Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-09-30")  
+        #st.markdown("#### Expected TGE Dates")
+        #col1, col2, col3 = st.columns(3)
+        #with col1:
+        #    Ena_l_date = st.text_input("📅 Ethena TGE Date:", value="2025-09-25")
+        #with col2:
+        #    Level_l_date = st.text_input("📅 Level TGE Date:", value="2025-09-30")
+        #with col3:
+        #    Ky_l_date = st.text_input("📅 Kyros TGE Date:", value="2025-09-30")  
         #with col5:
             #Gaib_l_date = st.text_input("📅 Gaib TGE Date:", value="2025-08-14")
 
