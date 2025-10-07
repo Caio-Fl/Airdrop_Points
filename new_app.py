@@ -2018,9 +2018,9 @@ with col_content:
         
 
         if uploaded_file is not None:
-            try:
+            #try:
                 df = pd.read_csv(uploaded_file)
-                df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+                df["timestamp"] = pd.to_datetime(df["timestamp"], format="ISO8601",utc=True)
                 df["timestamp_naive"] = df["timestamp"].dt.tz_convert(None)
                 df["volume"] = df["price"] * df["quantity"]
                 df["fee"] = pd.to_numeric(df["fee"], errors="coerce").fillna(0)
@@ -2176,8 +2176,8 @@ with col_content:
                 </style>
                 """
                 components.html(full_html, height=400, width=1900, scrolling=False)
-            except:
-                st.info("⚠️ Error in Load your file. Please, verify if you download the correct Trade history File from Backpack site and be sure to not do any modification in this file.")
+            #except:
+            #    st.info("⚠️ Error in Load your file. Please, verify if you download the correct Trade history File from Backpack site and be sure to not do any modification in this file.")
 
         else:
             st.info("📥 Please, load your CSV Trade File from Backpack.")
