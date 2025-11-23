@@ -878,14 +878,6 @@ with col_content:
     Ena_pts_token = 1
     Ena_date0 = datetime.strptime("2025-07-07T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
-    # Level
-    Level_Data = []
-    Level_Multipleir = 20
-    Level_Boost = 1.12
-    Level_TP_0 = 117375084663151
-    Level_pts_token = 2400
-    Level_date0 = datetime.strptime("2025-03-27T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-
     # Fragmetric
     Frag_Data = []
     Frag_Multipleir = 4
@@ -894,30 +886,6 @@ with col_content:
     Frag_TP_0 = 9710000000
     Frag_pts_token = 86.4
     Frag_date0 = datetime.strptime("2025-04-07T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-
-    # Kyros
-    Ky_Data = []
-    Ky_Multipleir = 4
-    Ky_Boost = 1.10
-    Ky_TP_0 = 881892008
-    ky_pts_token = 1
-    Ky_date0 = datetime.strptime("2025-04-18T08:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-
-    # Sparks
-    Sp_Data = []
-    Sp_Multipleir = 25
-    Sp_Boost = 1.10
-    Sp_TP_0 = 4026173640
-    Sp_pts_token = 1
-    Sp_date0 = datetime.strptime("2025-05-18T09:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-
-    # Gaib
-    Gaib_Data = []
-    Gaib_Multipleir = 20
-    Gaib_Boost = 1.20
-    Gaib_TP_0 = 4026167060
-    Gaib_pts_token = 1
-    Gaib_date0 = datetime.strptime("2025-06-11T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
 
     #Backpack
     Backpack_date0 = datetime.strptime("2025-03-21T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1063,7 +1031,7 @@ with col_content:
         total_actual_points = 0
 
         # --- Lista de protocolos ---
-        protocolos = ["Any", "Backpack", "Level", "Kyros", "Spark", "Ethena", "Gaib"]
+        protocolos = ["Any", "Backpack"]
 
         # --- Bloco com estilo aplicado apenas aqui ---
         st.markdown('<div class="custom-columns">', unsafe_allow_html=True)
@@ -1091,39 +1059,6 @@ with col_content:
                         print(mean_daily,(date_tge_format-date1).days)
                         total_points = int(round(actual_points + 4_261_285 + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "https://backpack.exchange/join/jj2kkdp1"
-                    elif selected_protocol == "Kyros":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-30")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        FDV = 40
-                        airdrop_pct = 10
-                        your_points = 100_000
-                        actual_points,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
-                        mean_daily = 1*(actual_points-Ky_TP_0)/((date1-Ky_date0).days)
-                        total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "https://boost.kyros.fi/?ref=nq3orn"
-                    elif selected_protocol == "Spark":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-14")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        url = "https://api.coingecko.com/api/v3/simple/price?ids=spark-2&vs_currencies=usd"
-                        data = requests.get(url).json()
-                        price = data.get('spark-2', {}).get('usd', 0.032)
-                        FDV = int((float(price)*977940501)/1000000)
-                        if FDV is None:
-                            FDV = 0
-                        airdrop_pct = 3
-                        your_points = 1_000_000
-                        actual_points,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
-                        mean_daily = 1*(actual_points-Sp_TP_0)/((date1-Sp_date0).days)
-                        total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))   
-                        referral = "https://app.spark.fi/points/8KBVQB"
                     elif selected_protocol == "Ethena":
                         date_tge = st.text_input("📅 TGE Date:", value="2025-09-25")
                         date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
@@ -1138,33 +1073,11 @@ with col_content:
                         mean_daily = 1*(actual_points-Ena_TP_0)/((date1-Ena_date0).days)
                         total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
                         referral = "app.ethena.fi/join/yp9pg"
-                    elif selected_protocol == "Gaib":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-08-17")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        FDV = 30
-                        airdrop_pct = 5
-                        your_points = 1_000_000
-                        actual_points,Gaib_total_users, Gaib_top100p, tvl = get_leader_Gaib_function()
-                        mean_daily = 1*(actual_points-Gaib_TP_0)/((date1-Gaib_date0).days)
-                        total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
                 else:
                     if selected_protocol == "Backpack":
                         referral = "https://backpack.exchange/join/jj2kkdp1"
-                    elif selected_protocol == "Level":
-                        referral = "https://app.level.money/farm?referralCode=pwlblh"
-                    elif selected_protocol == "Kyros":
-                        referral = "https://boost.kyros.fi/?ref=nq3orn"
-                    elif selected_protocol == "Spark":
-                        referral = "https://app.spark.fi/points/8KBVQB"
                     elif selected_protocol == "Ethena":
                         referral = "app.ethena.fi/join/yp9pg"
-                    elif selected_protocol == "Gaib":
-                        referral = "https://aid.gaib.ai/explore?invite=BF96D68D"
 
             FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
             airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct), step=1.0)
@@ -1630,12 +1543,6 @@ with col_content:
                 "fetch": get_ethereal,
             },
             {
-                "name": "Level",
-                "site": "https://app.level.money/farm?referralCode=pwlblh",
-                "image": "https://pbs.twimg.com/profile_images/1811061996172840960/wy0N3CoS_400x400.jpg",
-                "fetch": get_level,
-            },
-            {
                 "name": "Noon",
                 "site": "https://app.noon.capital/get?referralCode=f351689c-2391-4d2b-a963-d24a5530753a",
                 "image": "https://pbs.twimg.com/profile_images/1927790098906497025/Ze-SQcgt_400x400.jpg",
@@ -1658,12 +1565,6 @@ with col_content:
                 "site": "https://hylo.so/leverage?ref=E27KDV",
                 "image": "https://pbs.twimg.com/profile_images/1939067421895081987/73ljl6zx_400x400.png",
                 "fetch": get_hylo,
-            },
-            {
-                "name": "Kyros",
-                "site": "https://boost.kyros.fi/?ref=nq3orn",
-                "image": "https://pbs.twimg.com/profile_images/1847426788252590080/-Tb-I1Yl_400x400.jpg",
-                "fetch": get_kyros,
             },
             {
                 "name": "Triad",
@@ -1694,12 +1595,6 @@ with col_content:
                 "site": "https://www.prjx.com/@Fleming",
                 "image": "https://pbs.twimg.com/profile_images/1922089219737911296/1miGhDTB_400x400.jpg",
                 "fetch": get_prjx,
-            },
-            {
-                "name": "Lombard",
-                "site": "https://www.lombard.finance/app/?referrer=fgx6lb",
-                "image": "https://pbs.twimg.com/profile_images/1945866084202004480/sF1I4lkP_400x400.jpg",
-                "fetch": get_lombard,
             }
         ]
 
