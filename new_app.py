@@ -7,7 +7,6 @@ import pandas as pd
 import time
 from datetime import datetime, timezone
 from get_leader_Ethena_function import get_ethena_Data
-from get_leader_Level_function import get_leader_Level_function
 from get_Leader_Spark_Data import get_Leader_Spark_Data
 from get_fragmetric_data import get_fragmetric_data
 from get_leader_Gaib_function import get_leader_Gaib_function
@@ -218,24 +217,6 @@ def carregar_json():
 # --- Inicializa DB ---
 init_db()
 #deletar_json()
-# Faz a busca de dados da OpenEden e Level em suas API's
-def enviar_dados():
-    try:
-        #Total_OpenEden,top100p_OpenEden,Open_count = get_leader_OpenEden_function()
-        #time_Open = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-        Total_Level,top100p_Level,Level_count = get_leader_Level_function()
-        time_Level = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-        tags = ["OpenEden","Level"]
-        values = [Total_Level,Total_Level]
-        top100 = [top100p_Level,top100p_Level]
-        total_users = [Level_count,Level_count]
-        dado = {
-            "tag": tags[0],
-            "value": values[0]
-        }
-    except:
-        st.warning("⚠️ Não foi possível conectar à API.")
-    return(tags,values,time_Level,time_Level,top100,total_users)
 
 def set_background(image_path):
     with open(image_path, "rb") as f:
@@ -521,10 +502,6 @@ tokens = {
     "sui": {"name": "Sui (SUI)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
     "link": {"name": "Link (LINK)", "icon": "https://cryptologos.cc/logos/chainlink-link-logo.png"},
     "ethena": {"name": "Ethena (ENA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
-    "sonic-3": {"name": "Sonic (S)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
-    "berachain-bera": {"name": "Berachain (BERA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
-    "spark-2": {"name": "Spark (SPK)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
-    "burr-governance-token": {"name": "Burr (BURR)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
 }
 
 # Obter preços
@@ -604,7 +581,7 @@ st.markdown("""
   background-size: 600% 600%;
   animation: bg-gradient 10s ease infinite;
   color: black;
-  font-size: 22px;
+  font-size: 24px;
   padding: 10px;
   box-sizing: border-box;
   height: 70px;
@@ -635,9 +612,11 @@ st.markdown("""
 <div class="marquee-container">
   <div class="marquee-text">
     🚨 Last News: 
-    <a href='https://claim.reservoir.xyz/claim/' target='_blank' style='color:black;'>Reservoir’s airdrop is open!</a> / 
-    <a href='https://claim.hyperlane.foundation/' target='_blank' style='color:black;'>Hyperlane’s token claim is now live!</a> /
-    <a href='https://airdrop.mitosis.org/flow' target='_blank' style='color:black;'>Mitosis airdrop eligibility!</a> / 
+    <a href='https://app.hyperlend.finance/dashboard/terms-and-conditions' target='_blank' style='color:black;'>Register to Hyperland Airdrop!</a> / 
+    <a href='https://trovemarkets.com?referral=UHYVX7Q' target='_blank' style='color:black;'>Checker Hyper EVM Airdrops Points!</a> /
+    <a href='https://waitlist.stormrae.ai/dashboard?ref=CaioFlemin2089' target='_blank' style='color:black;'>Join the waitlist for STORMRAI!</a> /
+    <a href='https://www.ethgas.com/community/onboarding/?referral=MR8S32H' target='_blank' style='color:black;'>ETHGas launching $GWEI token!</a> /
+    <a href='https://waitlist.rally.fun/joinme/CaioFlemin2089' target='_blank' style='color:black;'>ByPass The InfoFi Crash!</a> /
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -749,8 +728,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
-           "🎁 Latest Airdrops", "📡 Depin Airdrops", "✅ Last Claims and Checkers", 
-           "🌉 Bridges & Swaps Protocols", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
+           "🎁 Latest Airdrops", "♾️ PerpDex Airdrops","📡 Depin Airdrops", "✅ Last Claims and Checkers", 
+           "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
 st.markdown("\n\n")
@@ -761,15 +740,17 @@ if "pagina" not in st.session_state:
 
 PAGES = {
     "🏠 Welcome": "",
-    "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
-    "🏆 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
-    "🎒 BackPack Volume Check": "Check your BackPack Volume.",
-    "🌾 Farm with YT": "Yield farming with YouTube strategies.",
-    "📊 Comparative YT Table": "Compare YouTube farming strategies.",
-    "📈 Pendle APY Prediction": "Pendle APY forecast and trends.",
-    "🎁 Latest Airdrops": "List of the latest available airdrops.",
-    "📡 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
     "✅ Last Claims and Checkers": "Latest claimable rewards and check tools.",
+    "🏆 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
+    "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
+    "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
+    "♾️ PerpDex Airdrops": "Airdrops from PerpDex.",
+    "📡 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
+    "🎁 Latest Airdrops": "List of the latest available airdrops.",
+    "🎒 BackPack Volume Check": "Check your BackPack Volume.",
+    #"🌾 Farm with YT": "Yield farming with YouTube strategies.",
+    #"📊 Comparative YT Table": "Compare YouTube farming strategies.",
+    "📈 Pendle APY Prediction": "Pendle APY forecast and trends.",
     "🌉 Bridges & Swaps Protocols": "Protocols for bridging and swapping assets.",
     "🚰 Faucets": "Faucets to receive free testnet tokens.",
     "⛔ Revoke Contract": "Revoke connected contracts and permissions.",
@@ -891,6 +872,10 @@ with col_content:
     Backpack_date0 = datetime.strptime("2025-03-21T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
     Backpack_TP_0 = 0
 
+    #Variational
+    Variational_date0 = datetime.strptime("2025-03-21T10:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+    Variational_TP_0 = 0
+
     # --- Conteúdo Principal ---
    
 
@@ -999,10 +984,15 @@ with col_content:
 
     elif st.session_state.pagina == "🧮 Airdrop Calculator":
 
-        # Estilo via CSS aplicando direto no bloco de entrada
+        from datetime import datetime, timezone
+        import streamlit as st
+        import streamlit.components.v1 as components
+
+        # =========================
+        # CSS GLOBAL DAS COLUNAS
+        # =========================
         st.markdown("""
         <style>
-        /* Aplica o estilo apenas às colunas dentro da div custom-columns */
         .custom-columns [data-testid="stHorizontalBlock"] > div:nth-child(1) {
             background-color: #111827;
             border-radius: 12px;
@@ -1023,67 +1013,161 @@ with col_content:
         </style>
         """, unsafe_allow_html=True)
 
-        # --- Valores iniciais ---
+        # =========================
+        # VALORES PADRÃO
+        # =========================
         FDV = 100
         total_points = 1_000_000_000
         airdrop_pct = 5
         your_points = 1_000_000
-        total_actual_points = 0
+        referral = ""
+        logo_url = ""
 
-        # --- Lista de protocolos ---
-        protocolos = ["Any", "Backpack"]
+        protocolos = ["Backpack", "Variational", "Pacifica", "Ostium", "Paradex", "Extended", "Gvrt S2", "EdgeX", "Reya", "Any"]
 
-        # --- Bloco com estilo aplicado apenas aqui ---
+        logos = {
+            "Backpack": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
+            "Variational": "https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg",
+            "Pacifica": "https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg",
+            "Paradex": "https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg",
+            "Extended": "https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg",
+            "Gvrt S2": "https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg",
+            "Ostium": "https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg",
+            "EdgeX": "https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg",
+            "Reya": "https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png",
+            "Any": "https://cdn-icons-png.flaticon.com/512/61/61088.png"
+        }
+
+        if "selected_protocol" not in st.session_state:
+            st.session_state.selected_protocol = "Any"
+
+        def select_protocol(p):
+            st.session_state.selected_protocol = p
+            for o in protocolos:
+                st.session_state[f"check_{o}"] = (o == p)
+
+        # =========================
+        # GRID DE PROTOCOLOS (FORA DAS COLUNAS)
+        # =========================
+        cols = st.columns(len(protocolos))
+        for i, p in enumerate(protocolos):
+            if f"check_{p}" not in st.session_state:
+                st.session_state[f"check_{p}"] = (p == st.session_state.selected_protocol)
+
+            with cols[i]:
+                st.checkbox(p, key=f"check_{p}", on_change=select_protocol, args=(p,))
+                selected = "selected" if st.session_state.selected_protocol == p else ""
+                st.markdown(f"""
+                <div style="
+                    background:#0f172a;
+                    border:2px solid {'#00ffae' if selected else '#1f2933'};
+                    box-shadow:{'0 0 18px #00ffae90' if selected else 'none'};
+                    border-radius:18px;
+                    padding:16px;
+                    text-align:center;">
+                    <img src="{logos[p]}" style="width:56px;border-radius:6px;"><br>
+                    <b style="color:white">{p}</b>
+                </div>
+                """, unsafe_allow_html=True)
+
+        # =========================
+        # COLUNAS PRINCIPAIS
+        # =========================
         st.markdown('<div class="custom-columns">', unsafe_allow_html=True)
-
-        # --- Colunas visuais ---
         colA1, colA2 = st.columns([1.8, 1.2])
 
-        with colA1:
-            selected_protocol = st.selectbox("Select Protocol", protocolos)
-            if selected_protocol != "Any":
-                auto_fill_actual = st.checkbox(f"Auto-fill Total Actual {selected_protocol} Points", value=True)
-                if auto_fill_actual:
-                    if selected_protocol == "Backpack":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-12-12")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        FDV = 1000
-                        airdrop_pct = 15
-                        your_points = 1_000
-                        actual_points = 150_046_628
-                        mean_daily = 10_000_000/7
-                        print(mean_daily,(date_tge_format-date1).days)
-                        total_points = int(round(actual_points + 4_261_285 + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "https://backpack.exchange/join/jj2kkdp1"
-                    elif selected_protocol == "Ethena":
-                        date_tge = st.text_input("📅 TGE Date:", value="2025-09-25")
-                        date_tge_format = datetime.strptime((date_tge+"T00:00:00.000Z"), "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        today = datetime.now().now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-                        date_obj = datetime.strptime(today, "%Y-%m-%d %H:%M:%S")
-                        date_utc_formatada = date_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        date1 = datetime.strptime(date_utc_formatada , "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        FDV = 5000
-                        airdrop_pct = 3.5
-                        your_points = 10_000_000
-                        actual_points,Ena_total_users, Ena_top100p = get_ethena_Data()
-                        mean_daily = 1*(actual_points-Ena_TP_0)/((date1-Ena_date0).days)
-                        total_points = int(round(actual_points + (((date_tge_format-date1).days)*mean_daily),0))
-                        referral = "app.ethena.fi/join/yp9pg"
-                else:
-                    if selected_protocol == "Backpack":
-                        referral = "https://backpack.exchange/join/jj2kkdp1"
-                    elif selected_protocol == "Ethena":
-                        referral = "app.ethena.fi/join/yp9pg"
+        selected_protocol = st.session_state.selected_protocol
 
-            FDV = st.number_input("Estimated FDV (M USD)", value=FDV, step=1)*1_000_000
-            airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct), step=1.0)
-            total_points = st.number_input("Estimated Total Points Farmed at the TGE", value=total_points, step=1)
-            your_points = st.number_input("Your Points", value=your_points, step=1)
-        
+        # =========================
+        # COLUNA ESQUERDA
+        # =========================
+        with colA1:
+
+            if selected_protocol != "Any":
+
+                auto_fill_actual = st.checkbox(
+                    f"Auto-fill Total Actual {selected_protocol} Points",
+                    value=True
+                )
+
+                if auto_fill_actual:
+                    today = datetime.now(timezone.utc)
+
+                    def calc(date_str, actual, daily):
+                        d = datetime.strptime(date_str+"T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        return int(actual + (d - today).days * daily)
+
+                    if selected_protocol == "Backpack":
+                        date_tge = st.text_input("📅 TGE Date", "2026-01-28")
+                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
+                        total_points = calc(date_tge, 399_490_000, 10_000_000/7)
+                        referral = "https://backpack.exchange/join/jj2kkdp1"
+                        logo_url = logos["Backpack"]
+
+                    elif selected_protocol == "Variational":
+                        date_tge = st.text_input("📅 TGE Date", "2026-10-01")
+                        FDV, airdrop_pct, your_points = 1000, 20, 100
+                        total_points = calc(date_tge, 3_600_000, 150_000/7)
+                        referral = "https://omni.variational.io/"
+                        logo_url = logos["Variational"]
+
+                    elif selected_protocol == "Pacifica":
+                        date_tge = st.text_input("📅 TGE Date", "2026-10-01")
+                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
+                        total_points = calc(date_tge, 180_000_000, 10_000_000/7)
+                        referral = "https://app.pacifica.fi?referral=PacificaRef"
+                        logo_url = logos["Pacifica"]
+
+                    elif selected_protocol == "Paradex":
+                        date_tge = st.text_input("📅 TGE Date", "2026-02-01")
+                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
+                        total_points = calc(date_tge, 323_000_000, 4_200_000/7)
+                        referral = "https://app.paradex.trade/r/Paradex15"
+                        logo_url = logos["Paradex"]
+
+                    elif selected_protocol == "Extended":
+                        date_tge = st.text_input("📅 TGE Date", "2026-06-01")
+                        FDV, airdrop_pct, your_points = 500, 20, 100
+                        total_points = calc(date_tge, 45_236_349, 1_030_000/7)
+                        referral = "https://app.extended.exchange/join/EXT3NDED15"
+                        logo_url = logos["Extended"]
+
+                    elif selected_protocol == "Gvrt S2":
+                        date_tge = st.text_input("📅 TGE Date", "2026-04-01")
+                        FDV, airdrop_pct, your_points = 500, 12, 100
+                        total_points = calc(date_tge, 1_964_286, 125_000/7)
+                        referral = "https://grvt.io/?ref=C496Y64"
+                        logo_url = logos["Gvrt S2"]
+
+                    elif selected_protocol == "Ostium":
+                        date_tge = st.text_input("📅 TGE Date", "2026-12-21")
+                        FDV, airdrop_pct, your_points = 500, 20, 1_000
+                        total_points = calc(date_tge, 22_928_571, 500_000/7)
+                        referral = "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH"
+                        logo_url = logos["Ostium"]
+                    
+                    elif selected_protocol == "EdgeX":
+                        date_tge = st.text_input("📅 TGE Date", "2026-03-31")
+                        FDV, airdrop_pct, your_points = 1000, 25, 100
+                        total_points = calc(date_tge, 7_300_000, 0)
+                        referral = "https://pro.edgex.exchange/referral/EDGE15"
+                        logo_url = logos["EdgeX"]
+
+                    elif selected_protocol == "Reya":
+                        date_tge = st.text_input("📅 TGE Date", "2026-03-31")
+                        FDV, airdrop_pct, your_points = 500, 20, 100
+                        total_points = calc(date_tge, 10_200_000, 153_000/7)
+                        referral = "https://app.reya.xyz/trade?referredBy=xe369dux"
+                        logo_url = logos["Reya"]
+
+            FDV = st.number_input("Estimated FDV (M USD)", value=FDV) * 1_000_000
+            airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct))
+            total_points = st.number_input("Estimated Total Points at TGE", value=int(total_points))
+            your_points = st.number_input("Your Points", value=int(your_points))
+
+        # =========================
+        # COLUNA DIREITA (REFERRAL)
+        # =========================
         with colA2:
             if selected_protocol != "Any":
                 st.markdown(f"""
@@ -1125,7 +1209,11 @@ with col_content:
                 </style>
 
                 <div class="ref-card">
-                    <h3 style="color:#00ffae;font-size=25px;">Start with {selected_protocol}</h3>
+                    <h3 style="color:#00ffae; font-size:25px; display:flex; align-items:center; gap:12px;">
+                        Start with {selected_protocol}
+                        <img src="{logo_url}" alt="{selected_protocol} logo" 
+                            style="height:60px; width:auto; border-radius:8px; background:#0b1f1a; padding:4px;">
+                    </h3>
                     <p style="margin-top:30px;font-size=22px;">New to {selected_protocol}? Use the referral link below to get started with <strong>Points Boost</strong> in the platform.</p>
                     <div class="ref-box" style="margin-top:20px;">{referral}</div>
                     <a " href={referral} target="_blank">
@@ -1268,6 +1356,7 @@ with col_content:
 
         # Renderiza o HTML customizado
         components.html(full_html, height=400, width=1900, scrolling=False)
+
     
     elif st.session_state.pagina == "🏆 Airdrop Points Viewer":
 
@@ -1295,19 +1384,45 @@ with col_content:
             except ValueError as e:
                 print(f"Erro ao parsear JSON: {e}")
                 return None
+            
+        # cria o scraper uma única vez
+        _scraper = cloudscraper.create_scraper(
+            browser={
+                "browser": "chrome",
+                "platform": "windows",
+                "desktop": True
+            }
+        )
     
         def safe_request(url, params=None, payload=None, use_scraper=False, method="GET"):
             try:
-                scraper = cloudscraper.create_scraper() if use_scraper else requests
+                session = _scraper if use_scraper else requests
+
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                                "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                    "Accept": "application/json, text/plain, */*",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Referer": "https://beta.triadfi.co/",
+                    "Origin": "https://beta.triadfi.co"
+                }
+
                 if method == "GET":
-                    res = scraper.get(url, params=params)
-                else:  # POST
-                    res = scraper.post(url, json=payload)
-                if res.status_code == 200:
-                    return res.json()
+                    res = session.get(url, params=params, headers=headers, timeout=20)
+                else:
+                    res = session.post(url, json=payload, headers=headers, timeout=20)
+
+                if res.status_code != 200:
+                    print("HTTP", res.status_code, url)
+                    print(res.text[:300])
+                    return None
+
+                return res.json()
+
             except Exception as e:
-                st.error(f"Erro ao acessar {url}: {e}")
-            return None
+                print(f"Request error → {url} | {e}")
+                return None
+
 
         # -------------------------
         # 🔹 FETCH FUNCTIONS
@@ -1362,22 +1477,6 @@ with col_content:
                 }
             return None
 
-        def get_level(wallet: str):
-            url = f"https://api.level.money/v1/xp/balances/leaderboard?page=1&take=1&referral=false&addresses={wallet}"
-            data = safe_request(url)
-            if data and data.get("leaderboard"):
-                try:
-                    lb = data["leaderboard"][0]["balance"]
-                    return {
-                        "points": int(lb.get("accrued", 0)),
-                        "rank": data.get("rank", "N/A"),
-                        "extra": f"<br>👥 Referral Points: {int(lb.get('fromReferrals',0)):,.2f}</br>  <br> </br>",
-                        "raw": data
-                    }
-                except:
-                    return None
-            return None
-
         def get_noon(wallet: str):
             url = f"https://back.noon.capital/api/v1/points/{wallet}"
             data = safe_request(url, use_scraper=True)
@@ -1396,7 +1495,7 @@ with col_content:
 
         def get_plume(wallet: str):
             url = f"https://portal-api.plume.org/api/v1/stats/pp-totals?walletAddress={wallet}"
-            data = safe_request(url)
+            data = safe_request(url, use_scraper=True)
             if data and "data" in data and data["data"].get("ppScores"):
                 try:
                     pp = data["data"]["ppScores"]
@@ -1423,28 +1522,14 @@ with col_content:
                     return None
             return None
 
-        def get_kyros(wallet: str):
-            url = f"https://points-api.kyros.fi/score?wallet={wallet}"
-            data = safe_request(url)
-            if data:
-                try:
-                    return {
-                        "points": data.get("points",0),
-                        "rank": data.get("rank","N/A"),
-                        "extra": f"<br>👥 Referral Points: {data.get('referralPoints',0):,.2f}</br> <br> </br>",
-                        "raw": data
-                    }
-                except:
-                    return None
-            return None
-
         def get_triad(wallet: str):
-            url = f"https://beta.triadfi.co/user/{wallet}/rank"
+            url = f"https://beta.triadfi.co/api/user/{wallet}/verify"
             data = safe_request(url, use_scraper=True)
+            print(data)
             if data:
                 try:
                     return {
-                        "points": data.get("points",0),
+                        "points": data.get("xp",0),
                         "rank": data.get("rank","N/A"),
                         "extra": f"<br>TRD Staked: {data.get('trdStaked',0):,.2f}</br> <br> </br>",
                         "raw": data
@@ -1454,8 +1539,8 @@ with col_content:
             return None
 
         def get_kinetiq(wallet: str):
-            url = f"https://kinetiq.xyz/api/points/{wallet}?chainId=999"
-            data = safe_request(url)
+            url = f"https://kinetiq.xyz/api/kpoints/{wallet}?chainId=999"
+            data = safe_request(url, use_scraper=True)
             if data:
                 try:
                     return {
@@ -1466,25 +1551,87 @@ with col_content:
                 except:
                     return None
             return None
+        
+        def get_hyperbeat_all(wallet: str):
+            wallet = wallet.lower()
+            url = f"https://api.hyperbeat.org/api/v1/ecosystem-points?userAddress={wallet}&provider=felix_hbusdt%2Cfelix_lsthype%2Chyperlend_hbbtc%2Chyperlend_hbhype%2Chyperlend_hbusdt%2Chyperlend_lsthype%2Chyperswap_hbbtc%2Chyperswap_hbhype%2Chyperswap_hbusdt%2Chypurrfi_hbbtc%2Chypurrfi_hbhype%2Chypurrfi_hbusdt%2Ckinetiq_lsthype%2Ctheo_hbusdt"
+
+            data = safe_request(url, use_scraper=True)
+
+            print("HYPERBEAT RAW:", data)
+
+            if not data or not data.get("success"):
+                return None
+
+            provider = {}
+            total_points = 0
+
+            for item in data.get("data", []):
+                p = item.get("provider")
+                pts = float(item.get("points", 0))
+
+                provider[p] = pts
+                total_points += pts
+
+            return {
+                "points": total_points,          # total somado
+                "rank": data.get("rank_position", "N/A"),
+                "provider": provider,            # <<< AQUI está o que sua outra função usa
+                "raw": data
+            }
+        
+        def get_hyper_provider(wallet: str, provider_name: str):
+            data = get_hyperbeat_all(wallet)
+
+            if not data:
+                return None
+
+            points = float(data["provider"].get(provider_name, 0))
+
+            return {
+                "points": points,
+                "extra": f"<br>{provider_name}: {points:.4f}</br><br></br>",
+                "raw": data["provider"]
+            }
+
+        def get_theo(wallet: str):
+            return get_hyper_provider(wallet, "theo_hbusdt")
+        
+        def get_felix(wallet: str):
+            return get_hyper_provider(wallet, "felix_hbusdt")
+
+        def get_hyperlend(wallet: str):
+            return get_hyper_provider(wallet, "hyperlend_hbusdt")
+
+        def get_hypurrfi(wallet: str):
+            return get_hyper_provider(wallet, "hypurrfi_hbusdt")
 
         def get_hyperbeat(wallet: str):
-            url = f"https://app.hyperbeat.org/api/hyperfolio/points?address={wallet}"
-            data = safe_request(url)
-            if data and "points" in data:
-                try:
-                    total = sum(float(p.get("balance",0)) for p in data["points"])
-                    return {
-                        "points": total,
-                        "extra": f"<br> Kittenswap: {data.get('Kittenswap', 0):,.2f} / Hyperswap: {data.get('Hyperswap', 0):,.2f} / Hyperlend: {data.get('Hyperlend', 0):,.2f}</br> <br> Felix: {data.get('Felix', 0):,.2f} / Upshift: {data.get('Upshift', 0):,.2f} / Hyperdrive: {data.get('Hyperdrive', 0):,.2f}</br>",
-                        "raw": data
-                    }
-                except:
-                    return None
-            return None
+            wallet = wallet.lower()
+            url = f"https://api.hyperbeat.org/api/v1/leaderboard-v2/{wallet}"
+
+            data = safe_request(url, use_scraper=True)
+
+            print( data)
+
+            if not data:
+                return None
+
+            return {
+                "points": data.get("points", 0),
+                "rank": data.get("rank_position", "N/A"),
+                "extra": (
+                    f"<br>🎯 Percentile: {data.get('percentile', 'N/A')}%</br>"
+                    f"<br>🏅 League: {data.get('league', 'N/A')}</br>"
+                    f"<br>👥 Referral Points: {data.get('referral_points', 0):,.2f}</br>"
+                    "<br> </br>"
+                ),
+                "raw": data
+            }
 
         def get_prjx(wallet: str):
             url = f"https://api.prjx.com/scorecard/impersonate/{wallet}?format=json"
-            data = safe_request(url)
+            data = safe_request(url, use_scraper=True)
             if data and data.get("stats"):
                 try:
                     return {
@@ -1516,7 +1663,7 @@ with col_content:
 
         def get_lombard(wallet: str):
             url = f"https://mainnet.prod.lombard.finance/api/v1/referral-system/season-1/points/{wallet}"
-            data = safe_request(url)
+            data = safe_request(url, use_scraper=True)
             if data:
                 return {
                     "points": data.get("total",0),
@@ -1539,7 +1686,7 @@ with col_content:
             {
                 "name": "Ethereal",
                 "site": "https://deposit.ethereal.trade/points?ref=KVHDUP",
-                "image": "https://pbs.twimg.com/profile_images/1949907904816988160/wPykUsI0_400x400.jpg",
+                "image": "https://pbs.twimg.com/profile_images/1980059369736654849/dF9lY6aT_400x400.jpg",
                 "fetch": get_ethereal,
             },
             {
@@ -1563,7 +1710,7 @@ with col_content:
             {
                 "name": "Hylo",
                 "site": "https://hylo.so/leverage?ref=E27KDV",
-                "image": "https://pbs.twimg.com/profile_images/1939067421895081987/73ljl6zx_400x400.png",
+                "image": "https://pbs.twimg.com/profile_images/1999811414299721729/-XyLtThr_400x400.png",
                 "fetch": get_hylo,
             },
             {
@@ -1589,6 +1736,30 @@ with col_content:
                 "site": "https://app.hyperbeat.org/earn?referral=F56B5BD8",
                 "image": "https://pbs.twimg.com/profile_images/1879158343194796032/ftN7FT3s_400x400.jpg",
                 "fetch": get_hyperbeat,
+            },
+            {
+                "name": "Theo",
+                "site": "https://app.theo.xyz/invite?invite=TheoBoost",
+                "image": "https://pbs.twimg.com/profile_images/1928132409783963648/LizAN275_400x400.png",
+                "fetch": get_theo,
+            },
+            {
+                "name": "HyperLend",
+                "site": "https://app.hyperlend.finance/?ref=CHYPER",
+                "image": "https://pbs.twimg.com/profile_images/2011062303932678145/a5-fTMGC_400x400.jpg",
+                "fetch": get_hyperlend,
+            },
+            {
+                "name": "Felix",
+                "site": "https://www.usefelix.xyz?ref=D51B721C",
+                "image": "https://pbs.twimg.com/profile_images/1845076293735297024/mx8MTMca_400x400.jpg",
+                "fetch": get_felix,
+            },
+            {
+                "name": "HypurrFi",
+                "site": "https://app.hypurr.fi/points?af=E2C6D4B",
+                "image": "https://pbs.twimg.com/profile_images/1991902971676758017/Dl4dF7Ay_400x400.jpg",
+                "fetch": get_hypurrfi,
             },
             {
                 "name": "Project X",
@@ -2075,7 +2246,7 @@ with col_content:
             #    st.info("⚠️ Error in Load your file. Please, verify if you download the correct Trade history File from Backpack site and be sure to not do any modification in this file.")
 
         else:
-            st.info("📥 Please, load your CSV Trade File from Backpack.")
+            st.info("📥 Please, load your CSV Trade Fills File from your Backpack Profile.")
 
     elif st.session_state.pagina == "🌾 Farm with YT":
 
@@ -2225,14 +2396,14 @@ with col_content:
                 Ena_tvl,Ena_amount,Ena_leadInvestors,Ena_otherInvestors = get_defillama_info("ethena","Ethereum")
                 #Level_tvl,Level_amount,Level_leadInvestors,Level_otherInvestors = get_defillama_info("level","Ethereum")
                 #Frag_tvl,Frag_amount,Frag_leadInvestors,Frag_otherInvestors = get_defillama_info("fragmetric","Solana")
-                Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
+                #Ky_tvl,Ky_amount,Ky_leadInvestors,Ky_otherInvestors = get_defillama_info("kyros","Solana")
                 #Sp_tvl,Sp_amount,Sp_leadInvestors,Sp_otherInvestors = get_defillama_info("spark","Ethereum")
                 
                 # Busca dados dos protocolos em suas respectivas API's
                 tags, values, time_Open, time_Level,top100,total_users = enviar_dados()
                 Ena_accured,Ena_total_users, Ena_top100p = get_ethena_Data()
                 #Frag_accured,Frag_unApy,solAsUSD,fragAsUSD,fragBySol,Frag_total_users = get_fragmetric_data()
-                Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
+                #Ky_accured,Ky_unApy,KyAsUSD,Ky_total_users,Ky_top100p = get_leader_kyros_function()
                 #Sp_accured,Sp_top100p,Sp_total_users,Sp_tokens_per_day = get_Leader_Spark_Data()
                 #Gaib_accured,Gaib_top100p,Gaib_total_users,Gaib_tvl = get_leader_Gaib_function()
                 print(Ena_accured,Ena_total_users, Ena_top100p)
@@ -2240,7 +2411,7 @@ with col_content:
                 Ena_ytMul,Ena_unApy,Ena_impApy,Ena_feeRate,Ena_swapFee,Ena_ytRoi,Ena_expiry,Ena_priceImpact = get_Pendle_Data("0xa36b60a14a1a5247912584768c6e53e1a269a9f7","0x029d6247adb0a57138c62e3019c92d3dfc9c1840")
                 #Level_ytMul,Level_unApy,Level_impApy,Level_feeRate,Level_swapFee,Level_ytRoi,Level_expiry,Level_priceImpact = get_Pendle_Data("0xc88ff954d42d3e11d43b62523b3357847c29377c","0x47247749e976c54c6db2a9db68c5cadb05482e9f")
                 #Frag_ytMul,Frag_Multiplier,Frag_expiry,Frag_swapFee,Frag_priceImpact,time_Frag,symbol_frag = get_rateX_data("fragmetric")
-                ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
+                #ky_ytMul,ky_Multiplier,ky_expiry,ky_swapFee,ky_priceImpact,time_ky,symbol_ky = get_rateX_data("kyros")
                 #Sp_ytMul,Sp_unApy,Sp_impApy,Sp_feeRate,Sp_swapFee,Sp_ytRoi,Sp_expiry,Sp_priceImpact = get_Pendle_Data("0xdace1121e10500e9e29d071f01593fd76b000f08","0x4eb0bb058bcfeac8a2b3c2fc3cae2b8ad7ff7f6e")
                 #Gaib_ytMul,Gaib_unApy,Gaib_impApy,Gaib_feeRate,Gaib_swapFee,Gaib_ytRoi,Gaib_expiry,Gaib_priceImpact = get_Pendle_Data("0x47306e3cb4e325042556864b38aa0cbe8d928be5","0x05db2d5f89b3e9eab8f9c07149cd3a7575db8b9d")
                 print(Ena_ytMul,Ena_unApy)
@@ -3164,6 +3335,341 @@ with col_content:
     elif st.session_state.pagina == "🎁 Latest Airdrops":
         st.info("🚧 Coming Soon: Protocols with Airdrop Potential.")
 
+    elif st.session_state.pagina == "♾️ PerpDEX Airdrops":
+
+        import streamlit.components.v1 as components
+
+        # =========================
+        # DESCRIÇÃO (BOX TOPO)
+        # =========================
+        st.markdown(
+                    """
+                    <style>
+                        .airdrop-box {
+                            position: relative;
+                            z-index: 1;
+                            border-radius: 12px;
+                            padding: 25px;
+                            margin: 20px 0;
+                            margin-bottom: 40px;
+                            background: #111827;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 30px;
+                            font-size: 22px;
+                            color: white;
+                            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                            overflow-wrap: break-word;
+                            word-wrap: break-word;
+                            white-space: normal;
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                        }
+
+                        /* Borda neon com gradiente animado */
+                        .airdrop-box::before {
+                            content: "";
+                            position: absolute;
+                            top: -3px;
+                            left: -3px;
+                            right: -3px;
+                            bottom: -3px;
+                            border-radius: 14px;
+                            z-index: -1;
+                            background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                            background-size: 600% 600%;
+                            animation: neonBorder 6s ease infinite;
+                            padding: 3px;
+                            -webkit-mask:
+                                linear-gradient(#fff 0 0) content-box,
+                                linear-gradient(#fff 0 0);
+                            -webkit-mask-composite: xor;
+                            mask-composite: exclude;
+                        }
+
+                        /* Efeito de hover */
+                        .airdrop-box:hover {
+                            border-color: #00f0ff;
+                            background: #262b33;
+                        }
+
+                        @keyframes neonBorder {
+                            0%   { background-position: 0% 50%; }
+                            50%  { background-position: 100% 50%; }
+                            100% { background-position: 0% 50%; }
+                        }
+
+                        .airdrop-box h1 {
+                            font-size: 25px;
+                            text-align: center;
+                            margin-bottom: 5px;
+                        }
+
+                        .airdrop-box h2 {
+                            font-size: 25px;
+                            margin-top: 10px;
+                            margin-bottom: 5px;
+                            color: #00ffae;
+                        }
+
+                        .airdrop-box ul {
+                            margin-left: 20px;
+                            margin-bottom: 5px;
+                        }
+                    </style>
+                    <div class="airdrop-box">
+                        <h2>PerpDEX Airdrops</h2>
+                        <p style="color: #8293A3;">PerpDEX airdrops are token distributions by decentralized perpetual exchanges designed to reward early traders, liquidity providers, and power users of onchain derivatives platforms, making access to leveraged trading more transparent, permissionless, and capital-efficient.</p>
+                        <p style="color: #8293A3;">By offering airdrops, Perp DEXs incentivize real trading activity such as volume generation, open interest, liquidity provision, and product testing, helping bootstrap deep markets, stress-test their infrastructure, and decentralize protocol ownership ahead of full-scale adoption.</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+
+        # =========================
+        # LISTA PERPDEX (20)
+        # =========================
+        protocols_perpdex = [
+
+            # ======================
+            # ⭐ PRIORIDADE S
+            # ======================
+            {"name":"Hyperliquid","priority":"S","funding":"Self-funded","site":"https://hyperliquid.xyz","twitter":"https://x.com/HyperliquidX","discord":"https://discord.gg/hyperliquid","status":"Post-TGE","application":"Perp + Spot","image":"https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg"},
+            {"name":"Paradex","priority":"S","funding":"Paradigm","site":"https://app.paradex.trade/r/Paradex15","twitter":"https://x.com/paradex","discord":"https://discord.gg/paradex","status":"Late Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg"},
+            {"name":"Ethereal","priority":"S","funding":"Ethena","site":"https://app.ethereal.trade","twitter":"https://x.com/etherealdex","discord":"https://discord.gg/etherealdex","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1980059369736654849/dF9lY6aT_400x400.jpg"},
+            {"name":"Variational","priority":"S","funding":"Top VCs","site":"https://variational.io","twitter":"https://x.com/variational_io","discord":"https://discord.gg/variational","status":"Early Farming","application":"Zero-fee Perps","image":"https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg"},
+
+            # ======================
+            # 🟢 PRIORIDADE A
+            # ======================
+            {"name":"Extended","priority":"A","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg"},
+            {"name":"Nado","priority":"A","funding":"Kraken","site":"https://nado.xyz","twitter":"https://x.com/nadoHQ","discord":"https://nado.xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg"},
+            {"name":"Pacifica","priority":"A","funding":"Solana","site":"https://app.pacifica.fi?referral=PacificaRef","twitter":"https://x.com/pacifica_fi","discord":"https://discord.gg/pacifica","status":"Early Farming","application":"Sol Perps","image":"https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg"},
+            {"name":"Aster","priority":"A","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg"},
+            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Late Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg"},
+            {"name":"StandX","priority":"A","funding":"Ex-Binance","site":"https://standx.com/referral?code=STAND_5","twitter":"https://x.com/StandX_Official","discord":"https://discord.gg/standx","status":"Early Farming","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/2005237613246959616/UHa0DROv_400x400.jpg"},
+
+            # ======================
+            # 🟡 PRIORIDADE B
+            # ======================
+            {"name":"GRVT","priority":"B","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg"},
+            {"name":"Apex","priority":"B","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg"},
+            {"name":"Cascade","priority":"B","funding":"Coinbase / Polychain","site":"https://cascade.xyz","twitter":"https://x.com/cascade_xyz","discord":"https://discord.gg/cascade-xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1999154479866736640/NZEzwEE1_400x400.jpg"},
+            {"name":"HyENA","priority":"B","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg"},
+            
+            # ======================
+            # 🟠 PRIORIDADE C
+            # ======================
+            {"name":"Ostium","priority":"C","funding":"RWA","site":"https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH","twitter":"https://x.com/OstiumLabs","discord":"https://discord.gg/ostiumlabs","status":"Early Farming","application":"RWA Perps","image":"https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg"},
+            {"name":"Reya","priority":"C","funding":"CoinList","site":"https://app.reya.xyz/trade?referredBy=xe369dux","twitter":"https://x.com/reya_xyz","discord":"https://discord.gg/reya","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png"},
+            {"name":"EdgeX","priority":"C","funding":"VC backed","site":"https://pro.edgex.exchange/referral/EDGE15","twitter":"https://x.com/edgeX_exchange","discord":"https://discord.gg/edgex","status":"Pre-TGE","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg"},
+            {"name":"TradeXYZ","priority":"C","funding":"Pre-seed","site":"https://trade.xyz","twitter":"https://x.com/tradexyz","discord":"https://trade.xyz","status":"Very Early","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/1971989421844000768/MNOCmF3z_400x400.jpg"},
+
+            # ======================
+            # 🔴 PRIORIDADE D
+            # ======================
+            {"name":"Based","priority":"D","funding":"Ethena","site":"https://based.one","twitter":"https://x.com/basedonex","discord":"https://discord.gg/basedonex","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2004517825772470272/U7fzL7uD_400x400.jpg"},
+            {"name":"Hibachi","priority":"D","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg"},
+        ]
+
+
+        # =========================
+        # GERA HTML DOS BLOCOS
+        # =========================
+        blocks_html = ""
+        for p in protocols_perpdex:
+            blocks_html += f"""
+            <div class="container-block">
+                <a href="{p['site']}" target="_blank" class="header-wrapper">
+                    <div class="header-content">
+                        <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
+                        <strong class="header-title">{p['name']}</strong>
+                    </div>
+                </a>
+
+                <div class="footer-wrapper">
+                    <p><strong>📌 Priority:</strong> {p['priority']}</p>
+                    <p><strong>💰 Funding:</strong> {p['funding']}</p>
+                    <p><strong>🚀 Application:</strong> {p['application']}</p>
+                    <p><strong>📊 Status:</strong> {p['status']}</p>
+                    <p><strong>📣 Social:</strong>
+                        <a href="{p['twitter']}" target="_blank" style="color:lightblue;">Twitter</a> |
+                        <a href="{p['discord']}" target="_blank" style="color:lightblue;">Discord</a>
+                    </p>
+                </div>
+            </div>
+            """
+
+
+        # =========================
+        # HTML + CSS FINAL
+        # =========================
+        # HTML completo
+        full_html = f"""
+        <style>
+        @keyframes neonBorder {{
+            0%   {{ background-position: 0% 50%; }}
+            50%  {{ background-position: 100% 50%; }}
+            100% {{ background-position: 0% 50%; }}
+        }}
+        .container-externa {{
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            gap: 0px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: left;
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            font-size: 22px;
+            color: white;
+            margin: 0px 0;
+            align-items: center;
+            justify-content: center;
+        }}
+        .container-externa::-webkit-scrollbar {{
+            display: none;             /* Chrome/Safari */
+        }}
+        .protocol-block {{
+            width: 1272px;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 0px;
+            display: flex;
+            background: #1E1F25;
+            justify-content: flex-start;
+            gap: 0px; /* 👈 distância fixa entre os blocos internos */
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            font-size: 22px;
+            color: white;
+            margin: 0px 0;
+            overflow: hidden;
+            scrollbar-width: none;
+            align-items: center;
+            justify-content: center;
+        }}
+        .header-wrapper {{
+            width: 330px;
+            padding: 30px;
+            margin-top: 10px;
+            margin-right: 15px;
+            margin-left: 12px;
+            border-top: 1px solid rgba(48, 240, 192, 0.2);
+            border-bottom: 1px solid #00e0ff;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 10px;  /* 👈 maior */
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            display: flex;
+            gap: 30px;
+            background: #1E1F25;
+            box-shadow: 0 0 20px rgba(0,255,150,0.3);
+            transition: transform 0.3s ease;
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            z-index: 1;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            color: lightblue;        /* ou white, se preferir */
+            text-decoration: none;   /* remove o sublinhado */
+        }}
+        .header-wrapper:hover {{
+            border: 1px solid #39ff14; /* Verde neon */
+            border-top-left-radius: 40px;
+            border-top-right-radius: 10px; 
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
+            background: #262b33;
+            text-decoration: none;
+        }}
+        .header-wrapper:hover::before {{
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 14px;
+            z-index: -1;
+            animation: neonBorder 6s ease infinite;
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }}
+        .header-wrapper a {{
+            color: lightblue;
+            text-decoration: none;
+        }}
+        .header-content {{
+            display: flex;
+            flex-direction: row;             /* lado a lado */
+            align-items: center;             /* alinhamento vertical central */
+            justify-content: center;
+            gap: 20px;
+        }}
+        .header-title {{
+            font-size: 22px;
+            color: lightblue;
+            text-decoration: none;
+            text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;
+        }}
+        .footer-wrapper {{
+            width: 330px;
+            padding: 30px;
+            margin-top: 6px;
+            margin-bottom: 30px;
+            margin-right: 15px;
+            margin-left: 12px;
+            border-top: 1px solid #00e0ff;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;  /* 👈 maior */
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 40px;
+            display: block;
+            align-items: center;
+            gap: 30px;
+            background: #1E1F25;
+            box-shadow: 0 0 20px rgba(0,255,150,0.5);
+            transition: transform 0.3s ease;
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            z-index: 1;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            font-size:20px;
+        }}
+        .footer-wrapper:hover {{
+            border: 1px solid #39ff14; /* Verde neon */
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px; 
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
+            background: #262b33;
+        }}
+        .footer-link {{
+            text-decoration: none;
+            margin: 0;
+            width: 100%;
+            color: inherit;
+        }}
+        .footer-link:hover {{
+            color: inherit;
+            align-items: center;
+            justify-content: center;
+        }}
+        </style>
+
+        <div class="container-externa">
+            {blocks_html}
+        </div>
+        """
+        components.html(full_html, height=4200, width=1500, scrolling=False)
+
+
     elif st.session_state.pagina == "📡 Depin Airdrops":
         st.markdown(
             """
@@ -3249,30 +3755,24 @@ with col_content:
         
 
         protocols_depin = [
-            {"name":"Monad Score","priority":"S","funding":"Not disclosed","site":"https://dashboard.monadscore.xyz/signup/r/cWiIkvLG","social":{"twitter":"https://x.com/monadscores_xyz","discord":"https://discord.com/invite/rYGaM87RZV"},"status":"Active Farming","application":"Dec. Reputation", "image":"https://pbs.twimg.com/profile_images/1898905479998287873/KqiFFod6_400x400.jpg"},
-            {"name":"OpenLedger","priority":"S","funding":"Not disclosed","site":"https://testnet.openledger.xyz/?referral_code=fdhgyvakoq","social":{"twitter":"https://x.com/OpenledgerHQ","discord":"https://discord.gg/wfeSEqH8"},"status":"Active Farming","application":"AI Blockchain", "image":"https://pbs.twimg.com/profile_images/1876981396134416384/lYzcJz9J_400x400.jpg"}, 
-            {"name":"Taker","priority":"A","funding":"$3M","site":"https://earn.taker.xyz?start=BXBDE7KR","social":{"twitter":"https://x.com/TakerProtocol","discord":"https://discord.gg/BkJy83ZT"},"status":"Active Farming","application":"Data Monetization Infra", "image":"https://pbs.twimg.com/profile_images/1905084157732257792/qIzxjm1A_400x400.jpg"},
             {"name":"Parasail","priority":"A","funding":"$4M","site":"https://www.parasail.network/season?refer=MHgzRTYyMTAxMkNiNjI3MmIwN2UwNTVhYTYyRjNBRTEyQzJBZGNDOTZG","social":{"twitter":"https://x.com/parasailnetwork","discord":"https://discord.com/invite/parasail"},"status":"Active Farming","application":"Private AI at the Edge", "image":"https://pbs.twimg.com/profile_images/1788203111720570880/RqVxPfmL_400x400.jpg"},
             {"name":"Rynus.io","priority":"S","funding":"Not disclosed","site":"https://cloud.rynus.io/login?affiliateId=BFD9FF25EC3B","social":{"twitter":"https://x.com/Rynus_io","discord":"https://discord.com/invite/Y3S8U8myeA"},"status":"Active Farming","application":"Distributed Computing", "image":"https://pbs.twimg.com/profile_images/1843848451177754629/JG9s95wv_400x400.jpg"},
-            {"name":"Public AI","priority":"A","funding":"$2M","site":"https://beta.publicai.io/?r=eBoOF","social":{"twitter":"https://x.com/PublicAIData","discord":"https://discord.gg/JRaJFdmx"},"status":"Active Farming","application":"Dec. AI Infrastructure", "image":"https://pbs.twimg.com/profile_images/1936462795584729088/c3advPaX_400x400.jpg"},
             {"name":"Uplink","priority":"S","funding":"$10M","site":"https://explorer.uplink.xyz/register?referralCode=XK7aY2","social":{"twitter":"https://x.com/uplink_xyz","discord":"https://discord.com/invite/r5d9DCT2e2"},"status":"Active Farming","application":"Dec. Connectivity", "image":"https://pbs.twimg.com/profile_images/1897064849689227264/iOge47Am_400x400.jpg"},
             {"name":"Kaisar","priority":"A","funding":"$1M","site":"https://zero.kaisar.io/register?ref=GoGPgT669","social":{"twitter":"https://x.com/KaisarNetwork","discord":"https://discord.gg/fKHUPa72"},"status":"Active Farming","application":"Sec. Connectivity", "image":"https://pbs.twimg.com/profile_images/1776202066282926080/5ppDFq9k_400x400.jpg"},
-            {"name":"NodePay","priority":"S","funding":"$7M","site":"https://app.nodepay.ai/register?ref=0kKEtv5Z8Ae3yMv","social":{"twitter":"https://x.com/nodepay_ai","discord":"https://discord.gg/nodepay"},"status":"Season 3","application":"Sensor & Edge Devices","image": "https://pbs.twimg.com/profile_images/1785448882195013632/NlAWjldQ_400x400.jpg"},
             {"name":"Dawn","priority":"S","funding":"$18M","site":"(Code: dker3uap) https://chromewebstore.google.com/detail/dawn-validator-chrome-ext/fpdkjdnhkakefebpekbdhillbhonfjjp?authuser=0&hl=en","social":{"twitter":"https://x.com/dawninternet","discord":"https://discord.gg/jhPkKCZq"},"status":"Active Farming","application":"Data Storage/Web","image": "https://pbs.twimg.com/profile_images/1811363474284417025/3yGX3CjY_400x400.jpg"},
             {"name":"Grass","priority":"S","funding":"$4.5M","site":"https://app.getgrass.io/register?referralCode=XEQ1thjGfHk0N8O","social":{"twitter":"https://x.com/grass","discord":"https://discord.gg/getgrass"},"status":"Season 2","application":"Data Monetization", "image":"https://pbs.twimg.com/profile_images/1836126251007852545/wILJU3d6_400x400.jpg"},
             {"name":"3DOS","priority":"S","funding":"Not disclosed","site":"https://dashboard.3dos.io/register?ref_code=894a3e","social":{"twitter":"https://x.com/3DOSNetwork","discord":"https://discord.gg/3kE2yUxa"},"status":"Active Farming","application":"Dist. Manufacturing/IoT", "image":"https://pbs.twimg.com/profile_images/1616254196377952257/yUxZSRAX_400x400.jpg"},
-            {"name":"Gradient","priority":"S","funding":"Not disclosed","site":"https://app.gradient.network/signup?code=VFKHU1","social":{"twitter":"https://x.com/Gradient_HQ","discord":"https://discord.com/invite/2MthdzVJX9"},"status":"Active Farming","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/1951628691228024832/N5YoX7Nl_400x400.jpg"},
+            {"name":"Gradient","priority":"S","funding":"Not disclosed","site":"https://app.gradient.network/signup?code=VFKHU1","social":{"twitter":"https://x.com/Gradient_HQ","discord":"https://discord.com/invite/2MthdzVJX9"},"status":"Active Farming","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/2008090619638697985/xyBT54Mn_400x400.jpg"},
             {"name":"Bless","priority":"A","funding":"$8M","site":"https://bless.network/dashboard?ref=2SPZLM","social":{"twitter":"https://x.com/theblessnetwork","discord":"https://discord.gg/blessnetwork"},"status":"Active Farming","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/1858647923212361728/GYk64f8U_400x400.jpg"},
-            {"name":"Multisync","priority":"A","funding":"$2.2M","site":"https://multisynq.io/auth?referral=487a7ae52ccc7827","social":{"twitter":"https://x.com/multisynq","discord":"https://discord.com/invite/6Bvt8vx8NA"},"status":"Connection Only","application":"Device Synchronization", "image":"https://pbs.twimg.com/profile_images/1944462931111952384/kxXecY0r_400x400.jpg"},
+            {"name":"Multisync","priority":"A","funding":"$2.2M","site":"https://multisynq.io/auth?referral=487a7ae52ccc7827","social":{"twitter":"https://x.com/multisynq","discord":"https://discord.com/invite/6Bvt8vx8NA"},"status":"Connection Only","application":"Device Synchronization", "image":"https://pbs.twimg.com/profile_images/2007914802488786944/7k2bxOTg_400x400.jpg"},
             {"name":"GRID","priority":"A","funding":"$2.2M","site":"https://sso.getgrid.ai/registration?referral_code=fc126e7","social":{"twitter":"https://x.com/GetGridAi","discord":"https://discord.com/invite/fDs88WUNXS"},"status":"Connection Only","application":"AI training", "image":"https://pbs.twimg.com/profile_images/1798313490534555648/BET1sJNK_400x400.jpg"},
             {"name":"Stork","priority":"A","funding":"$4M","site":"https://chromewebstore.google.com/detail/stork-verify/knnliglhgkmlblppdejchidfihjnockl","social":{"twitter":"https://x.com/StorkOracle","discord":"https://discord.com/invite/storkoracle"},"status":"Active Farming","application":"Geo. Data Distribution", "image":"https://pbs.twimg.com/profile_images/1899474008195637248/-nVBNuKn_400x400.jpg"},
-            {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity", "image":"https://pbs.twimg.com/profile_images/1847181726973415424/8mw2mGXQ_400x400.png"},
+            {"name":"Toggle","priority":"B","funding":"Not disclosed","site":"https://toggle.pro/sign-up/11a2f0c1-35b5-4cc9-89c7-6ae2157f0ff7","social":{"twitter":"https://x.com/toggle","discord":"https://discord.com/invite/DfCyzC7tB8"},"status":"Active Farming","application":"DePIN Connectivity", "image":"https://pbs.twimg.com/profile_images/1999528541407322114/jNntGsHK_400x400.jpg"},
             {"name":"BlockMesh","priority":"B","funding":"Not disclosed","site":"https://app.blockmesh.xyz/register?invite_code=925336ba-de36-4e8e-a8ab-ce645919ce27","social":{"twitter":"https://x.com/blockmesh_xyz","discord":"https://discord.com/invite/pwZWzCtGx4"},"status":"Active Farming","application":"Dec. Communication", "image":"https://pbs.twimg.com/profile_images/1935652819672920064/BsH-7Fva_400x400.jpg"},
             {"name":"Distribute AI","priority":"B","funding":"Not disclosed","site":"https://r.oasis.ai/4c858669677a0fe6","social":{"twitter":"https://x.com/distributeai","discord":"https://discord.gg/distributeai"},"status":"Season 2","application":"Priv. & Storage for AI", "image":"https://pbs.twimg.com/profile_images/1866227189122789376/Ic2w3fhw_400x400.jpg"},
             {"name":"GaeaAI","priority":"B","funding":"Not disclosed","site":"https://app.aigaea.net/register?ref=gaSC6trQ0WpqzZ","social":{"twitter":"https://x.com/aigaealabs","discord":"https://discord.com/invite/aigaea"},"status":"Active Farming","application":"AI Training", "image":"https://pbs.twimg.com/profile_images/1904422472902115328/OQd87AE6_400x400.png"},
             {"name":"Teneo (Code: uigsb)","priority":"B","funding":"Not disclosed","site":"https://bit.ly/teneo-community-node","social":{"twitter":"https://x.com/teneo_protocol","discord":"https://discord.gg/teneoprotocol"},"status":"Active Farming","application":"DePIN Points", "image":"https://pbs.twimg.com/profile_images/1797649020564754432/0Oav1zjU_400x400.jpg"},
             {"name":"Depinned (Code: DES9xJKEsKLfo2)","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/depined/pjlappmodaidbdjhmhifbnnmmkkicjoc?hl=pt-BR","social":{"twitter":"https://x.com/DePINed_org","discord":"https://discord.com/invite/74dEq5Et"},"status":"Active Farming","application":"Unclear/Browser Plugin", "image":"https://pbs.twimg.com/profile_images/1871083685732061184/GklrQE2V_400x400.jpg"},
-            {"name":"Kleo Network","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/kleo-network/jimpblheogbjfgajkccdoehjfadmimoo?refAddress=0xb905B5F5869F6F6b6FC3C92950ec5bE210585f98","social":{"twitter":"https://x.com/kleo_network","discord":"discord.gg/4JQyXqBg8b"},"status":"Active Farming","application":"Priv. Storage Network", "image":"https://pbs.twimg.com/profile_images/1905390198801784833/G0Vjvmkx_400x400.jpg"},
         ]
         
         # Gera os blocos HTML individualmente
@@ -3465,115 +3965,116 @@ with col_content:
         """
         components.html(full_html, height=4200, width=1500, scrolling=False)
 
-    elif st.session_state.pagina == "📊 Comparative YT Table":
+    #elif st.session_state.pagina == "📊 Comparative YT Table":
 
-        st.markdown(
-            """
-            <style>
-            .bridge-description {
-                font-size: 20px;
-                text-align: justify;
-                line-height: 1.6;
-            }
-            </style>
+    #    st.markdown(
+    #        """
+    #        <style>
+    #        .bridge-description {
+    #            font-size: 20px;
+    #            text-align: justify;
+    #            line-height: 1.6;
+    #        }
+    #        </style>
 
-            <div class="bridge-description">
-                Comparative table of the protocols presented in the ‘Farm with YT’ Section. You can dowload the table.
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    #        <div class="bridge-description">
+    #           Comparative table of the protocols presented in the ‘Farm with YT’ Section. You can dowload the table.
+    #        </div>
+    #        """,
+    #        unsafe_allow_html=True
+    #    )
 
-        df = pd.DataFrame({
-            "Protocolo": list(protocolos.keys()),
-            "TVL": [protocolos[p]["TVL"] for p in protocolos],
-            "Total Points Farmed (XP)": [protocolos[p]["Total Points Farmed"] for p in protocolos],
-            "Last Update": [protocolos[p]["Last Update"] for p in protocolos],
-            "YT Multiplier (x)": [protocolos[p]["YT Multiplier"] for p in protocolos],
-            "YT APY": [protocolos[p]["YT APY"] for p in protocolos],
-            "Time Until YT Expiration": [protocolos[p]["Time Until Expiration"] for p in protocolos],
-            "Protocol YT Multiplier": [protocolos[p]["Protocol YT Multiplier"] for p in protocolos],
-            "Protocol Referral Boost": [protocolos[p]["Protocol Referral Boost"] for p in protocolos],
-            "Equivalent YT Received": [protocolos[p]["Equivalent YT Received"] for p in protocolos],
-            "Daily Points Farmed (XP)": [protocolos[p]["Daily Points Farmed"] for p in protocolos],
-            "Total Points in YT Expiration (XP)": [protocolos[p]["Total Points Farmed in YT"] for p in protocolos],
-            "Top 100 Concentration (%)": [protocolos[p]["Top 100 Concentration"] for p in protocolos],
-            "Total Users": [protocolos[p]["Total User"] for p in protocolos],
-            "Farmed Yield in YT": [protocolos[p]["Farmed Yield in YT"] for p in protocolos],
-            "Mean Daily Points (XP)": [protocolos[p]["Mean Daily Points"] for p in protocolos],
-            "Points in TGE (XP)": [protocolos[p]["Estimated Points in TGE"] for p in protocolos],
-            "Points per Token": [protocolos[p]["Points per Token"] for p in protocolos],
-            "Estimated FDV in TGE": [protocolos[p]["Estimated FDV in TGE"] for p in protocolos],
-            "Token Price": [protocolos[p]["Estimated Token Price"] for p in protocolos],
-            "Tokens Airdrop": [protocolos[p]["Estimated Tokens Airdrop"] for p in protocolos],
-            "Airdrop Value": [protocolos[p]["Estimated Airdrop Value"] for p in protocolos],
-            "Profit": [protocolos[p]["Expected Profit"] for p in protocolos],
-            "ROI": [protocolos[p]["Expected ROI"] for p in protocolos],
-            "Rating": [protocolos[p]["Grade"] for p in protocolos],  # Se estiver disponível
-            "Expiry": [protocolos[p]["Expiry"] for p in protocolos]  # Se aplicável
-        })
-        dfT = df.set_index("Protocolo").T
-        styled_dfT = (
-            dfT.style
-            .map(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #E6EDF3')
-            .set_table_styles([
-                {
-                    "selector": "th.row_heading", 
-                    "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
-                },
-                {
-                    "selector": "th.col_heading", 
-                    "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
-                },
-                {
-                    "selector": "td",  # Aqui é o corpo da tabela
-                    "props": [("color", "#342b44"), ("background-color", "#E6EDF3"), ("font-size", "20px"), ("padding", "6px 12px"),("font-weight", "bold")]
-                }
-            ])
-        )
-        #st.write(styled_dfT)
-        # Mostrando no Streamlit
-        #st.dataframe(df, use_container_width=True)
-        styled_df = df.style.applymap(
-            lambda v: 'color: #342b44; background-color: #E6EDF3' if isinstance(v, (int, float)) and v > 0.1 
-            else 'color: #342b44; background-color: #E6EDF3'
-        )
-        st.markdown("""
-        <style>
-        /* Fonte e cor das abas */
-        .stTabs [data-baseweb="tab"] {
-            font-size: 20px;
-            font-family: 'Space Grotesk', sans-serif;
-            color: white;
-            background-color: #342b44;  /* roxo escuro */
-            border-radius: 8px 8px 0 0;
-            padding: 8px;
-            margin-right: 2px;
-        }
+    #    df = pd.DataFrame({
+    #        "Protocolo": list(protocolos.keys()),
+    #        "TVL": [protocolos[p]["TVL"] for p in protocolos],
+    #        "Total Points Farmed (XP)": [protocolos[p]["Total Points Farmed"] for p in protocolos],
+    #        "Last Update": [protocolos[p]["Last Update"] for p in protocolos],
+    #        "YT Multiplier (x)": [protocolos[p]["YT Multiplier"] for p in protocolos],
+    #        "YT APY": [protocolos[p]["YT APY"] for p in protocolos],
+    #        "Time Until YT Expiration": [protocolos[p]["Time Until Expiration"] for p in protocolos],
+    #        "Protocol YT Multiplier": [protocolos[p]["Protocol YT Multiplier"] for p in protocolos],
+    #        "Protocol Referral Boost": [protocolos[p]["Protocol Referral Boost"] for p in protocolos],
+    #        "Equivalent YT Received": [protocolos[p]["Equivalent YT Received"] for p in protocolos],
+    #        "Daily Points Farmed (XP)": [protocolos[p]["Daily Points Farmed"] for p in protocolos],
+    #        "Total Points in YT Expiration (XP)": [protocolos[p]["Total Points Farmed in YT"] for p in protocolos],
+    #        "Top 100 Concentration (%)": [protocolos[p]["Top 100 Concentration"] for p in protocolos],
+    #        "Total Users": [protocolos[p]["Total User"] for p in protocolos],
+    #        "Farmed Yield in YT": [protocolos[p]["Farmed Yield in YT"] for p in protocolos],
+    #        "Mean Daily Points (XP)": [protocolos[p]["Mean Daily Points"] for p in protocolos],
+    #        "Points in TGE (XP)": [protocolos[p]["Estimated Points in TGE"] for p in protocolos],
+    #        "Points per Token": [protocolos[p]["Points per Token"] for p in protocolos],
+    #        "Estimated FDV in TGE": [protocolos[p]["Estimated FDV in TGE"] for p in protocolos],
+    #        "Token Price": [protocolos[p]["Estimated Token Price"] for p in protocolos],
+    #        "Tokens Airdrop": [protocolos[p]["Estimated Tokens Airdrop"] for p in protocolos],
+    #        "Airdrop Value": [protocolos[p]["Estimated Airdrop Value"] for p in protocolos],
+    #        "Profit": [protocolos[p]["Expected Profit"] for p in protocolos],
+    #        "ROI": [protocolos[p]["Expected ROI"] for p in protocolos],
+    #        "Rating": [protocolos[p]["Grade"] for p in protocolos],  # Se estiver disponível
+    #        "Expiry": [protocolos[p]["Expiry"] for p in protocolos]  # Se aplicável
+    #    })
+    #    dfT = df.set_index("Protocolo").T
+    #    styled_dfT = (
+    #        dfT.style
+    #        .map(lambda v: 'color: green' if isinstance(v, (int, float)) and v > 0.1 else 'color: #E6EDF3')
+    #        .set_table_styles([
+    #            {
+    #                "selector": "th.row_heading", 
+    #                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
+    #            },
+    #            {
+    #                "selector": "th.col_heading", 
+    #                "props": [("color", "white"), ("background-color", "#342b44"), ("font-weight", "bold"), ("font-size", "25px")]
+    #            },
+    #            {
+    #                "selector": "td",  # Aqui é o corpo da tabela
+    #                "props": [("color", "#342b44"), ("background-color", "#E6EDF3"), ("font-size", "20px"), ("padding", "6px 12px"),("font-weight", "bold")]
+    #            }
+    #        ])
+    #    )
+    #    #st.write(styled_dfT)
+    #    # Mostrando no Streamlit
+    #    #st.dataframe(df, use_container_width=True)
+    #    styled_df = df.style.applymap(
+    #        lambda v: 'color: #342b44; background-color: #E6EDF3' if isinstance(v, (int, float)) and v > 0.1 
+    #        else 'color: #342b44; background-color: #E6EDF3'
+    #    )
+    #    st.markdown("""
+    #    <style>
+    #    /* Fonte e cor das abas */
+    #    .stTabs [data-baseweb="tab"] {
+    #        font-size: 20px;
+    #        font-family: 'Space Grotesk', sans-serif;
+    #        color: white;
+    #        background-color: #342b44;  /* roxo escuro */
+    #        border-radius: 8px 8px 0 0;
+    #        padding: 8px;
+    #        margin-right: 2px;
+    #    }
 
-        /* Aba ativa */
-        .stTabs [aria-selected="true"] {
-            background-color: #FFA500 !important;  /* laranja */
-            color: black !important;
-            font-weight: bold;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-    
-        tab1, tab2 = st.tabs(["📄 Vertical Table","🔁 Horizontal Table"])
+    #    /* Aba ativa */
+    #    .stTabs [aria-selected="true"] {
+    #        background-color: #FFA500 !important;  /* laranja */
+    #        color: black !important;
+    #        font-weight: bold;
+    #    }
+    #    </style>
+    #    """, unsafe_allow_html=True)
+    # 
+    #   tab1, tab2 = st.tabs(["📄 Vertical Table","🔁 Horizontal Table"])
 
-        with tab1:
-            st.markdown("<h2 style='font-size:25px;'>Vertical Table</h2>", unsafe_allow_html=True)
-            st.markdown(styled_dfT.to_html(), unsafe_allow_html=True)
+    #    with tab1:
+    #        st.markdown("<h2 style='font-size:25px;'>Vertical Table</h2>", unsafe_allow_html=True)
+    #        st.markdown(styled_dfT.to_html(), unsafe_allow_html=True)
 
-        with tab2:
-            st.markdown("<h2 style='font-size:32px;'>Horizontal Table</h2>", unsafe_allow_html=True)
-            st.write(styled_df)
+    #    with tab2:
+    #        st.markdown("<h2 style='font-size:32px;'>Horizontal Table</h2>", unsafe_allow_html=True)
+    #        st.write(styled_df)
+    #    
+    #    st.markdown(
+    #        "<hr style='border: 2px double #342b44;'>",
+    #        unsafe_allow_html=True
+    #    )
         
-        st.markdown(
-            "<hr style='border: 2px double #342b44;'>",
-            unsafe_allow_html=True
-        )
 
     elif st.session_state.pagina == "✅ Last Claims and Checkers":
         code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.GVURiL"
@@ -3591,7 +4092,7 @@ with col_content:
         Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
         question = "\n\n".join(Resp_sem_tag)
-        personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title and ignore content with X(twitter) and do not add any comment, but alwayws provide the claim link. Try to put each topic in one line."""
+        personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title and ignore content with X(twitter) and do not add any comment, but alwayws provide the claim link. Try to put each topic in one line. And if there is any referral code into a link, remove it and from link"""
 
         result = mistral_AI_2(question,"ingles","mistral-large-latest",personality)
         
@@ -3699,7 +4200,7 @@ with col_content:
             {texto_html}
         </div>
     """, unsafe_allow_html=True)
-       
+   
     elif st.session_state.pagina == "🌉 Bridges & Swaps Protocols":
         # Updated protocols data including Sonic and Hyperlane networks
 
@@ -3786,11 +4287,12 @@ with col_content:
 
         protocols_bridge_swap = {
             "EVM": [
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
-                {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1952718333335269376/NWZNfDuk_400x400.png"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1960334543052816384/ejODKCzq_400x400.jpg"},
+                {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1995446284627632128/UEEe3Id8_400x400.jpg"},
                 {"name": "Uniswap", "site": "https://uniswap.org", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1831348758753206272/y2Z0hMrl_400x400.jpg"},
-                {"name": "Swaps.io", "site": "https://swaps.io?ref=q7kMylhY2EY", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1710931572667584512/GWMzqBE0_400x400.png"},
                 {"name": "Bungee", "site": "https://bungee.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1938126602774450177/qEmo_mDl_400x400.png"},
+                {"name": "PactSwap","site":"https://app.pactswap.io","fees":"Low","image":"https://pbs.twimg.com/profile_images/1985653295252209664/AVr5gfUU_400x400.jpg"},
+                {"name": "Swaps.io", "site": "https://swaps.io?ref=q7kMylhY2EY", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1710931572667584512/GWMzqBE0_400x400.png"},
                 {"name": "SuperBridge", "site": " https://superbridge.app/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1891417040399048705/g_qJg56l_400x400.jpg"},
                 {"name": "Comet", "site": "https://cometbridge.app/?", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1771071398251012096/Fe_n9mbm_400x400.jpg"},
                 {"name": "iZumi Finance", "site": "https://izumi.finance", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1509704804032937991/5qVVZwJj_400x400.jpg"},
@@ -3801,12 +4303,12 @@ with col_content:
                 {"name": "LayerSwap", "site": "https://layerswap.io/app", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1635993072327639041/G_YIQ-G1_400x400.jpg"},      
                 {"name": "SushiSwap", "site": "https://www.sushi.com/sonic/swap",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1848386042073858048/Dev1DVpq_400x400.jpg"},
                 {"name": "KyberSwap", "site": "https://kyberswap.com/swap/sonic",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1641706567014940672/UFuWgdxn_400x400.jpg"},  
-                {"name": "PancakeSwap", "site": "https://pancakeswap.finance/swap", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1949012010378952705/wZGdragb_400x400.jpg"},
+                {"name": "PancakeSwap", "site": "https://pancakeswap.finance/swap", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2004910939959967744/wr7-zpVh_400x400.jpg"},
                 {"name": "SquidRouter", "site": "https://app.squidrouter.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1938625911743524864/ppNPPF84_400x400.jpg"},
                 {"name": "Stargate", "site": "https://stargate.finance", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1928147506699145217/n7-KQGNJ_400x400.png"},
                 {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"}, 
                 {"name": "Merkly", "site": "https://minter.merkly.com/hyperlane/token", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1730147960082628608/3Oz6434E_400x400.jpg"},
-                {"name": "Across Protocol", "site": "https://app.across.to/bridge?", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1886903904874512384/wnRMhfef_400x400.jpg"},
+                {"name": "Across Protocol", "site": "https://app.across.to/bridge?", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2008632947612565507/YHUF-r2L_400x400.jpg"},
                 {"name": "Rhino.fi", "site": "https://app.rhino.fi/bridge?", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1938213012181078016/luFTCyEW_400x400.jpg"},
                 {"name": "Retro", "site": "https://app.retrobridge.io/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1764776304895787009/TqIDlj_P_400x400.jpg"},
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
@@ -3814,25 +4316,27 @@ with col_content:
                 {"name": "deBridge", "site": "https://debridge.finance", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Solana": [
-                {"name": "Titan - Code: G1UCP3A6", "site": "https://titandex.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1864118438538436608/94Hh88Vz_400x400.jpg"},
+                {"name": "Titan", "site": "titan.exchange/@Fleming", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1957368973701652480/cvzob53-_400x400.jpg"},
                 {"name": "Jupiter", "site": "https://jup.ag", "fees": "Low", "image": "https://jup.ag/favicon.ico"},
-                {"name": "Kamino", "site": "https://swap.kamino.finance/swap/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1800478667040002048/8bUg0jRH_400x400.jpg"},
+                {"name": "Kamino", "site": "https://swap.kamino.finance/swap/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1999411256155938818/lAOSJHuf_400x400.jpg"},
                 {"name": "Orca", "site": "https://www.orca.so/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1948115299817119744/mn3HxiYq_400x400.jpg"},
                 {"name": "Stabble", "site": "https://app.stabble.org/?referrer=fleming25", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1876267708238434304/8J3u2h6I_400x400.jpg"},
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1960334543052816384/ejODKCzq_400x400.jpg"},
                 {"name": "Portal Bridge", "site": "https://portalbridge.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1927411080172593152/n_qpHIq7_400x400.jpg"},
-                {"name": "Mayan", "site": "https://swap.mayan.finance/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1891499635597856769/5BMo_JQJ_400x400.jpg"},
+                {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1995446284627632128/UEEe3Id8_400x400.jpg"},
+                {"name": "Mayan", "site": "https://swap.mayan.finance/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1995516018748219392/4Q4w7xBt_400x400.png"},
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
                 {"name": "Owlto", "site": "https://owlto.finance/?ref=0xa786817bE0B3FC4385E9F93140B513c9846C6f74", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1886736859054923778/Iv098oCX_400x400.jpg"},
                 {"name": "deBridge", "site": "https://debridge.finance", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Sui": [
-                {"name": "Bridge.sui", "site": "https://bridge.sui.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1928528183466373120/4xpp6RSr_400x400.jpg"},
+                {"name": "Bridge.sui", "site": "https://bridge.sui.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2001729274496053248/SKLMdvW__400x400.jpg"},
                 {"name": "Aftermath (Sui)", "site": "https://aftermath.finance/trade?", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1898807230818078720/g20J2FLu_400x400.jpg"},
-                {"name": "7k (Sui)", "site": "https://7k.ag/?ref=6ZG45VKF2W", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1925943394586468352/uSHSEZ7M_400x400.jpg"},
+                {"name": "7k (Sui)", "site": "https://7k.ag/?ref=6ZG45VKF2W", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2005513583443279872/GvR8SSaf_400x400.jpg"},
                 {"name": "Portal Bridge", "site": "https://portalbridge.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1927411080172593152/n_qpHIq7_400x400.jpg"},
             ],
             "Bitcoin": [   
+                {"name": "PactSwap","site":"https://app.pactswap.io","fees":"Low","image":"https://pbs.twimg.com/profile_images/1985653295252209664/AVr5gfUU_400x400.jpg"},
                 {"name": "Swaps.io", "site": "https://swaps.io?ref=q7kMylhY2EY", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1710931572667584512/GWMzqBE0_400x400.png"},
                 {"name": "Meson", "site": "https://meson.fi/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1844573068083273728/03OqXzZD_400x400.jpg"},
                 {"name": "Oooo Money", "site": "https://bridge.oooo.money/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1749633878460084224/yduMtwPo_400x400.jpg"},     
@@ -3841,7 +4345,7 @@ with col_content:
                 {"name": "Owlto", "site": "https://owlto.finance/?ref=0xa786817bE0B3FC4385E9F93140B513c9846C6f74", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1886736859054923778/Iv098oCX_400x400.jpg"},
             ],
             "Eclipse": [
-                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1960334543052816384/ejODKCzq_400x400.jpg"},
                 {"name": "Invariant", "site": "https://eclipse.invariant.app/points", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1842564007770693632/pW6YmToL_400x400.jpg"},
                 {"name": "Orca", "site": "https://www.orca.so/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1948115299817119744/mn3HxiYq_400x400.jpg"},
                 {"name": "Eclipse Bridge", "site": "https://app.eclipse.xyz/bridge?target=deposit", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1816156021519466496/FBQWKnR4_400x400.jpg"},     
@@ -3850,16 +4354,16 @@ with col_content:
             "Cosmos": [
                 {"name": "Osmosis", "site": "https://app.osmosis.zone", "fees": "Low", "image": "https://app.osmosis.zone/favicon.ico"},
                 {"name": "Axelar", "site": "https://axelar.network", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1869486848646537216/rs71wCQo_400x400.jpg"},
-                {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1910278053340823552/xl3wZv0N_400x400.png"},
+                {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
             ],
             "Celestia": [
                 {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"}, 
                 {"name": "Injective Bridge", "site": "https://hub.injective.network/bridge", "fees": "Fair", "image": "https://injective.com/favicon.ico"},
-                {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1910278053340823552/xl3wZv0N_400x400.png"},
+                {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
             ],
             "Injective": [
                 {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"},  
-                {"name": "Skip.go", "site": "https://ibcprotocol.org", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1910278053340823552/xl3wZv0N_400x400.png"},
+                {"name": "Skip.go", "site": "https://ibcprotocol.org", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
                 {"name": "Helix", "site": "https://helixapp.com/swap/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1557766092088610816/ZPpcNEAd_400x400.jpg"},
             ],
             "Mantle": [
@@ -3869,8 +4373,8 @@ with col_content:
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
             ],
             "Monad": [
-                {"name": "Jumper Exchange", "site": "https://jumper.exchange",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1952718333335269376/NWZNfDuk_400x400.png"},
-                {"name": "Relay", "site": "https://relay.link/bridge",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1945144527498485760/QxoWQgE0_400x400.jpg"},
+                {"name": "Jumper Exchange", "site": "https://jumper.exchange",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1995446284627632128/UEEe3Id8_400x400.jpg"},
+                {"name": "Relay", "site": "https://relay.link/bridge",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1960334543052816384/ejODKCzq_400x400.jpg"},
                 {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
             ],
             "Sonic Labs": [
@@ -3881,7 +4385,7 @@ with col_content:
                 {"name": "deBridge", "site": "https://debridge.finance",  "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Hyperliquid":[
-                {"name": "HyperSwap", "site": "https://app.hyperswap.exchange/#/swap?referral=Fleming",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1818300103825719296/mE6pjX1x_400x400.jpg"},
+                {"name": "HyperSwap", "site": "https://app.hyperswap.exchange/#/swap?referral=Fleming",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2008202311873544192/nnkMb5Qy_400x400.jpg"},
                 {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
             ]
         }
@@ -4130,6 +4634,361 @@ with col_content:
         """
         components.html(full_html, height=3200, width=1500, scrolling=False)
 
+    elif st.session_state.pagina == "⚖️ Funding Rate Arbitrage":
+
+        import requests
+        import streamlit.components.v1 as components
+
+        API_URL = "https://www.cryptoexchange.sh/api/funding-arb"
+        VARIATIONAL_API = "https://omni-client-api.prod.ap-northeast-1.variational.io/metadata/stats"
+
+        # ------------------------------
+        # LINKS DOS PROTOCOLOS
+        # ------------------------------
+        EXCHANGE_LINKS = {
+            "VARIATIONAL": "https://omni.variational.io/",
+            "PACIFICA": "https://app.pacifica.fi?referral=PacificaRef",
+            "OSTIUM": "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH",
+            "HYPERLIQUID": "https://app.hyperliquid.xyz/join/HYPER15",
+            "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
+            "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
+        }
+
+        def link_exchange(name: str):
+            if not name:
+                return "-"
+            key = name.upper()
+            url = EXCHANGE_LINKS.get(key)
+            if url:
+                return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
+            return key
+
+        # ------------------------------
+        # VARIATIONAL FIX
+        # ------------------------------
+        def fetch_variational_funding():
+            r = requests.get(VARIATIONAL_API, timeout=10)
+            r.raise_for_status()
+            data = r.json()
+
+            funding_map = {}
+            for item in data.get("listings", []):
+                try:
+                    yearly = float(item["funding_rate"])
+                    hourly = yearly / (365 * 24)
+                    funding_map[item["ticker"].upper()] = hourly
+                except:
+                    pass
+            return funding_map
+
+
+        def fix_variational_markets(markets, funding_map):
+
+            for m in markets:
+                symbol = m.get("symbol","").split("-")[0].upper()
+
+                for v in m.get("venues", []):
+                    if v.get("venue","").lower() == "variational":
+                        if symbol in funding_map:
+                            v["funding"] = funding_map[symbol]
+
+                valid = [v for v in m.get("venues",[]) if isinstance(v.get("funding"),(int,float))]
+                if not valid:
+                    continue
+
+                min_v = min(valid, key=lambda x: x["funding"])
+                max_v = max(valid, key=lambda x: x["funding"])
+
+                m["minFundingVenue"] = {"venue": min_v["venue"], "funding": min_v["funding"]}
+                m["maxFundingVenue"] = {"venue": max_v["venue"], "funding": max_v["funding"]}
+                m["fundingDiff"] = max_v["funding"] - min_v["funding"]
+
+            return markets
+
+        # ------------------------------
+        # Request
+        # ------------------------------
+        try:
+            response = requests.get(API_URL, timeout=15)
+            response.raise_for_status()
+            json_data = response.json()
+
+            variational_funding = fetch_variational_funding()
+
+        except Exception as e:
+            st.error(f"Erro ao buscar dados: {e}")
+            st.stop()
+
+        markets = fix_variational_markets(json_data.get("data", []), variational_funding)
+        rwa_markets = fix_variational_markets(json_data.get("rwaTopOpportunities", []), variational_funding)
+
+        # ------------------------------
+        # Sidebar filtros
+        # ------------------------------
+        st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
+
+        min_spread = st.sidebar.slider(
+            "Spread mínimo (%)",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.001,
+            step=0.001
+        )
+
+        top_n = st.sidebar.slider(
+            "Top oportunidades destacadas",
+            min_value=3,
+            max_value=20,
+            value=12,
+            step=1
+        )
+
+        # ------------------------------
+        # Header
+        # ------------------------------
+        st.markdown(
+            """
+            <style>
+                .airdrop-box {
+                    position: relative;
+                    z-index: 1;
+                    border-radius: 12px;
+                    padding: 25px;
+                    margin: 20px 0;
+                    background: #111827;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 30px;
+                    font-size: 20px;
+                    color: white;
+                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                    white-space: normal;
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                }
+
+                /* Borda neon com gradiente animado */
+                .airdrop-box::before {
+                    content: "";
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
+                    border-radius: 14px;
+                    z-index: -1;
+                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                    background-size: 600% 600%;
+                    animation: neonBorder 6s ease infinite;
+                    padding: 3px;
+                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                }
+
+                /* Efeito de hover */
+                .airdrop-box:hover {
+                    border-color: #00f0ff;
+                    background: #262b33;
+                }
+
+                @keyframes neonBorder {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+
+                .airdrop-box h1 {
+                    font-size: 25px;
+                    text-align: center;
+                    margin-bottom: 5px;
+                }
+
+                .airdrop-box h2 {
+                    font-size: 25px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    color: #00ffae;
+                }
+
+                .airdrop-box ul {
+                    margin-left: 20px;
+                    margin-bottom: 5px;
+                }
+            </style>
+
+            <div class="airdrop-box">
+                <h2>Funding Rate Arbitrage</h2>
+                <p style="color: #8293A3;">
+                    Find the arbitrage opportunities by tracking the real-time funding rate differences across decentralized exchanges (refresh each 5 minutes).
+                </p>
+                <h2>What to do?</h2>
+                <ul style="color: #8293A3;">
+                    <li><strong>Asset selection:</strong> Choose a coin with a large funding gap (or best daily APY) between two exchanges from the ranking below.</li>
+                    <li><strong>Where to sell (Short):</strong> Open a short position where funding is highest and positive (you get paid).</li>
+                    <li><strong>Where to buy (Long):</strong> Open a long position where funding is lowest or negative (low or negative cost).</li>
+                    <li><strong>Balance:</strong> Use the same notional (e.g. $1,000 each side) and the same leverage (1x–3x recommended).</li>
+                    <li><strong>Time:</strong> Let the trade run for at least a few hours and check on the PerpDEX platform what the funding payment interval is.</li>
+                    <li><strong>Capital:</strong> It’s not recommended to do arbitrage with very low capital. Use at least $300 per trade on the two indicated platforms; otherwise, you won’t be able to cover the fees and the spread when closing the trade..</li>
+                </ul>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+        # ------------------------------
+        # Builders (INALTERADOS)
+        # ------------------------------
+        def prepare_markets(data):
+            processed = []
+
+            for m in data:
+                spread_pct = m.get("spreadPct", 0)
+                funding_diff = m.get("fundingDiff", 0)
+                apy_diario = funding_diff * 24 * 100
+                apy_anual = apy_diario * 365
+                
+                if funding_diff*100 >= min_spread:
+                    m["spread_pct"] = round(spread_pct, 4)
+                    m["funding_diff_pct"] = round(funding_diff * 100, 5)
+                    m["apy_diario"] = round(apy_diario, 4)
+                    m["apy_anual"] = round(apy_anual, 2)
+                    processed.append(m)
+
+            processed = sorted(processed, key=lambda x: x["apy_diario"], reverse=True)
+            return processed
+
+        def build_blocks(data):
+            blocks_html = ""
+
+            for idx, m in enumerate(data):
+                symbol = m.get("symbol", "")
+                spread_pct = m["spread_pct"]
+                funding_diff = m["funding_diff_pct"]
+                apy_diario = m["apy_diario"]
+                apy_anual = m["apy_anual"]
+
+                min_v = m.get("minFundingVenue", {})
+                max_v = m.get("maxFundingVenue", {})
+
+                long_name = link_exchange(min_v.get("venue", ""))
+                short_name = link_exchange(max_v.get("venue", ""))
+
+                highlight_class = "highlight-block" if idx < top_n else "protocol-block"
+
+                venues_html = ""
+                for v in m.get("venues", []):
+                    venues_html += f"""
+                        <div style="font-size:14px; opacity:0.9; margin-top:3px;">
+                            {link_exchange(v.get("venue",""))} | funding: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}
+                        </div>
+                    """
+
+                blocks_html += f"""
+                    <div class="{highlight_class}">
+                        <div class="header-wrapper">
+                            <strong style="font-size:26px; text-shadow:0 0 6px #14ffe9;">
+                                #{idx+1} — {symbol}
+                            </strong>
+                            <p style="margin-top:6px;">
+                                ∆ Funding: {funding_diff}% |💰 daily APY: <b style="color:#3cff9e;">{apy_diario}%</b>
+                            </p>
+                        </div>
+
+                        <div class="footer-wrapper">
+                            <p>🟢 Long: {long_name} — {round(min_v.get("funding",0)*100,5)}%</p>
+                            <p>🔴 Short: {short_name} — {round(max_v.get("funding",0)*100,5)}%</p>
+                            <p>⚡ Price Spread: {spread_pct}%</p>
+                            <p>💰 Anual APY: {apy_anual}%</p>
+                            <div style="margin-top:10px;">{venues_html}</div>
+                        </div>
+                    </div>
+                """
+
+            return blocks_html
+
+        crypto_markets = prepare_markets(markets)
+        rwa_markets = prepare_markets(rwa_markets)
+
+        # ------------------------------
+        # CSS
+        # ------------------------------
+        block_style_css = """
+        <style>
+            .container-externa {
+                border-radius: 12px;
+                padding: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                color: white;
+            }
+
+            .protocol-block {
+                width: 350px;
+                border-radius: 14px;
+                padding: 20px;
+                margin: 12px;
+                background: #121217;
+                box-shadow: 0 0 16px rgba(0,255,150,0.25);
+                transition: 0.3s;
+            }
+
+            .highlight-block {
+                width: 350px;
+                border-radius: 16px;
+                padding: 22px;
+                margin: 12px;
+                background: linear-gradient(135deg, #0f2f23, #121217);
+                box-shadow: 0 0 30px rgba(0,255,150,0.85);
+                border: 1px solid rgba(80,255,180,0.6);
+                transform: scale(1.03);
+            }
+
+            .header-wrapper {
+                padding-bottom: 10px;
+                border-bottom: 1px solid rgba(48, 240, 192, 0.15);
+            }
+
+            .footer-wrapper {
+                margin-top: 10px;
+                font-size:16px;
+            }
+        </style>
+        """
+        # ------------------------------
+        # Crypto section (INALTERADA)
+        # ------------------------------
+        st.markdown("## 🔥 Crypto Top Opportunities")
+
+        crypto_html = f"""
+            {block_style_css}
+            <div class="container-externa">
+                {build_blocks(crypto_markets)}
+            </div>
+        """
+
+        components.html(crypto_html, height=3200, scrolling=True)
+
+        # ------------------------------
+        # RWA section (INALTERADA)
+        # ------------------------------
+        if rwa_markets:
+            st.markdown("## 🏛 RWA Top Opportunities")
+
+            rwa_html = f"""
+                {block_style_css}
+                <div class="container-externa">
+                    {build_blocks(rwa_markets)}
+                </div>
+            """
+
+            components.html(rwa_html, height=2600, scrolling=True)
+
+
     elif st.session_state.pagina == "🚰 Faucets":
         st.markdown(
             """
@@ -4214,26 +5073,25 @@ with col_content:
             {"network": "Ethereum", "token": "ETH (Sepolia, Holesky)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://sepolia-faucet.pk910.de/","https://faucet.hoodscan.io/", "https://console.optimism.io/faucet","",""]},
             {"network": "Bitcoin", "token": "BTC (Signet)", "image":"https://pbs.twimg.com/profile_images/421692600446619648/dWAbC2wg_400x400.jpeg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
             {"network": "0G Labs", "token": "0G", "image":"https://pbs.twimg.com/profile_images/1933474287027171329/L-I1k2oL_400x400.jpg", "sites": ["https://faucet.0g.ai/","","","",""]},
-            {"network": "Pharos", "token": "Pharos", "image":"https://pbs.twimg.com/profile_images/1899385457047412736/vfvmbKVj_400x400.jpg", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
+            {"network": "Pharos", "token": "Pharos", "image":"https://pbs.twimg.com/profile_images/2005491865450430464/ta6znFqT_400x400.jpg", "sites": ["https://testnet.pharosnetwork.xyz/", "https://zan.top/faucet/pharos", "https://web3.okx.com/pt-br/faucet","",""]},
             {"network": "Opnet", "token": "Opnet", "image":"https://pbs.twimg.com/profile_images/1817743953627660289/7HObLZyL_400x400.jpg", "sites": ["https://faucet.opnet.org","","","",""]},
             {"network": "Campnetwork", "token": "Campnetwork", "image":"https://pbs.twimg.com/profile_images/1774932612160557056/QOyzwbO2_400x400.jpg", "sites": ["https://faucet.campnetwork.xyz","","","",""]},
             {"network": "Somnia", "token": "Somnia", "image":"https://pbs.twimg.com/profile_images/1896736794810458112/9tsFttK2_400x400.jpg", "sites": ["https://testnet.somnia.network/","https://www.somnia.domains/faucet","","",""]},
-            {"network": "Moonveil", "token": "Moonveil", "image":"https://pbs.twimg.com/profile_images/1935215139734908928/E_mmN003_400x400.png", "sites": ["https://faucet.testnet.moonveil.gg/","","","",""]},
-            {"network": "Sahara", "token": "Sahara", "image":"https://pbs.twimg.com/profile_images/1871431718198239232/2LNyhe05_400x400.jpg", "sites": ["https://faucet.saharalabs.ai/", "https://web3.okx.com/pt-br/faucet","","",""]},
+            {"network": "Sahara", "token": "Sahara", "image":"https://pbs.twimg.com/profile_images/1955663161928921088/nn_g5zL1_400x400.png", "sites": ["https://web3.okx.com/pt-br/faucet", "","","",""]},
             {"network": "MegaETH", "token": "MegaETH", "image":"https://pbs.twimg.com/profile_images/1861751545790070784/KvlxTzAq_400x400.jpg", "sites": ["https://testnet.megaeth.com/#1","","","",""]},
             {"network": "Xion", "token": "Xion", "image":"https://pbs.twimg.com/profile_images/1881756422507024384/Huw5cTrb_400x400.jpg", "sites": ["https://faucet.xion.burnt.com/", "https://web3.okx.com/pt-br/faucet","","",""]},
-            {"network": "AVAX", "token": "AVAX", "image":"https://pbs.twimg.com/profile_images/1948745192041054214/Xtv0XFFw_400x400.jpg", "sites": ["https://core.app/tools/testnet-faucet/?","","","",""]},
-            {"network": "Seismic", "token": "Seismic", "image":"https://pbs.twimg.com/profile_images/1889153006483935233/VWQ-F4dG_400x400.png", "sites": ["https://faucet-2.seismicdev.net/","","","",""]},
+            {"network": "AVAX", "token": "AVAX", "image":"https://pbs.twimg.com/profile_images/2004400226480934915/GT-XFQzI_400x400.jpg", "sites": ["https://core.app/tools/testnet-faucet/?","","","",""]},
+            {"network": "Seismic", "token": "Seismic", "image":"https://pbs.twimg.com/profile_images/1973845579592519680/b4fdyJ1-_400x400.jpg", "sites": ["https://faucet-2.seismicdev.net/","","","",""]},
             {"network": "Humanity", "token": "Humanity", "image":"https://pbs.twimg.com/profile_images/1923385112172888065/Elwahdp2_400x400.jpg", "sites": ["https://www.alchemy.com/faucets/","","","",""]},
-            {"network": "Monad", "token": "Monad", "image":"https://pbs.twimg.com/profile_images/1877532281419739137/I_t8rg_V_400x400.jpg", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
-            {"network": "Sui", "token": "SUI", "image":"https://pbs.twimg.com/profile_images/1928528183466373120/4xpp6RSr_400x400.jpg", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
+            {"network": "Monad", "token": "Monad", "image":"https://pbs.twimg.com/profile_images/1967693862559698944/XTfCXXGa_400x400.jpg", "sites": ["https://testnet.monad.xyz/", "https://stake.apr.io/faucet", "https://faucet.quicknode.com/", "https://thirdweb.com/monad-testnet",""]},
+            {"network": "Sui", "token": "SUI", "image":"https://pbs.twimg.com/profile_images/2001729274496053248/SKLMdvW__400x400.jpg", "sites": ["https://faucet.sui.io/","https://faucet.blockbolt.io/","","",""]},
             {"network": "Ethereum", "token": "USDC, EURC (Sepolia)", "image":"https://pbs.twimg.com/profile_images/1878738447067652096/tXQbWfpf_400x400.jpg", "sites": ["https://faucet.circle.com/","","","",""]},
-            {"network": "Sei", "token": "SEI", "image":"https://pbs.twimg.com/profile_images/1938635626766565380/l5P2O5jF_400x400.jpg", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
+            {"network": "Sei", "token": "SEI", "image":"https://pbs.twimg.com/profile_images/1998864096943566848/quL0fkgk_400x400.jpg", "sites": ["https://www.docs.sei.io/learn/faucet","","","",""]},
             {"network": "Babylon", "token": "Babylon Testnet", "image":"https://pbs.twimg.com/profile_images/1877578455576948736/q0GnBs9F_400x400.jpg", "sites": ["https://faucet.hoodscan.io/","","","",""]},
             {"network": "Google Web3 Faucet", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1754606338460487681/bWupXdxo_400x400.jpg", "sites": ["https://cloud.google.com/application/web3","","","",""]},
             {"network": "Chainlink", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1800426318099595264/N7yf_kOD_400x400.jpg", "sites": ["https://faucets.chain.link/","","","",""]},
-            {"network": "Alchemy", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1947425842738384896/eDE44AUv_400x400.jpg", "sites": ["https://www.alchemy.com/faucets","","","",""]},
-            {"network": "Quicknode", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1875136807781662720/MJP7n4UN_400x400.jpg", "sites": ["https://faucet.quicknode.com/","","","",""]},
+            {"network": "Alchemy", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/1979190252448133120/xAMqZF7__400x400.jpg", "sites": ["https://www.alchemy.com/faucets","","","",""]},
+            {"network": "Quicknode", "token": "Multichain", "image":"https://pbs.twimg.com/profile_images/2006931756109209601/TRgoe6HT_400x400.jpg", "sites": ["https://faucet.quicknode.com/","","","",""]},
             {"network": "Buy Faucets", "token": "Multichain", "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA131noMEukSs7KjDfFB7fURfU_mkHSZVmWw&s", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
         ]
     
