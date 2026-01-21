@@ -728,15 +728,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
-           "🎁 Latest Airdrops", "♾️ PerpDex Airdrops","📡 Depin Airdrops", "✅ Last Claims and Checkers", 
+           "🎁 Latest Airdrops", "♾️ PerpDEX Airdrops","📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
 st.markdown("\n\n")
 st.sidebar.markdown("---")
-opcao = st.sidebar.radio("🏠 Welcome", options, index=1)
+opcao = st.sidebar.radio("🧮 Airdrop Calculator", options, index=1)
 if "pagina" not in st.session_state:
-    st.session_state.pagina = "🏠 Welcome"
+    st.session_state.pagina = "🧮 Airdrop Calculator"
 
 PAGES = {
     "🏠 Welcome": "",
@@ -744,7 +744,7 @@ PAGES = {
     "🏆 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
     "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
     "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
-    "♾️ PerpDex Airdrops": "Airdrops from PerpDex.",
+    "♾️ PerpDEX Airdrops": "Airdrops from PerpDex.",
     "📡 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
     "🎁 Latest Airdrops": "List of the latest available airdrops.",
     "🎒 BackPack Volume Check": "Check your BackPack Volume.",
@@ -1039,7 +1039,7 @@ with col_content:
         }
 
         if "selected_protocol" not in st.session_state:
-            st.session_state.selected_protocol = "Any"
+            st.session_state.selected_protocol = "Backpack"
 
         def select_protocol(p):
             st.session_state.selected_protocol = p
