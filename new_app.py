@@ -615,7 +615,7 @@ st.markdown("""
     <a href='https://app.hyperlend.finance/dashboard/terms-and-conditions' target='_blank' style='color:black;'>Register to Hyperland Airdrop!</a> / 
     <a href='https://trovemarkets.com?referral=UHYVX7Q' target='_blank' style='color:black;'>Checker Hyper EVM Airdrops Points!</a> /
     <a href='https://waitlist.stormrae.ai/dashboard?ref=CaioFlemin2089' target='_blank' style='color:black;'>Join the waitlist for STORMRAI!</a> /
-    <a href='https://www.ethgas.com/community/onboarding/?referral=MR8S32H' target='_blank' style='color:black;'>ETHGas launching $GWEI token!</a> /
+    <a href='https://hub.orbt.xyz/?referral_code=ORBT-RCD-SSA-ETF' target='_blank' style='color:black;'>Join Orbit Protocol Campaign!</a> /
     <a href='https://waitlist.rally.fun/joinme/CaioFlemin2089' target='_blank' style='color:black;'>ByPass The InfoFi Crash!</a> /
   </div>
 </div>
@@ -1049,6 +1049,21 @@ with col_content:
         # =========================
         # GRID DE PROTOCOLOS (FORA DAS COLUNAS)
         # =========================
+        st.markdown("""
+        <style>
+        div[data-testid="stCheckbox"] * {
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif !important;
+            font-size: 14px !important;
+            color: #e5e7eb !important;
+            letter-spacing: 0.2px;
+            align-items: center !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # --- abre container do grid ---
+        st.markdown('<div class="protocol-grid">', unsafe_allow_html=True)
+
         cols = st.columns(len(protocolos))
         for i, p in enumerate(protocolos):
             if f"check_{p}" not in st.session_state:
@@ -1056,6 +1071,7 @@ with col_content:
 
             with cols[i]:
                 st.checkbox(p, key=f"check_{p}", on_change=select_protocol, args=(p,))
+                
                 selected = "selected" if st.session_state.selected_protocol == p else ""
                 st.markdown(f"""
                 <div style="
@@ -1066,9 +1082,12 @@ with col_content:
                     padding:16px;
                     text-align:center;">
                     <img src="{logos[p]}" style="width:56px;border-radius:6px;"><br>
-                    <b style="color:white">{p}</b>
+                    <b style="font-size:14px;color:white">{p}</b>
                 </div>
                 """, unsafe_allow_html=True)
+
+        # --- fecha container do grid ---
+        st.markdown('</div>', unsafe_allow_html=True)
 
         # =========================
         # COLUNAS PRINCIPAIS
@@ -3435,41 +3454,41 @@ with col_content:
             # ⭐ PRIORIDADE S
             # ======================
             {"name":"Hyperliquid","priority":"S","funding":"Self-funded","site":"https://hyperliquid.xyz","twitter":"https://x.com/HyperliquidX","discord":"https://discord.gg/hyperliquid","status":"Post-TGE","application":"Perp + Spot","image":"https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg"},
+            {"name":"Variational","priority":"S","funding":"Top VCs","site":"https://variational.io","twitter":"https://x.com/variational_io","discord":"https://discord.gg/variational","status":"Early Farming","application":"Zero-fee Perps","image":"https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg"},
+            {"name":"Extended","priority":"S","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg"},
             {"name":"Paradex","priority":"S","funding":"Paradigm","site":"https://app.paradex.trade/r/Paradex15","twitter":"https://x.com/paradex","discord":"https://discord.gg/paradex","status":"Late Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg"},
             {"name":"Ethereal","priority":"S","funding":"Ethena","site":"https://app.ethereal.trade","twitter":"https://x.com/etherealdex","discord":"https://discord.gg/etherealdex","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1980059369736654849/dF9lY6aT_400x400.jpg"},
-            {"name":"Variational","priority":"S","funding":"Top VCs","site":"https://variational.io","twitter":"https://x.com/variational_io","discord":"https://discord.gg/variational","status":"Early Farming","application":"Zero-fee Perps","image":"https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg"},
-
+            
             # ======================
             # 🟢 PRIORIDADE A
             # ======================
-            {"name":"Extended","priority":"A","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg"},
             {"name":"Nado","priority":"A","funding":"Kraken","site":"https://nado.xyz","twitter":"https://x.com/nadoHQ","discord":"https://nado.xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg"},
             {"name":"Pacifica","priority":"A","funding":"Solana","site":"https://app.pacifica.fi?referral=PacificaRef","twitter":"https://x.com/pacifica_fi","discord":"https://discord.gg/pacifica","status":"Early Farming","application":"Sol Perps","image":"https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg"},
-            {"name":"Aster","priority":"A","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg"},
-            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Late Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg"},
             {"name":"StandX","priority":"A","funding":"Ex-Binance","site":"https://standx.com/referral?code=STAND_5","twitter":"https://x.com/StandX_Official","discord":"https://discord.gg/standx","status":"Early Farming","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/2005237613246959616/UHa0DROv_400x400.jpg"},
-
+            {"name":"HyENA","priority":"A","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg"},
+            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Ending Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg"},
+            
             # ======================
             # 🟡 PRIORIDADE B
             # ======================
-            {"name":"GRVT","priority":"B","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg"},
-            {"name":"Apex","priority":"B","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg"},
+            {"name":"TradeXYZ","priority":"B","funding":"Pre-seed","site":"https://trade.xyz","twitter":"https://x.com/tradexyz","discord":"https://trade.xyz","status":"Very Early","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/1971989421844000768/MNOCmF3z_400x400.jpg"},
+            {"name":"Ostium","priority":"B","funding":"RWA","site":"https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH","twitter":"https://x.com/OstiumLabs","discord":"https://discord.gg/ostiumlabs","status":"Early Farming","application":"RWA Perps","image":"https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg"},
             {"name":"Cascade","priority":"B","funding":"Coinbase / Polychain","site":"https://cascade.xyz","twitter":"https://x.com/cascade_xyz","discord":"https://discord.gg/cascade-xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1999154479866736640/NZEzwEE1_400x400.jpg"},
-            {"name":"HyENA","priority":"B","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg"},
             
             # ======================
             # 🟠 PRIORIDADE C
             # ======================
-            {"name":"Ostium","priority":"C","funding":"RWA","site":"https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH","twitter":"https://x.com/OstiumLabs","discord":"https://discord.gg/ostiumlabs","status":"Early Farming","application":"RWA Perps","image":"https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg"},
             {"name":"Reya","priority":"C","funding":"CoinList","site":"https://app.reya.xyz/trade?referredBy=xe369dux","twitter":"https://x.com/reya_xyz","discord":"https://discord.gg/reya","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png"},
             {"name":"EdgeX","priority":"C","funding":"VC backed","site":"https://pro.edgex.exchange/referral/EDGE15","twitter":"https://x.com/edgeX_exchange","discord":"https://discord.gg/edgex","status":"Pre-TGE","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg"},
-            {"name":"TradeXYZ","priority":"C","funding":"Pre-seed","site":"https://trade.xyz","twitter":"https://x.com/tradexyz","discord":"https://trade.xyz","status":"Very Early","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/1971989421844000768/MNOCmF3z_400x400.jpg"},
-
+            {"name":"Hibachi","priority":"C","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg"},
+            {"name":"GRVT","priority":"C","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg"},
+            {"name":"Apex","priority":"C","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg"},
+            {"name":"Aster","priority":"C","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg"},
+            
             # ======================
             # 🔴 PRIORIDADE D
             # ======================
             {"name":"Based","priority":"D","funding":"Ethena","site":"https://based.one","twitter":"https://x.com/basedonex","discord":"https://discord.gg/basedonex","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2004517825772470272/U7fzL7uD_400x400.jpg"},
-            {"name":"Hibachi","priority":"D","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg"},
         ]
 
 
@@ -4830,7 +4849,7 @@ with col_content:
                     <li><strong>Where to buy (Long):</strong> Open a long position where funding is lowest or negative (low or negative cost).</li>
                     <li><strong>Balance:</strong> Use the same notional (e.g. $1,000 each side) and the same leverage (1x–3x recommended).</li>
                     <li><strong>Time:</strong> Let the trade run for at least a few hours and check on the PerpDEX platform what the funding payment interval is.</li>
-                    <li><strong>Capital:</strong> It’s not recommended to do arbitrage with very low capital. Use at least $300 per trade on the two indicated platforms; otherwise, you won’t be able to cover the fees and the spread when closing the trade..</li>
+                    <li><strong>Capital:</strong> It’s not recommended to do arbitrage with very low capital. Use at least $300 per trade on the two indicated platforms; otherwise, you won’t be able to cover the fees and the spread when closing the trade.</li>
                 </ul>
             </div>
             """,
