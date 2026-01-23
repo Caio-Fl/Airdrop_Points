@@ -4671,6 +4671,7 @@ with col_content:
             "HYPERLIQUID": "https://app.hyperliquid.xyz/join/HYPER15",
             "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
             "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
+            "NADO": "https://app.nado.xyz?join=TMTHHkO",
         }
 
         def link_exchange(name: str):
@@ -4681,6 +4682,57 @@ with col_content:
             if url:
                 return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
             return key
+        #
+        # NADO FETCH
+        #
+        def fetch_nado_data():
+            NADO_API = "https://archive.prod.nado.xyz/v2/contracts"
+            try:
+                r = requests.get(NADO_API, timeout=10)
+                r.raise_for_status()
+                data = r.json()
+                
+                nado_map = {}
+                for ticker_id, item in data.items():
+                    # "PENGU-PERP_USDT0" -> "PENGU-USD"
+                    base = item["base_currency"].replace("-PERP", "").upper()
+                    symbol = f"{base}-USD"
+                    
+                    # Ajuste: Funding vem 24h, convertemos para 1h
+                    funding_diario = float(item.get("funding_rate", 0))
+                    funding_horario = funding_diario / 24
+                    
+                    nado_map[symbol] = {
+                        "base": base,
+                        "quote": "USD",
+                        "symbol": symbol,
+                        "venue": "nado",
+                        "mark": float(item.get("mark_price", 0)),
+                        "funding": funding_horario, # Agora compatível com o resto do código
+                        "openInterestUsd": float(item.get("open_interest_usd", 0)),
+                        "ts": int(time.time() * 1000)
+                    }
+                return nado_map
+            except Exception as e:
+                st.warning(f"Aviso: Não foi possível carregar dados da Nado ({e})")
+                return {}
+        
+        def inject_external_venues(markets, nado_map):
+            """Insere os dados da Nado na estrutura para que o fix_variational os processe."""
+            for symbol, nado_venue in nado_map.items():
+                target = next((m for m in markets if m.get("symbol") == symbol), None)
+                if target:
+                    # Substitui se já existir a nado, ou adiciona se não
+                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
+                    target["venues"].append(nado_venue)
+                else:
+                    # Cria novo mercado se a Nado tiver um token exclusivo
+                    markets.append({
+                        "symbol": symbol,
+                        "venues": [nado_venue],
+                        "spreadPct": 0
+                    })
+            return markets
 
         # ------------------------------
         # VARIATIONAL FIX
@@ -4725,21 +4777,36 @@ with col_content:
             return markets
 
         # ------------------------------
-        # Request
+        # Request e Injeção de Dados
         # ------------------------------
         try:
+            # 1. Busca API principal
             response = requests.get(API_URL, timeout=15)
             response.raise_for_status()
             json_data = response.json()
+            
+            raw_markets = json_data.get("data", [])
+            raw_rwa = json_data.get("rwaTopOpportunities", [])
 
+            # 2. Busca dados externos (Variational e Nado)
             variational_funding = fetch_variational_funding()
+            nado_data = fetch_nado_data()
+
+            # 3. Injeta Nado nos mercados antes de recalcular
+            markets_with_nado = inject_external_venues(raw_markets, nado_data)
+            rwa_with_nado = inject_external_venues(raw_rwa, nado_data)
+
+            # 4. Roda o fix_variational para recalcular Min/Max Funding e Diff
+            # Isso garante que a Nado e Variational entrem no cálculo do Delta
+            markets = fix_variational_markets(markets_with_nado, variational_funding)
+            rwa_markets = fix_variational_markets(rwa_with_nado, variational_funding)
 
         except Exception as e:
             st.error(f"Erro ao buscar dados: {e}")
             st.stop()
 
-        markets = fix_variational_markets(json_data.get("data", []), variational_funding)
-        rwa_markets = fix_variational_markets(json_data.get("rwaTopOpportunities", []), variational_funding)
+        #markets = fix_variational_markets(json_data.get("data", []), variational_funding)
+        #rwa_markets = fix_variational_markets(json_data.get("rwaTopOpportunities", []), variational_funding)
 
         # ------------------------------
         # Sidebar filtros
@@ -4974,7 +5041,7 @@ with col_content:
 
             .footer-wrapper {
                 margin-top: 10px;
-                font-size:16px;
+                font-size:14px;
             }
         </style>
         """
