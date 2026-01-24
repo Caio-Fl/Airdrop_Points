@@ -147,23 +147,47 @@ def mistral_AI_2(question,language,model,personality):
             time.sleep(5)
     return {"content": "Error trying to access the Mistral AI."}
 
-def retrieve_messages(Request_URL,headers):
+def retrieve_messages(Request_URL, headers):
+    import requests, json
+
     res = requests.get(Request_URL, headers=headers)
-    jsonn = json.loads(res.text)
+
+    try:
+        jsonn = res.json()
+    except Exception:
+        print("Resposta não é JSON:", res.text)
+        return res, [], [], [], []
+
     org_res = []
     org_author = []
     org_author_name = []
     org_mention = []
 
+    # Se não for lista, é erro da API (rate limit, permissão, etc.)
+    if not isinstance(jsonn, list):
+        print("Resposta inesperada da API do Discord:")
+        print(jsonn)
+        return res, [], [], [], []
+
     for value in jsonn:
-        #print(value['author']['username'],': ',value['content'], '\n')
-        org_res.append(value['content'])
-        org_author.append(value['author']['id'])
-        org_author_name.append(value['author']['username'])
-        if value['mentions']:
-            org_mention.append(value['mentions'][0]['username'])
-        else:
-            org_mention.append(' ')
+
+        # Garante que é uma mensagem válida
+        if not isinstance(value, dict):
+            continue
+
+        content = value.get("content")
+        author = value.get("author", {})
+
+        if content and isinstance(author, dict):
+            org_res.append(content)
+            org_author.append(author.get("id"))
+            org_author_name.append(author.get("username"))
+
+            mentions = value.get("mentions")
+            if isinstance(mentions, list) and len(mentions) > 0:
+                org_mention.append(mentions[0].get("username", " "))
+            else:
+                org_mention.append(" ")
 
     return res, org_res, org_author, org_mention, org_author_name
 
@@ -4096,51 +4120,80 @@ with col_content:
         
 
     elif st.session_state.pagina == "✅ Last Claims and Checkers":
-        code = "MTIyMTI1MjYwNzQxNTE1Njc3MA.GVURiL"
-        code2=".yIBMPG6sNlKSx4y4tAmkMTuBvss4tbaGfjpcGs"
-        
+        code = "MTIxNjgyMTQxNzQzNDE1MzA1MA.Gs-"
+        code2 = "MVR.hIwdTK6Hu0IXYz6FC2IIFzw9HkXBD9x3er-pi4"
+
         headers = {
-            "Authorization" : code+code2
+            "Authorization": code + code2
         }
-        
+
         Request_URL = "https://discord.com/api/v9/channels/1314347387942211605/messages?limit=5"
-        res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL,headers)
+
+        res, org_res, org_author, org_mention, org_author_name = retrieve_messages(Request_URL, headers)
+
+        if not org_res:
+            st.warning("⚠️ Não foi possível obter mensagens no momento. Aguarde um pouco e tente novamente.")
+            st.stop()
 
         respostas = mirror_list(org_res)
-
         Resp_sem_tag = [item.replace("<@&1291085400336760864>", "") for item in respostas]
 
         question = "\n\n".join(Resp_sem_tag)
+
         personality = """Translate to english and Rewrite the present text in a topic structure in few lines. Do not show topic structure title and ignore content with X(twitter) and do not add any comment, but alwayws provide the claim link. Try to put each topic in one line. And if there is any referral code into a link, remove it and from link"""
 
-        result = mistral_AI_2(question,"ingles","mistral-large-latest",personality)
-        
-        # IA pode ser uma lista de dicionários com 'content'
+        # =======================
+        # CHAMADA DA IA (BLINDADA)
+        # =======================
+
+        try:
+            result = mistral_AI_2(
+                question,
+                "ingles",
+                "mistral-large-latest",
+                personality
+            )
+        except Exception:
+            st.warning("⚠️ Muitas requisições foram feitas para a IA. Aguarde alguns instantes e tente novamente.")
+            st.stop()
+
+        if not result or not isinstance(result, dict) or "content" not in result:
+            st.warning("⚠️ O serviço de IA está sobrecarregado no momento. Aguarde alguns instantes e tente novamente.")
+            st.stop()
+
+        # =======================
+        # MARKDOWN → HTML
+        # =======================
+
         def markdown_to_html(texto):
-            # Negrito em HTML
             texto = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', texto)
 
-            # Substitui [qualquer coisa](link) por apenas o link com texto fixo
-            texto = re.sub(r'\[.*?\]\((https?://[^\s]+)\)', r'<a href="\1" target="_blank" style="color: #ffd700;">Check Link</a>', texto)
+            texto = re.sub(
+                r'\[.*?\]\((https?://[^\s]+)\)',
+                r'<a href="\1" target="_blank" style="color: #ffd700;">Check Link</a>',
+                texto
+            )
 
-            # Substitui links puros (sem markdown) por links com texto fixo também
-            texto = re.sub(r'(?<!["=])\bhttps?://[^\s<]+', lambda match: f'<a href="{match.group(0)}" target="_blank" style="color: #ffd700;">{match.group(0)}</a>', texto)
+            texto = re.sub(
+                r'(?<!["=])\bhttps?://[^\s<]+',
+                lambda match: f'<a href="{match.group(0)}" target="_blank" style="color: #ffd700;">{match.group(0)}</a>',
+                texto
+            )
 
-            # Substituir quebras de linha por <br>
             return texto.replace('\n', '<br>')
 
-        # Obter conteúdo e dividir pelos separadores
-        blocos = result['content'].strip().split('\n\n')
+        # =======================
+        # PROCESSAMENTO
+        # =======================
 
+        blocos = result['content'].strip().split('\n\n')
         time.sleep(3)
 
-            # Gera os blocos HTML individualmente
-        blocks_html = ""
         texto_html = ""
-        for i, bloco in enumerate(blocos):
-            print(bloco)
+        for bloco in blocos:
             texto_html += markdown_to_html(bloco)
             texto_html += "<br><br>"
+
         print(texto_html)
         st.markdown(f"""
         <style>
