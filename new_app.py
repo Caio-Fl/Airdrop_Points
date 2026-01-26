@@ -1136,70 +1136,80 @@ with col_content:
                 if auto_fill_actual:
                     today = datetime.now(timezone.utc)
 
-                    def calc(date_str, actual, daily):
+                    def calc(date_str, actual, daily, actual_date):
                         d = datetime.strptime(date_str+"T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        return int(actual + (d - today).days * daily)
+                        a = datetime.strptime(actual_date+"T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                        return int(actual + (d - a).days * daily)
 
                     if selected_protocol == "Backpack":
                         date_tge = st.text_input("📅 TGE Date", "2026-01-28")
+                        last_update = "2026-01-26"
                         FDV, airdrop_pct, your_points = 1000, 20, 1_000
-                        total_points = calc(date_tge, 399_490_000, 10_000_000/7)
+                        total_points = calc(date_tge, 420_790_000, 10_000_000/7, last_update)
                         referral = "https://backpack.exchange/join/jj2kkdp1"
                         logo_url = logos["Backpack"]
 
                     elif selected_protocol == "Variational":
                         date_tge = st.text_input("📅 TGE Date", "2026-10-01")
+                        last_update = "2026-01-02"
                         FDV, airdrop_pct, your_points = 1000, 20, 100
-                        total_points = calc(date_tge, 3_600_000, 150_000/7)
+                        total_points = calc(date_tge, 3_450_000, 150_000/7, last_update)
                         referral = "https://omni.variational.io/"
                         logo_url = logos["Variational"]
 
                     elif selected_protocol == "Pacifica":
                         date_tge = st.text_input("📅 TGE Date", "2026-10-01")
-                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
-                        total_points = calc(date_tge, 180_000_000, 10_000_000/7)
+                        last_update = "2026-01-20"
+                        FDV, airdrop_pct, your_points = 500, 20, 1_000
+                        total_points = calc(date_tge, 190_000_000, 10_000_000/7, last_update)
                         referral = "https://app.pacifica.fi?referral=PacificaRef"
                         logo_url = logos["Pacifica"]
 
                     elif selected_protocol == "Paradex":
                         date_tge = st.text_input("📅 TGE Date", "2026-02-01")
+                        last_update = "2026-01-15"
                         FDV, airdrop_pct, your_points = 1000, 20, 1_000
-                        total_points = calc(date_tge, 323_000_000, 4_200_000/7)
+                        total_points = calc(date_tge, 323_000_000, 4_200_000/7, last_update)
                         referral = "https://app.paradex.trade/r/Paradex15"
                         logo_url = logos["Paradex"]
 
                     elif selected_protocol == "Extended":
                         date_tge = st.text_input("📅 TGE Date", "2026-06-01")
+                        last_update = "2026-01-19"
                         FDV, airdrop_pct, your_points = 500, 20, 100
-                        total_points = calc(date_tge, 45_236_349, 1_030_000/7)
+                        total_points = calc(date_tge, 46_403_962, 1_034_000/7, last_update)
                         referral = "https://app.extended.exchange/join/EXT3NDED15"
                         logo_url = logos["Extended"]
 
                     elif selected_protocol == "Gvrt S2":
                         date_tge = st.text_input("📅 TGE Date", "2026-04-01")
+                        last_update = "2026-01-20"
                         FDV, airdrop_pct, your_points = 500, 12, 100
-                        total_points = calc(date_tge, 1_964_286, 125_000/7)
+                        total_points = calc(date_tge, 2_325_000, 135_000/7, last_update)
                         referral = "https://grvt.io/?ref=C496Y64"
                         logo_url = logos["Gvrt S2"]
 
                     elif selected_protocol == "Ostium":
                         date_tge = st.text_input("📅 TGE Date", "2026-12-21")
+                        last_update = "2026-01-26"
                         FDV, airdrop_pct, your_points = 500, 20, 1_000
-                        total_points = calc(date_tge, 22_928_571, 500_000/7)
+                        total_points = calc(date_tge, 32_500_000, 500_000/7, last_update)
                         referral = "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH"
                         logo_url = logos["Ostium"]
-                    
+
                     elif selected_protocol == "EdgeX":
                         date_tge = st.text_input("📅 TGE Date", "2026-03-31")
+                        last_update = "2026-01-07"
                         FDV, airdrop_pct, your_points = 1000, 25, 100
-                        total_points = calc(date_tge, 7_300_000, 0)
+                        total_points = calc(date_tge, 7_300_000, 0, last_update)
                         referral = "https://pro.edgex.exchange/referral/EDGE15"
                         logo_url = logos["EdgeX"]
 
                     elif selected_protocol == "Reya":
                         date_tge = st.text_input("📅 TGE Date", "2026-03-31")
+                        last_update = "2026-01-26"
                         FDV, airdrop_pct, your_points = 500, 20, 100
-                        total_points = calc(date_tge, 10_200_000, 153_000/7)
+                        total_points = calc(date_tge, 10_500_000, 153_000/7, last_update)
                         referral = "https://app.reya.xyz/trade?referredBy=xe369dux"
                         logo_url = logos["Reya"]
 
