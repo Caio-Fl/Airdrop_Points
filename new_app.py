@@ -751,7 +751,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "💵 Solana APY Ranking", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
+options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "💵 Solana Stables APY", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
            "🎁 Latest Airdrops", "♾️ PerpDEX Airdrops","📡 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
@@ -767,7 +767,7 @@ PAGES = {
     "✅ Last Claims and Checkers": "Latest claimable rewards and check tools.",
     "🏆 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
     "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
-    "💵 Solana APY Ranking": "Solana Stables APY Chances",
+    "💵 Solana Stables APY": "Solana Stables APY Chances",
     "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
     "♾️ PerpDEX Airdrops": "Airdrops from PerpDex.",
     "📡 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
@@ -5138,7 +5138,7 @@ with col_content:
 
             components.html(rwa_html, height=2600, scrolling=True)
 
-    elif st.session_state.pagina == "💵 Solana APY Ranking":
+    elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)
         st.markdown(
@@ -5180,14 +5180,44 @@ with col_content:
                     100% { background-position: 0% 50%; }
                 }
                 
+                .airdrop-box h1 {
+                    font-size: 25px;
+                    text-align: center;
+                    margin-bottom: 5px;
+                }
+
+                .airdrop-box h2 {
+                    font-size: 25px;
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                    color: #00ffae;
+                }
+
+                .airdrop-box ul {
+                    margin-left: 20px;
+                    margin-bottom: 0px;
+                }
+                
                 /* Badges de Risco */
                 .risk-low { color: #39FF14; text-shadow: 0 0 5px #39FF14; }
                 .risk-moderate { color: #FFD600; text-shadow: 0 0 5px #FFD600; }
                 .risk-high { color: #FF3B3B; text-shadow: 0 0 5px #FF3B3B; }
             </style>
             <div class="airdrop-box">
-                Real-time ranking of the best yields in the Solana ecosystem. 
-                Monitor APY, TVL, and risk levels across top-tier protocols.
+                <h2>Solana Stables APY</h2>
+                <p style="color: #8293A3;">
+                    Real-time ranking of the best yields in the Solana ecosystem. Monitor APY, TVL, and risk levels across top-tier protocols.
+                </p>
+                <h2>Risk & Diversification Notice</h2>
+                <p style="color: #8293A3; line-height: 1.6;">
+                    Stablecoin yield strategies should not be treated as a single bet. The best way to manage risk is through 
+                    diversification, adjusting your allocations according to your investment profile.
+                    <ul style="color: #8293A3;margin-top: 0px;">
+                        <li><strong>Conservative:</strong> focus mainly on lower-risk with a little of moderate strategies.</li>
+                        <li><strong>Moderate:</strong> allocate part to low risk, some to medium risk, and a smaller portion to moderate/high risk.</li>
+                        <li><strong>Aggressive / degen:</strong> accept higher exposure to high-risk strategies, understanding the increased chance of losses.</li>
+                    </ul>
+                </p>
             </div>
             """,
             unsafe_allow_html=True
@@ -5201,7 +5231,7 @@ with col_content:
         def get_kamino_vault_data(vault_address):
             try:
                 url = f"https://api.kamino.finance/kvaults/{vault_address}/metrics"
-                r = requests.get(url, timeout=5)
+                r = requests.get(url, timeout=10)
                 if r.status_code == 200:
                     res = r.json()
                     
@@ -5240,18 +5270,18 @@ with col_content:
                 data['hylo'] = f"{r.json()['staked_hyusd']['projected_apy']:.2f}%"
             except: data['hylo'] = "10.83%"
 
-            # KAMINO (PRIME History)
+            # HASTRA (PRIME History)
             try:
                 kamino_token_addr = "A2wsxhA7pF4B2UKVfXocb6TAAP9ipfPJam6oMKgDE5BK"
                 data['prime_apy'], data['prime_tvl'] = get_kamino_vault_data(kamino_token_addr)
             except:  
                 data['prime_apy'] = "7.19%"
                 data['prime_tvl'] = "411.35M"
-            try:
-                r = requests.get("https://api.kamino.finance/yields/3b8X44fLF9ooXaUm3hhSgjpmVs6rZZ3pPoGnGahc3Uu7/history", timeout=5)
+            #try:
+            #    r = requests.get("https://api.kamino.finance/yields/3b8X44fLF9ooXaUm3hhSgjpmVs6rZZ3pPoGnGahc3Uu7/history", timeout=5)
                 # Pega o APY do último registro da lista
-                data['kamino'] = f"{float(r.json()[-1]['apy']) * 100:.2f}%"
-            except: data['kamino'] = "8.00%"
+            #    data['kamino'] = f"{float(r.json()[-1]['apy']) * 100:.2f}%"
+            #except: data['kamino'] = "8.00%", data['prime_tvl'] = "411.35M"
 
             # PayPal(PYUSD History)
             try:
@@ -5260,6 +5290,14 @@ with col_content:
             except:  
                 data['paypal_apy'] = "7.19%"
                 data['paypal_tvl'] = "411.35M"
+
+            # World Liberty Financial (USD1 History)
+            try:
+                kamino_token_addr = "2eCcHyUfFmiLX5RnNY21Qfndqww7TmwaKBgNXX5Unu7o"
+                data['world_apy'], data['world_tvl'] = get_kamino_vault_data(kamino_token_addr)
+            except:  
+                data['world_apy'] = "9.48%"
+                data['world_tvl'] = "14.44M"
 
             # CASH
             try:
@@ -5379,23 +5417,24 @@ with col_content:
         live_yields = get_live_data()
         solana_ranking = [
             {"name": "Synatra (yUSD)", "type": "Synthetic Staking", "apy": live_yields.get('synatra'), "risk": "High", "tvl": get_protocol_tvl("synatra"), "image": "https://pbs.twimg.com/profile_images/1952420579023507456/HjnoTSzs_400x400.jpg", "site": "https://synatra.xyz"},
-            {"name": "PiggyBank (pbUSDC) - Invite: HL8KOIQKBO", "type": "LST / Stable", "apy": live_yields.get('piggy'), "risk": "Moderate", "tvl": live_yields.get('piggy_tvl'), "image": "https://pbs.twimg.com/profile_images/1986814405791698944/oBBo_qnB_400x400.jpg", "site": "https://app.piggybank.fi"},
-            {"name": "Huma Finance (PST)", "type": "RWA Lending", "apy": live_yields.get('huma'), "risk": "Moderate", "tvl": get_protocol_tvl("huma-finance"), "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
-            {"name": "Hastra (PRIME) - Kamino", "type": "Automated Vault", "apy": live_yields.get('kamino'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("hastra"), "image": "https://pbs.twimg.com/profile_images/2004570730063953920/BnIZzGdQ_400x400.jpg", "site": "https://kamino.com/assets/prime"},
+            {"name": "PiggyBank (pbUSDC) - Invite: HL8KOIQKBO", "type": "Liquid Staking (LST)", "apy": live_yields.get('piggy'), "risk": "Moderate", "tvl": live_yields.get('piggy_tvl'), "image": "https://pbs.twimg.com/profile_images/1986814405791698944/oBBo_qnB_400x400.jpg", "site": "https://app.piggybank.fi"},
+            {"name": "Huma Finance (PST)", "type": "RWA Private Credit", "apy": live_yields.get('huma'), "risk": "Moderate", "tvl": "N/A", "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
+            {"name": "Hastra (PRIME) - Kamino", "type": "Automated Vault", "apy": live_yields.get('prime_apy'), "risk": "Low/Moderate", "tvl": live_yields.get('prime_tvl'), "image": "https://pbs.twimg.com/profile_images/2004570730063953920/BnIZzGdQ_400x400.jpg", "site": "https://kamino.com/assets/prime"},
             {"name": "Ethena (sUSDe)", "type": "Delta Neutral", "apy": live_yields.get('ethena'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("ethena"), "image": "https://pbs.twimg.com/profile_images/1963578749170900992/9M1Oxp04_400x400.jpg", "site": "https://ethena.fi"},
-            {"name": "Lulo Boost", "type": "Lending Aggregator", "apy": live_yields.get('lulo'), "risk": "Moderate", "tvl": get_protocol_tvl("lulo"), "image": "https://pbs.twimg.com/profile_images/2006335597175058433/TNx2uo4W_400x400.jpg", "site": "https://lulo.fi"},
-            {"name": "Ondo (USDY)", "type": "RWA / Treasuries", "apy": live_yields.get('ondo'), "risk": "Low", "tvl": get_protocol_tvl("ondo-finance"), "image": "https://pbs.twimg.com/profile_images/1737846990778851328/KH0PALNY_400x400.jpg", "site": "https://ondo.finance"},
-            {"name": "Carrot (CRT)", "type": "Yield Optimizer", "apy": live_yields.get('carrot'), "risk": "Moderate/High", "tvl": get_protocol_tvl("carrot"), "image": "https://pbs.twimg.com/profile_images/1996652426724585473/4OvTPWz1_400x400.jpg", "site": "https://use.deficarrot.com?code=9375b9"},
-            {"name": "ONRE (ONyc)", "type": "RWA / Real Estate", "apy": live_yields.get('onre'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("onre"), "image": "https://pbs.twimg.com/profile_images/1988016892079206400/JVf5OsK3_400x400.jpg", "site": "https://onre.finance"},
-            {"name": "Hylo (sHYUSD)", "type": "Basis Trading", "apy": live_yields.get('hylo'), "risk": "Moderate/High", "tvl": get_protocol_tvl("hylo"), "image": "https://pbs.twimg.com/profile_images/1999811414299721729/-XyLtThr_400x400.png", "site": "https://hylo.so/leverage?ref=E27KDV"},
-            {"name": "Maple (syrupUSD)", "type": "Institutional Lending", "apy": live_yields.get('maple'), "risk": "Low", "tvl": get_protocol_tvl("maple"), "image": "https://pbs.twimg.com/profile_images/1808520906416979968/rys7ciQq_400x400.jpg", "site": "https://maple.finance/app"},
-            {"name": "Perena (USD*)", "type": "Stablecoin Basket", "apy": live_yields.get('perena'), "risk": "Low", "tvl": get_protocol_tvl("perena"), "image": "https://pbs.twimg.com/profile_images/1995866228137885696/gDp21I4p_400x400.jpg", "site": "https://perena.org"},
-            {"name": "Solayer (sUSD)", "type": "Restaking LST", "apy": live_yields.get('solayer'), "risk": "Low", "tvl": get_protocol_tvl("solayer"), "image": "https://pbs.twimg.com/profile_images/1852368489174159360/htlVoJ1j_400x400.jpg", "site": "https://solayer.org"},
-            {"name": "JupLend (jupUSD)", "type": "Supply Lending", "apy": live_yields.get('jup_lend'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("jupiter-lend"), "image": "https://pbs.twimg.com/profile_images/2007318464030228480/4x6SH7gB_400x400.jpg", "site": "https://lending.jup.ag"},
+            {"name": "Lulo Boost", "type": "Lending Aggregator", "apy": live_yields.get('lulo'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("lulo"), "image": "https://pbs.twimg.com/profile_images/2006335597175058433/TNx2uo4W_400x400.jpg", "site": "https://lulo.fi"},
+            {"name": "Ondo (USDY)", "type": "RWA Treasuries", "apy": live_yields.get('ondo'), "risk": "Low", "tvl": get_protocol_tvl("ondo-finance"), "image": "https://pbs.twimg.com/profile_images/1737846990778851328/KH0PALNY_400x400.jpg", "site": "https://ondo.finance"},
+            {"name": "Carrot (CRT)", "type": "Yield Aggregator", "apy": live_yields.get('carrot'), "risk": "Moderate/High", "tvl": get_protocol_tvl("carrot"), "image": "https://pbs.twimg.com/profile_images/1996652426724585473/4OvTPWz1_400x400.jpg", "site": "https://use.deficarrot.com?code=9375b9"},
+            {"name": "ONRE (ONyc)", "type": "RWA Real Estate", "apy": live_yields.get('onre'), "risk": "Moderate", "tvl": get_protocol_tvl("onre"), "image": "https://pbs.twimg.com/profile_images/1988016892079206400/JVf5OsK3_400x400.jpg", "site": "https://onre.finance"},
+            {"name": "Hylo (sHYUSD)", "type": "Basis Trading / Funding", "apy": live_yields.get('hylo'), "risk": "Moderate/High", "tvl": get_protocol_tvl("hylo"), "image": "https://pbs.twimg.com/profile_images/1999811414299721729/-XyLtThr_400x400.png", "site": "https://hylo.so/leverage?ref=E27KDV"},
+            {"name": "Maple (syrupUSD)", "type": "Institutional Credit", "apy": live_yields.get('maple'), "risk": "Low", "tvl": get_protocol_tvl("maple"), "image": "https://pbs.twimg.com/profile_images/1808520906416979968/rys7ciQq_400x400.jpg", "site": "https://maple.finance/app"},
+            {"name": "Perena (USD*)", "type": "Stablecoin Index", "apy": live_yields.get('perena'), "risk": "Low", "tvl": get_protocol_tvl("perena"), "image": "https://pbs.twimg.com/profile_images/1995866228137885696/gDp21I4p_400x400.jpg", "site": "https://perena.org"},
+            {"name": "Solayer (sUSD)", "type": "Restaking Stable", "apy": live_yields.get('solayer'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("solayer"), "image": "https://pbs.twimg.com/profile_images/1852368489174159360/htlVoJ1j_400x400.jpg", "site": "https://solayer.org"},
+            {"name": "JupLend (jupUSD)", "type": "Overcollateralized Lending", "apy": live_yields.get('jup_lend'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("jupiter-lend"), "image": "https://pbs.twimg.com/profile_images/2007318464030228480/4x6SH7gB_400x400.jpg", "site": "https://lending.jup.ag"},
             {"name": "PayPal (PYUSD) - Kamino", "type": "Lending Yield", "apy": live_yields.get('paypal_apy'), "risk": "Low", "tvl": live_yields.get('paypal_tvl'), "image": "https://pbs.twimg.com/profile_images/1831523218831634432/dtvuvsNM_400x400.jpg", "site": "https://kamino.com/lend/sentora-pyusd"},
-            {"name": "Solstice (eUSX)", "type": "Liquid Restaking", "apy": live_yields.get('solstice'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("solstice-usx"), "image": "https://pbs.twimg.com/profile_images/1916876277388046337/Qny5yRI2_400x400.png", "site": "https://solstice.finance/PVGuheMZ9f"},
+            {"name": "Solstice (eUSX)", "type": "Liquid Restaking (LRT)", "apy": live_yields.get('solstice'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("solstice-usx"), "image": "https://pbs.twimg.com/profile_images/1916876277388046337/Qny5yRI2_400x400.png", "site": "https://solstice.finance/PVGuheMZ9f"},
             {"name": "useCASH (CASH) - Kamino", "type": "Open Issuance Stable", "apy": live_yields.get('cash_apy'), "risk": "Low", "tvl": live_yields.get('cash_tvl'), "image": "https://pbs.twimg.com/profile_images/1973003466894163968/QLiOIqmF_400x400.jpg", "site": "https://kamino.com/lend/cash-earn"},
-        ]
+            {"name": "World Liberty (USD1) - Kamino", "type": "Institutional Lending", "apy": live_yields.get('world_apy'), "risk": "High", "tvl": live_yields.get('world_tvl'), "image": "https://pbs.twimg.com/profile_images/1819121309126729728/30Q2SFVH_400x400.jpg", "site": "https://kamino.com/lend/steakhouse-usd1-high-yield"},
+            ]
 
         # Ordenação opcional (Maiores APYs primeiro)
         # Remove o '%' para ordenar numericamente
@@ -5405,20 +5444,24 @@ with col_content:
         blocks_html = ""
         for p in solana_ranking:
             risk_class = f"risk-{p['risk'].lower()}"
+
             blocks_html += f"""
-            <div class="container-block" style="overflow: hidden; margin-bottom: 20px;">
-                <div class="header-wrapper">
-                    <img src="{p['image']}" width="50" height="50" style="border-radius: 50%;">
-                    <div>
-                        <strong style="text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;">{p['name']}</strong>
+            <div class="container-block">
+                <a href="{p['site']}" target="_blank" class="header-wrapper">
+                    <div class="header-content">
+                        <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
+                        <strong class="header-title">{p['name']}</strong>
                     </div>
-                </div>
+                </a>
+
                 <div class="footer-wrapper">
-                    <p><strong>🔥 APY: <span style="color: #39FF14;">{p['apy']}</span></strong></p>
-                    <p><strong>💰 TVL: {p['tvl']}</strong></p>
-                    <p><strong>📝 Type: <span style="color: #00e0ff;">{p['type']}</span></strong></p>
-                    <p><strong>⚠️ Risk: <span class="{risk_class}">{p['risk']}</span></strong></p>
-                    <p><strong>🌐 Site: <a href="{p['site']}" style="color: lightblue;" target="_blank">Explore Yield</strong></a></p>
+                    <p><strong>🔥 APY:</strong> <span style="color:#39FF14;">{p['apy']}</span></p>
+                    <p><strong>💰 TVL:</strong> {p['tvl']}</p>
+                    <p><strong>📝 Type:</strong> <span style="color:#00e0ff;">{p['type']}</span></p>
+                    <p><strong>⚠️ Risk:</strong> <span class="{risk_class}">{p['risk']}</span></p>
+                    <p><strong>🌐 Site:</strong>
+                        <a href="{p['site']}" target="_blank" style="color:lightblue;">Explore Yield</a>
+                    </p>
                 </div>
             </div>
             """
@@ -5427,10 +5470,11 @@ with col_content:
         full_html = f"""
         <style>
         @keyframes neonBorder {{
-            0%   {{ background-position: 0% 50%; }}
-            50%  {{ background-position: 100% 50%; }}
+            0% {{ background-position: 0% 50%; }}
+            50% {{ background-position: 100% 50%; }}
             100% {{ background-position: 0% 50%; }}
         }}
+
         .container-externa {{
             border-radius: 12px;
             padding: 25px;
@@ -5439,29 +5483,60 @@ with col_content:
             justify-content: center;
             font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
             color: white;
-            overflow: hidden;
         }}
+
+        .container-block {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }}
+
         .header-wrapper {{
-            width: 330px; padding: 30px; margin: 10px 12px 0 12px;
+            width: 330px;
+            padding: 30px;
+            margin: 10px 12px 0 12px;
             border-top: 1px solid rgba(48, 240, 192, 0.2);
             border-bottom: 1px solid #00e0ff;
-            border-top-left-radius: 40px; border-top-right-radius: 10px;
-            display: flex; align-items: center; gap: 30px;
-            background: #1E1F25; box-shadow: 0 0 20px rgba(0,255,150,0.3);
-            transition: transform 0.3s ease;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: center;
+            background: #1E1F25;
+            box-shadow: 0 0 20px rgba(0,255,150,0.3);
+            transition: 0.3s;
+            text-decoration: none;
         }}
+
         .header-wrapper:hover {{
             border: 1px solid #39ff14;
             box-shadow: 0 0 8px #39ff14;
             background: #262b33;
         }}
+
+        .header-content {{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }}
+
+        .header-title {{
+            font-size: 22px;
+            color: lightblue;
+            text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;
+        }}
+
         .footer-wrapper {{
-            width: 330px; padding: 30px; margin: 6px 12px 30px 12px;
+            width: 330px;
+            padding: 30px;
+            margin: 6px 12px 30px 12px;
             border-top: 1px solid #00e0ff;
-            border-bottom-right-radius: 40px; border-bottom-left-radius: 10px;
-            background: #1E1F25; box-shadow: 0 0 20px rgba(0,255,150,0.5);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 40px;
+            background: #1E1F25;
+            box-shadow: 0 0 20px rgba(0,255,150,0.5);
             font-size: 20px;
         }}
+
         .footer-wrapper:hover {{
             border: 1px solid #39ff14;
             box-shadow: 0 0 8px #39ff14;
@@ -5473,7 +5548,7 @@ with col_content:
             {blocks_html}
         </div>
         """
-        
+
         import streamlit.components.v1 as components
         components.html(full_html, height=3500, width=1500, scrolling=False)
 
