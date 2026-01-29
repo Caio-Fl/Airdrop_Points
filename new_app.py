@@ -1414,6 +1414,87 @@ with col_content:
     
     elif st.session_state.pagina == "🏆 Airdrop Points Viewer":
 
+        st.markdown(
+        """
+        <style>
+            .airdrop-box {
+                position: relative;
+                z-index: 1;
+                border-radius: 12px;
+                padding: 25px;
+                margin: 20px 0;
+                margin-bottom: 40px;
+                background: #111827;
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                font-size: 22px;
+                color: white;
+                font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                white-space: normal;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            }
+
+            /* Borda neon com gradiente animado */
+            .airdrop-box::before {
+                content: "";
+                position: absolute;
+                top: -3px;
+                left: -3px;
+                right: -3px;
+                bottom: -3px;
+                border-radius: 14px;
+                z-index: -1;
+                background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                background-size: 600% 600%;
+                animation: neonBorder 6s ease infinite;
+                padding: 3px;
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+            }
+
+            /* Efeito de hover */
+            .airdrop-box:hover {
+                border-color: #00f0ff;
+                background: #262b33;
+            }
+
+            @keyframes neonBorder {
+                0%   { background-position: 0% 50%; }
+                50%  { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            .airdrop-box h1 {
+                font-size: 25px;
+                text-align: center;
+                margin-bottom: 0px;
+            }
+
+            .airdrop-box h2 {
+                font-size: 25px;
+                margin-top: 5px;
+                margin-bottom: 0px;
+            }
+
+            .airdrop-box ul {
+                margin-left: 20px;
+                margin-bottom: 0px;
+            }
+        </style>
+        <div class="airdrop-box">
+            <h2 style="color: #00ffae; margin:0;">Airdrop Points Viewer</h2>
+            <p>Enter your wallet address below to check your points across participating protocols in the Airdrop Points Campaign. You can verify one or multiple addresses at once.</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
         # -------------------------
         # 🔹 HELPER
         # -------------------------
@@ -3602,7 +3683,7 @@ with col_content:
                             <div style="display:flex; gap:10px;">
                                 <a href="{p['site']}" target="_blank" class="t-btn">Trade</a>
                                 <a href="{p['twitter']}" target="_blank" style="font-size:18px; text-decoration:none;">🐦</a>
-                                <a href="{p['discord']}" target="_blank" style="font-size:18px; text-decoration:none;">🐦</a>
+                                <a href="{p['discord']}" target="_blank" style="font-size:18px; text-decoration:none;">🤖</a>
                             </div>
                         </td>
                     </tr>
@@ -3700,21 +3781,22 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
             <div class="airdrop-box">
+                <h2 style="color: #00ffae; margin:0;">DePIN Airdrops</h2>
                 <p>DePIN airdrops are promotional token distributions by Decentralized Physical Infrastructure (DePIN) projects to early users and participants in their networks.
                 making it easier and more secure to transfer and exchange assets within the crypto ecosystem.</p>
                 <p>By offering airdrops, DePIN projects incentivize users to contribute resources, like bandwidth, data storage, or even energy, to their networks, helping them grow and become more robust.</p>
@@ -3725,15 +3807,15 @@ with col_content:
         
 
         protocols_depin = [
-            {"name":"Parasail","priority":"A","funding":"$4M","site":"https://www.parasail.network/season?refer=MHgzRTYyMTAxMkNiNjI3MmIwN2UwNTVhYTYyRjNBRTEyQzJBZGNDOTZG","social":{"twitter":"https://x.com/parasailnetwork","discord":"https://discord.com/invite/parasail"},"status":"Active Farming","application":"Private AI at the Edge", "image":"https://pbs.twimg.com/profile_images/1788203111720570880/RqVxPfmL_400x400.jpg"},
+            {"name":"Parasail","priority":"A","funding":"$4M","site":"https://www.parasail.network/season?refer=MHgzRTYyMTAxMkNiNjI3MmIwN2UwNTVhYTYyRjNBRTEyQzJBZGNDOTZG","social":{"twitter":"https://x.com/parasailnetwork","discord":"https://discord.com/invite/parasail"},"status":"Season 1","application":"Private AI at the Edge", "image":"https://pbs.twimg.com/profile_images/1788203111720570880/RqVxPfmL_400x400.jpg"},
             {"name":"Rynus.io","priority":"S","funding":"Not disclosed","site":"https://cloud.rynus.io/login?affiliateId=BFD9FF25EC3B","social":{"twitter":"https://x.com/Rynus_io","discord":"https://discord.com/invite/Y3S8U8myeA"},"status":"Active Farming","application":"Distributed Computing", "image":"https://pbs.twimg.com/profile_images/1843848451177754629/JG9s95wv_400x400.jpg"},
             {"name":"Uplink","priority":"S","funding":"$10M","site":"https://explorer.uplink.xyz/register?referralCode=XK7aY2","social":{"twitter":"https://x.com/uplink_xyz","discord":"https://discord.com/invite/r5d9DCT2e2"},"status":"Active Farming","application":"Dec. Connectivity", "image":"https://pbs.twimg.com/profile_images/1897064849689227264/iOge47Am_400x400.jpg"},
             {"name":"Kaisar","priority":"A","funding":"$1M","site":"https://zero.kaisar.io/register?ref=GoGPgT669","social":{"twitter":"https://x.com/KaisarNetwork","discord":"https://discord.gg/fKHUPa72"},"status":"Active Farming","application":"Sec. Connectivity", "image":"https://pbs.twimg.com/profile_images/1776202066282926080/5ppDFq9k_400x400.jpg"},
-            {"name":"Dawn","priority":"S","funding":"$18M","site":"(Code: dker3uap) https://chromewebstore.google.com/detail/dawn-validator-chrome-ext/fpdkjdnhkakefebpekbdhillbhonfjjp?authuser=0&hl=en","social":{"twitter":"https://x.com/dawninternet","discord":"https://discord.gg/jhPkKCZq"},"status":"Active Farming","application":"Data Storage/Web","image": "https://pbs.twimg.com/profile_images/1811363474284417025/3yGX3CjY_400x400.jpg"},
+            {"name":"Dawn","priority":"S","funding":"$18M","site":"(Code: dker3uap) https://chromewebstore.google.com/detail/dawn-validator-chrome-ext/fpdkjdnhkakefebpekbdhillbhonfjjp?authuser=0&hl=en","social":{"twitter":"https://x.com/dawninternet","discord":"https://discord.gg/jhPkKCZq"},"status":"Active Farming","application":"Data Storage/Web","image": "https://pbs.twimg.com/profile_images/2013722399867310081/ALitROGK_400x400.jpg"},
             {"name":"Grass","priority":"S","funding":"$4.5M","site":"https://app.getgrass.io/register?referralCode=XEQ1thjGfHk0N8O","social":{"twitter":"https://x.com/grass","discord":"https://discord.gg/getgrass"},"status":"Season 2","application":"Data Monetization", "image":"https://pbs.twimg.com/profile_images/1836126251007852545/wILJU3d6_400x400.jpg"},
             {"name":"3DOS","priority":"S","funding":"Not disclosed","site":"https://dashboard.3dos.io/register?ref_code=894a3e","social":{"twitter":"https://x.com/3DOSNetwork","discord":"https://discord.gg/3kE2yUxa"},"status":"Active Farming","application":"Dist. Manufacturing/IoT", "image":"https://pbs.twimg.com/profile_images/1616254196377952257/yUxZSRAX_400x400.jpg"},
             {"name":"Gradient","priority":"S","funding":"Not disclosed","site":"https://app.gradient.network/signup?code=VFKHU1","social":{"twitter":"https://x.com/Gradient_HQ","discord":"https://discord.com/invite/2MthdzVJX9"},"status":"Active Farming","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/2008090619638697985/xyBT54Mn_400x400.jpg"},
-            {"name":"Bless","priority":"A","funding":"$8M","site":"https://bless.network/dashboard?ref=2SPZLM","social":{"twitter":"https://x.com/theblessnetwork","discord":"https://discord.gg/blessnetwork"},"status":"Active Farming","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/1858647923212361728/GYk64f8U_400x400.jpg"},
+            {"name":"Bless","priority":"A","funding":"$8M","site":"https://bless.network/dashboard?ref=2SPZLM","social":{"twitter":"https://x.com/theblessnetwork","discord":"https://discord.gg/blessnetwork"},"status":"Ended","application":"Edge Devices/Sensors", "image":"https://pbs.twimg.com/profile_images/1858647923212361728/GYk64f8U_400x400.jpg"},
             {"name":"Multisync","priority":"A","funding":"$2.2M","site":"https://multisynq.io/auth?referral=487a7ae52ccc7827","social":{"twitter":"https://x.com/multisynq","discord":"https://discord.com/invite/6Bvt8vx8NA"},"status":"Connection Only","application":"Device Synchronization", "image":"https://pbs.twimg.com/profile_images/2007914802488786944/7k2bxOTg_400x400.jpg"},
             {"name":"GRID","priority":"A","funding":"$2.2M","site":"https://sso.getgrid.ai/registration?referral_code=fc126e7","social":{"twitter":"https://x.com/GetGridAi","discord":"https://discord.com/invite/fDs88WUNXS"},"status":"Connection Only","application":"AI training", "image":"https://pbs.twimg.com/profile_images/1798313490534555648/BET1sJNK_400x400.jpg"},
             {"name":"Stork","priority":"A","funding":"$4M","site":"https://chromewebstore.google.com/detail/stork-verify/knnliglhgkmlblppdejchidfihjnockl","social":{"twitter":"https://x.com/StorkOracle","discord":"https://discord.com/invite/storkoracle"},"status":"Active Farming","application":"Geo. Data Distribution", "image":"https://pbs.twimg.com/profile_images/1899474008195637248/-nVBNuKn_400x400.jpg"},
@@ -3745,195 +3827,109 @@ with col_content:
             {"name":"Depinned (Code: DES9xJKEsKLfo2)","priority":"C","funding":"Not disclosed","site":"https://chromewebstore.google.com/detail/depined/pjlappmodaidbdjhmhifbnnmmkkicjoc?hl=pt-BR","social":{"twitter":"https://x.com/DePINed_org","discord":"https://discord.com/invite/74dEq5Et"},"status":"Active Farming","application":"Unclear/Browser Plugin", "image":"https://pbs.twimg.com/profile_images/1871083685732061184/GklrQE2V_400x400.jpg"},
         ]
         
-        # Gera os blocos HTML individualmente
-        blocks_html = ""
-        for protocol in protocols_depin:
-            blocks_html += f"""
-            <div class="container-block" style="overflow: hidden;">
-                <a href="{protocol['site']}" target="_blank" class="header-wrapper">
-                    <div class="header-content">
-                        <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;" />
-                        <strong class="header-title">{protocol['name']}</strong>
+        # --- 3. Filtros de Interface ---
+        col_v, col_f = st.columns([1, 2])
+        
+        with col_v:
+            view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True, key="depin_view")
+
+        with col_f:
+            depin_statuses = sorted(list(set(p['status'] for p in protocols_depin)))
+            selected_statuses = st.multiselect("Filter by Status", options=depin_statuses, default=depin_statuses, key="depin_status")
+
+        # --- 4. Lógica de Filtragem ---
+        filtered_depin = [p for p in protocols_depin if p['status'] in selected_statuses]
+
+        if not filtered_depin:
+            st.info("No DePIN protocols match the selected filters.")
+        else:
+            if view_mode == "Grid Cards":
+                # --- GERAÇÃO GRID ---
+                blocks_html = ""
+                for p in filtered_depin:
+                    blocks_html += f"""
+                    <div class="container-block">
+                        <a href="{p['site']}" target="_blank" class="header-wrapper">
+                            <div class="header-content">
+                                <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
+                                <strong class="header-title">{p['name']}</strong>
+                            </div>
+                        </a>
+                        <div class="footer-wrapper">
+                            <p><strong>📌 Priority:</strong> <span style="color:#39FF14;">{p['priority']}</span></p>
+                            <p><strong>💰 Funding:</strong> {p['funding']}</p>
+                            <p><strong>🚀 Application:</strong> {p['application']}</p>
+                            <p><strong>📊 Status:</strong> <span style="color:#00e0ff;">{p['status']}</span></p>
+                            <p><strong>📣 Social:</strong>
+                                <a href="{p['social']['twitter']}" target="_blank" style="color:lightblue;">Twitter</a> |
+                                <a href="{p['social']['discord']}" target="_blank" style="color:lightblue;">Discord</a>
+                            </p>
+                        </div>
                     </div>
-                </a>
-                <div class="footer-wrapper">
-                    <p style="font-size: 18px;"><strong>📌 Priority:</strong> {protocol['priority']}</p>
-                    <p style="font-size: 18px;"><strong>💰 Funding:</strong> {protocol['funding']}</p>
-                    <p style="font-size: 18px;"><strong>🚀 Application:</strong> {protocol['application']}</p>
-                    <p style="font-size: 18px;"><strong>📊 Status:</strong> {protocol['status']}</p>
-                    <p style="font-size: 18px;"><strong>📣 Social:</strong> 
-                        <a href="{protocol['social']['twitter']}" style="color: lightblue;" target="_blank">Twitter</a> | 
-                        <a href="{protocol['social']['discord']}" style="color: lightblue;" target="_blank">Discord</a>
-                    </p>
-                    <p style="font-size: 18px;"><strong>🌐 Site:</strong> <a href="{protocol['site']}" style="color: lightblue;" target="_blank">Visit Protocol</a></p>
+                    """
+                
+                full_html = f"""
+                <style>
+                .container-externa {{ display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Segoe UI', sans-serif; gap: 15px; }}
+                .container-block {{ display: flex; flex-direction: column; align-items: center; }}
+                .header-wrapper {{ width: 320px; padding: 25px; margin-top: 10px; border-top: 1px solid rgba(48, 240, 192, 0.2); border-bottom: 1px solid #00e0ff; border-top-left-radius: 40px; border-top-right-radius: 10px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.2); transition: 0.3s; text-decoration: none; display: flex; justify-content: center; }}
+                .header-wrapper:hover {{ border: 1px solid #39ff14; background: #262b33; box-shadow: 0 0 10px #39ff14; }}
+                .header-title {{ font-size: 18px; color: lightblue; text-shadow: 0 0 4px #14ffe9; }}
+                .footer-wrapper {{ width: 320px; padding: 25px; margin-top: 6px; margin-bottom: 20px; border-top: 1px solid #00e0ff; border-bottom-left-radius: 10px; border-bottom-right-radius: 40px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.3); font-size: 16px; color: white; }}
+                </style>
+                <div class="container-externa">{blocks_html}</div>
+                """
+            else:
+                # --- GERAÇÃO LISTA (TABELA) ---
+                rows_html = ""
+                for p in filtered_depin:
+                    rows_html += f"""
+                    <tr class="t-row">
+                        <td><div style="display:flex; align-items:center; gap:12px;"><img src="{p['image']}" width="35" height="35" style="border-radius:50%;"><strong>{p['name']}</strong></div></td>
+                        <td style="color:#39FF14; font-weight:bold;">{p['priority']}</td>
+                        <td>{p['funding']}</td>
+                        <td style="color:#00e0ff;">{p['status']}</td>
+                        <td style="font-size:13px;">{p['application']}</td>
+                        <td>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <a href="{p['site']}" target="_blank" class="t-btn">Connect</a>
+                                <a href="{p['social']['twitter']}" target="_blank" style="text-decoration:none;">🐦</a>
+                                <a href="{p['social']['discord']}" target="_blank" style="text-decoration:none;">🤖</a>
+                            </div>
+                        </td>
+                    </tr>
+                    """
+
+                full_html = f"""
+                <style>
+                .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; }}
+                table {{ width: 100%; border-collapse: collapse; }}
+                th {{ text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }}
+                td {{ padding: 15px; border-bottom: 1px solid #1f2937; font-size: 15px; }}
+                .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
+                .t-btn {{ background: #1f2937; color: white; padding: 6px 15px; border-radius: 6px; text-decoration: none; border: 1px solid #374151; font-size: 12px; transition: 0.2s; }}
+                .t-btn:hover {{ border-color: #39FF14; color: #39FF14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }}
+                </style>
+                <div class="t-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Priority</th>
+                                <th>Funding</th>
+                                <th>Status</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows_html}</tbody>
+                    </table>
                 </div>
-            </div>
-            """
+                """
 
-        # HTML completo
-        full_html = f"""
-        <style>
-        @keyframes neonBorder {{
-            0%   {{ background-position: 0% 50%; }}
-            50%  {{ background-position: 100% 50%; }}
-            100% {{ background-position: 0% 50%; }}
-        }}
-        .container-externa {{
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            gap: 0px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            align-items: center;
-            justify-content: center;
-        }}
-        .container-externa::-webkit-scrollbar {{
-            display: none;             /* Chrome/Safari */
-        }}
-        .protocol-block {{
-            width: 1272px;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 0px;
-            display: flex;
-            background: #1E1F25;
-            justify-content: flex-start;
-            gap: 0px; /* 👈 distância fixa entre os blocos internos */
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            overflow: hidden;
-            scrollbar-width: none;
-            align-items: center;
-            justify-content: center;
-        }}
-        .header-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 10px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid rgba(48, 240, 192, 0.2);
-            border-bottom: 1px solid #00e0ff;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px;  /* 👈 maior */
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            display: flex;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.3);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-            color: lightblue;        /* ou white, se preferir */
-            text-decoration: none;   /* remove o sublinhado */
-        }}
-        .header-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px; 
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-            text-decoration: none;
-        }}
-        .header-wrapper:hover::before {{
-            content: "";
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 14px;
-            z-index: -1;
-            animation: neonBorder 6s ease infinite;
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }}
-        .header-wrapper a {{
-            color: lightblue;
-            text-decoration: none;
-        }}
-        .header-content {{
-            display: flex;
-            flex-direction: row;             /* lado a lado */
-            align-items: center;             /* alinhamento vertical central */
-            justify-content: center;
-            gap: 20px;
-        }}
-        .header-title {{
-            font-size: 22px;
-            color: lightblue;
-            text-decoration: none;
-            text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;
-        }}
-        .footer-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 6px;
-            margin-bottom: 30px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid #00e0ff;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;  /* 👈 maior */
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            display: block;
-            align-items: center;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.5);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-            font-size:20px;
-        }}
-        .footer-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px; 
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-        }}
-        .footer-link {{
-            text-decoration: none;
-            margin: 0;
-            width: 100%;
-            color: inherit;
-        }}
-        .footer-link:hover {{
-            color: inherit;
-            align-items: center;
-            justify-content: center;
-        }}
-        </style>
-
-        <div class="container-externa">
-            {blocks_html}
-        </div>
-        """
-        components.html(full_html, height=4200, width=1500, scrolling=False)
+            # 5. Renderização Final
+            h_calc = len(filtered_depin) * 85 + 200 if view_mode == "List Table" else 4200
+            components.html(full_html, height=max(h_calc, 600), width=1500, scrolling=False)
 
     #elif st.session_state.pagina == "📊 Comparative YT Table":
 
@@ -4262,23 +4258,25 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
             <div class="airdrop-box">
+                <h2 style="color: #00ffae; margin:0;">Bridges & Swaps Protocols</h2>
+                <p style="color: #8293A3;">
                 Explore and access the best bridge and swap protocols available for each network, 
-                making it easier and more secure to transfer and exchange assets within the crypto ecosystem.
+                making it easier and more secure to transfer and exchange assets within the crypto ecosystem.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -5513,22 +5511,23 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
             <div class="airdrop-box">
-                Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.
+                <h2 style="color: #00ffae; margin:0;">Airdrop Points Viewer</h2>
+                <p style="color: #8293A3;">Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -5559,173 +5558,84 @@ with col_content:
             {"network": "Buy Faucets", "token": "Multichain", "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA131noMEukSs7KjDfFB7fURfU_mkHSZVmWw&s", "sites": ["https://www.gas.zip/", "https://testnetbridge.com/sepolia","","",""]}
         ]
     
-        # Gera os blocos HTML individualmente
-        blocks_html = ""
-        for protocol in faucet_sites:
-            blocks_html += f"""
-            <div class="container-block" style="overflow: hidden;">
-                <div class="header-wrapper">
-                    <img src="{protocol['image']}" width="50" height="50" style="border-radius: 50%;">
-                    <div>
-                    <strong style="text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;">{protocol['network']}</strong>
+        # 3. Seletor de Visualização (Sem filtros de rede, apenas troca de layout)
+        view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True, key="faucet_view")
+
+        if view_mode == "Grid Cards":
+            # --- GERAÇÃO GRID ---
+            blocks_html = ""
+            for f in faucet_sites:
+                links_html = "".join([f'<a href="{s}" target="_blank" style="color:lightblue; font-size:14px; display:block; margin-bottom:5px;">🔗 {s[:40]}...</a>' for s in f['sites'] if s])
+                blocks_html += f"""
+                <div class="container-block">
+                    <div class="header-wrapper">
+                        <div class="header-content">
+                            <img src="{f['image']}" width="50" height="50" style="border-radius:50%;">
+                            <strong class="header-title">{f['network']}</strong>
+                        </div>
+                    </div>
+                    <div class="footer-wrapper">
+                        <p><strong>🪙 Token:</strong> <span style="color:#39FF14;">{f['token']}</span></p>
+                        <div style="margin-top:10px;">
+                            <strong>🌐 Faucet Links:</strong>
+                            <div style="margin-top:8px;">{links_html}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="footer-wrapper">
-                    <p><strong>🪙 Token: {protocol['token']}</strong></p>
-                    <strong>🌐 Sites: </strong><br>
-                    {"<br>".join([f'<a href="{site}" target="_blank" style="color: lightblue; font-size: 16px;">{site}</a>' for site in protocol['sites']])}
-                </div>
+                """
+            
+            full_html = f"""
+            <style>
+            .container-externa {{ display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Segoe UI', sans-serif; gap: 15px; }}
+            .container-block {{ display: flex; flex-direction: column; align-items: center; }}
+            .header-wrapper {{ width: 330px; padding: 25px; margin-top: 10px; border-top: 1px solid rgba(48, 240, 192, 0.2); border-bottom: 1px solid #00e0ff; border-top-left-radius: 40px; border-top-right-radius: 10px; background: #1E1F25; display: flex; justify-content: center; }}
+            .header-title {{ font-size: 20px; color: lightblue; text-shadow: 0 0 4px #14ffe9; }}
+            .header-content {{ display: flex; align-items: center; gap: 15px; }}
+            .footer-wrapper {{ width: 330px; padding: 25px; margin-top: 6px; margin-bottom: 20px; border-top: 1px solid #00e0ff; border-bottom-left-radius: 10px; border-bottom-right-radius: 40px; background: #1E1F25; font-size: 16px; color: white; min-height: 180px; }}
+            </style>
+            <div class="container-externa">{blocks_html}</div>
+            """
+        else:
+            # --- GERAÇÃO LISTA (TABELA) ---
+            rows_html = ""
+            for f in faucet_sites:
+                links_html = " ".join([f'<a href="{s}" target="_blank" class="t-btn" style="margin-right:5px; margin-bottom:5px; display:inline-block;">Link {i+1}</a>' for i, s in enumerate(f['sites']) if s])
+                rows_html += f"""
+                <tr class="t-row">
+                    <td><div style="display:flex; align-items:center; gap:12px;"><img src="{f['image']}" width="35" height="35" style="border-radius:50%;"><strong>{f['network']}</strong></div></td>
+                    <td style="color:#39FF14; font-weight:bold;">{f['token']}</td>
+                    <td><div style="display:flex; flex-wrap:wrap;">{links_html}</div></td>
+                </tr>
+                """
+
+            full_html = f"""
+            <style>
+            .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; }}
+            table {{ width: 100%; border-collapse: collapse; }}
+            th {{ text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }}
+            td {{ padding: 15px; border-bottom: 1px solid #1f2937; font-size: 15px; }}
+            .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
+            .t-btn {{ background: #1f2937; color: white; padding: 5px 12px; border-radius: 4px; text-decoration: none; border: 1px solid #374151; font-size: 11px; }}
+            .t-btn:hover {{ border-color: #39FF14; color: #39FF14; }}
+            </style>
+            <div class="t-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30%">Network</th>
+                            <th width="30%">Token</th>
+                            <th width="40%">Available Links</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows_html}</tbody>
+                </table>
             </div>
             """
 
- # HTML completo
-        full_html = f"""
-        <style>
-        @keyframes neonBorder {{
-            0%   {{ background-position: 0% 50%; }}
-            50%  {{ background-position: 100% 50%; }}
-            100% {{ background-position: 0% 50%; }}
-        }}
-        .container-externa {{
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            gap: 0px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            scrollbar-width: none;
-        }}
-        .container-externa::-webkit-scrollbar {{
-            display: none;             /* Chrome/Safari */
-        }}
-        .protocol-block {{
-            width: 1272px;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 0px;
-            display: flex;
-            background: #1E1F25;
-            justify-content: flex-start;
-            gap: 0px; /* 👈 distância fixa entre os blocos internos */
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            overflow: hidden;
-            scrollbar-width: none;
-        }}
-        .header-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 10px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid rgba(48, 240, 192, 0.2);
-            border-bottom: 1px solid #00e0ff;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px;  /* 👈 maior */
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.3);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-        }}
-        .header-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px; 
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-        }}
-        .header-wrapper:hover::before {{
-            content: "";
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 14px;
-            z-index: -1;
-            animation: neonBorder 6s ease infinite;
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }}
-        .header-wrapper a {{
-            color: lightblue;
-            text-decoration: none;
-        }}
-        .footer-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 6px;
-            margin-bottom: 30px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid #00e0ff;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;  /* 👈 maior */
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            display: block;
-            align-items: center;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.5);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-            font-size:20px;
-        }}
-        .footer-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px; 
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-        }}
-        .footer-link {{
-            text-decoration: none;
-            margin: 0;
-            width: 100%;
-            color: inherit;
-        }}
-        .footer-link:hover {{
-            color: inherit;
-        }}
-        </style>
-
-        <div class="container-externa">
-            {blocks_html}
-        </div>
-        """
-        components.html(full_html, height=3300, width=1500, scrolling=False)
-
+        # 4. Renderização
+        h_calc = len(faucet_sites) * 100 + 300 if view_mode == "List Table" else 3500
+        components.html(full_html, height=max(h_calc, 800), width=1500, scrolling=False)
+        
     elif st.session_state.pagina == "⛔ Revoke Contract":
 
         st.markdown(
