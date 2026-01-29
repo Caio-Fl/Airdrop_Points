@@ -4634,179 +4634,9 @@ with col_content:
     elif st.session_state.pagina == "⚖️ Funding Rate Arbitrage":
 
         import requests
+        import time
         import streamlit.components.v1 as components
-
-        API_URL = "https://www.cryptoexchange.sh/api/funding-arb"
-        VARIATIONAL_API = "https://omni-client-api.prod.ap-northeast-1.variational.io/metadata/stats"
-
-        # ------------------------------
-        # LINKS DOS PROTOCOLOS
-        # ------------------------------
-        EXCHANGE_LINKS = {
-            "VARIATIONAL": "https://omni.variational.io/",
-            "PACIFICA": "https://app.pacifica.fi?referral=PacificaRef",
-            "OSTIUM": "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH",
-            "HYPERLIQUID": "https://app.hyperliquid.xyz/join/HYPER15",
-            "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
-            "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
-            "NADO": "https://app.nado.xyz?join=TMTHHkO",
-        }
-
-        def link_exchange(name: str):
-            if not name:
-                return "-"
-            key = name.upper()
-            url = EXCHANGE_LINKS.get(key)
-            if url:
-                return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
-            return key
-        #
-        # NADO FETCH
-        #
-        def fetch_nado_data():
-            NADO_API = "https://archive.prod.nado.xyz/v2/contracts"
-            try:
-                r = requests.get(NADO_API, timeout=10)
-                r.raise_for_status()
-                data = r.json()
-                
-                nado_map = {}
-                for ticker_id, item in data.items():
-                    # "PENGU-PERP_USDT0" -> "PENGU-USD"
-                    base = item["base_currency"].replace("-PERP", "").upper()
-                    symbol = f"{base}-USD"
-                    
-                    # Ajuste: Funding vem 24h, convertemos para 1h
-                    funding_diario = float(item.get("funding_rate", 0))
-                    funding_horario = funding_diario / 24
-                    
-                    nado_map[symbol] = {
-                        "base": base,
-                        "quote": "USD",
-                        "symbol": symbol,
-                        "venue": "nado",
-                        "mark": float(item.get("mark_price", 0)),
-                        "funding": funding_horario, # Agora compatível com o resto do código
-                        "openInterestUsd": float(item.get("open_interest_usd", 0)),
-                        "ts": int(time.time() * 1000)
-                    }
-                return nado_map
-            except Exception as e:
-                st.warning(f"Aviso: Não foi possível carregar dados da Nado ({e})")
-                return {}
         
-        def inject_external_venues(markets, nado_map):
-            """Insere os dados da Nado na estrutura para que o fix_variational os processe."""
-            for symbol, nado_venue in nado_map.items():
-                target = next((m for m in markets if m.get("symbol") == symbol), None)
-                if target:
-                    # Substitui se já existir a nado, ou adiciona se não
-                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
-                    target["venues"].append(nado_venue)
-                else:
-                    # Cria novo mercado se a Nado tiver um token exclusivo
-                    markets.append({
-                        "symbol": symbol,
-                        "venues": [nado_venue],
-                        "spreadPct": 0
-                    })
-            return markets
-
-        # ------------------------------
-        # VARIATIONAL FIX
-        # ------------------------------
-        def fetch_variational_funding():
-            r = requests.get(VARIATIONAL_API, timeout=10)
-            r.raise_for_status()
-            data = r.json()
-
-            funding_map = {}
-            for item in data.get("listings", []):
-                try:
-                    yearly = float(item["funding_rate"])
-                    hourly = yearly / (365 * 24)
-                    funding_map[item["ticker"].upper()] = hourly
-                except:
-                    pass
-            return funding_map
-
-
-        def fix_variational_markets(markets, funding_map):
-
-            for m in markets:
-                symbol = m.get("symbol","").split("-")[0].upper()
-
-                for v in m.get("venues", []):
-                    if v.get("venue","").lower() == "variational":
-                        if symbol in funding_map:
-                            v["funding"] = funding_map[symbol]
-
-                valid = [v for v in m.get("venues",[]) if isinstance(v.get("funding"),(int,float))]
-                if not valid:
-                    continue
-
-                min_v = min(valid, key=lambda x: x["funding"])
-                max_v = max(valid, key=lambda x: x["funding"])
-
-                m["minFundingVenue"] = {"venue": min_v["venue"], "funding": min_v["funding"]}
-                m["maxFundingVenue"] = {"venue": max_v["venue"], "funding": max_v["funding"]}
-                m["fundingDiff"] = max_v["funding"] - min_v["funding"]
-
-            return markets
-
-        # ------------------------------
-        # Request e Injeção de Dados
-        # ------------------------------
-        try:
-            # 1. Busca API principal
-            response = requests.get(API_URL, timeout=15)
-            response.raise_for_status()
-            json_data = response.json()
-            
-            raw_markets = json_data.get("data", [])
-            raw_rwa = json_data.get("rwaTopOpportunities", [])
-
-            # 2. Busca dados externos (Variational e Nado)
-            variational_funding = fetch_variational_funding()
-            nado_data = fetch_nado_data()
-
-            # 3. Injeta Nado nos mercados antes de recalcular
-            markets_with_nado = inject_external_venues(raw_markets, nado_data)
-            rwa_with_nado = inject_external_venues(raw_rwa, nado_data)
-
-            # 4. Roda o fix_variational para recalcular Min/Max Funding e Diff
-            # Isso garante que a Nado e Variational entrem no cálculo do Delta
-            markets = fix_variational_markets(markets_with_nado, variational_funding)
-            rwa_markets = fix_variational_markets(rwa_with_nado, variational_funding)
-
-        except Exception as e:
-            st.error(f"Erro ao buscar dados: {e}")
-            st.stop()
-
-        #markets = fix_variational_markets(json_data.get("data", []), variational_funding)
-        #rwa_markets = fix_variational_markets(json_data.get("rwaTopOpportunities", []), variational_funding)
-
-        # ------------------------------
-        # Sidebar filtros
-        # ------------------------------
-        st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
-
-        min_spread = st.sidebar.slider(
-            "Spread mínimo (%)",
-            min_value=0.0,
-            max_value=100.0,
-            value=0.001,
-            step=0.001
-        )
-
-        top_n = st.sidebar.slider(
-            "Top oportunidades destacadas",
-            min_value=3,
-            max_value=20,
-            value=12,
-            step=1
-        )
-
         # ------------------------------
         # Header
         # ------------------------------
@@ -4866,19 +4696,19 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
                     margin-top: 5px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                     color: #00ffae;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
 
@@ -4901,66 +4731,144 @@ with col_content:
             unsafe_allow_html=True
         )
 
+        API_URL = "https://www.cryptoexchange.sh/api/funding-arb"
+        VARIATIONAL_API = "https://omni-client-api.prod.ap-northeast-1.variational.io/metadata/stats"
 
         # ------------------------------
-        # Builders (INALTERADOS)
+        # LINKS DOS PROTOCOLOS
         # ------------------------------
-        def prepare_markets(data):
+        EXCHANGE_LINKS = {
+            "VARIATIONAL": "https://omni.variational.io/",
+            "PACIFICA": "https://app.pacifica.fi?referral=PacificaRef",
+            "OSTIUM": "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH",
+            "HYPERLIQUID": "https://app.hyperliquid.xyz/join/HYPER15",
+            "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
+            "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
+            "NADO": "https://app.nado.xyz?join=TMTHHkO",
+        }
+
+        # --- FUNÇÕES DE SUPORTE ---
+        def link_exchange(name: str):
+            if not name: return "-"
+            key = name.upper()
+            url = EXCHANGE_LINKS.get(key)
+            if url: return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
+            return key
+
+        # --- NADO FETCH ---
+        def fetch_nado_data():
+            NADO_API = "https://archive.prod.nado.xyz/v2/contracts"
+            try:
+                r = requests.get(NADO_API, timeout=10)
+                r.raise_for_status()
+                data = r.json()
+                nado_map = {}
+                for ticker_id, item in data.items():
+                    base = item.get("base_currency", "").replace("-PERP", "").upper()
+                    symbol = f"{base}-USD"
+                    funding_diario = float(item.get("funding_rate", 0))
+                    nado_map[symbol] = {
+                        "base": base, "quote": "USD", "symbol": symbol, "venue": "nado",
+                        "mark": float(item.get("mark_price", 0)),
+                        "funding": funding_diario / 24,
+                        "openInterestUsd": float(item.get("open_interest_usd", 0)),
+                        "ts": int(time.time() * 1000)
+                    }
+                return nado_map
+            except: return {}
+
+        # --- VARIATIONAL FETCH ---
+        def fetch_variational_funding():
+            try:
+                r = requests.get(VARIATIONAL_API, timeout=10)
+                r.raise_for_status()
+                data = r.json()
+                return {item["ticker"].upper(): float(item.get("funding_rate", 0)) / (365 * 24) for item in data.get("listings", [])}
+            except: return {}
+
+        def inject_external_venues(markets, nado_map):
+            for symbol, nado_venue in nado_map.items():
+                target = next((m for m in markets if m.get("symbol") == symbol), None)
+                if target:
+                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
+                    target["venues"].append(nado_venue)
+                else:
+                    markets.append({"symbol": symbol, "venues": [nado_venue], "spreadPct": 0})
+            return markets
+
+        def fix_variational_markets(markets, funding_map):
+            for m in markets:
+                symbol = m.get("symbol","").split("-")[0].upper()
+                for v in m.get("venues", []):
+                    if v.get("venue","").lower() == "variational" and symbol in funding_map:
+                        v["funding"] = funding_map[symbol]
+                valid = [v for v in m.get("venues",[]) if isinstance(v.get("funding"),(int,float))]
+                if valid:
+                    min_v = min(valid, key=lambda x: x["funding"])
+                    max_v = max(valid, key=lambda x: x["funding"])
+                    m["minFundingVenue"], m["maxFundingVenue"] = min_v, max_v
+                    m["fundingDiff"] = max_v["funding"] - min_v["funding"]
+            return markets
+
+        # --- SIDEBAR FILTROS ---
+        st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
+        view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True, key="arb_view_toggle")
+        
+        min_spread = st.sidebar.slider("Spread mínimo (%)", 0.0, 10.0, 0.001, 0.001, key="arb_spread_slider")
+        min_apy_diario = st.sidebar.slider("APY Diário Mínimo (%)", 0.0, 5.0, 0.0, 0.01, key="arb_apy_slider")
+        top_n = st.sidebar.slider("Top oportunidades destacadas", 3, 20, 12, 1, key="arb_topn_slider")
+
+        # --- DATA PROCESSING ---
+        try:
+            response = requests.get(API_URL, timeout=15)
+            json_data = response.json()
+            raw_markets = json_data.get("data", [])
+            raw_rwa = json_data.get("rwaTopOpportunities", [])
+
+            v_funding = fetch_variational_funding()
+            n_data = fetch_nado_data()
+
+            markets = fix_variational_markets(inject_external_venues(raw_markets, n_data), v_funding)
+            rwa_markets = fix_variational_markets(inject_external_venues(raw_rwa, n_data), v_funding)
+        except Exception as e:
+            st.error(f"Erro ao buscar dados: {e}")
+            st.stop()
+
+        def prepare_markets(data, m_spread, m_apy):
             processed = []
-
             for m in data:
-                spread_pct = m.get("spreadPct", 0)
                 funding_diff = m.get("fundingDiff", 0)
                 apy_diario = funding_diff * 24 * 100
-                apy_anual = apy_diario * 365
-                
-                if funding_diff*100 >= min_spread:
-                    m["spread_pct"] = round(spread_pct, 4)
+                # Aplica filtros de Spread E APY Diário
+                if (funding_diff * 100 >= m_spread) and (apy_diario >= m_apy):
+                    m["spread_pct"] = round(m.get("spreadPct", 0), 4)
                     m["funding_diff_pct"] = round(funding_diff * 100, 5)
                     m["apy_diario"] = round(apy_diario, 4)
-                    m["apy_anual"] = round(apy_anual, 2)
+                    m["apy_anual"] = round(apy_diario * 365, 2)
                     processed.append(m)
+            return sorted(processed, key=lambda x: x["apy_diario"], reverse=True)
 
-            processed = sorted(processed, key=lambda x: x["apy_diario"], reverse=True)
-            return processed
+        crypto_markets = prepare_markets(markets, min_spread, min_apy_diario)
+        rwa_processed = prepare_markets(rwa_markets, min_spread, min_apy_diario)
 
+        # --- BUILDERS ---
         def build_blocks(data):
             blocks_html = ""
-
             for idx, m in enumerate(data):
-                symbol = m.get("symbol", "")
-                spread_pct = m["spread_pct"]
-                funding_diff = m["funding_diff_pct"]
-                apy_diario = m["apy_diario"]
-                apy_anual = m["apy_anual"]
-
-                min_v = m.get("minFundingVenue", {})
-                max_v = m.get("maxFundingVenue", {})
-
-                long_name = link_exchange(min_v.get("venue", ""))
-                short_name = link_exchange(max_v.get("venue", ""))
+                symbol, spread_pct = m.get("symbol", ""), m["spread_pct"]
+                funding_diff, apy_diario, apy_anual = m["funding_diff_pct"], m["apy_diario"], m["apy_anual"]
+                min_v, max_v = m.get("minFundingVenue", {}), m.get("maxFundingVenue", {})
+                long_name, short_name = link_exchange(min_v.get("venue")), link_exchange(max_v.get("venue"))
 
                 highlight_class = "highlight-block" if idx < top_n else "protocol-block"
-
-                venues_html = ""
-                for v in m.get("venues", []):
-                    venues_html += f"""
-                        <div style="font-size:14px; opacity:0.9; margin-top:3px;">
-                            {link_exchange(v.get("venue",""))} | funding: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}
-                        </div>
-                    """
+                venues_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | funding: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}</div>' for v in m.get("venues", [])])
 
                 blocks_html += f"""
                     <div class="{highlight_class}">
                         <div class="header-wrapper">
-                            <strong style="font-size:26px; text-shadow:0 0 6px #14ffe9;">
-                                #{idx+1} — {symbol}
-                            </strong>
-                            <p style="margin-top:6px;">
-                                ∆ Funding: {funding_diff}% |💰 daily APY: <b style="color:#3cff9e;">{apy_diario}%</b>
-                            </p>
+                            <strong style="font-size:26px; text-shadow:0 0 6px #14ffe9;">#{idx+1} — {symbol}</strong>
+                            <p style="margin-top:6px;">∆ Funding: {funding_diff}% |💰 daily APY: <b style="color:#3cff9e;">{apy_diario}%</b></p>
                         </div>
-
                         <div class="footer-wrapper">
                             <p>🟢 Long: {long_name} — {round(min_v.get("funding",0)*100,5)}%</p>
                             <p>🔴 Short: {short_name} — {round(max_v.get("funding",0)*100,5)}%</p>
@@ -4968,89 +4876,67 @@ with col_content:
                             <p>💰 Anual APY: {apy_anual}%</p>
                             <div style="margin-top:10px;">{venues_html}</div>
                         </div>
-                    </div>
-                """
-
+                    </div>"""
             return blocks_html
 
-        crypto_markets = prepare_markets(markets)
-        rwa_markets = prepare_markets(rwa_markets)
-
-        # ------------------------------
-        # CSS
-        # ------------------------------
+        # --- CSS ORIGINAL ---
         block_style_css = """
         <style>
-            .container-externa {
-                border-radius: 12px;
-                padding: 10px;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-                color: white;
-            }
+            .container-externa { border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Trebuchet MS', sans-serif; color: white; }
+            .protocol-block { width: 350px; border-radius: 14px; padding: 20px; margin: 12px; background: #121217; box-shadow: 0 0 16px rgba(0,255,150,0.25); transition: 0.3s; }
+            .highlight-block { width: 350px; border-radius: 16px; padding: 22px; margin: 12px; background: linear-gradient(135deg, #0f2f23, #121217); box-shadow: 0 0 30px rgba(0,255,150,0.85); border: 1px solid rgba(80,255,180,0.6); transform: scale(1.03); }
+            .header-wrapper { padding-bottom: 10px; border-bottom: 1px solid rgba(48, 240, 192, 0.15); }
+            .footer-wrapper { margin-top: 10px; font-size:14px; }
+            /* Estilos Tabela */
+            .t-container { background: #111827; padding: 20px; border-radius: 12px; font-family: sans-serif; color: white; width: 95%; margin: auto; }
+            table { width: 100%; border-collapse: collapse; }
+            th { text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }
+            td { padding: 15px; border-bottom: 1px solid #1f2937; font-size: 15px; }
+            .t-row:hover { background: #1e293b; }
+            .t-btn { background: #1f2937; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; border: 1px solid #374151; font-size: 11px; }
+            .t-btn:hover { border-color: #39FF14; color: #39FF14; }
+        </style>"""
 
-            .protocol-block {
-                width: 350px;
-                border-radius: 14px;
-                padding: 20px;
-                margin: 12px;
-                background: #121217;
-                box-shadow: 0 0 16px rgba(0,255,150,0.25);
-                transition: 0.3s;
-            }
-
-            .highlight-block {
-                width: 350px;
-                border-radius: 16px;
-                padding: 22px;
-                margin: 12px;
-                background: linear-gradient(135deg, #0f2f23, #121217);
-                box-shadow: 0 0 30px rgba(0,255,150,0.85);
-                border: 1px solid rgba(80,255,180,0.6);
-                transform: scale(1.03);
-            }
-
-            .header-wrapper {
-                padding-bottom: 10px;
-                border-bottom: 1px solid rgba(48, 240, 192, 0.15);
-            }
-
-            .footer-wrapper {
-                margin-top: 10px;
-                font-size:14px;
-            }
-        </style>
-        """
-        # ------------------------------
-        # Crypto section (INALTERADA)
-        # ------------------------------
-        st.markdown("## 🔥 Crypto Top Opportunities")
-
-        crypto_html = f"""
-            {block_style_css}
-            <div class="container-externa">
-                {build_blocks(crypto_markets)}
-            </div>
-        """
-
-        components.html(crypto_html, height=3200, scrolling=True)
-
-        # ------------------------------
-        # RWA section (INALTERADA)
-        # ------------------------------
-        if rwa_markets:
-            st.markdown("## 🏛 RWA Top Opportunities")
-
-            rwa_html = f"""
+        
+        def render_content(data, section_title):
+            st.markdown(f"## {section_title}")
+            if view_mode == "Grid Cards":
+                html = f"{block_style_css}<div class='container-externa'>{build_blocks(data)}</div>"
+                components.html(html, height=2500, scrolling=True)
+            else:
+                # Gerando as linhas sem a coluna de Action e adicionando colunas informativas
+                rows = "".join([f"""<tr class='t-row'>
+                    <td><b>#{i+1} {m['symbol']}</b></td>
+                    <td style='color:#39FF14; font-weight:bold;'>{m['apy_diario']}%</td>
+                    <td>{m['funding_diff_pct']}%</td>
+                    <td style='font-size:15px;'>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td>
+                    <td>{round(m.get('spreadPct', 0), 4)}%</td>
+                    <td>{m['apy_anual']}%</td>
+                </tr>""" for i, m in enumerate(data)])
+                
+                # Atualizando o cabeçalho da tabela
+                table_html = f"""
                 {block_style_css}
-                <div class="container-externa">
-                    {build_blocks(rwa_markets)}
-                </div>
-            """
+                <div class='t-container'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Daily APY</th>
+                                <th>Delta</th>
+                                <th>Strategy (Long/Short)</th>
+                                <th>Spread</th>
+                                <th>Annual</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                    </table>
+                </div>"""
+                components.html(table_html, height=1200, scrolling=True)
 
-            components.html(rwa_html, height=2600, scrolling=True)
+        render_content(crypto_markets, "🔥 Crypto Top Opportunities")
+        if rwa_processed:
+            render_content(rwa_processed, "🏛 RWA Top Opportunities")
 
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
