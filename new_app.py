@@ -3455,19 +3455,19 @@ with col_content:
                         .airdrop-box h1 {
                             font-size: 25px;
                             text-align: center;
-                            margin-bottom: 5px;
+                            margin-bottom: 0px;
                         }
 
                         .airdrop-box h2 {
                             font-size: 25px;
-                            margin-top: 10px;
-                            margin-bottom: 5px;
+                            margin-top: 5px;
+                            margin-bottom: 0px;
                             color: #00ffae;
                         }
 
                         .airdrop-box ul {
                             margin-left: 20px;
-                            margin-bottom: 5px;
+                            margin-bottom: 0px;
                         }
                     </style>
                     <div class="airdrop-box">
@@ -3527,201 +3527,117 @@ with col_content:
         ]
 
 
-        # =========================
-        # GERA HTML DOS BLOCOS
-        # =========================
-        blocks_html = ""
-        for p in protocols_perpdex:
-            blocks_html += f"""
-            <div class="container-block">
-                <a href="{p['site']}" target="_blank" class="header-wrapper">
-                    <div class="header-content">
-                        <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
-                        <strong class="header-title">{p['name']}</strong>
+        # --- 3. Filtros de Interface ---
+        col_v, col_f = st.columns([1, 2])
+        
+        with col_v:
+            view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True)
+
+        with col_f:
+            # Pega todos os status únicos da lista para o filtro
+            all_statuses = sorted(list(set(p['status'] for p in protocols_perpdex)))
+            selected_statuses = st.multiselect(
+                "Filter by Status",
+                options=all_statuses,
+                default=all_statuses
+            )
+
+        # --- 4. Lógica de Filtragem ---
+        filtered_perps = [p for p in protocols_perpdex if p['status'] in selected_statuses]
+
+        if not filtered_perps:
+            st.info("No protocols match the selected status.")
+        else:
+            if view_mode == "Grid Cards":
+                # --- GERAÇÃO GRID ---
+                blocks_html = ""
+                for p in filtered_perps:
+                    blocks_html += f"""
+                    <div class="container-block">
+                        <a href="{p['site']}" target="_blank" class="header-wrapper">
+                            <div class="header-content">
+                                <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
+                                <strong class="header-title">{p['name']}</strong>
+                            </div>
+                        </a>
+                        <div class="footer-wrapper">
+                            <p><strong>📌 Priority:</strong> <span style="color:#39FF14;">{p['priority']}</span></p>
+                            <p><strong>💰 Funding:</strong> {p['funding']}</p>
+                            <p><strong>🚀 Application:</strong> {p['application']}</p>
+                            <p><strong>📊 Status:</strong> <span style="color:#00e0ff;">{p['status']}</span></p>
+                            <p><strong>📣 Social:</strong>
+                                <a href="{p['twitter']}" target="_blank" style="color:lightblue;">Twitter</a> |
+                                <a href="{p['discord']}" target="_blank" style="color:lightblue;">Discord</a>
+                            </p>
+                        </div>
                     </div>
-                </a>
+                    """
+                
+                full_html = f"""
+                <style>
+                @keyframes neonBorder {{ 0% {{ background-position: 0% 50%; }} 50% {{ background-position: 100% 50%; }} 100% {{ background-position: 0% 50%; }} }}
+                .container-externa {{ display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Segoe UI', sans-serif; gap: 20px; }}
+                .container-block {{ display: flex; flex-direction: column; align-items: center; }}
+                .header-wrapper {{ width: 320px; padding: 25px; margin-top: 10px; border-top: 1px solid rgba(48, 240, 192, 0.2); border-bottom: 1px solid #00e0ff; border-top-left-radius: 40px; border-top-right-radius: 10px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.2); transition: 0.3s; text-decoration: none; display: flex; justify-content: center; }}
+                .header-wrapper:hover {{ border: 1px solid #39ff14; background: #262b33; box-shadow: 0 0 10px #39ff14; }}
+                .header-title {{ font-size: 18px; color: lightblue; text-shadow: 0 0 4px #14ffe9; }}
+                .header-content {{ display: flex; align-items: center; gap: 15px; }}
+                .footer-wrapper {{ width: 320px; padding: 25px; margin-top: 6px; border-top: 1px solid #00e0ff; border-bottom-left-radius: 10px; border-bottom-right-radius: 40px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.3); font-size: 16px; color: white; }}
+                .footer-wrapper:hover {{ border: 1px solid #39ff14; background: #262b33; }}
+                </style>
+                <div class="container-externa">{blocks_html}</div>
+                """
+            else:
+                # --- GERAÇÃO LISTA (TABELA) ---
+                rows_html = ""
+                for p in filtered_perps:
+                    rows_html += f"""
+                    <tr class="t-row">
+                        <td><div style="display:flex; align-items:center; gap:12px;"><img src="{p['image']}" width="35" height="35" style="border-radius:50%;"><strong>{p['name']}</strong></div></td>
+                        <td style="color:#39FF14; font-weight:bold;">{p['priority']}</td>
+                        <td>{p['funding']}</td>
+                        <td style="color:#00e0ff;">{p['status']}</td>
+                        <td>{p['application']}</td>
+                        <td>
+                            <div style="display:flex; gap:10px;">
+                                <a href="{p['site']}" target="_blank" class="t-btn">Trade</a>
+                                <a href="{p['twitter']}" target="_blank" style="font-size:18px; text-decoration:none;">🐦</a>
+                                <a href="{p['discord']}" target="_blank" style="font-size:18px; text-decoration:none;">🐦</a>
+                            </div>
+                        </td>
+                    </tr>
+                    """
 
-                <div class="footer-wrapper">
-                    <p><strong>📌 Priority:</strong> {p['priority']}</p>
-                    <p><strong>💰 Funding:</strong> {p['funding']}</p>
-                    <p><strong>🚀 Application:</strong> {p['application']}</p>
-                    <p><strong>📊 Status:</strong> {p['status']}</p>
-                    <p><strong>📣 Social:</strong>
-                        <a href="{p['twitter']}" target="_blank" style="color:lightblue;">Twitter</a> |
-                        <a href="{p['discord']}" target="_blank" style="color:lightblue;">Discord</a>
-                    </p>
+                full_html = f"""
+                <style>
+                .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; overflow-x: auto; }}
+                table {{ width: 100%; border-collapse: collapse; }}
+                th {{ text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }}
+                td {{ padding: 18px 15px; border-bottom: 1px solid #1f2937; font-size: 15px; }}
+                .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
+                .t-btn {{ background: #1f2937; color: white; padding: 6px 15px; border-radius: 6px; text-decoration: none; border: 1px solid #374151; font-size: 12px; transition: 0.2s; }}
+                .t-btn:hover {{ border-color: #39FF14; color: #39FF14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }}
+                </style>
+                <div class="t-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Exchange</th>
+                                <th>Priority</th>
+                                <th>Funding</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows_html}</tbody>
+                    </table>
                 </div>
-            </div>
-            """
+                """
 
-
-        # =========================
-        # HTML + CSS FINAL
-        # =========================
-        # HTML completo
-        full_html = f"""
-        <style>
-        @keyframes neonBorder {{
-            0%   {{ background-position: 0% 50%; }}
-            50%  {{ background-position: 100% 50%; }}
-            100% {{ background-position: 0% 50%; }}
-        }}
-        .container-externa {{
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            gap: 0px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            align-items: center;
-            justify-content: center;
-        }}
-        .container-externa::-webkit-scrollbar {{
-            display: none;             /* Chrome/Safari */
-        }}
-        .protocol-block {{
-            width: 1272px;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 0px;
-            display: flex;
-            background: #1E1F25;
-            justify-content: flex-start;
-            gap: 0px; /* 👈 distância fixa entre os blocos internos */
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            font-size: 22px;
-            color: white;
-            margin: 0px 0;
-            overflow: hidden;
-            scrollbar-width: none;
-            align-items: center;
-            justify-content: center;
-        }}
-        .header-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 10px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid rgba(48, 240, 192, 0.2);
-            border-bottom: 1px solid #00e0ff;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px;  /* 👈 maior */
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            display: flex;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.3);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-            color: lightblue;        /* ou white, se preferir */
-            text-decoration: none;   /* remove o sublinhado */
-        }}
-        .header-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px; 
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-            text-decoration: none;
-        }}
-        .header-wrapper:hover::before {{
-            content: "";
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 14px;
-            z-index: -1;
-            animation: neonBorder 6s ease infinite;
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }}
-        .header-wrapper a {{
-            color: lightblue;
-            text-decoration: none;
-        }}
-        .header-content {{
-            display: flex;
-            flex-direction: row;             /* lado a lado */
-            align-items: center;             /* alinhamento vertical central */
-            justify-content: center;
-            gap: 20px;
-        }}
-        .header-title {{
-            font-size: 22px;
-            color: lightblue;
-            text-decoration: none;
-            text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;
-        }}
-        .footer-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin-top: 6px;
-            margin-bottom: 30px;
-            margin-right: 15px;
-            margin-left: 12px;
-            border-top: 1px solid #00e0ff;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;  /* 👈 maior */
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            display: block;
-            align-items: center;
-            gap: 30px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.5);
-            transition: transform 0.3s ease;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            z-index: 1;
-            overflow: hidden;
-            align-items: center;
-            justify-content: center;
-            font-size:20px;
-        }}
-        .footer-wrapper:hover {{
-            border: 1px solid #39ff14; /* Verde neon */
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px; 
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 0 4px #39ff14, 0 0 8px #39ff14; /* Brilho neon suave */
-            background: #262b33;
-        }}
-        .footer-link {{
-            text-decoration: none;
-            margin: 0;
-            width: 100%;
-            color: inherit;
-        }}
-        .footer-link:hover {{
-            color: inherit;
-            align-items: center;
-            justify-content: center;
-        }}
-        </style>
-
-        <div class="container-externa">
-            {blocks_html}
-        </div>
-        """
-        components.html(full_html, height=4200, width=1500, scrolling=False)
+            # 5. Renderização
+            h_calc = len(filtered_perps) * 90 + 200 if view_mode == "List Table" else 4200
+            components.html(full_html, height=max(h_calc, 600), width=1500, scrolling=False)
 
 
     elif st.session_state.pagina == "📡 Depin Airdrops":
@@ -5412,8 +5328,7 @@ with col_content:
                 return "N/A"
             return "N/A"
         
-
-        
+       
         live_yields = get_live_data()
         solana_ranking = [
             {"name": "Synatra (yUSD)", "type": "Synthetic Staking", "apy": live_yields.get('synatra'), "risk": "High", "tvl": get_protocol_tvl("synatra"), "image": "https://pbs.twimg.com/profile_images/1952420579023507456/HjnoTSzs_400x400.jpg", "site": "https://synatra.xyz"},
@@ -5436,121 +5351,107 @@ with col_content:
             {"name": "World Liberty (USD1) - Kamino", "type": "Institutional Lending", "apy": live_yields.get('world_apy'), "risk": "High", "tvl": live_yields.get('world_tvl'), "image": "https://pbs.twimg.com/profile_images/1819121309126729728/30Q2SFVH_400x400.jpg", "site": "https://kamino.com/lend/steakhouse-usd1-high-yield"},
             ]
 
-        # Ordenação opcional (Maiores APYs primeiro)
-        # Remove o '%' para ordenar numericamente
-        solana_ranking.sort(key=lambda x: float(x['apy'].replace('%', '')), reverse=True)
+        # --- 3. Filtros de Interface (Novidade) ---
+        col_view, col_filter = st.columns([1, 2])
 
-        # 3. Geração dos Blocos HTML
-        blocks_html = ""
-        for p in solana_ranking:
-            risk_class = f"risk-{p['risk'].lower()}"
+        with col_view:
+            view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True)
 
-            blocks_html += f"""
-            <div class="container-block">
-                <a href="{p['site']}" target="_blank" class="header-wrapper">
-                    <div class="header-content">
-                        <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
-                        <strong class="header-title">{p['name']}</strong>
+        with col_filter:
+            risk_options = ["Low", "Low/Moderate", "Moderate", "Moderate/High", "High"]
+            selected_risks = st.multiselect("Filter by Risk Level", options=risk_options, default=risk_options)
+
+        # --- 4. Lógica de Filtragem e Ordenação ---
+        filtered_ranking = [p for p in solana_ranking if p['risk'] in selected_risks]
+        filtered_ranking.sort(key=lambda x: float(x['apy'].replace('%', '')), reverse=True)
+
+        if not filtered_ranking:
+            st.info("No protocols match the selected filters.")
+        else:
+            # --- 5. Geração do HTML baseado na escolha ---
+            if view_mode == "Grid Cards":
+                blocks_html = ""
+                for p in filtered_ranking:
+                    risk_slug = p['risk'].lower().replace('/', '-')
+                    blocks_html += f"""
+                    <div class="container-block">
+                        <a href="{p['site']}" target="_blank" class="header-wrapper">
+                            <div class="header-content">
+                                <img src="{p['image']}" width="50" height="50" style="border-radius:50%;">
+                                <strong class="header-title">{p['name']}</strong>
+                            </div>
+                        </a>
+                        <div class="footer-wrapper">
+                            <p><strong>🔥 APY:</strong> <span style="color:#39FF14;">{p['apy']}</span></p>
+                            <p><strong>💰 TVL:</strong> {p['tvl']}</p>
+                            <p><strong>📝 Type:</strong> <span style="color:#00e0ff;">{p['type']}</span></p>
+                            <p><strong>⚠️ Risk:</strong> <span class="risk-{risk_slug}">{p['risk']}</span></p>
+                        </div>
                     </div>
-                </a>
+                    """
+                
+                # CSS do Grid Original
+                full_html = f"""
+                <style>
+                .container-externa {{ display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Segoe UI', sans-serif; }}
+                .container-block {{ display: flex; flex-direction: column; align-items: center; }}
+                .header-wrapper {{ width: 320px; padding: 25px; margin: 10px 12px 0 12px; border-top: 1px solid rgba(48, 240, 192, 0.2); border-bottom: 1px solid #00e0ff; border-top-left-radius: 40px; border-top-right-radius: 10px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.2); transition: 0.3s; text-decoration: none; display: flex; justify-content: center; }}
+                .header-wrapper:hover {{ border: 1px solid #39ff14; background: #262b33; }}
+                .header-title {{ font-size: 18px; color: lightblue; text-shadow: 0 0 4px #14ffe9; }}
+                .header-content {{ display: flex; align-items: center; gap: 15px; }}
+                .footer-wrapper {{ width: 320px; padding: 25px; margin: 6px 12px 30px 12px; border-top: 1px solid #00e0ff; border-bottom-left-radius: 10px; border-bottom-right-radius: 40px; background: #1E1F25; box-shadow: 0 0 15px rgba(0,255,150,0.3); font-size: 16px; color: white; }}
+                .risk-low {{ color: #39FF14; }} .risk-low-moderate {{ color: #9DFF00; }} .risk-moderate {{ color: #FFD600; }} .risk-moderate-high {{ color: #FF8C00; }} .risk-high {{ color: #FF3B3B; }}
+                </style>
+                <div class="container-externa">{blocks_html}</div>
+                """
+            else:
+                # --- NOVO: Estilo Tabela ---
+                rows_html = ""
+                for p in filtered_ranking:
+                    risk_slug = p['risk'].lower().replace('/', '-')
+                    rows_html += f"""
+                    <tr class="t-row">
+                        <td><div style="display:flex; align-items:center; gap:12px;"><img src="{p['image']}" width="35" height="35" style="border-radius:50%;"><strong>{p['name']}</strong></div></td>
+                        <td style="color:#39FF14; font-weight:bold; font-size:18px;">{p['apy']}</td>
+                        <td>{p['tvl']}</td>
+                        <td class="risk-{risk_slug}">{p['risk']}</td>
+                        <td style="color:#00e0ff;">{p['type']}</td>
+                        <td><a href="{p['site']}" target="_blank" class="t-btn">Deposit</a></td>
+                    </tr>
+                    """
 
-                <div class="footer-wrapper">
-                    <p><strong>🔥 APY:</strong> <span style="color:#39FF14;">{p['apy']}</span></p>
-                    <p><strong>💰 TVL:</strong> {p['tvl']}</p>
-                    <p><strong>📝 Type:</strong> <span style="color:#00e0ff;">{p['type']}</span></p>
-                    <p><strong>⚠️ Risk:</strong> <span class="{risk_class}">{p['risk']}</span></p>
-                    <p><strong>🌐 Site:</strong>
-                        <a href="{p['site']}" target="_blank" style="color:lightblue;">Explore Yield</a>
-                    </p>
+                full_html = f"""
+                <style>
+                .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; }}
+                table {{ width: 100%; border-collapse: collapse; }}
+                th {{ text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }}
+                td {{ padding: 18px 15px; border-bottom: 1px solid #1f2937; }}
+                .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
+                .risk-low {{ color: #39FF14; font-weight: bold; }} .risk-low-moderate {{ color: #9DFF00; }} .risk-moderate {{ color: #FFD600; }} .risk-high {{ color: #FF3B3B; }}
+                .t-btn {{ background: #1f2937; color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; border: 1px solid #374151; font-size: 13px; transition: 0.2s; }}
+                .t-btn:hover {{ border-color: #39FF14; color: #39FF14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }}
+                </style>
+                <div class="t-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protocol</th>
+                                <th>APY</th>
+                                <th>TVL</th>
+                                <th>Risk Level</th>
+                                <th>Strategy Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows_html}</tbody>
+                    </table>
                 </div>
-            </div>
-            """
+                """
 
-        # 4. Renderização Final com o seu CSS Original
-        full_html = f"""
-        <style>
-        @keyframes neonBorder {{
-            0% {{ background-position: 0% 50%; }}
-            50% {{ background-position: 100% 50%; }}
-            100% {{ background-position: 0% 50%; }}
-        }}
-
-        .container-externa {{
-            border-radius: 12px;
-            padding: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            color: white;
-        }}
-
-        .container-block {{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }}
-
-        .header-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin: 10px 12px 0 12px;
-            border-top: 1px solid rgba(48, 240, 192, 0.2);
-            border-bottom: 1px solid #00e0ff;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 10px;
-            display: flex;
-            justify-content: center;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.3);
-            transition: 0.3s;
-            text-decoration: none;
-        }}
-
-        .header-wrapper:hover {{
-            border: 1px solid #39ff14;
-            box-shadow: 0 0 8px #39ff14;
-            background: #262b33;
-        }}
-
-        .header-content {{
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }}
-
-        .header-title {{
-            font-size: 22px;
-            color: lightblue;
-            text-shadow: 0 0 4px #14ffe9, 0 0 4px #14ffe9;
-        }}
-
-        .footer-wrapper {{
-            width: 330px;
-            padding: 30px;
-            margin: 6px 12px 30px 12px;
-            border-top: 1px solid #00e0ff;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 40px;
-            background: #1E1F25;
-            box-shadow: 0 0 20px rgba(0,255,150,0.5);
-            font-size: 20px;
-        }}
-
-        .footer-wrapper:hover {{
-            border: 1px solid #39ff14;
-            box-shadow: 0 0 8px #39ff14;
-            background: #262b33;
-        }}
-        </style>
-
-        <div class="container-externa">
-            {blocks_html}
-        </div>
-        """
-
-        import streamlit.components.v1 as components
-        components.html(full_html, height=3500, width=1500, scrolling=False)
+            # 6. Renderização
+            import streamlit.components.v1 as components
+            dynamic_height = len(filtered_ranking) * 100 + 200 if view_mode == "List Table" else 3000
+            components.html(full_html, height=max(dynamic_height, 600), scrolling=False)
 
     elif st.session_state.pagina == "🚰 Faucets":
         st.markdown(
