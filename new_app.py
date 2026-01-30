@@ -406,6 +406,30 @@ button:focus {
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown(
+"""
+<style>
+    /* Alvo: Rótulos (labels) de inputs numéricos e de texto */
+    div[data-testid="stNumberInput"] label p,
+    div[data-testid="stTextInput"] label p {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
+        font-family: 'Trebuchet MS', sans-serif !important;
+    }
+    
+    /* Aumentar o tamanho do texto/número digitado dentro dos campos */
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stTextInput"] input {
+        font-size: 18px !important;
+        color: #39FF14 !important; /* Verde neon para o conteúdo */
+        background-color: #1a1c24 !important;
+    }
+</style>
+""",
+unsafe_allow_html=True
+)
+
 # Adicionando CSS para os botões de navegação
 st.markdown("""
     <style>
@@ -637,7 +661,7 @@ st.markdown("""
   <div class="marquee-text">
     🚨 Last News: 
     <a href='https://app.hyperlend.finance/dashboard/terms-and-conditions' target='_blank' style='color:black;'>Register to Hyperland Airdrop!</a> / 
-    <a href='https://trovemarkets.com?referral=UHYVX7Q' target='_blank' style='color:black;'>Checker Hyper EVM Airdrops Points!</a> /
+    <a href='https://jup.ag/?ref=hf7390upylv8' target='_blank' style='color:black;'>Claim JUPITER Rewards!</a> /
     <a href='https://waitlist.stormrae.ai/dashboard?ref=CaioFlemin2089' target='_blank' style='color:black;'>Join the waitlist for STORMRAI!</a> /
     <a href='https://hub.orbt.xyz/?referral_code=ORBT-RCD-SSA-ETF' target='_blank' style='color:black;'>Join Orbit Protocol Campaign!</a> /
     <a href='https://waitlist.rally.fun/joinme/CaioFlemin2089' target='_blank' style='color:black;'>ByPass The InfoFi Crash!</a> /
@@ -1127,6 +1151,7 @@ with col_content:
         # =========================
         with colA1:
 
+
             if selected_protocol != "Any":
 
                 auto_fill_actual = st.checkbox(
@@ -1145,7 +1170,7 @@ with col_content:
                     if selected_protocol == "Backpack":
                         date_tge = st.text_input("📅 TGE Date", "2026-01-28")
                         last_update = "2026-01-26"
-                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
+                        FDV, airdrop_pct, your_points = 1000, 24, 1_000
                         total_points = calc(date_tge, 420_790_000, 10_000_000/7, last_update)
                         referral = "https://backpack.exchange/join/jj2kkdp1"
                         logo_url = logos["Backpack"]
@@ -1213,11 +1238,12 @@ with col_content:
                         total_points = calc(date_tge, 10_500_000, 153_000/7, last_update)
                         referral = "https://app.reya.xyz/trade?referredBy=xe369dux"
                         logo_url = logos["Reya"]
+            
 
-            FDV = st.number_input("Estimated FDV (M USD)", value=FDV) * 1_000_000
-            airdrop_pct = st.number_input("Supply % for Airdrop", value=float(airdrop_pct))
-            total_points = st.number_input("Estimated Total Points at TGE", value=int(total_points))
-            your_points = st.number_input("Your Points", value=int(your_points))
+            FDV = st.number_input("🧈Estimated FDV (M USD)", value=FDV) * 1_000_000
+            airdrop_pct = st.number_input("％ Supply % for Airdrop", value=float(airdrop_pct))
+            total_points = st.number_input("✦ Estimated Total Points for TGE", value=int(total_points))
+            your_points = st.number_input("✧ Your Points", value=int(your_points))
 
         # =========================
         # COLUNA DIREITA (REFERRAL)
@@ -3048,7 +3074,7 @@ with col_content:
         #selected_names = st.multiselect("Escolha um ou mais mercados", options)
 
         # Define o mercado desejado (exatamente como aparece no 'label')
-        default_market_name = "slvlUSD"  # substitua pela label desejada
+        default_market_name = "SUSDE"  # substitua pela label desejada
 
         # Buscar índice do mercado default
         default_index = markets[markets["name"] == default_market_name].index
