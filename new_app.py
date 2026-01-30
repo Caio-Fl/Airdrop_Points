@@ -5056,7 +5056,47 @@ with col_content:
                 return "0.00%", "N/A"
             return "0.00%", "N/A"
     
-
+        def get_kamino_hist_apy(strategy_address):
+            import requests
+            from datetime import datetime, timedelta
+            """
+            Obtém o último apy24h registrado para uma estratégia específica do Kamino.
+            :param strategy_address: Endereço da pool/estratégia.
+            :return: Valor do APY 24h (float) ou None em caso de erro.
+            """
+            # Define o intervalo de datas (últimos 2 dias para garantir o histórico)
+            end_date = datetime.now(timezone.utc)
+            start_date = end_date - timedelta(days=2)
+            
+            # Formata as datas para o padrão da API
+            format_str = "%Y-%m-%dT%H:%M:%S.000Z"
+            start_str = start_date.strftime(format_str)
+            end_str = end_date.strftime(format_str)
+            
+            # Monta a URL dinâmica
+            url = (
+                f"https://api.kamino.finance/strategies/{strategy_address}/metrics/history"
+                f"?start={start_str}&end={end_str}&env=mainnet-beta"
+            )
+            
+            try:
+                response = requests.get(url, timeout=10)
+                response.raise_for_status()
+                data = response.json()
+                
+                if isinstance(data, list) and len(data) > 0:
+                    # Pega o último item da lista (mais recente)
+                    last_entry = data[-1]
+                    apy_value = last_entry.get("apy24h")
+                    
+                    # Converte para float (vem como string ou float da API)
+                    return float(apy_value) if apy_value is not None else 0.0
+                    
+                return None
+            except Exception as e:
+                print(f"Erro ao buscar dados da pool {strategy_address}: {e}")
+                return None
+    
         def get_live_data():
             data = {}
             
@@ -5114,7 +5154,7 @@ with col_content:
             # HUMA
             try:
                 kamino_token_addr = "8oGwRYRabLZATW2aKavujRPzFT72FAP8nVsiXdAZvpd"
-                data['huma_apy'], data['huma_tvl'] = get_kamino_vault_data(kamino_token_addr)
+                data['huma_apy'], data['huma_tvl'] = get_kamino_hist_apy(kamino_token_addr)
             except: 
                 data['huma_apy'] = "12.81%"
                 data['huma_tvl'] = "2.51M"
@@ -5229,7 +5269,7 @@ with col_content:
         solana_ranking = [
             {"name": "Synatra (yUSD)", "type": "Synthetic Staking", "apy": live_yields.get('synatra'), "risk": "High", "tvl": get_protocol_tvl("synatra"), "image": "https://pbs.twimg.com/profile_images/1952420579023507456/HjnoTSzs_400x400.jpg", "site": "https://synatra.xyz"},
             {"name": "PiggyBank (pbUSDC) - Invite: HL8KOIQKBO", "type": "Liquid Staking (LST)", "apy": live_yields.get('piggy'), "risk": "Moderate", "tvl": live_yields.get('piggy_tvl'), "image": "https://pbs.twimg.com/profile_images/1986814405791698944/oBBo_qnB_400x400.jpg", "site": "https://app.piggybank.fi"},
-            {"name": "Huma Finance (PST)", "type": "RWA Private Credit", "apy": live_yields.get('huma_apy'), "risk": "Moderate", "tvl": live_yields.get('huma_tvl'), "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
+            {"name": "Huma Finance (PST) - Kamino", "type": "RWA Private Credit", "apy": live_yields.get('huma_apy'), "risk": "Moderate", "tvl": live_yields.get('huma_tvl'), "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
             {"name": "Hastra (PRIME) - Kamino", "type": "Automated Vault", "apy": live_yields.get('prime_apy'), "risk": "Low/Moderate", "tvl": live_yields.get('prime_tvl'), "image": "https://pbs.twimg.com/profile_images/2004570730063953920/BnIZzGdQ_400x400.jpg", "site": "https://kamino.com/assets/prime"},
             {"name": "Ethena (sUSDe)", "type": "Delta Neutral", "apy": live_yields.get('ethena'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("ethena"), "image": "https://pbs.twimg.com/profile_images/1963578749170900992/9M1Oxp04_400x400.jpg", "site": "https://ethena.fi"},
             {"name": "Lulo Boost", "type": "Lending Aggregator", "apy": live_yields.get('lulo'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("lulo"), "image": "https://pbs.twimg.com/profile_images/2006335597175058433/TNx2uo4W_400x400.jpg", "site": "https://lulo.fi"},
