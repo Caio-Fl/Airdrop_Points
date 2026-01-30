@@ -964,19 +964,19 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
                     margin-top: 5px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                     color: #00ffae;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
 
@@ -1489,7 +1489,7 @@ with col_content:
         </style>
         <div class="airdrop-box">
             <h2 style="color: #00ffae; margin:0;">Airdrop Points Viewer</h2>
-            <p>Enter your wallet address below to check your points across participating protocols in the Airdrop Points Campaign. You can verify one or multiple addresses at once.</p>
+            <p style="color: #8293A3;">Enter your wallet address below to check your points across participating protocols in the Airdrop Points Campaign. You can verify one or multiple addresses at once.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -2986,18 +2986,18 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
             <div class="airdrop-box">
@@ -3346,16 +3346,16 @@ with col_content:
                 .airdrop-box h1 {{
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }}
                 .airdrop-box h2 {{
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }}
                 .airdrop-box ul {{
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }}
                 </style>
                 <div class="container-externa">
@@ -3428,18 +3428,18 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
         <div class="airdrop-box">
@@ -4240,18 +4240,18 @@ with col_content:
             .airdrop-box h1 {{
                 font-size: 25px;
                 text-align: center;
-                margin-bottom: 5px;
+                margin-bottom: 0px;
             }}
 
             .airdrop-box h2 {{
                 font-size: 25px;
-                margin-top: 10px;
-                margin-bottom: 5px;
+                margin-top: 5px;
+                margin-bottom: 0px;
             }}
 
             .airdrop-box ul {{
                 margin-left: 20px;
-                margin-bottom: 5px;
+                margin-bottom: 0px;
             }}
         </style>
 
@@ -4934,14 +4934,14 @@ with col_content:
                 html = f"{block_style_css}<div class='container-externa'>{build_blocks(data)}</div>"
                 components.html(html, height=2500, scrolling=True)
             else:
-                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>L: {link_exchange(m['minFundingVenue'].get('venue'))}<br>S: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
-                table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Daily APY</th><th>∆ Funding</th><th>Strategy</th><th>Annual</th></tr></thead><tbody>{rows}</tbody></table></div>"
+                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
+                table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Daily APY</th><th>∆ Funding (Hourly)</th><th>Strategy</th><th>Annual</th></tr></thead><tbody>{rows}</tbody></table></div>"
                 components.html(table_html, height=1200, scrolling=True)
 
         render_content(crypto_markets, "🔥 Crypto Top Opportunities")
         if rwa_processed:
             render_content(rwa_processed, "🏛 RWA Top Opportunities")
-                  
+
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)
@@ -5914,18 +5914,18 @@ with col_content:
                 .airdrop-box h1 {
                     font-size: 25px;
                     text-align: center;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box h2 {
                     font-size: 25px;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
                 }
 
                 .airdrop-box ul {
                     margin-left: 20px;
-                    margin-bottom: 5px;
+                    margin-bottom: 0px;
                 }
             </style>
 
