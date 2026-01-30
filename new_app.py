@@ -4934,7 +4934,7 @@ with col_content:
                 html = f"{block_style_css}<div class='container-externa'>{build_blocks(data)}</div>"
                 components.html(html, height=2500, scrolling=True)
             else:
-                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
+                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br><br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
                 table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Daily APY</th><th>∆ Funding (Hourly)</th><th>Strategy</th><th>Annual</th></tr></thead><tbody>{rows}</tbody></table></div>"
                 components.html(table_html, height=1200, scrolling=True)
 
