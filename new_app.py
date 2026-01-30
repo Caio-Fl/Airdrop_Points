@@ -5030,8 +5030,8 @@ with col_content:
         # 2. Preparação dos Dados (Simulando o resultado dos requests que você passou)
         # Nota: Em produção, você substituirá os valores fixos pelas variáveis dos requests
 
-        @st.cache_data(ttl=300)  # Cache de 10 minutos para performance
-
+        @st.cache_data(ttl=300, show_spinner=False)  # Cache de 5 minutos para performance
+        
         def get_kamino_vault_data(vault_address):
             try:
                 url = f"https://api.kamino.finance/kvaults/{vault_address}/metrics"
@@ -5059,11 +5059,6 @@ with col_content:
         def get_kamino_hist_apy(strategy_address):
             import requests
             from datetime import datetime, timedelta
-            """
-            Obtém o último apy24h registrado para uma estratégia específica do Kamino.
-            :param strategy_address: Endereço da pool/estratégia.
-            :return: Valor do APY 24h (float) ou None em caso de erro.
-            """
             # Define o intervalo de datas (últimos 2 dias para garantir o histórico)
             end_date = datetime.now(timezone.utc)
             start_date = end_date - timedelta(days=2)
