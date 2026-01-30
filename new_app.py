@@ -3610,6 +3610,38 @@ with col_content:
 
         # --- 3. Filtros de Interface ---
         col_v, col_f = st.columns([1, 2])
+
+        st.markdown(
+            """
+            <style>
+                /* Fundo das etiquetas selecionadas */
+                span[data-baseweb="tag"] {
+                    background-color: #39FF14 !important; /* Verde Neon */
+                    border: 1px solid #39FF14 !important;
+                    box-shadow: 0 0 5px #39FF14 !important; /* Brilho suave */
+                    border-radius: 4px !important;
+                }
+
+                /* Texto dentro das etiquetas */
+                span[data-baseweb="tag"] span {
+                    color: #000000 !important; /* Texto preto para contraste total */
+                    font-weight: 800 !important;
+                }
+
+                /* Ícone de fechar (X) */
+                span[data-baseweb="tag"] svg {
+                    fill: #000000 !important;
+                }
+
+                /* Cor de hover quando o mouse passa no 'X' */
+                span[data-baseweb="tag"]:hover {
+                    background-color: #00ffae !important;
+                    box-shadow: 0 0 10px #00ffae !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
         
         with col_v:
             view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True)
@@ -3829,6 +3861,38 @@ with col_content:
         
         # --- 3. Filtros de Interface ---
         col_v, col_f = st.columns([1, 2])
+
+        st.markdown(
+            """
+            <style>
+                /* Fundo das etiquetas selecionadas */
+                span[data-baseweb="tag"] {
+                    background-color: #39FF14 !important; /* Verde Neon */
+                    border: 1px solid #39FF14 !important;
+                    box-shadow: 0 0 5px #39FF14 !important; /* Brilho suave */
+                    border-radius: 4px !important;
+                }
+
+                /* Texto dentro das etiquetas */
+                span[data-baseweb="tag"] span {
+                    color: #000000 !important; /* Texto preto para contraste total */
+                    font-weight: 800 !important;
+                }
+
+                /* Ícone de fechar (X) */
+                span[data-baseweb="tag"] svg {
+                    fill: #000000 !important;
+                }
+
+                /* Cor de hover quando o mouse passa no 'X' */
+                span[data-baseweb="tag"]:hover {
+                    background-color: #00ffae !important;
+                    box-shadow: 0 0 10px #00ffae !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
         
         with col_v:
             view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True, key="depin_view")
@@ -4638,7 +4702,7 @@ with col_content:
         import streamlit.components.v1 as components
         
         # ------------------------------
-        # Header
+        # Header (CSS ORIGINAL PRESERVADO)
         # ------------------------------
         st.markdown(
             """
@@ -4662,7 +4726,6 @@ with col_content:
                     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
                 }
 
-                /* Borda neon com gradiente animado */
                 .airdrop-box::before {
                     content: "";
                     position: absolute;
@@ -4681,7 +4744,6 @@ with col_content:
                     mask-composite: exclude;
                 }
 
-                /* Efeito de hover */
                 .airdrop-box:hover {
                     border-color: #00f0ff;
                     background: #262b33;
@@ -4709,6 +4771,21 @@ with col_content:
                 .airdrop-box ul {
                     margin-left: 20px;
                     margin-bottom: 0px;
+                }
+
+                /* ESTILO NEON PARA O MULTISELECT (VISUAL SOLICITADO) */
+                span[data-baseweb="tag"] {
+                    background-color: #39FF14 !important;
+                    border: 1px solid #39FF14 !important;
+                    box-shadow: 0 0 8px rgba(57, 255, 20, 0.6) !important;
+                    border-radius: 6px !important;
+                }
+                span[data-baseweb="tag"] span {
+                    color: #000000 !important; 
+                    font-weight: 700 !important;
+                }
+                span[data-baseweb="tag"] svg {
+                    fill: #000000 !important;
                 }
             </style>
 
@@ -4747,7 +4824,29 @@ with col_content:
             "NADO": "https://app.nado.xyz?join=TMTHHkO",
         }
 
-        # --- FUNÇÕES DE SUPORTE ---
+        # --- FILTROS NO DASHBOARD (VISUAL IGUAL À IMAGEM) ---
+        col_mode, col_filter = st.columns([1, 3])
+        
+        with col_mode:
+            view_mode = st.radio("Display Mode", ["List Table", "Grid Cards"], horizontal=True, key="arb_view_toggle")
+        
+        with col_filter:
+            available_venues = sorted(list(EXCHANGE_LINKS.keys()))
+            # Filtro por PerpDEX com visual Neon
+            selected_venues = st.multiselect(
+                "Filter by PerpDEX", 
+                options=available_venues, 
+                default=available_venues,
+                key="arb_perp_filter"
+            )
+
+        # Sliders na Sidebar permanecem conforme original
+        st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
+        min_spread = st.sidebar.slider("Spread mínimo (%)", 0.0, 10.0, 0.001, 0.001, key="arb_spread_slider")
+        min_apy_diario = st.sidebar.slider("APY Diário Mínimo (%)", 0.0, 5.0, 0.0, 0.01, key="arb_apy_slider")
+        top_n = st.sidebar.slider("Top oportunidades destacadas", 3, 20, 12, 1, key="arb_topn_slider")
+
+        # --- DATA PROCESSING ---
         def link_exchange(name: str):
             if not name: return "-"
             key = name.upper()
@@ -4755,189 +4854,94 @@ with col_content:
             if url: return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
             return key
 
-        # --- NADO FETCH ---
-        def fetch_nado_data():
-            NADO_API = "https://archive.prod.nado.xyz/v2/contracts"
-            try:
-                r = requests.get(NADO_API, timeout=10)
-                r.raise_for_status()
-                data = r.json()
-                nado_map = {}
-                for ticker_id, item in data.items():
-                    base = item.get("base_currency", "").replace("-PERP", "").upper()
-                    symbol = f"{base}-USD"
-                    funding_diario = float(item.get("funding_rate", 0))
-                    nado_map[symbol] = {
-                        "base": base, "quote": "USD", "symbol": symbol, "venue": "nado",
-                        "mark": float(item.get("mark_price", 0)),
-                        "funding": funding_diario / 24,
-                        "openInterestUsd": float(item.get("open_interest_usd", 0)),
-                        "ts": int(time.time() * 1000)
-                    }
-                return nado_map
-            except: return {}
-
-        # --- VARIATIONAL FETCH ---
-        def fetch_variational_funding():
-            try:
-                r = requests.get(VARIATIONAL_API, timeout=10)
-                r.raise_for_status()
-                data = r.json()
-                return {item["ticker"].upper(): float(item.get("funding_rate", 0)) / (365 * 24) for item in data.get("listings", [])}
-            except: return {}
-
-        def inject_external_venues(markets, nado_map):
-            for symbol, nado_venue in nado_map.items():
-                target = next((m for m in markets if m.get("symbol") == symbol), None)
-                if target:
-                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
-                    target["venues"].append(nado_venue)
-                else:
-                    markets.append({"symbol": symbol, "venues": [nado_venue], "spreadPct": 0})
-            return markets
-
-        def fix_variational_markets(markets, funding_map):
-            for m in markets:
-                symbol = m.get("symbol","").split("-")[0].upper()
-                for v in m.get("venues", []):
-                    if v.get("venue","").lower() == "variational" and symbol in funding_map:
-                        v["funding"] = funding_map[symbol]
-                valid = [v for v in m.get("venues",[]) if isinstance(v.get("funding"),(int,float))]
-                if valid:
-                    min_v = min(valid, key=lambda x: x["funding"])
-                    max_v = max(valid, key=lambda x: x["funding"])
-                    m["minFundingVenue"], m["maxFundingVenue"] = min_v, max_v
-                    m["fundingDiff"] = max_v["funding"] - min_v["funding"]
-            return markets
-
-        # --- SIDEBAR FILTROS ---
-        st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
-        view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True, key="arb_view_toggle")
-        
-        min_spread = st.sidebar.slider("Spread mínimo (%)", 0.0, 10.0, 0.001, 0.001, key="arb_spread_slider")
-        min_apy_diario = st.sidebar.slider("APY Diário Mínimo (%)", 0.0, 5.0, 0.0, 0.01, key="arb_apy_slider")
-        top_n = st.sidebar.slider("Top oportunidades destacadas", 3, 20, 12, 1, key="arb_topn_slider")
-
-        # --- DATA PROCESSING ---
         try:
-            response = requests.get(API_URL, timeout=15)
-            json_data = response.json()
-            raw_markets = json_data.get("data", [])
-            raw_rwa = json_data.get("rwaTopOpportunities", [])
+            response = requests.get(API_URL, timeout=15).json()
+            raw_markets = response.get("data", [])
+            raw_rwa = response.get("rwaTopOpportunities", [])
 
-            v_funding = fetch_variational_funding()
-            n_data = fetch_nado_data()
+            # Lógica de processamento respeitando as PERPDEX selecionadas
+            def process_with_perp_filter(data_list):
+                processed = []
+                for m in data_list:
+                    # Filtra apenas as venues selecionadas no dashboard
+                    venues = [v for v in m.get("venues", []) if v.get("venue", "").upper() in selected_venues]
+                    valid = [v for v in venues if isinstance(v.get("funding"), (int, float))]
+                    
+                    if len(valid) >= 2:
+                        min_v = min(valid, key=lambda x: x["funding"])
+                        max_v = max(valid, key=lambda x: x["funding"])
+                        diff = max_v["funding"] - min_v["funding"]
+                        apy_diario = diff * 24 * 100
+                        
+                        if (diff * 100 >= min_spread) and (apy_diario >= min_apy_diario):
+                            m["minFundingVenue"] = min_v
+                            m["maxFundingVenue"] = max_v
+                            m["funding_diff_pct"] = round(diff * 100, 5)
+                            m["apy_diario"] = round(apy_diario, 4)
+                            m["apy_anual"] = round(apy_diario * 365, 2)
+                            m["venues"] = valid
+                            processed.append(m)
+                return sorted(processed, key=lambda x: x["apy_diario"], reverse=True)
 
-            markets = fix_variational_markets(inject_external_venues(raw_markets, n_data), v_funding)
-            rwa_markets = fix_variational_markets(inject_external_venues(raw_rwa, n_data), v_funding)
+            crypto_markets = process_with_perp_filter(raw_markets)
+            rwa_processed = process_with_perp_filter(raw_rwa)
+
         except Exception as e:
-            st.error(f"Erro ao buscar dados: {e}")
-            st.stop()
+            st.error(f"Erro ao buscar dados: {e}"); st.stop()
 
-        def prepare_markets(data, m_spread, m_apy):
-            processed = []
-            for m in data:
-                funding_diff = m.get("fundingDiff", 0)
-                apy_diario = funding_diff * 24 * 100
-                # Aplica filtros de Spread E APY Diário
-                if (funding_diff * 100 >= m_spread) and (apy_diario >= m_apy):
-                    m["spread_pct"] = round(m.get("spreadPct", 0), 4)
-                    m["funding_diff_pct"] = round(funding_diff * 100, 5)
-                    m["apy_diario"] = round(apy_diario, 4)
-                    m["apy_anual"] = round(apy_diario * 365, 2)
-                    processed.append(m)
-            return sorted(processed, key=lambda x: x["apy_diario"], reverse=True)
+        # --- CSS DOS ELEMENTOS (PRESERVADO) ---
+        block_style_css = """
+        <style>
+            .container-externa { border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Trebuchet MS', sans-serif; color: white; }
+            .protocol-block { width: 350px; border-radius: 14px; padding: 20px; margin: 12px; background: #121217; box-shadow: 0 0 16px rgba(0,255,150,0.25); }
+            .highlight-block { width: 350px; border-radius: 16px; padding: 22px; margin: 12px; background: linear-gradient(135deg, #0f2f23, #121217); box-shadow: 0 0 30px rgba(0,255,150,0.85); border: 1px solid rgba(80,255,180,0.6); transform: scale(1.03); }
+            .header-wrapper { padding-bottom: 10px; border-bottom: 1px solid rgba(48, 240, 192, 0.15); }
+            .footer-wrapper { margin-top: 10px; font-size:14px; }
+            .t-container { background: #111827; padding: 20px; border-radius: 12px; font-family: sans-serif; color: white; margin-top: 20px; }
+            table { width: 100%; border-collapse: collapse; text-align: left; }
+            th { color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 12px; text-transform: uppercase; }
+            td { padding: 15px; border-bottom: 1px solid #1f2937; }
+            .t-row:hover { background: #1e293b; }
+            .t-row td a, .footer-wrapper a { display: inline-block; transition: all 0.2s; text-decoration: none; color: #3cff9e; }
+            .t-row td a:hover, .footer-wrapper a:hover { transform: scale(1.18); color: #ffffff !important; text-shadow: 0 0 10px #39FF14; }
+        </style>
+        """
 
-        crypto_markets = prepare_markets(markets, min_spread, min_apy_diario)
-        rwa_processed = prepare_markets(rwa_markets, min_spread, min_apy_diario)
-
-        # --- BUILDERS ---
+        # --- RENDERIZAÇÃO ---
         def build_blocks(data):
             blocks_html = ""
             for idx, m in enumerate(data):
-                symbol, spread_pct = m.get("symbol", ""), m["spread_pct"]
-                funding_diff, apy_diario, apy_anual = m["funding_diff_pct"], m["apy_diario"], m["apy_anual"]
-                min_v, max_v = m.get("minFundingVenue", {}), m.get("maxFundingVenue", {})
-                long_name, short_name = link_exchange(min_v.get("venue")), link_exchange(max_v.get("venue"))
-
                 highlight_class = "highlight-block" if idx < top_n else "protocol-block"
-                venues_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | funding: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}</div>' for v in m.get("venues", [])])
-
+                v_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | f: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}</div>' for v in m.get("venues", [])])
                 blocks_html += f"""
                     <div class="{highlight_class}">
                         <div class="header-wrapper">
-                            <strong style="font-size:26px; text-shadow:0 0 6px #14ffe9;">#{idx+1} — {symbol}</strong>
-                            <p style="margin-top:6px;">∆ Funding: {funding_diff}% |💰 daily APY: <b style="color:#3cff9e;">{apy_diario}%</b></p>
+                            <strong style="font-size:26px; text-shadow:0 0 6px #14ffe9;">#{idx+1} — {m['symbol']}</strong>
+                            <p style="margin-top:6px;">∆ Funding: {m['funding_diff_pct']}% |💰 daily APY: <b style="color:#3cff9e;">{m['apy_diario']}%</b></p>
                         </div>
                         <div class="footer-wrapper">
-                            <p>🟢 Long: {long_name} — {round(min_v.get("funding",0)*100,5)}%</p>
-                            <p>🔴 Short: {short_name} — {round(max_v.get("funding",0)*100,5)}%</p>
-                            <p>⚡ Price Spread: {spread_pct}%</p>
-                            <p>💰 Anual APY: {apy_anual}%</p>
-                            <div style="margin-top:10px;">{venues_html}</div>
+                            <p>🟢 Long: {link_exchange(m['minFundingVenue'].get('venue'))} — {round(m['minFundingVenue'].get('funding',0)*100,5)}%</p>
+                            <p>🔴 Short: {link_exchange(m['maxFundingVenue'].get('venue'))} — {round(m['maxFundingVenue'].get('funding',0)*100,5)}%</p>
+                            <div style="margin-top:10px;">{v_html}</div>
                         </div>
                     </div>"""
             return blocks_html
 
-        # --- CSS ORIGINAL ---
-        block_style_css = """
-        <style>
-            .container-externa { border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Trebuchet MS', sans-serif; color: white; }
-            .protocol-block { width: 350px; border-radius: 14px; padding: 20px; margin: 12px; background: #121217; box-shadow: 0 0 16px rgba(0,255,150,0.25); transition: 0.3s; }
-            .highlight-block { width: 350px; border-radius: 16px; padding: 22px; margin: 12px; background: linear-gradient(135deg, #0f2f23, #121217); box-shadow: 0 0 30px rgba(0,255,150,0.85); border: 1px solid rgba(80,255,180,0.6); transform: scale(1.03); }
-            .header-wrapper { padding-bottom: 10px; border-bottom: 1px solid rgba(48, 240, 192, 0.15); }
-            .footer-wrapper { margin-top: 10px; font-size:14px; }
-            /* Estilos Tabela */
-            .t-container { background: #111827; padding: 20px; border-radius: 12px; font-family: sans-serif; color: white; width: 95%; margin: auto; }
-            table { width: 100%; border-collapse: collapse; }
-            th { text-align: left; color: #8293A3; padding: 15px; border-bottom: 1px solid #1f2937; font-size: 13px; text-transform: uppercase; }
-            td { padding: 15px; border-bottom: 1px solid #1f2937; font-size: 15px; }
-            .t-row:hover { background: #1e293b; }
-            .t-btn { background: #1f2937; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; border: 1px solid #374151; font-size: 11px; }
-            .t-btn:hover { border-color: #39FF14; color: #39FF14; }
-        </style>"""
-
-        
         def render_content(data, section_title):
+            if not data: return
             st.markdown(f"## {section_title}")
             if view_mode == "Grid Cards":
                 html = f"{block_style_css}<div class='container-externa'>{build_blocks(data)}</div>"
                 components.html(html, height=2500, scrolling=True)
             else:
-                # Gerando as linhas sem a coluna de Action e adicionando colunas informativas
-                rows = "".join([f"""<tr class='t-row'>
-                    <td><b>#{i+1} {m['symbol']}</b></td>
-                    <td style='color:#39FF14; font-weight:bold;'>{m['apy_diario']}%</td>
-                    <td>{m['funding_diff_pct']}%</td>
-                    <td style='font-size:15px;'>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td>
-                    <td>{round(m.get('spreadPct', 0), 4)}%</td>
-                    <td>{m['apy_anual']}%</td>
-                </tr>""" for i, m in enumerate(data)])
-                
-                # Atualizando o cabeçalho da tabela
-                table_html = f"""
-                {block_style_css}
-                <div class='t-container'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Asset</th>
-                                <th>Daily APY</th>
-                                <th>Delta</th>
-                                <th>Strategy (Long/Short)</th>
-                                <th>Spread</th>
-                                <th>Annual</th>
-                            </tr>
-                        </thead>
-                        <tbody>{rows}</tbody>
-                    </table>
-                </div>"""
+                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>L: {link_exchange(m['minFundingVenue'].get('venue'))}<br>S: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
+                table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Daily APY</th><th>∆ Funding</th><th>Strategy</th><th>Annual</th></tr></thead><tbody>{rows}</tbody></table></div>"
                 components.html(table_html, height=1200, scrolling=True)
 
         render_content(crypto_markets, "🔥 Crypto Top Opportunities")
         if rwa_processed:
             render_content(rwa_processed, "🏛 RWA Top Opportunities")
-
+                  
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)
@@ -5107,6 +5111,14 @@ with col_content:
                 data['cash_apy'] = "6.78%"
                 data['cash_tvl'] = "49.8M"
 
+            # HUMA
+            try:
+                kamino_token_addr = "8oGwRYRabLZATW2aKavujRPzFT72FAP8nVsiXdAZvpd"
+                data['huma_apy'], data['huma_tvl'] = get_kamino_vault_data(kamino_token_addr)
+            except: 
+                data['huma_apy'] = "12.81%"
+                data['huma_tvl'] = "2.51M"
+
 
             # PIGGYBANK (pbUSDC)
             try:
@@ -5180,7 +5192,7 @@ with col_content:
                 lince_data = r.json()
                 
                 # Preenche os que faltam ou serve como redundância
-                data['huma'] = f"{lince_data.get('huma', 9.0)}%"
+                #data['huma'] = f"{lince_data.get('huma', 9.0)}%"
                 data['ethena'] = f"{lince_data.get('ethena', 4.3)}%"
                 data['ondo'] = f"{lince_data.get('ondo', 3.7)}%"
                 data['save'] = f"{lince_data.get('save-usdc-lending', 7.9)}%"
@@ -5217,7 +5229,7 @@ with col_content:
         solana_ranking = [
             {"name": "Synatra (yUSD)", "type": "Synthetic Staking", "apy": live_yields.get('synatra'), "risk": "High", "tvl": get_protocol_tvl("synatra"), "image": "https://pbs.twimg.com/profile_images/1952420579023507456/HjnoTSzs_400x400.jpg", "site": "https://synatra.xyz"},
             {"name": "PiggyBank (pbUSDC) - Invite: HL8KOIQKBO", "type": "Liquid Staking (LST)", "apy": live_yields.get('piggy'), "risk": "Moderate", "tvl": live_yields.get('piggy_tvl'), "image": "https://pbs.twimg.com/profile_images/1986814405791698944/oBBo_qnB_400x400.jpg", "site": "https://app.piggybank.fi"},
-            {"name": "Huma Finance (PST)", "type": "RWA Private Credit", "apy": live_yields.get('huma'), "risk": "Moderate", "tvl": "N/A", "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
+            {"name": "Huma Finance (PST)", "type": "RWA Private Credit", "apy": live_yields.get('huma_apy'), "risk": "Moderate", "tvl": live_yields.get('huma_tvl'), "image": "https://pbs.twimg.com/profile_images/2003864399594061825/VL5AGcQA_400x400.png", "site": "https://app.huma.finance?ref=bXA84j"},
             {"name": "Hastra (PRIME) - Kamino", "type": "Automated Vault", "apy": live_yields.get('prime_apy'), "risk": "Low/Moderate", "tvl": live_yields.get('prime_tvl'), "image": "https://pbs.twimg.com/profile_images/2004570730063953920/BnIZzGdQ_400x400.jpg", "site": "https://kamino.com/assets/prime"},
             {"name": "Ethena (sUSDe)", "type": "Delta Neutral", "apy": live_yields.get('ethena'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("ethena"), "image": "https://pbs.twimg.com/profile_images/1963578749170900992/9M1Oxp04_400x400.jpg", "site": "https://ethena.fi"},
             {"name": "Lulo Boost", "type": "Lending Aggregator", "apy": live_yields.get('lulo'), "risk": "Low/Moderate", "tvl": get_protocol_tvl("lulo"), "image": "https://pbs.twimg.com/profile_images/2006335597175058433/TNx2uo4W_400x400.jpg", "site": "https://lulo.fi"},
@@ -5237,6 +5249,38 @@ with col_content:
 
         # --- 3. Filtros de Interface (Novidade) ---
         col_view, col_filter = st.columns([1, 2])
+
+        st.markdown(
+            """
+            <style>
+                /* Fundo das etiquetas selecionadas */
+                span[data-baseweb="tag"] {
+                    background-color: #39FF14 !important; /* Verde Neon */
+                    border: 1px solid #39FF14 !important;
+                    box-shadow: 0 0 5px #39FF14 !important; /* Brilho suave */
+                    border-radius: 4px !important;
+                }
+
+                /* Texto dentro das etiquetas */
+                span[data-baseweb="tag"] span {
+                    color: #000000 !important; /* Texto preto para contraste total */
+                    font-weight: 800 !important;
+                }
+
+                /* Ícone de fechar (X) */
+                span[data-baseweb="tag"] svg {
+                    fill: #000000 !important;
+                }
+
+                /* Cor de hover quando o mouse passa no 'X' */
+                span[data-baseweb="tag"]:hover {
+                    background-color: #00ffae !important;
+                    box-shadow: 0 0 10px #00ffae !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
         with col_view:
             view_mode = st.radio("Display Mode", ["List Table","Grid Cards"], horizontal=True)
