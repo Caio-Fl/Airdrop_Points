@@ -4845,8 +4845,19 @@ with col_content:
             "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
             "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
             "NADO": "https://app.nado.xyz?join=TMTHHkO",
+            "BACKPACK": "https://backpack.exchange/trade/",
         }
 
+        EXCHANGE_LOGOS = {
+            "VARIATIONAL": "https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg", # Exemplo: Substitua pela URL real
+            "PACIFICA": "https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg",
+            "OSTIUM": "https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg",
+            "HYPERLIQUID": "https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg",
+            "EXTENDED": "https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg",
+            "LIGHTER": "https://pbs.twimg.com/profile_images/1968693128002412544/mH8iX9SN_400x400.jpg",
+            "NADO": "https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg",
+            "BACKPACK": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
+        }
         # --- FUNÇÕES DE BUSCA EXTERNA (REINSERIDAS) ---
         def fetch_nado_data():
             try:
@@ -4874,6 +4885,40 @@ with col_content:
                 return {item["ticker"].upper(): float(item.get("funding_rate", 0)) / (365 * 24) for item in data.get("listings", [])}
             except: return {}
 
+        def fetch_backpack_data():
+            try:
+                # APIs da Backpack
+                funding_url = "https://api.backpack.exchange/api/v1/markPrices"
+                oi_url = "https://api.backpack.exchange/api/v1/openInterest"
+                
+                f_res = requests.get(funding_url, timeout=10).json()
+                oi_res = requests.get(oi_url, timeout=10).json()
+                
+                # Mapeia OI por símbolo para facilitar o cruzamento
+                oi_map = {item['symbol']: float(item['openInterest']) for item in oi_res}
+                
+                bp_map = {}
+                for item in f_res:
+                    symbol_raw = item['symbol']
+                    # Filtra apenas o que for PERP e ignora PREDICTION markets
+                    if "_USDC_PERP" in symbol_raw:
+                        base = symbol_raw.replace("_USDC_PERP", "").upper()
+                        symbol_standard = f"{base}-USD"
+                        
+                        mark_price = float(item.get('markPrice', 0))
+                        oi_contracts = oi_map.get(symbol_raw, 0)
+                        
+                        bp_map[symbol_standard] = {
+                            "venue": "backpack",
+                            "symbol": symbol_standard,
+                            "funding": float(item.get("fundingRate", 0)), # Taxa horária
+                            "openInterestUsd": oi_contracts * mark_price
+                        }
+                return bp_map
+            except Exception as e:
+                print(f"Erro Backpack: {e}")
+                return {}
+
         def inject_external_venues(markets, nado_map):
             for symbol, nado_venue in nado_map.items():
                 target = next((m for m in markets if m.get("symbol") == symbol), None)
@@ -4898,11 +4943,21 @@ with col_content:
         top_n = st.sidebar.slider("Top oportunidades destacadas", 3, 20, 12, 1, key="arb_topn_slider")
 
         # --- DATA PROCESSING ---
-        def link_exchange(name: str):
+        def link_exchange(name: str, show_logo: bool = True):
             if not name: return "-"
             key = name.upper()
             url = EXCHANGE_LINKS.get(key)
-            return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>' if url else key
+            logo_url = EXCHANGE_LOGOS.get(key, "")
+
+            logo_img = ""
+            if show_logo and logo_url:
+                logo_img = f'<img src="{logo_url}" width="18" height="18" style="margin-right:6px; vertical-align:middle; border-radius:4px;">'
+            
+            if url:
+                return f'<span style="white-space:nowrap;">{logo_img}<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a></span>'
+            return f'<span>{logo_img}{key}</span>'
+        
+            #return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>' if url else key
 
         try:
             # 1. Fetch de todas as fontes
@@ -4911,11 +4966,15 @@ with col_content:
             raw_rwa = response.get("rwaTopOpportunities", [])
             v_funding_map = fetch_variational_funding()
             nado_map = fetch_nado_data()
+            backpack_data = fetch_backpack_data() # Novo fetch
        
 
             # 2. Injeção e Correção de Dados antes do filtro de PerpDEX
             raw_markets = inject_external_venues(raw_markets, nado_map)
             raw_rwa = inject_external_venues(raw_rwa, nado_map)
+
+            raw_markets = inject_external_venues(raw_markets, backpack_data)
+            raw_rwa = inject_external_venues(raw_rwa, backpack_data)
 
             def process_with_perp_filter(data_list):
                 processed = []
@@ -4976,7 +5035,8 @@ with col_content:
             blocks_html = ""
             for idx, m in enumerate(data):
                 highlight_class = "highlight-block" if idx < top_n else "protocol-block"
-                v_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | f: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}</div>' for v in m.get("venues", [])])
+                #v_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | f: {round(v.get("funding",0)*100,5)}% | OI: ${round(v.get("openInterestUsd",0),2):,}</div>' for v in m.get("venues", [])])
+                v_html = "".join([f'<div style="font-size:14px; opacity:0.9; margin-top:3px;">{link_exchange(v.get("venue"))} | funding rate: {round(v.get("funding",0)*100,5)}% </div>' for v in m.get("venues", [])])
                 blocks_html += f"""
                     <div class="{highlight_class}">
                         <div class="header-wrapper">
@@ -5006,6 +5066,7 @@ with col_content:
         render_content(crypto_markets, "🔥 Crypto Top Opportunities")
         if rwa_processed:
             render_content(rwa_processed, "🏛 RWA Top Opportunities")
+    
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)
