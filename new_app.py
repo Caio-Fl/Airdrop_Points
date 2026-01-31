@@ -539,73 +539,73 @@ st.markdown("""
 
 ### Letreiro Cotação tokens
 
-tokens = {
-    "bitcoin": {"name": "Bitcoin (BTC)", "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png"},
-    "ethereum": {"name": "Ethereum (ETH)", "icon": "https://cryptologos.cc/logos/ethereum-eth-logo.png"},
-    "solana": {"name": "Solana (SOL)", "icon": "https://cryptologos.cc/logos/solana-sol-logo.png"},
-    "binancecoin": {"name": "BNB (BNB)", "icon": "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"},
-    "hyperliquid": {"name": "Hyperliquid (HYPE)", "icon": "https://assets.coingecko.com/coins/images/34898/large/hype.png"},
-    "aave": {"name": "Aave (AAVE)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
-    "ripple": {"name": "XRP (XRP)", "icon": "https://cryptologos.cc/logos/xrp-xrp-logo.png"},
-    "sui": {"name": "Sui (SUI)", "icon": "https://cryptologos.cc/logos/dogecoin-doge-logo.png"},
-    "link": {"name": "Link (LINK)", "icon": "https://cryptologos.cc/logos/chainlink-link-logo.png"},
-    "ethena": {"name": "Ethena (ENA)", "icon": "https://cryptologos.cc/logos/ethena-ena-logo.png"},
-}
+import requests
 
-# Obter preços
-url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(tokens.keys())}&vs_currencies=usd"
+# Corrected dictionary with fixed IDs and Icons
+import streamlit as st
+import streamlit.components.v1 as components
+import requests
 
-data = requests.get(url).json()
+import streamlit as st
+import streamlit.components.v1 as components
+import requests
 
-# HTML e CSS do ticker
-htmld = """
-<style>
-.ticker-container {
-    width: 100%;
-    overflow: hidden;
-    background: radial-gradient(circle at top, #2A2A33 0%, #1B1B22 100%);
-    padding: 10px 0;
-    height: 70px;
-    align-items: center;
-}
-.ticker {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-left 30s linear infinite;
-}
-@keyframes scroll-left {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-.ticker-item {
-    display: inline-block;
-    margin: 6px 50px;
-    color: white;
-    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-    font-size: 22px;
-    align-items: center;
-    justify-content: center;
-}
-.ticker-item img {
-    vertical-align: middle;
-    height: 30px;
-    margin-right: 8px;
-}
-</style>
-<div class="ticker-container"><div class="ticker">
-"""
+# 1. Coloque a lógica dentro de uma função para isolar do layout principal
+def gerar_ticker():
+    tokens = {
+        "bitcoin": {"name": "BTC", "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png"},
+        "ethereum": {"name": "ETH", "icon": "https://cryptologos.cc/logos/ethereum-eth-logo.png"},
+        "solana": {"name": "SOL", "icon": "https://cryptologos.cc/logos/solana-sol-logo.png"},
+        "binancecoin": {"name": "BNB", "icon": "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"},
+        "hyperliquid": {"name": "HYPE", "icon": "https://assets.coingecko.com/coins/images/50882/standard/hyperliquid.jpg?1729431300"},
+        "aave": {"name": "AAVE", "icon": "https://cryptologos.cc/logos/aave-aave-logo.png"},
+        "ripple": {"name": "XRP", "icon": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=002"},
+        "sui": {"name": "SUI", "icon": "https://cryptologos.cc/logos/sui-sui-logo.png"},
+        "chainlink": {"name": "LINK", "icon": "https://cryptologos.cc/logos/chainlink-link-logo.png"},
+        "ethena": {"name": "ENA", "icon": "https://assets.coingecko.com/coins/images/36530/standard/ethena.png?1711701436"},
+    }
 
-# Preencher os dados
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(tokens.keys())}&vs_currencies=usd&include_24hr_change=true"
+    
+    try:
+        data = requests.get(url).json()
+    except:
+        return ""
 
-for key, token in tokens.items():
-    price = data.get(key, {}).get("usd")
-    if price is not None:
-        htmld += f'<span class="ticker-item"> {token["name"]} ${price:,.3f} </span>'
+    # Estilos CSS
+    css = """
+    <style>
+        body { margin: 0; background-color: transparent; font-family: sans-serif; overflow: hidden; }
+        .ticker-container { width: 100%; overflow: hidden; background: #1B1B22; padding: 10px 0; display: flex; align-items: center;}
+        .ticker { display: inline-block; white-space: nowrap; animation: scroll-left 40s linear infinite; margin-bottom: +30px; }
+        @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-150%); } }
+        .ticker-item { display: inline-flex; align-items: center; margin-right: 50px; color: white; font-size: 20px; font-weight: bold; margin-top: +5px;}
+        .ticker-item img { height: 40px; margin-right: 8px; }
+        .up { color: #00ff88; }
+        .down { color: #ff4d4d; }
+    </style>
+    """
 
-htmld += "  "
+    # Montagem dos itens
+    itens = ""
+    for key, token in tokens.items():
+        token_info = data.get(key, {})
+        price = token_info.get("usd")
+        change = token_info.get("usd_24h_change", 0)
+        color = "up" if change >= 0 else "down"
+        
+        if price:
+            itens += f'<span class="ticker-item"><img src="{token["icon"]}">{token["name"]} <span class="{color}" style="margin-left:8px">${price:,.2f}</span></span>'
+
+    return f"{css}<div class='ticker-container'><div class='ticker'>{itens}</div></div>"
+
+
+# Chame a função e passe o resultado para o componente
+html_final = gerar_ticker()
+components.html(html_final, height=70)
 
 # Renderização correta do HTML
-st.markdown(htmld, unsafe_allow_html=True)
+#st.markdown(htmld, unsafe_allow_html=True)
 
 ### Letreiro de divulgação de informações
 st.markdown("""
