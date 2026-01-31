@@ -1241,7 +1241,7 @@ with col_content:
             
 
             FDV = st.number_input("🧈Estimated FDV (M USD)", value=FDV) * 1_000_000
-            airdrop_pct = st.number_input("％ Supply % for Airdrop", value=float(airdrop_pct))
+            airdrop_pct = st.number_input("％ Supply for Airdrop", value=float(airdrop_pct))
             total_points = st.number_input("✦ Estimated Total Points for TGE", value=int(total_points))
             your_points = st.number_input("✧ Your Points", value=int(your_points))
 
