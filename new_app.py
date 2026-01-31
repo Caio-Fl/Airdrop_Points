@@ -4799,7 +4799,7 @@ with col_content:
                     margin-bottom: 0px;
                 }
 
-                /* ESTILO NEON PARA O MULTISELECT (VISUAL SOLICITADO) */
+                /* ESTILO NEON PARA O MULTISELECT */
                 span[data-baseweb="tag"] {
                     background-color: #39FF14 !important;
                     border: 1px solid #39FF14 !important;
@@ -4837,9 +4837,6 @@ with col_content:
         API_URL = "https://www.cryptoexchange.sh/api/funding-arb"
         VARIATIONAL_API = "https://omni-client-api.prod.ap-northeast-1.variational.io/metadata/stats"
 
-        # ------------------------------
-        # LINKS DOS PROTOCOLOS
-        # ------------------------------
         EXCHANGE_LINKS = {
             "VARIATIONAL": "https://omni.variational.io/",
             "PACIFICA": "https://app.pacifica.fi?referral=PacificaRef",
@@ -4850,23 +4847,51 @@ with col_content:
             "NADO": "https://app.nado.xyz?join=TMTHHkO",
         }
 
-        # --- FILTROS NO DASHBOARD (VISUAL IGUAL À IMAGEM) ---
+        # --- FUNÇÕES DE BUSCA EXTERNA (REINSERIDAS) ---
+        def fetch_nado_data():
+            try:
+                r = requests.get("https://archive.prod.nado.xyz/v2/contracts", timeout=10)
+                r.raise_for_status()
+                data = r.json()
+                nado_map = {}
+                for ticker_id, item in data.items():
+                    base = item.get("base_currency", "").replace("-PERP", "").upper()
+                    symbol = f"{base}-USD"
+                    nado_map[symbol] = {
+                        "venue": "nado", "symbol": symbol, 
+                        "funding": float(item.get("funding_rate", 0)) / 24, # Diário para Horário
+                        "openInterestUsd": float(item.get("open_interest_usd", 0))
+                    }
+                return nado_map
+            except: return {}
+
+        def fetch_variational_funding():
+            try:
+                r = requests.get(VARIATIONAL_API, timeout=10)
+                r.raise_for_status()
+                data = r.json()
+                # Anual para Horário: rate / (365 * 24)
+                return {item["ticker"].upper(): float(item.get("funding_rate", 0)) / (365 * 24) for item in data.get("listings", [])}
+            except: return {}
+
+        def inject_external_venues(markets, nado_map):
+            for symbol, nado_venue in nado_map.items():
+                target = next((m for m in markets if m.get("symbol") == symbol), None)
+                if target:
+                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
+                    target["venues"].append(nado_venue)
+                else:
+                    markets.append({"symbol": symbol, "venues": [nado_venue], "spreadPct": 0})
+            return markets
+
+        # --- FILTROS NO DASHBOARD ---
         col_mode, col_filter = st.columns([1, 3])
-        
         with col_mode:
             view_mode = st.radio("Display Mode", ["List Table", "Grid Cards"], horizontal=True, key="arb_view_toggle")
-        
         with col_filter:
             available_venues = sorted(list(EXCHANGE_LINKS.keys()))
-            # Filtro por PerpDEX com visual Neon
-            selected_venues = st.multiselect(
-                "Filter by PerpDEX", 
-                options=available_venues, 
-                default=available_venues,
-                key="arb_perp_filter"
-            )
+            selected_venues = st.multiselect("Filter by PerpDEX", options=available_venues, default=available_venues, key="arb_perp_filter")
 
-        # Sliders na Sidebar permanecem conforme original
         st.sidebar.markdown("## ⚙️ Funding Arbitrage Filters")
         min_spread = st.sidebar.slider("Spread mínimo (%)", 0.0, 10.0, 0.001, 0.001, key="arb_spread_slider")
         min_apy_diario = st.sidebar.slider("APY Diário Mínimo (%)", 0.0, 5.0, 0.0, 0.01, key="arb_apy_slider")
@@ -4877,19 +4902,32 @@ with col_content:
             if not name: return "-"
             key = name.upper()
             url = EXCHANGE_LINKS.get(key)
-            if url: return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>'
-            return key
+            return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>' if url else key
 
         try:
+            # 1. Fetch de todas as fontes
             response = requests.get(API_URL, timeout=15).json()
             raw_markets = response.get("data", [])
             raw_rwa = response.get("rwaTopOpportunities", [])
+            v_funding_map = fetch_variational_funding()
+            nado_map = fetch_nado_data()
+       
 
-            # Lógica de processamento respeitando as PERPDEX selecionadas
+            # 2. Injeção e Correção de Dados antes do filtro de PerpDEX
+            raw_markets = inject_external_venues(raw_markets, nado_map)
+            raw_rwa = inject_external_venues(raw_rwa, nado_map)
+
             def process_with_perp_filter(data_list):
                 processed = []
                 for m in data_list:
-                    # Filtra apenas as venues selecionadas no dashboard
+                    symbol_base = m.get("symbol", "").split("-")[0].upper()
+                    
+                    # Aplica Correção Variational se presente nas venues
+                    for v in m.get("venues", []):
+                        if v.get("venue", "").lower() == "variational" and symbol_base in v_funding_map:
+                            v["funding"] = v_funding_map[symbol_base]
+
+                    # Filtra apenas as venues selecionadas pelo usuário
                     venues = [v for v in m.get("venues", []) if v.get("venue", "").upper() in selected_venues]
                     valid = [v for v in venues if isinstance(v.get("funding"), (int, float))]
                     
@@ -4912,10 +4950,11 @@ with col_content:
             crypto_markets = process_with_perp_filter(raw_markets)
             rwa_processed = process_with_perp_filter(raw_rwa)
 
+
         except Exception as e:
             st.error(f"Erro ao buscar dados: {e}"); st.stop()
 
-        # --- CSS DOS ELEMENTOS (PRESERVADO) ---
+        # --- CSS PRESERVADO ---
         block_style_css = """
         <style>
             .container-externa { border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Trebuchet MS', sans-serif; color: white; }
@@ -4933,7 +4972,6 @@ with col_content:
         </style>
         """
 
-        # --- RENDERIZAÇÃO ---
         def build_blocks(data):
             blocks_html = ""
             for idx, m in enumerate(data):
@@ -4948,6 +4986,7 @@ with col_content:
                         <div class="footer-wrapper">
                             <p>🟢 Long: {link_exchange(m['minFundingVenue'].get('venue'))} — {round(m['minFundingVenue'].get('funding',0)*100,5)}%</p>
                             <p>🔴 Short: {link_exchange(m['maxFundingVenue'].get('venue'))} — {round(m['maxFundingVenue'].get('funding',0)*100,5)}%</p>
+                            <p>Annual APY: {m['apy_anual']}%</p>
                             <div style="margin-top:10px;">{v_html}</div>
                         </div>
                     </div>"""
@@ -4960,14 +4999,13 @@ with col_content:
                 html = f"{block_style_css}<div class='container-externa'>{build_blocks(data)}</div>"
                 components.html(html, height=2500, scrolling=True)
             else:
-                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['funding_diff_pct']}%</td><td>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br><br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
-                table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Daily APY</th><th>∆ Funding (Hourly)</th><th>Strategy</th><th>Annual</th></tr></thead><tbody>{rows}</tbody></table></div>"
+                rows = "".join([f"<tr class='t-row'><td><b>#{i+1} {m['symbol']}</b></td><td>Long: {link_exchange(m['minFundingVenue'].get('venue'))}<br><br>Short: {link_exchange(m['maxFundingVenue'].get('venue'))}</td><td>{round(m['minFundingVenue'].get('funding',0)*100,5)}%<br><br>{round(m['maxFundingVenue'].get('funding',0)*100,5)}%</td><td>{m['funding_diff_pct']}%</td><td style='color:#39FF14;'>{m['apy_diario']}%</td><td>{m['apy_anual']}%</td></tr>" for i, m in enumerate(data)])
+                table_html = f"{block_style_css}<div class='t-container'><table><thead><tr><th>Asset</th><th>Strategy</th><th>Funding Rate (hourly)</th><th>∆ Funding (hourly)</th><th>Daily APY</th><th>Annual APY</th></tr></thead><tbody>{rows}</tbody></table></div>"
                 components.html(table_html, height=1200, scrolling=True)
 
         render_content(crypto_markets, "🔥 Crypto Top Opportunities")
         if rwa_processed:
             render_content(rwa_processed, "🏛 RWA Top Opportunities")
-
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)
