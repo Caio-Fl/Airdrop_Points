@@ -3074,8 +3074,8 @@ with col_content:
         #selected_names = st.multiselect("Escolha um ou mais mercados", options)
 
         # Define o mercado desejado (exatamente como aparece no 'label')
-        default_market_name = "SUSDE"  # substitua pela label desejada
-
+        default_market_name = "sUSDe"  # substitua pela label desejada
+        print(markets["name"])
         # Buscar índice do mercado default
         default_index = markets[markets["name"] == default_market_name].index
         default_index = int(default_index[0]) if not default_index.empty else 0  # fallback para 0 se não encontrar
