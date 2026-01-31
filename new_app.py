@@ -822,7 +822,7 @@ elif st.session_state.pagina != pagina_atual:
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
 
 # Layout colunas menu + conteúdo
-col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 7,2.1], gap="large")
+col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 8,1.5], gap="large")
 
 # Menu lateral com botões
 with col_left:
@@ -1006,23 +1006,23 @@ with col_content:
 
             <div class="airdrop-box">
                 <h2>Welcome to Airdrops Monitor</h2>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     This platform is designed for airdrop enthusiasts looking to stay updated with the latest crypto opportunities.
                     If you're passionate about crypto, this site helps you track valuable airdrops and grow your portfolio.
                 </p>
                 <h2>What Are Airdrops and How Can You Benefit from Them?</h2>
-                <ul style="color: #8293A3;">
+                <ul style="color: #8293A3; line-height: 1.2;">
                     <p>There are two main types:</p>
                     <li><strong>Task-based</strong>: Complete simple actions like social follows to earn tokens.</li>
                     <li><strong>Holder</strong>: Receive tokens just by holding certain cryptocurrencies.</li>
                 </ul>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     Participating in airdrops is an accessible and educational way to get involved in the crypto space, especially for beginners.
                     Best of all, you can grow your portfolio with real value without investing money upfront.
                     Browse our list of active airdrops, track new opportunities in real time, and start earning free crypto today!
                 </p>
                 <h2>About Me</h2>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     I'm an electrical-electronic engineer with a strong interest in investments and programming.
                     I created this platform using Python to share knowledge and support others in the crypto and airdrop community.
                 </p>
@@ -1515,7 +1515,7 @@ with col_content:
         </style>
         <div class="airdrop-box">
             <h2 style="color: #00ffae; margin:0;">Airdrop Points Viewer</h2>
-            <p style="color: #8293A3;">Enter your wallet address below to check your points across participating protocols in the Airdrop Points Campaign. You can verify one or multiple addresses at once.</p>
+            <p style="color: #8293A3; line-height: 1.2;">Enter your wallet address below to check your points across participating protocols in the Airdrop Points Campaign. You can verify one or multiple addresses at once.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -3579,8 +3579,8 @@ with col_content:
                     </style>
                     <div class="airdrop-box">
                         <h2>PerpDEX Airdrops</h2>
-                        <p style="color: #8293A3;">PerpDEX airdrops are token distributions by decentralized perpetual exchanges designed to reward early traders, liquidity providers, and power users of onchain derivatives platforms, making access to leveraged trading more transparent, permissionless, and capital-efficient.</p>
-                        <p style="color: #8293A3;">By offering airdrops, Perp DEXs incentivize real trading activity such as volume generation, open interest, liquidity provision, and product testing, helping bootstrap deep markets, stress-test their infrastructure, and decentralize protocol ownership ahead of full-scale adoption.</p>
+                        <p style="color: #8293A3; line-height: 1.2;">PerpDEX airdrops are token distributions by decentralized perpetual exchanges designed to reward early traders, liquidity providers, and power users of onchain derivatives platforms, making access to leveraged trading more transparent, permissionless, and capital-efficient.</p>
+                        <p style="color: #8293A3; line-height: 1.2;">By offering airdrops, Perp DEXs incentivize real trading activity such as volume generation, open interest, liquidity provision, and product testing, helping bootstrap deep markets, stress-test their infrastructure, and decentralize protocol ownership ahead of full-scale adoption.</p>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -3855,9 +3855,9 @@ with col_content:
             </style>
             <div class="airdrop-box">
                 <h2 style="color: #00ffae; margin:0;">DePIN Airdrops</h2>
-                <p>DePIN airdrops are promotional token distributions by Decentralized Physical Infrastructure (DePIN) projects to early users and participants in their networks.
+                <p style="color: #8293A3; line-height: 1.2;">DePIN airdrops are promotional token distributions by Decentralized Physical Infrastructure (DePIN) projects to early users and participants in their networks.
                 making it easier and more secure to transfer and exchange assets within the crypto ecosystem.</p>
-                <p>By offering airdrops, DePIN projects incentivize users to contribute resources, like bandwidth, data storage, or even energy, to their networks, helping them grow and become more robust.</p>
+                <p style="color: #8293A3; line-height: 1.2;">By offering airdrops, DePIN projects incentivize users to contribute resources, like bandwidth, data storage, or even energy, to their networks, helping them grow and become more robust.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -4364,7 +4364,7 @@ with col_content:
             </style>
             <div class="airdrop-box">
                 <h2 style="color: #00ffae; margin:0;">Bridges & Swaps Protocols</h2>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                 Explore and access the best bridge and swap protocols available for each network, 
                 making it easier and more secure to transfer and exchange assets within the crypto ecosystem.</p>
             </div>
@@ -4809,6 +4809,7 @@ with col_content:
                 span[data-baseweb="tag"] span {
                     color: #000000 !important; 
                     font-weight: 700 !important;
+                    font-size: 16px !important;
                 }
                 span[data-baseweb="tag"] svg {
                     fill: #000000 !important;
@@ -4817,7 +4818,7 @@ with col_content:
 
             <div class="airdrop-box">
                 <h2>Funding Rate Arbitrage</h2>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     Find the arbitrage opportunities by tracking the real-time funding rate differences across decentralized exchanges (refresh each 5 minutes).
                 </p>
                 <h2>What to do?</h2>
@@ -4827,13 +4828,13 @@ with col_content:
                     <li><strong>Where to buy (Long):</strong> Open a long position where funding is lowest or negative (low or negative cost).</li>
                     <li><strong>Balance:</strong> Use the same notional (e.g. $1,000 each side) and the same leverage (1x–3x recommended).</li>
                     <li><strong>Time:</strong> Let the trade run for at least a few hours and check on the PerpDEX platform what the funding payment interval is.</li>
-                    <li><strong>Capital:</strong> It’s not recommended to do arbitrage with very low capital. Use at least $300 per trade on the two indicated platforms; otherwise, you won’t be able to cover the fees and the spread when closing the trade.</li>
+                    <li><strong>Capital:</strong> It’s not recommended to do arbitrage with very low capital. Use at least $500 per trade on the two indicated platforms; otherwise, you won’t be able to cover the fees and the spread when closing the trade.</li>
                 </ul>
             </div>
             """,
             unsafe_allow_html=True
         )
-
+       
         API_URL = "https://www.cryptoexchange.sh/api/funding-arb"
         VARIATIONAL_API = "https://omni-client-api.prod.ap-northeast-1.variational.io/metadata/stats"
 
@@ -4859,6 +4860,7 @@ with col_content:
             "BACKPACK": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
         }
         # --- FUNÇÕES DE BUSCA EXTERNA (REINSERIDAS) ---
+        @st.cache_data(ttl=300, show_spinner=False)  # Cache de 5 minutos para performance
         def fetch_nado_data():
             try:
                 r = requests.get("https://archive.prod.nado.xyz/v2/contracts", timeout=10)
@@ -4951,14 +4953,14 @@ with col_content:
 
             logo_img = ""
             if show_logo and logo_url:
-                logo_img = f'<img src="{logo_url}" width="18" height="18" style="margin-right:6px; vertical-align:middle; border-radius:4px;">'
+                logo_img = f'<img src="{logo_url}" width="24" height="24" style="margin-right:6px; vertical-align:middle; border-radius:4px;">'
             
             if url:
                 return f'<span style="white-space:nowrap;">{logo_img}<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a></span>'
             return f'<span>{logo_img}{key}</span>'
         
             #return f'<a href="{url}" target="_blank" style="color:#3cff9e; text-decoration:none; font-weight:600;">{key}</a>' if url else key
-
+        
         try:
             # 1. Fetch de todas as fontes
             response = requests.get(API_URL, timeout=15).json()
@@ -5134,14 +5136,14 @@ with col_content:
             </style>
             <div class="airdrop-box">
                 <h2>Solana Stables APY</h2>
-                <p style="color: #8293A3;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     Real-time ranking of the best yields in the Solana ecosystem. Monitor APY, TVL, and risk levels across top-tier protocols.
                 </p>
                 <h2>Risk & Diversification Notice</h2>
-                <p style="color: #8293A3; line-height: 1.6;">
+                <p style="color: #8293A3; line-height: 1.2;">
                     Stablecoin yield strategies should not be treated as a single bet. The best way to manage risk is through 
                     diversification, adjusting your allocations according to your investment profile.
-                    <ul style="color: #8293A3;margin-top: 0px;">
+                    <ul style="color: #8293A3;margin-top: 0px; margin-bottom: 0px;line-height: 1.2;">
                         <li><strong>Conservative:</strong> focus mainly on lower-risk with a little of moderate strategies.</li>
                         <li><strong>Moderate:</strong> allocate part to low risk, some to medium risk, and a smaller portion to moderate/high risk.</li>
                         <li><strong>Aggressive / degen:</strong> accept higher exposure to high-risk strategies, understanding the increased chance of losses.</li>
@@ -5617,7 +5619,7 @@ with col_content:
             </style>
             <div class="airdrop-box">
                 <h2 style="color: #00ffae; margin:0;">Airdrop Points Viewer</h2>
-                <p style="color: #8293A3;">Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.</p>
+                <p style="color: #8293A3; line-height: 1.2;">Below are some links to obtain Faucet tokens to support some protocols that may require faucets on their farms.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -5801,10 +5803,10 @@ with col_content:
                 }
             </style>
             <div class="airdrop-box">
-                <h2>Why Revoke Contracts?</h2>
-                <p style="color: #8293A3;>Revoke protocols let you remove permissions previously granted to smart contracts in your crypto wallet.
+                <h2 style="color: #00ffae; margin:0;">Why Revoke Contracts?</h2>
+                <p style="color: #8293A3; line-height: 1.2;>Revoke protocols let you remove permissions previously granted to smart contracts in your crypto wallet.
                 When using DApps, these permissions often stay active indefinitely.</p>
-                <p style="color: #8293A3;>Revoking them enhances security and control, preventing malicious contracts from accessing your assets without your approval.</p>
+                <p style="color: #8293A3; line-height: 1.2;>Revoking them enhances security and control, preventing malicious contracts from accessing your assets without your approval.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -6091,58 +6093,58 @@ with col_content:
 
             <div class="airdrop-box">
                     <h2><strong>With the rise of crypto airdrops, scams have become more widespread than ever.</strong></h2>
-                    <p style="color: #8293A3;">
+                    <p style="color: #8293A3; line-height: 1.2;">
                     Many users rush to be among the first to discover new projects or engage with X posts to secure rewards. But that urgency can come at a high cost.
                     Without careful verification, it’s easy to fall into traps set by scammers.
                     </p>
-                    <p style="color: #8293A3;">They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
+                    <p style="color: #8293A3; line-height: 1.2;">They’ll use every trick in the book — from fake comments under posts to direct messages promising “great opportunities” — all designed to trick you and steal your funds.
                     </p>
                     <h2>🚨 How to Avoid Crypto Airdrop Scams?</h2>
-                    <p style="color: #8293A3;">Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.</p>
+                    <p style="color: #8293A3; line-height: 1.2;">Crypto airdrops can be a great way to earn rewards—but they're also a big target for scammers. Here's a quick guide to staying safe while chasing drops.</p>
                     <h2>🔒 1. Use a Dedicated Wallet for Airdrops</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li><b>Create a separate wallet</b> just for airdrop interactions. Consider a Cold Wallet with at least 3 accounts by network.</li>
                         <li><b>Never use your main wallet</b> with valuable assets.</li>
                         <li>If anything goes wrong, your main funds stay safe.</li>
                     </ul>
                     <h2>🧠 2. Research Before You Click</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li><b>Verify the project’s legitimacy</b> through <b>official sites</b> and <b>trusted communities</b>.</li>
                         <li><b>Avoid links</b> from random X (Twitter) users or Telegram DMs.</li>
                         <li><b>Look for audits, GitHub repos, and real backers.</b></li>
                     </ul>
                     <h2>⚠️ 3. Beware of Fake Accounts and Bots</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li>Many scam comments and impersonators exist under legit posts.</li>
                         <li>Double-check usernames and links — <b>look for subtle typos</b>.</li>
                         <li><b>Never trust DMs</b> offering "airdrops" or "early access".</li>
                     </ul>
                     <h2>🧾 4. Audit the Smart Contract or Wait</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li>Don’t rush to sign random transactions.</li>
                         <li>Use tools like <b>Etherscan</b>, <b>DeBank</b>, or <b>Rabby Wallet</b> to inspect them.</li>
                         <li>If a project lacks transparency or an audit, think twice.</li>
                     </ul>
                     <h2>🧼 5. Revoke Unused Permissions</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li>Clean up your wallet permissions regularly with:</li>
                         <li><a href="https://revoke.cash" target="_blank">revoke.cash</a></li>
                         <li><a href="https://app.safe.global" target="_blank">Safe</a></li>
                         <li>This reduces the chance of malicious token drains.</li>
                     </ul>
                     <h2>🔐 6. Never Share Private Keys or Seed Phrases</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li><b>No legit team will ever ask</b> for your keys or phrase.</li>
                         <li>Use <b>hardware wallets</b> like Ledger or Trezor for serious funds.</li>
                     </ul>
                     <h2>🪪 7. Watch Out for “Connect Wallet to Check Eligibility”</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li>Don't connect your wallet to <b>random sites</b>.</li>
                         <li>Always verify the domain and source.</li>
                         <li>If in doubt, don’t click!</li>
                     </ul>
                     <h2>🧾 8. Use Reputable Airdrop Aggregators</h2>
-                    <ul style="color: #8293A3;">
+                    <ul style="color: #8293A3; line-height: 1.2;">
                         <li>Use vetted aggregators to spot real airdrops:</li>
                         <li><a href="https://earni.fi/" target="_blank">Earnifi</a></li>
                         <li><a href="https://defillama.com/airdrops" target="_blank">DeFiLlama Airdrops</a></li>
