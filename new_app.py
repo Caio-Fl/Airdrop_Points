@@ -430,6 +430,7 @@ st.markdown(
 unsafe_allow_html=True
 )
 
+
 # Adicionando CSS para os botões de navegação
 st.markdown("""
     <style>
@@ -822,20 +823,115 @@ elif st.session_state.pagina != pagina_atual:
 st.markdown('<div class="container-outer">', unsafe_allow_html=True)
 
 # Layout colunas menu + conteúdo
-col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2,1, 8,1.5], gap="large")
+col_zero,col_left,col_menu, col_content,col_rigth = st.columns([0.12,2.3,0.7, 8,1.5], gap="large")
 
 # Menu lateral com botões
+# --- Certifique-se de que este bloco abaixo esteja identado corretamente ---
+
 with col_left:
+    # Tudo abaixo desta linha precisa de 4 espaços de recuo
+    st.markdown("""
+    <style>
+        /* 1. CONTAINER PAI: Adiciona um respiro de segurança na coluna */
+        .menu-column {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            width: 100% !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 2. ESTILO GLOBAL DOS BOTÕES */
+        .stButton > button {
+            width: 100% !important;        /* Ocupa a largura disponível da coluna */
+            max-width: 200px !important;   /* Define um limite máximo para não esticar demais */
+            min-height: 45px !important;
+            height: 45px !important;
+            margin-top: 5px !important;
+            margin-bottom: 5px !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        /* 3. WELCOME: Centralizado com margens automáticas */
+        .welcome-section {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .welcome-section .stButton > button {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            justify-content: center !important;
+            text-align: center !important;
+            padding-left: 0 !important;
+            background: rgba(0, 255, 163, 0.1) !important;
+            border: 1px solid #00ffa3 !important;
+        }
+
+        /* 4. OUTROS BOTÕES: Alinhados à esquerda dentro do seu limite */
+        .menu-column div:not(.welcome-section) .stButton > button {
+            margin-left: 0 !important;      /* Cola na esquerda do container */
+            justify-content: flex-start !important;
+            padding-left: 15px !important;
+            text-align: left !important;
+        }
+
+        /* Ajuste para o texto não quebrar ou sumir no zoom */
+        .stButton > button p {
+            font-size: 14px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+
     st.markdown('<div class="menu-column">', unsafe_allow_html=True)
-    match = re.match(r'^([^\w\s]+)', pagina_atual)
-    emoji = match.group(1) if match else '' #list(PAGES.keys())[1].split()[0] 
-    label = re.sub(r'^[^\w\s]+', '', pagina_atual).strip()#" ".join(list(PAGES.keys())[0].split()[1:])
-    for pagina in PAGES:
-        if st.button(pagina, key=pagina):
-            emoji = pagina.split()[0]
-            label = " ".join(pagina.split()[1:])
-            st.session_state.pagina = pagina
-            st.query_params.update({"pagina": pagina})
+    
+
+    # ⭐ SPOTLIGHT (Com a Calculator dentro)
+    with st.expander("⭐ SPOTLIGHT", expanded=True): # True para começar aberto
+        if st.button("🧮 Airdrop Calculator", key="btn_calc"):
+            st.session_state.pagina = "🧮 Airdrop Calculator"
+
+    # --- SEÇÃO RETRÁTIL: MONITORING ---
+    with st.expander("🖥️ MONITORING", expanded=True): # True para começar aberto
+        if st.button("✅ Last Claims", key="btn_claims"):
+            st.session_state.pagina = "✅ Last Claims and Checkers"
+        if st.button("💵 Solana Stables APY", key="btn_sol_stables"):
+            st.session_state.pagina = "💵 Solana Stables APY"
+
+    # --- SEÇÃO RETRÁTIL: TOOLS ---
+    with st.expander("🛠️ TOOLS", expanded=True):
+        if st.button("⚖️ Funding Arbitrage", key="btn_funding"):
+            st.session_state.pagina = "⚖️ Funding Rate Arbitrage"
+        if st.button("💎 Points Viewer", key="btn_points"):
+            st.session_state.pagina = "🏆 Airdrop Points Viewer"
+        if st.button("🎒 Backpack Check", key="btn_backpack"):
+            st.session_state.pagina = "🎒 BackPack Volume Check"
+
+    # --- SEÇÃO RETRÁTIL: AIRDROPS ---
+    with st.expander("🪂 AIRDROPS", expanded=False): # False para começar fechado
+        if st.button("🔄 PerpDex Airdrops", key="btn_perpdex"):
+            st.session_state.pagina = "♾️ PerpDEX Airdrops"
+        if st.button("🌐 DePIN Airdrops", key="btn_depin"):
+            st.session_state.pagina = "📡 Depin Airdrops"
+        if st.button("📅 Latest Airdrops", key="btn_latest"):
+            st.session_state.pagina = "🎁 Latest Airdrops"
+
+    # --- SEÇÃO RETRÁTIL: SAFETY ---
+    with st.expander("🛡️ SAFETY", expanded=False):
+        if st.button("⛔ Revoke Contract", key="btn_revoke"):
+            st.session_state.pagina = "⛔ Revoke Contract"
+        if st.button("⚠️ Avoiding Scams", key="btn_scams"):
+            st.session_state.pagina = "⚠️ Avoiding Scams"
+        if st.button("🏠 Welcome", key="btn_welcome"):
+            st.session_state.pagina = "🏠 Welcome"
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Conteúdo principal
@@ -862,6 +958,19 @@ st.markdown("""
 
 # Remove emojis ou símbolos no início da string
 clean_label = re.sub(r'^[^\w\s]+', '', pagina_atual).strip()
+
+# --- Lógica para definir emoji e label baseada na página selecionada ---
+pagina_selecionada = st.session_state.get("pagina", "🏠 Welcome")
+
+# Extrai o emoji (primeiro caractere/emoji) e o texto (o resto)
+import re
+match = re.match(r'^([^\w\s]+)\s*(.*)$', pagina_selecionada)
+if match:
+    emoji = match.group(1)
+    label = match.group(2)
+else:
+    emoji = "🚀"
+    label = pagina_selecionada
 
 with col_content:
     #st.markdown(f"### {st.session_state.pagina}")
@@ -1102,7 +1211,7 @@ with col_content:
         <style>
         div[data-testid="stCheckbox"] * {
             font-family: 'Trebuchet MS', 'Segoe UI', sans-serif !important;
-            font-size: 14px !important;
+            font-size: 15px !important;
             color: #e5e7eb !important;
             letter-spacing: 0.2px;
             align-items: center !important;
