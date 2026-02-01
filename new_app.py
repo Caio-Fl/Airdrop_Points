@@ -777,7 +777,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "💵 Solana Stables APY", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
-           "🎁 Latest Airdrops", "♾️ PerpDEX Airdrops","📡 Depin Airdrops", "✅ Last Claims and Checkers", 
+           "🎁 Latest Airdrops", "♾️ PerpDEX Airdrops","🌐 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
@@ -795,7 +795,7 @@ PAGES = {
     "💵 Solana Stables APY": "Solana Stables APY Chances",
     "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
     "♾️ PerpDEX Airdrops": "Airdrops from PerpDex.",
-    "📡 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
+    "🌐 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
     "🎁 Latest Airdrops": "List of the latest available airdrops.",
     "🎒 BackPack Volume Check": "Check your BackPack Volume.",
     #"🌾 Farm with YT": "Yield farming with YouTube strategies.",
@@ -910,18 +910,18 @@ with col_left:
         if st.button("⚖️ Funding Arbitrage", key="btn_funding"):
             st.session_state.pagina = "⚖️ Funding Rate Arbitrage"
         if st.button("💎 Points Viewer", key="btn_points"):
-            st.session_state.pagina = "🏆 Airdrop Points Viewer"
+            st.session_state.pagina = "💎 Airdrop Points Viewer"
         if st.button("🎒 Backpack Check", key="btn_backpack"):
             st.session_state.pagina = "🎒 BackPack Volume Check"
 
     # --- SEÇÃO RETRÁTIL: AIRDROPS ---
     with st.expander("🪂 AIRDROPS", expanded=False): # False para começar fechado
-        if st.button("🔄 PerpDex Airdrops", key="btn_perpdex"):
+        if st.button("♾️ PerpDex Airdrops", key="btn_perpdex"):
             st.session_state.pagina = "♾️ PerpDEX Airdrops"
         if st.button("🌐 DePIN Airdrops", key="btn_depin"):
-            st.session_state.pagina = "📡 Depin Airdrops"
+            st.session_state.pagina = "🌐 Depin Airdrops"
         if st.button("📅 Latest Airdrops", key="btn_latest"):
-            st.session_state.pagina = "🎁 Latest Airdrops"
+            st.session_state.pagina = "📅 Latest Airdrops"
 
     # --- SEÇÃO RETRÁTIL: SAFETY ---
     with st.expander("🛡️ SAFETY", expanded=False):
@@ -3888,7 +3888,7 @@ with col_content:
             components.html(full_html, height=max(h_calc, 600), width=1500, scrolling=False)
 
 
-    elif st.session_state.pagina == "📡 Depin Airdrops":
+    elif st.session_state.pagina == "🌐 Depin Airdrops":
         st.markdown(
             """
             <style>
