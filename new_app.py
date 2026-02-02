@@ -1181,9 +1181,10 @@ with col_content:
         referral = ""
         logo_url = ""
 
-        protocolos = ["Backpack", "Variational", "Pacifica", "Ostium", "Paradex", "Extended", "Gvrt S2", "EdgeX", "Reya", "Any"]
+        protocolos = ["Nado","Backpack", "Variational", "Pacifica", "Ostium", "Paradex", "Extended", "Gvrt S2", "EdgeX", "Reya", "Any"]
 
         logos = {
+            "Nado": "https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg",
             "Backpack": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
             "Variational": "https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg",
             "Pacifica": "https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg",
@@ -1197,7 +1198,7 @@ with col_content:
         }
 
         if "selected_protocol" not in st.session_state:
-            st.session_state.selected_protocol = "Backpack"
+            st.session_state.selected_protocol = "Nado"
 
         def select_protocol(p):
             st.session_state.selected_protocol = p
@@ -1275,6 +1276,14 @@ with col_content:
                         d = datetime.strptime(date_str+"T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                         a = datetime.strptime(actual_date+"T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                         return int(actual + (d - a).days * daily)
+                    
+                    if selected_protocol == "Nado":
+                        date_tge = st.text_input("📅 TGE Date", "2026-08-30")
+                        last_update = "2026-01-29"
+                        FDV, airdrop_pct, your_points = 500, 20, 1000
+                        total_points = calc(date_tge, 8_915_074, 950_000/7, last_update)
+                        referral = "https://app.nado.xyz?join=TMTHHkO"
+                        logo_url = logos["Nado"]
 
                     if selected_protocol == "Backpack":
                         date_tge = st.text_input("📅 TGE Date", "2026-01-28")
@@ -1295,7 +1304,7 @@ with col_content:
                     elif selected_protocol == "Pacifica":
                         date_tge = st.text_input("📅 TGE Date", "2026-10-01")
                         last_update = "2026-01-20"
-                        FDV, airdrop_pct, your_points = 500, 20, 1_000
+                        FDV, airdrop_pct, your_points = 300, 20, 1_000
                         total_points = calc(date_tge, 190_000_000, 10_000_000/7, last_update)
                         referral = "https://app.pacifica.fi?referral=PacificaRef"
                         logo_url = logos["Pacifica"]
