@@ -776,8 +776,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-options = ["🏠 Welcome", "🧮 Airdrop Calculator", "🏆 Airdrop Points Viewer", "💵 Solana Stables APY", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
-           "🎁 Latest Airdrops", "♾️ PerpDEX Airdrops","🌐 Depin Airdrops", "✅ Last Claims and Checkers", 
+options = ["🏠 Welcome", "🧮 Airdrop Calculator", "💎 Airdrop Points Viewer", "💵 Solana Stables APY", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
+           "📅 Latest Airdrops", "♾️ PerpDEX Airdrops","🌐 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
@@ -790,13 +790,13 @@ if "pagina" not in st.session_state:
 PAGES = {
     "🏠 Welcome": "",
     "✅ Last Claims and Checkers": "Latest claimable rewards and check tools.",
-    "🏆 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
+    "💎 Airdrop Points Viewer": "Verify your wallet points in Airdrops",
     "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
     "💵 Solana Stables APY": "Solana Stables APY Chances",
     "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
     "♾️ PerpDEX Airdrops": "Airdrops from PerpDex.",
     "🌐 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
-    "🎁 Latest Airdrops": "List of the latest available airdrops.",
+    "📅 Latest Airdrops": "List of the latest available airdrops.",
     "🎒 BackPack Volume Check": "Check your BackPack Volume.",
     #"🌾 Farm with YT": "Yield farming with YouTube strategies.",
     #"📊 Comparative YT Table": "Compare YouTube farming strategies.",
@@ -1547,7 +1547,7 @@ with col_content:
         components.html(full_html, height=400, width=1900, scrolling=False)
 
     
-    elif st.session_state.pagina == "🏆 Airdrop Points Viewer":
+    elif st.session_state.pagina == "💎 Airdrop Points Viewer":
 
         st.markdown(
         """
@@ -3602,7 +3602,7 @@ with col_content:
         unsafe_allow_html=True
         )
         
-    elif st.session_state.pagina == "🎁 Latest Airdrops":
+    elif st.session_state.pagina == "📅 Latest Airdrops":
         st.info("🚧 Coming Soon: Protocols with Airdrop Potential.")
 
     elif st.session_state.pagina == "♾️ PerpDEX Airdrops":
