@@ -3713,42 +3713,42 @@ with col_content:
             # ======================
             # ⭐ PRIORIDADE S
             # ======================
-            {"name":"Hyperliquid","priority":"S","funding":"Self-funded","site":"https://hyperliquid.xyz","twitter":"https://x.com/HyperliquidX","discord":"https://discord.gg/hyperliquid","status":"Post-TGE","application":"Perp + Spot","image":"https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg"},
-            {"name":"Variational","priority":"S","funding":"Top VCs","site":"https://variational.io","twitter":"https://x.com/variational_io","discord":"https://discord.gg/variational","status":"Early Farming","application":"Zero-fee Perps","image":"https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg"},
-            {"name":"Paradex","priority":"S","funding":"Paradigm","site":"https://app.paradex.trade/r/Paradex15","twitter":"https://x.com/paradex","discord":"https://discord.gg/paradex","status":"Late Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg"},
-            {"name":"Ethereal","priority":"S","funding":"Ethena","site":"https://app.ethereal.trade","twitter":"https://x.com/etherealdex","discord":"https://discord.gg/etherealdex","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1980059369736654849/dF9lY6aT_400x400.jpg"},
-            {"name":"Nado","priority":"S","funding":"Kraken","site":"https://nado.xyz","twitter":"https://x.com/nadoHQ","discord":"https://nado.xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg"},
+            {"name":"Hyperliquid","priority":"S","funding":"Self-funded","site":"https://hyperliquid.xyz","twitter":"https://x.com/HyperliquidX","discord":"https://discord.gg/hyperliquid","status":"Post-TGE","application":"Perp + Spot","image":"https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg", "maker": "0.01%", "taker": "0.045%", "leverage": "40x"},
+            {"name":"Variational","priority":"S","funding":"Top VCs","site":"https://variational.io","twitter":"https://x.com/variational_io","discord":"https://discord.gg/variational","status":"Early Farming","application":"Zero-fee Perps","image":"https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg", "maker": "0%", "taker": "0%", "leverage": "50x"},
+            {"name":"Paradex","priority":"S","funding":"Paradigm","site":"https://app.paradex.trade/r/Paradex15","twitter":"https://x.com/paradex","discord":"https://discord.gg/paradex","status":"Late Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg", "maker": "0%", "taker": "0%", "leverage": "50x"},
+            {"name":"Ethereal","priority":"S","funding":"Ethena","site":"https://app.ethereal.trade","twitter":"https://x.com/etherealdex","discord":"https://discord.gg/etherealdex","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1980059369736654849/dF9lY6aT_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
+            {"name":"Nado","priority":"S","funding":"Kraken","site":"https://nado.xyz","twitter":"https://x.com/nadoHQ","discord":"https://nado.xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
             
             # ======================
             # 🟢 PRIORIDADE A
             # ======================
-            {"name":"Extended","priority":"A","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg"},
-            {"name":"StandX","priority":"A","funding":"Ex-Binance","site":"https://standx.com/referral?code=STAND_5","twitter":"https://x.com/StandX_Official","discord":"https://discord.gg/standx","status":"Early Farming","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/2005237613246959616/UHa0DROv_400x400.jpg"},
-            {"name":"HyENA","priority":"A","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg"},
-            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Ending Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg"},
+            {"name":"Extended","priority":"A","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg", "maker": "0%", "taker": "0.025%", "leverage": "50x"},
+            {"name":"StandX","priority":"A","funding":"Ex-Binance","site":"https://standx.com/referral?code=STAND_5","twitter":"https://x.com/StandX_Official","discord":"https://discord.gg/standx","status":"Early Farming","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/2005237613246959616/UHa0DROv_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
+            {"name":"HyENA","priority":"A","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
+            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Ending Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg", "maker": "0.02%", "taker": "0.05%", "leverage": "50x"},
             
             # ======================
             # 🟡 PRIORIDADE B
             # ======================
-            {"name":"Pacifica","priority":"B","funding":"Solana","site":"https://app.pacifica.fi?referral=PacificaRef","twitter":"https://x.com/pacifica_fi","discord":"https://discord.gg/pacifica","status":"Early Farming","application":"Sol Perps","image":"https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg"},
-            {"name":"TradeXYZ","priority":"B","funding":"Pre-seed","site":"https://trade.xyz","twitter":"https://x.com/tradexyz","discord":"https://trade.xyz","status":"Very Early","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/1971989421844000768/MNOCmF3z_400x400.jpg"},
-            {"name":"Ostium","priority":"B","funding":"RWA","site":"https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH","twitter":"https://x.com/OstiumLabs","discord":"https://discord.gg/ostiumlabs","status":"Early Farming","application":"RWA Perps","image":"https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg"},
-            {"name":"Cascade","priority":"B","funding":"Coinbase / Polychain","site":"https://cascade.xyz","twitter":"https://x.com/cascade_xyz","discord":"https://discord.gg/cascade-xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1999154479866736640/NZEzwEE1_400x400.jpg"},
+            {"name":"Pacifica","priority":"B","funding":"Solana","site":"https://app.pacifica.fi?referral=PacificaRef","twitter":"https://x.com/pacifica_fi","discord":"https://discord.gg/pacifica","status":"Early Farming","application":"Sol Perps","image":"https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg", "maker": "0.015%", "taker": "0.04%", "leverage": "50x"},
+            {"name":"TradeXYZ","priority":"B","funding":"Pre-seed","site":"https://trade.xyz","twitter":"https://x.com/tradexyz","discord":"https://trade.xyz","status":"Very Early","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/1971989421844000768/MNOCmF3z_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
+            {"name":"Ostium","priority":"B","funding":"RWA","site":"https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH","twitter":"https://x.com/OstiumLabs","discord":"https://discord.gg/ostiumlabs","status":"Early Farming","application":"RWA Perps","image":"https://pbs.twimg.com/profile_images/1948722481780453376/GT7D7CNh_400x400.jpg", "maker": "0.03%", "taker": "0.1%", "leverage": "200x"},
+            {"name":"Cascade","priority":"B","funding":"Coinbase / Polychain","site":"https://cascade.xyz","twitter":"https://x.com/cascade_xyz","discord":"https://discord.gg/cascade-xyz","status":"Early Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1999154479866736640/NZEzwEE1_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
             
             # ======================
             # 🟠 PRIORIDADE C
             # ======================
-            {"name":"Reya","priority":"C","funding":"CoinList","site":"https://app.reya.xyz/trade?referredBy=xe369dux","twitter":"https://x.com/reya_xyz","discord":"https://discord.gg/reya","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png"},
-            {"name":"EdgeX","priority":"C","funding":"VC backed","site":"https://pro.edgex.exchange/referral/EDGE15","twitter":"https://x.com/edgeX_exchange","discord":"https://discord.gg/edgex","status":"Pre-TGE","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg"},
-            {"name":"Hibachi","priority":"C","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg"},
-            {"name":"GRVT","priority":"C","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg"},
-            {"name":"Apex","priority":"C","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg"},
-            {"name":"Aster","priority":"C","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg"},
+            {"name":"Reya","priority":"C","funding":"CoinList","site":"https://app.reya.xyz/trade?referredBy=xe369dux","twitter":"https://x.com/reya_xyz","discord":"https://discord.gg/reya","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png", "maker": "0.04%", "taker": "0.04%", "leverage": "100x"},
+            {"name":"EdgeX","priority":"C","funding":"VC backed","site":"https://pro.edgex.exchange/referral/EDGE15","twitter":"https://x.com/edgeX_exchange","discord":"https://discord.gg/edgex","status":"Pre-TGE","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg", "maker": "0.012%", "taker": "0.038%", "leverage": "100x"},
+            {"name":"Hibachi","priority":"C","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
+            {"name":"GRVT","priority":"C","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg", "maker": "-0.0001%", "taker": "0.055%", "leverage": "50x"},
+            {"name":"Apex","priority":"C","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg", "maker": "0%", "taker": "0.025%", "leverage": "50x"},
+            {"name":"Aster","priority":"C","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg", "maker": "0.01%", "taker": "0.035%", "leverage": "100x"},
             
             # ======================
             # 🔴 PRIORIDADE D
             # ======================
-            {"name":"Based","priority":"D","funding":"Ethena","site":"https://based.one","twitter":"https://x.com/basedonex","discord":"https://discord.gg/basedonex","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2004517825772470272/U7fzL7uD_400x400.jpg"},
+            {"name":"Based","priority":"D","funding":"Ethena","site":"https://based.one","twitter":"https://x.com/basedonex","discord":"https://discord.gg/basedonex","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2004517825772470272/U7fzL7uD_400x400.jpg", "maker": "TBD", "taker": "TBD", "leverage": "TBD"},
         ]
 
 
@@ -3820,6 +3820,8 @@ with col_content:
                         <div class="footer-wrapper">
                             <p><strong>📌 Priority:</strong> <span style="color:#39FF14;">{p['priority']}</span></p>
                             <p><strong>💰 Funding:</strong> {p['funding']}</p>
+                            <p><strong>💸 Fees (M/T):</strong> {p['maker']} / {p['taker']}</p>
+                            <p><strong>⚖️ Leverage:</strong> {p['leverage']}</p>
                             <p><strong>🚀 Application:</strong> {p['application']}</p>
                             <p><strong>📊 Status:</strong> <span style="color:#00e0ff;">{p['status']}</span></p>
                             <p><strong>📣 Social:</strong>
@@ -3848,13 +3850,22 @@ with col_content:
                 # --- GERAÇÃO LISTA (TABELA) ---
                 rows_html = ""
                 for p in filtered_perps:
+                    # Lógica de cor para Maker Fee (destaque se for 0% ou negativo)
+                    maker_color = "#39FF14" if "0%" in p['maker'] or "-" in p['maker'] else "white"
+                    
                     rows_html += f"""
                     <tr class="t-row">
-                        <td><div style="display:flex; align-items:center; gap:12px;"><img src="{p['image']}" width="35" height="35" style="border-radius:50%;"><strong>{p['name']}</strong></div></td>
-                        <td style="color:#39FF14; font-weight:bold;">{p['priority']}</td>
-                        <td>{p['funding']}</td>
-                        <td style="color:#00e0ff;">{p['status']}</td>
-                        <td>{p['application']}</td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <img src="{p['image']}" width="35" height="35" style="border-radius:50%;">
+                                <strong>{p['name']}</strong>
+                            </div>
+                        </td>
+                        <td style="color:#39FF14; font-weight:bold; text-align:center;">{p['priority']}</td>
+                        <td style="color:{maker_color};">{p['maker']}</td>
+                        <td>{p['taker']}</td>
+                        <td style="color:#00e0ff; font-weight:bold;">{p['leverage']}</td>
+                        <td style="color:#8293A3; font-size:13px;">{p['funding']}</td>
                         <td>
                             <div style="display:flex; gap:10px;">
                                 <a href="{p['site']}" target="_blank" class="t-btn">Trade</a>
@@ -3880,11 +3891,12 @@ with col_content:
                         <thead>
                             <tr>
                                 <th>Exchange</th>
-                                <th>Priority</th>
-                                <th>Funding</th>
-                                <th>Status</th>
-                                <th>Type</th>
-                                <th>Action</th>
+                                <th style="text-align:center;">Rank</th>
+                                <th>Maker Fee</th>
+                                <th>Taker Fee</th>
+                                <th>Lev. Max</th>
+                                <th>Funding/Backing</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>{rows_html}</tbody>
