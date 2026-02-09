@@ -5051,14 +5051,24 @@ with col_content:
                 print(f"Erro Backpack: {e}")
                 return {}
 
-        def inject_external_venues(markets, nado_map):
-            for symbol, nado_venue in nado_map.items():
-                target = next((m for m in markets if m.get("symbol") == symbol), None)
+        
+        def inject_external_venues(markets, external_map):
+            for symbol_raw, venue_data in external_map.items():
+                # Extrai apenas a base (ex: transforma 'BTC-USD' em 'BTC')
+                base_symbol = symbol_raw.split('-')[0].upper()
+                
+                # Procura um mercado que comece com o mesmo nome base
+                target = next((m for m in markets if m.get("symbol", "").startswith(base_symbol)), None)
+                
                 if target:
-                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != "nado"]
-                    target["venues"].append(nado_venue)
+                    # Se achou o par (ex: achou BTC-USDC para o BTC-USD da Nado), injeta
+                    target["venues"] = [v for v in target.get("venues", []) if v.get("venue","").lower() != venue_data['venue'].lower()]
+                    target["venues"].append(venue_data)
                 else:
-                    markets.append({"symbol": symbol, "venues": [nado_venue], "spreadPct": 0})
+                    # Se não existe no raw_markets, adiciona como novo
+                    # Nota: Só aparecerá se outra exchange também for injetada para este base_symbol
+                    markets.append({"symbol": f"{base_symbol}-USD", "venues": [venue_data], "spreadPct": 0})
+                    
             return markets
 
         # --- FILTROS NO DASHBOARD ---
@@ -5099,7 +5109,7 @@ with col_content:
             v_funding_map = fetch_variational_funding()
             nado_map = fetch_nado_data()
             backpack_data = fetch_backpack_data() # Novo fetch
-       
+            
 
             # 2. Injeção e Correção de Dados antes do filtro de PerpDEX
             raw_markets = inject_external_venues(raw_markets, nado_map)
