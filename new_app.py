@@ -663,9 +663,9 @@ st.markdown("""
     🚨 Last News: 
     <a href='https://app.hyperlend.finance/dashboard/terms-and-conditions' target='_blank' style='color:black;'>Register to Hyperland Airdrop!</a> / 
     <a href='https://jup.ag/?ref=hf7390upylv8' target='_blank' style='color:black;'>Claim JUPITER Rewards!</a> /
-    <a href='https://waitlist.stormrae.ai/dashboard?ref=CaioFlemin2089' target='_blank' style='color:black;'>Join the waitlist for STORMRAI!</a> /
     <a href='https://hub.orbt.xyz/?referral_code=ORBT-RCD-SSA-ETF' target='_blank' style='color:black;'>Join Orbit Protocol Campaign!</a> /
     <a href='https://waitlist.rally.fun/joinme/CaioFlemin2089' target='_blank' style='color:black;'>ByPass The InfoFi Crash!</a> /
+    <a href='https://backpack.exchange/join/jj2kkdp1' target='_blank' style='color:black;'>Backpack Airdrop Register!</a> /
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -5458,6 +5458,7 @@ with col_content:
                 r = requests.get("https://app.solayer.org/api/info", timeout=5)
                 data['solayer'] = f"{r.json()['susd_apy']:.2f}%"
             except: data['solayer'] = "3.30%"
+            
 
             # MAPLE (Syrup USDC)
             try:
