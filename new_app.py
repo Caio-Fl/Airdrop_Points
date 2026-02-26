@@ -667,6 +667,7 @@ st.markdown("""
     <a href='https://hub.orbt.xyz/?referral_code=ORBT-RCD-SSA-ETF' target='_blank' style='color:black;'>Join Orbit Protocol Campaign!</a> /
     <a href='https://waitlist.rally.fun/joinme/CaioFlemin2089' target='_blank' style='color:black;'>ByPass The InfoFi Crash!</a> /
     <a href='https://backpack.exchange/join/jj2kkdp1' target='_blank' style='color:black;'>Backpack Airdrop Register!</a> /
+    <a href='https://backpack.exchange/join/jj2kkdp1' target='_blank' style='color:black;'>Trade Bot Added in TOOLS!</a> /
   </div>
 </div>
 """, unsafe_allow_html=True)
