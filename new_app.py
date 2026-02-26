@@ -6297,7 +6297,10 @@ with col_content:
                 if strategy == "EMA Pullback":
                     tolerancia_pct = st.number_input("EMA Touch Tolerance (%)", value=0.20)
                 else:
-                    tolerancia_pct = 0.20      
+                    tolerancia_pct = 0.20  
+
+                evaluate_all_markets = st.checkbox("Verify All Markets", value=True)
+
                 
 
             # Seletor de Visualização
@@ -6327,23 +6330,26 @@ with col_content:
             # -----------------------------
             if "lista_sinais" not in st.session_state:
                 st.session_state.lista_sinais = []
-            url = "https://api.backpack.exchange/api/v1/tickers"
-            try:
-                response = requests.get(url)
-                response.raise_for_status()
-                tickers = response.json()
+            #url = "https://api.backpack.exchange/api/v1/tickers"
+            #try:
+            #    response = requests.get(url)
+            #    response.raise_for_status()
+            #    tickers = response.json()
                 
-                symbol = sorted([
-                    t["symbol"] for t in tickers 
-                    if float(t.get("quoteVolume", 0)) >= min_vol
-                ])
-            except Exception as e:
-                st.error(f"Erro ao buscar tickers: {e}")
-                symbol = []
+            #    symbol = sorted([
+            #        t["symbol"] for t in tickers 
+            #        if float(t.get("quoteVolume", 0)) >= min_vol
+            #    ])
+            #except Exception as e:
+            #    st.error(f"Erro ao buscar tickers: {e}")
+            #    symbol = []
             
-            symbols, ids = get_tickers(exchange=exchange, min_vol=min_vol)
+            sym, ids = get_tickers(exchange=exchange, min_vol=min_vol)
 
-        
+            if evaluate_all_markets == False:
+                symbols = [st.selectbox("Choose Market:", sym)]
+            else:
+                symbols = sym   
 
         # EMAs por timeframe
         ema_periods = {
@@ -6957,6 +6963,11 @@ with col_content:
 
                 # --- FINALIZAÇÃO AUTOMÁTICA ---
                 st.session_state.bot_rodando = False # Desliga o estado do bot
+
+                if evaluate_all_markets == False:
+                    log_placeholder = st.empty()
+                    print(log_text)
+                    log_placeholder.code(log_text)
                 
                 status_text.success(f"✅ Search Complete! {total_moedas} tokens processed with {len(all_signals)} opportunities founded.")
                 progress_bar.empty() # Remove a barra ao terminar para limpar o layout
