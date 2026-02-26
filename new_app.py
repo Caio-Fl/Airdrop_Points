@@ -6310,8 +6310,7 @@ with col_content:
             
             symbols, ids = get_tickers(exchange=exchange, min_vol=min_vol)
 
-        # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
-        st.markdown("### 🔥 Trade Opportunities")
+        
 
         # EMAs por timeframe
         ema_periods = {
@@ -6332,6 +6331,9 @@ with col_content:
             period_hours = 120
         
         if st.session_state.bot_rodando:
+
+            # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
+            st.markdown("### 🔥 Trade Opportunities")
             
             status_placeholder = st.empty()
             log_placeholder = st.empty()
