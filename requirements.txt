@@ -11,3 +11,4 @@ mistralai
 dotenv
 cloudscraper
 openpyxl
+scipy
