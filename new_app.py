@@ -5313,7 +5313,7 @@ with col_content:
                 <ul style="color: #8293A3;">
                     <li><strong>Strategy Selection:</strong> Choose your preferred strategy: EMA Pullback follows the main market trend, while RSI focuses on potential reversals against the trend.</li>
                     <li><strong>Exchange Selection:</strong> Scan for opportunities across 10 different exchanges to find the best setups.</li>
-                    <li><strong>Timeframe Selection:</strong> Select your preferred timeframe — 5m, 15m, 1h, or 4h — depending on your trading style.</li>
+                    <li><strong>Timeframe Selection:</strong> Select your preferred timeframe — 5m, 15m, 1h, 4h or 1d — depending on your trading style.</li>
                     <li><strong>Risk Management:</strong> Use automatic or manual Stop Loss and Take Profit levels based on your defined risk-reward ratio.</li>
                     <li><strong>Volume Filter:</strong> Set a minimum 24h trading volume to ensure sufficient liquidity and safer trade execution.</li>
             </div>
@@ -6104,7 +6104,8 @@ with col_content:
                 "5m": 0.02,
                 "15m": 0.04,
                 "1h": 0.06,
-                "4h": 0.08
+                "4h": 0.08,
+                "1d": 0.12
             }
             
             if timeframe in variacoes:
@@ -6238,7 +6239,7 @@ with col_content:
             
             with col1:
                 strategy = st.selectbox("Strategy:", ["EMA Pullback", "RSI (20/80)"], key="bot_strat")
-                interval = st.selectbox("Timestamp:", ["5m", "15m", "1h", "4h"], index=1)
+                interval = st.selectbox("Timestamp:", ["5m", "15m", "1h", "4h", "1d"], index=1)
                 calcular_stop = st.checkbox("Auto Calculate Stop Loss and Take Profit", value=True)
                 mostrar_graficos = st.checkbox("Exibir Gráficos na Varredura", value=False)
                 
@@ -6260,11 +6261,43 @@ with col_content:
                     stop_loss_pct = st.number_input("Stop Loss (%)", value=1)
 
             with col3:
-                exchange = st.selectbox("Exchange:", ["backpack", "binance", "mexc", "gate.io", "extended", "paradex", "pacifica", "hyperliquid", "lighter", "nado"], index=0)
+                exchanges = [
+                    "backpack",
+                    "binance",
+                    "mexc",
+                    "gate.io",
+                    "extended",
+                    "paradex",
+                    "pacifica",
+                    "hyperliquid",
+                    "lighter",
+                    "nado",
+                ]
+
+                logos = {
+                    "backpack": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
+                    "binance": "https://pbs.twimg.com/profile_images/1940131561103347712/f5y2qENu_400x400.jpg",
+                    "mexc": "https://pbs.twimg.com/profile_images/2016433568231391236/Zfdec3Us_400x400.jpg",
+                    "gate.io": "https://pbs.twimg.com/profile_images/2006198898025717760/nFgV1-Oj_400x400.jpg",
+                    "extended": "https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg",
+                    "paradex": "https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg",
+                    "pacifica": "https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg",
+                    "hyperliquid": "https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg",
+                    "lighter": "https://pbs.twimg.com/profile_images/1968693128002412544/mH8iX9SN_400x400.jpg",
+                    "nado": "https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg",
+                }
+
+                exchange = st.selectbox(
+                    "Exchange:",
+                    exchanges,
+                    index=0,
+                    format_func=lambda x: x.replace(".", ". ").title().replace(". ", ".")
+                )
+
                 if strategy == "EMA Pullback":
                     tolerancia_pct = st.number_input("EMA Touch Tolerance (%)", value=0.20)
                 else:
-                    tolerancia_pct = 0.20
+                    tolerancia_pct = 0.20      
                 
 
             # Seletor de Visualização
@@ -6326,14 +6359,26 @@ with col_content:
         elif interval == "1h":
             period_hours = 720
         elif interval == "4h":
-            period_hours = 890
+            period_hours = 892
+        elif interval == "1d":
+            period_hours = 3600
         else:
             period_hours = 120
         
         if st.session_state.bot_rodando:
 
             # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
-            st.markdown("### 🔥 Trade Opportunities")
+            exchange_name = exchange.capitalize()
+            st.markdown(
+                f"""
+                <div style="margin-top: 25px; display:flex; align-items:center; gap:10px;">
+                    <h3 style="margin:0;">🔥 Trade Opportunities in</h3>
+                    <img src="{logos[exchange]}" width="40">
+                    <h3 style="margin:0;">{exchange_name}</h3>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
             
             status_placeholder = st.empty()
             log_placeholder = st.empty()
@@ -6872,7 +6917,7 @@ with col_content:
                                 if strategy == "EMA Pullback":
                                     signal_html = (
                                         f"<div style='text-align: left; font-size: 11px; line-height: 1.3;'>"
-                                        f"<b>{sinal}</b><br>"
+                                        f"<b>{sinal}</b><br><br>"
                                         f"<b>Price Trend from</b>: {tendency}<br>"
                                         f"<span style='margin-left:12px; display: block;'>↳ Note that {reason}</span>"
                                         f"<span style='margin-left:12px; display: block;'>↳ Pullback Info: {pullback_volume['classificacao']}</span>"

@@ -14,7 +14,9 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
     elif interval == "1h":
         period_hours = 720
     elif interval == "4h":
-        period_hours = 890
+        period_hours = 892
+    elif interval == "1d":
+        period_hours = 3600
     else:
         period_hours = 120
 
@@ -41,7 +43,6 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
                     "volume": k.get("volume"),
                     "quoteVolume": k.get("quoteVolume")
                 })
-                
             return klines
             
 
@@ -166,7 +167,7 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
             url = "https://api.prod.paradex.trade/v1/markets/klines"
             
             # Paradex quer resolução em minutos (string)
-            map_res = {"1m": "1", "3m": "3", "5m": "5", "15m": "15", "30m": "30", "1h": "60"}
+            map_res = {"1m": "1", "3m": "3", "5m": "5", "15m": "15", "30m": "30", "1h": "60", "4h": "60", "1d": "60"}
             resolution = map_res.get(interval, "60")
             
             # Paradex exige milissegundos (ms)
