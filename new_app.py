@@ -17,6 +17,7 @@ from get_defillama_info import get_defillama_info
 from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
 from barra_compra_venda import barra_compra_venda
+from exchanges_klines import get_klines_data
 import streamlit.components.v1 as components
 import re
 from PIL import Image
@@ -777,7 +778,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 options = ["🏠 Welcome", "🧮 Airdrop Calculator", "💎 Airdrop Points Viewer", "💵 Solana Stables APY", "🎒 BackPack Volume Check", "🌾 Farm with YT", "📊 Comparative YT Table", "📈 Pendle APY Prediction", 
-           "📅 Latest Airdrops", "♾️ PerpDEX Airdrops","🌐 Depin Airdrops", "✅ Last Claims and Checkers", 
+           "📅 Latest Airdrops", "📈 Trade Opportunity Bot","♾️ PerpDEX Airdrops","🌐 Depin Airdrops", "✅ Last Claims and Checkers", 
            "🌉 Bridges & Swaps Protocols", "⚖️ Funding Rate Arbitrage", "🚰 Faucets", "⛔ Revoke Contract", "⚠️ Avoiding Scams"]
 
 
@@ -794,6 +795,7 @@ PAGES = {
     "🧮 Airdrop Calculator": "Estimate your potential airdrop rewards.",
     "💵 Solana Stables APY": "Solana Stables APY Chances",
     "⚖️ Funding Rate Arbitrage": "Funding Rate Arbitrage Chances",
+    "📈 Trade Opportunity Bot":"Trade Opportunity Bot",
     "♾️ PerpDEX Airdrops": "Airdrops from PerpDex.",
     "🌐 Depin Airdrops": "Airdrops from DePIN (Decentralized Physical Infrastructure) projects.",
     "📅 Latest Airdrops": "List of the latest available airdrops.",
@@ -909,6 +911,8 @@ with col_left:
     with st.expander("🛠️ TOOLS", expanded=True):
         if st.button("⚖️ Funding Arbitrage", key="btn_funding"):
             st.session_state.pagina = "⚖️ Funding Rate Arbitrage"
+        if st.button("📈 Trade Opportunity Bot", key="btn_trade"):
+            st.session_state.pagina = "📈 Trade Opportunity Bot"
         if st.button("💎 Points Viewer", key="btn_points"):
             st.session_state.pagina = "💎 Airdrop Points Viewer"
         if st.button("🎒 Backpack Check", key="btn_backpack"):
@@ -5209,6 +5213,1876 @@ with col_content:
         if rwa_processed:
             render_content(rwa_processed, "🏛 RWA Top Opportunities")
     
+    elif st.session_state.pagina == "📈 Trade Opportunity Bot":
+        # ------------------------------
+        # Header (CSS ORIGINAL PRESERVADO)
+        # ------------------------------
+        st.markdown(
+            """
+            <style>
+                .airdrop-box {
+                    position: relative;
+                    z-index: 1;
+                    border-radius: 12px;
+                    padding: 25px;
+                    margin: 20px 0;
+                    background: #111827;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 30px;
+                    font-size: 20px;
+                    color: white;
+                    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                    white-space: normal;
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                }
+
+                .airdrop-box::before {
+                    content: "";
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
+                    border-radius: 14px;
+                    z-index: -1;
+                    background: linear-gradient(270deg, #00F0FF, #39FF14, #00F0FF);
+                    background-size: 600% 600%;
+                    animation: neonBorder 6s ease infinite;
+                    padding: 3px;
+                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                }
+
+                .airdrop-box:hover {
+                    border-color: #00f0ff;
+                    background: #262b33;
+                }
+
+                @keyframes neonBorder {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+
+                .airdrop-box h1 {
+                    font-size: 25px;
+                    text-align: center;
+                    margin-bottom: 0px;
+                }
+
+                .airdrop-box h2 {
+                    font-size: 25px;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
+                    color: #00ffae;
+                }
+
+                .airdrop-box ul {
+                    margin-left: 20px;
+                    margin-bottom: 0px;
+                }
+
+                /* ESTILO NEON PARA O MULTISELECT */
+                span[data-baseweb="tag"] {
+                    background-color: #39FF14 !important;
+                    border: 1px solid #39FF14 !important;
+                    box-shadow: 0 0 8px rgba(57, 255, 20, 0.6) !important;
+                    border-radius: 6px !important;
+                }
+                span[data-baseweb="tag"] span {
+                    color: #000000 !important; 
+                    font-weight: 700 !important;
+                    font-size: 16px !important;
+                }
+                span[data-baseweb="tag"] svg {
+                    fill: #000000 !important;
+                }
+            </style>
+
+            <div class="airdrop-box">
+                <h2>Trade Bot Opportunity</h2>
+                <p style="color: #8293A3; line-height: 1.2;">
+                    Detect high-probability trade setups using EMAs (21/50/100/200) trend analysis or RSI momentum strategy.
+                </p>
+                <h2>What to do?</h2>
+                <ul style="color: #8293A3;">
+                    <li><strong>Strategy Selection:</strong> Choose your preferred strategy: EMA Pullback follows the main market trend, while RSI focuses on potential reversals against the trend.</li>
+                    <li><strong>Exchange Selection:</strong> Scan for opportunities across 10 different exchanges to find the best setups.</li>
+                    <li><strong>Timeframe Selection:</strong> Select your preferred timeframe — 5m, 15m, 1h, or 4h — depending on your trading style.</li>
+                    <li><strong>Risk Management:</strong> Use automatic or manual Stop Loss and Take Profit levels based on your defined risk-reward ratio.</li>
+                    <li><strong>Volume Filter:</strong> Set a minimum 24h trading volume to ensure sufficient liquidity and safer trade execution.</li>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )   
+
+        import numpy as np
+        import plotly.graph_objects as go
+
+        if "bot_rodando" not in st.session_state:
+            st.session_state.bot_rodando = False
+        
+        # Inicialize os placeholders aqui para evitar o AttributeError
+        #if "placeholder_log" not in st.session_state:
+        #    st.session_state.placeholder_log = None
+
+        if "placeholder_chart" not in st.session_state:
+            st.session_state.placeholder_chart = None
+        # ------------------
+        # ALL FUNCTIONS
+        # ------------------
+        from scipy.signal import find_peaks
+        def intervalo_para_minutos(intervalo):
+            if intervalo.endswith("m"):
+                return int(intervalo.replace("m", ""))
+            elif intervalo.endswith("h"):
+                return int(intervalo.replace("h", "")) 
+            elif intervalo.endswith("d"):
+                return int(intervalo.replace("d", "")) * 24
+            else:
+                return None
+
+        def soma_volume_ultimas_24h1(df, col_data='start', col_volume='volume'):
+            """
+            Calcula o somatório do volume nas últimas 24 horas.
+            
+            df : DataFrame com dados
+            col_data : nome da coluna de timestamp (precisa estar em datetime)
+            col_volume : nome da coluna de volume (precisa ser numérico)
+            
+            Retorna: float (soma do volume)
+            """
+            df = df.copy()
+            df[col_data] = pd.to_datetime(df[col_data])
+
+            agora = pd.Timestamp.now(tz='UTC')
+            limite = agora - pd.Timedelta(hours=24)
+
+            df_24h = df[df[col_data] >= limite]
+
+            return df_24h[col_volume].sum()
+        
+        def soma_volume_ultimas_24h(df, col_data='start', col_volume='volume'):
+            if df is None or df.empty:
+                return 0.0
+            
+            df = df.copy()
+            
+            # 1. Garante que a data está em datetime, UTC e formato correto
+            # Se os dados forem numéricos (timestamps), o 'unit' é essencial
+            if pd.api.types.is_numeric_dtype(df[col_data]):
+                unit = 'ms' if df[col_data].iloc[0] > 1e12 else 's'
+                df[col_data] = pd.to_datetime(df[col_data], unit=unit, utc=True)
+            else:
+                df[col_data] = pd.to_datetime(df[col_data], utc=True)
+
+            # 2. Pega o momento exato agora em UTC
+            agora = pd.Timestamp.now(tz='UTC')
+            limite = agora - pd.Timedelta(hours=24)
+
+            # 3. Filtra apenas as linhas dentro da janela de 24h
+            df_24h = df[df[col_data] >= limite]
+            print(float(pd.to_numeric(df_24h[col_volume], errors='coerce').sum()))
+            # 4. Garante que o volume é numérico antes de somar
+            return float(pd.to_numeric(df_24h[col_volume], errors='coerce').sum())
+
+        def detectar_tendencia_simples(df, n=3):
+            mids = ((df['high'] + df['low']) / 2).iloc[-n:]
+            is_rising = all(x <= y for x, y in zip(mids, mids[1:]))
+            is_falling = all(x >= y for x, y in zip(mids, mids[1:]))
+            equals = sum(1 for x, y in zip(mids, mids[1:]) if x == y)
+            if is_rising and equals < 2:
+                return "rising"
+            elif is_falling and equals < 2:
+                return "falling"
+            else:
+                return "lateral"
+
+        def detectar_tendencia_regressao(df, n=3, tolerancia=0.1):
+            # Usar ponto médio em vez do close
+            mids = ((df['high'] + df['low']) / 2).iloc[-n:]
+            x = list(range(len(mids)))
+            y = mids.values
+
+            # Regressão linear simples
+            a = (n * sum(x[i] * y[i] for i in range(n)) - sum(x) * sum(y)) / \
+                (n * sum(x[i]**2 for i in range(n)) - sum(x)**2)
+            b = (sum(y) - a * sum(x)) / n  # intercepto (não usado, mas mantido)
+
+            # Variação percentual do início ao fim
+            variacao_pct = (mids.iloc[-1] - mids.iloc[0]) / mids.iloc[0] * 100
+
+            if variacao_pct > tolerancia:
+                return "rising"
+            elif variacao_pct < -tolerancia:
+                return "falling"
+            else:
+                return "lateral"
+
+        def detect_trends_caio(df, n=3, tolerancia=0.2):
+            """
+            Traduzido da função 'detectTrends' do Caio.
+            Calcula a tendência baseada na variação percentual do ponto médio 
+            usando os últimos 'n' candles.
+            """
+            if df is None or len(df) < n:
+                return "indefinido"
+
+            # Ponto médio = (high + low) / 2 para os últimos 'n' candles
+            recent_candles = df.tail(n)
+            mids = (recent_candles['high'] + recent_candles['low']) / 2
+            mids = mids.values
+
+            # Cálculo da Regressão Linear (Slope 'a')
+            x = np.arange(len(mids))
+            y = mids
+            
+            # Embora o código original calcule 'a' e 'b', 
+            # a decisão final dele é baseada na variacaoPct:
+            variacao_pct = ((mids[-1] - mids[0]) / mids[0]) * 100
+
+            if variacao_pct > tolerancia:
+                return "increasing"
+            elif variacao_pct < -tolerancia:
+                return "decreasing"
+            else:
+                return "lateral"
+
+        def obter_ultimo_pivot(df, window=2, distancia_minima=3):
+            _,_,indices_alta, indices_baixa = detectar_pivots(df, window=window, distancia_minima=distancia_minima)
+            n = len(df)
+
+            if len(indices_alta) == 0 and len(indices_baixa) == 0:
+                return min(6, n)  # fallback
+
+            ultimo_pivot = max(
+                indices_alta.max() if len(indices_alta) > 0 else 0,
+                indices_baixa.max() if len(indices_baixa) > 0 else 0
+            )
+            return n - ultimo_pivot
+
+        def obter_ultimo_pivot_caio(df, window=2, distancia_minima=2, variacao_minima_pct=0.04):
+            """
+            Versão Python idêntica à 'obterUltimoPivot' do Caio.
+            Retorna a distância em candles e o tipo do último pivô (high/low).
+            """
+            # Ajuste para garantir que detectar_pivots receba os novos parâmetros se necessário
+            _, _, indices_alta, indices_baixa = detectar_pivots_caio(
+                df, 
+                window=window, 
+                distancia_minima=distancia_minima, 
+                variacao_minima_pct=variacao_minima_pct
+            )
+            
+            n = len(df)
+
+            # Fallback caso não encontre nenhum pivô
+            if len(indices_alta) == 0 and len(indices_baixa) == 0:
+                return {"candlesAgo": min(6, n), "type": "none"}
+
+            # Encontra o índice mais recente de cada tipo
+            # Usamos .max() se forem arrays do numpy ou max() se forem listas
+            ultimo_alta = indices_alta.max() if len(indices_alta) > 0 else 0
+            ultimo_baixa = indices_baixa.max() if len(indices_baixa) > 0 else 0
+
+            # Determina qual é o mais recente de todos
+            ultimo_pivot_index = max(ultimo_alta, ultimo_baixa)
+            
+            # Define o tipo baseado em qual índice é maior (mais recente)
+            tipo = "high" if ultimo_alta >= ultimo_baixa else "low"
+
+            return {
+                "candlesAgo": n - ultimo_pivot_index,
+                "type": tipo
+            }
+
+        def detectar_pivots(df, window=2, distancia_minima=3):
+            """
+            Detecta pivots de alta e baixa após suavizar preços com média móvel simples.
+
+            Retorna índices dos pivots de alta (máximos locais) e baixa (mínimos locais),
+            e também as séries suavizadas (high_smooth, low_smooth).
+            """
+            high_smooth = df['high'].rolling(window=window, center=True).mean()
+            low_smooth = df['low'].rolling(window=window, center=True).mean()
+
+            high_smooth_clean = high_smooth.dropna()
+            low_smooth_clean = low_smooth.dropna()
+
+            peaks, _ = find_peaks(high_smooth_clean, distance=distancia_minima)
+            valleys, _ = find_peaks(-low_smooth_clean, distance=distancia_minima)
+
+            offset = (window - 1) // 2
+
+            indices_pivots_alta = peaks + offset
+            indices_pivots_baixa = valleys + offset
+
+            return indices_pivots_alta.tolist(), indices_pivots_baixa.tolist(), indices_pivots_alta, indices_pivots_baixa
+
+        def detectar_pivots_caio(df, window=2, distancia_minima=2, variacao_minima_pct=0.05):
+            """
+            Versão Python idêntica à 'detectarPivots' do Caio.
+            Implementa a suavização SMA e o filtro de variação percentual por vizinhança.
+            """
+            # 1. Suavização (SMA clássica, sem center=True para evitar repainting)
+            high_smooth = df['high'].rolling(window=window).mean().values
+            low_smooth = df['low'].rolling(window=window).mean().values
+            
+            indices_alta = []
+            indices_baixa = []
+            n = len(df)
+
+            # 2. Busca de Picos (Highs)
+            for i in range(distancia_minima, n - distancia_minima):
+                if np.isnan(high_smooth[i]): 
+                    continue
+
+                is_peak = True
+                # Verifica vizinhos no raio da distancia_minima
+                for j in range(1, distancia_minima + 1):
+                    # O Caio calcula a variação baseada no preço do vizinho anterior
+                    var_min = high_smooth[i - j] * (variacao_minima_pct / 100)
+                    
+                    # Se o ponto atual não for maior que o vizinho + margem, não é pivô
+                    if high_smooth[i] <= (high_smooth[i - j] + var_min) or \
+                    high_smooth[i] <= (high_smooth[i + j] + var_min):
+                        is_peak = False
+                        break
+                
+                if is_peak:
+                    indices_alta.append(i)
+
+            # 3. Busca de Vales (Lows)
+            for i in range(distancia_minima, n - distancia_minima):
+                if np.isnan(low_smooth[i]): 
+                    continue
+
+                is_valley = True
+                for j in range(1, distancia_minima + 1):
+                    var_min = low_smooth[i - j] * (variacao_minima_pct / 100)
+                    
+                    # Se o ponto atual não for menor que o vizinho - margem, não é pivô
+                    if low_smooth[i] >= (low_smooth[i - j] - var_min) or \
+                    low_smooth[i] >= (low_smooth[i + j] - var_min):
+                        is_valley = False
+                        break
+                
+                if is_valley:
+                    indices_baixa.append(i)
+
+            # Retorno compatível com o resto do seu código
+            return indices_alta, indices_baixa, np.array(indices_alta), np.array(indices_baixa)
+            
+        def calcular_trade_levels(df, preco_entrada, p=0.02, tipo='SELL', risk_reward_ratio=2):
+            """
+            Calcula níveis de Stop Loss e Take Profit com base no preço de entrada,
+            pivots e fator de risco/recompensa. Retorna também os percentuais relativos.
+
+            Parâmetros:
+                df: DataFrame com colunas ['high', 'low', 'close']
+                preco_entrada: float, preço de entrada da operação
+                p: float, margem percentual acima/abaixo do pivot para definir o stop loss
+                tipo: str, 'BUY' ou 'SELL'
+                risk_reward_ratio: float, fator multiplicador do risco para definir take profit
+
+            Retorna:
+                dict com preço de entrada, stop loss, take profit, percentuais e pivot
+            """
+            p = p/100
+            pivots_alta, pivots_baixa,_,_ = detectar_pivots(df, window=2, distancia_minima=3)
+
+            if tipo == 'SELL':
+                pivots_validos = [i for i in pivots_alta if df.loc[i, 'high'] > preco_entrada]
+                pivots_contrario = [i for i in pivots_baixa if df.loc[i, 'low'] < preco_entrada]
+                if not pivots_validos:
+                    return None
+                if not pivots_contrario:
+                    return None
+                pivot1_idx = pivots_contrario[-1]
+                pivot2_idx = pivots_validos[-1]
+                max_pivot = df.loc[pivot2_idx, 'high']
+                stop_loss = max_pivot * (1 + p)
+                risco = abs(preco_entrada - stop_loss)
+                take_profit = preco_entrada - risk_reward_ratio * risco
+
+            elif tipo == 'BUY':
+                pivots_validos = [i for i in pivots_baixa if df.loc[i, 'low'] < preco_entrada]
+                pivots_contrario = [i for i in pivots_alta if df.loc[i, 'high'] > preco_entrada]
+                if not pivots_validos:
+                    return None
+                if not pivots_contrario:
+                    return None
+                pivot1_idx = pivots_contrario[-1]
+                pivot2_idx = pivots_validos[-1]
+                min_pivot = df.loc[pivot2_idx, 'low']
+                stop_loss = min_pivot * (1 - p)
+                risco = abs(preco_entrada - stop_loss)
+                take_profit = preco_entrada + risk_reward_ratio * risco
+
+            else:
+                raise ValueError("Tipo de operação deve ser 'BUY' ou 'SELL'")
+
+            stop_loss_pct = abs(stop_loss - preco_entrada) / preco_entrada * 100
+            take_profit_pct = abs(take_profit - preco_entrada) / preco_entrada * 100
+
+            return {
+                'preco_entrada': preco_entrada,
+                'stop_loss': stop_loss,
+                'stop_loss_pct': stop_loss_pct,
+                'take_profit': take_profit,
+                'take_profit_pct': take_profit_pct,
+                'pivot1_index': pivot1_idx,
+                'pivot2_index': pivot2_idx,
+                'risco_absoluto': risco,
+                'risk_reward_ratio': risk_reward_ratio
+            }
+
+        def calculate_stop_take(df, operation, entry_price, lookback=2,
+                                max_stop_loss_pct=0.03, max_take_profit_pct=0.05, buffer_pct=0.002):
+            """
+            Calcula stop loss e take profit com base no último pivô relevante antes da entrada,
+            respeitando limites máximos e mínimos de variação percentual.
+
+            df: dataframe com colunas ['high', 'low', 'close']
+            operation: "BUY" ou "SELL"
+            entry_price: preço de entrada
+            lookback: quantos candles antes/depois para identificar pivôs
+            max_stop_loss_pct: limite máximo de stop loss (ex: 0.03 = 3%)
+            max_take_profit_pct: limite máximo de take profit (ex: 0.05 = 5%)
+            buffer_pct: margem de segurança sobre o pivô (ex: 0.002 = 0.2%)
+            """
+            df = df.copy()
+
+            # Limites mínimos
+            min_stop_loss_pct = 0.005   # 0.5%
+            min_take_profit_pct = 0.01  # 1%
+
+            # Calcular pivôs
+            df['pivot_high'] = df['high'][
+                (df['high'].shift(lookback) < df['high']) &
+                (df['high'].shift(-lookback) < df['high'])
+            ]
+
+            # Calcular pivôs
+            df['pivot_low'] = df['low'][
+                (df['low'].shift(lookback) > df['low']) &
+                (df['low'].shift(-lookback) > df['low'])
+            ]
+            
+            # Pegar o índice do candle mais recente
+            last_idx = df.index[-1]
+
+            stop_loss = None
+            take_profit = None
+
+            if operation.upper() == "SELL":
+                # Último topo relevante
+                last_pivot_high = df.loc[:last_idx - 1]['pivot_high'].dropna()
+                if not last_pivot_high.empty:
+                    raw_stop = last_pivot_high.iloc[-1] * (1 + buffer_pct)
+                    max_stop = entry_price * (1 + max_stop_loss_pct)
+                    stop_loss = min(raw_stop, max_stop)
+                    min_stop = entry_price * (1 + min_stop_loss_pct)
+                    stop_loss = max(stop_loss, min_stop)
+                else:
+                    stop_loss = entry_price * (1 + min_stop_loss_pct)
+
+                # Último fundo relevante
+                last_pivot_low = df.loc[:last_idx - 1]['pivot_low'].dropna()
+                if not last_pivot_low.empty:
+                    raw_take = last_pivot_low.iloc[-1] * (1 + buffer_pct)
+                    max_take = entry_price * (1 - max_take_profit_pct)
+                    take_profit = max(raw_take, max_take)
+                    min_take = entry_price * (1 - min_take_profit_pct)
+                    take_profit = min(take_profit, min_take)
+                else:
+                    take_profit = entry_price * (1 - min_take_profit_pct)
+
+            elif operation.upper() == "BUY":
+                # Último fundo relevante
+                last_pivot_low = df.loc[:last_idx - 1]['pivot_low'].dropna()
+                if not last_pivot_low.empty:
+                    raw_stop = last_pivot_low.iloc[-1] * (1 - buffer_pct)
+                    max_stop = entry_price * (1 - max_stop_loss_pct)
+                    stop_loss = max(raw_stop, max_stop)
+                    min_stop = entry_price * (1 - min_stop_loss_pct)
+                    stop_loss = min(stop_loss, min_stop)
+                else:
+                    stop_loss = entry_price * (1 - min_stop_loss_pct)
+
+                # Último topo relevante
+                last_pivot_high = df.loc[:last_idx - 1]['pivot_high'].dropna()
+                if not last_pivot_high.empty:
+                    raw_take = last_pivot_high.iloc[-1] * (1 - buffer_pct)
+                    max_take = entry_price * (1 + max_take_profit_pct)
+                    take_profit = min(raw_take, max_take)
+                    min_take = entry_price * (1 + min_take_profit_pct)
+                    take_profit = max(take_profit, min_take)
+                else:
+                    take_profit = entry_price * (1 + min_take_profit_pct)
+
+            else:
+                raise ValueError("operation deve ser 'BUY' ou 'SELL'")
+
+            # Calcular diferenças percentuais
+            diff_stop_pct = abs((entry_price - stop_loss) / entry_price) * 100
+            diff_take_pct = abs((take_profit - entry_price) / entry_price) * 100
+
+            # Relação risco/retorno
+            risk_reward_ratio = round(diff_take_pct / diff_stop_pct, 2) if diff_stop_pct != 0 else None
+
+            return {
+                "stop_loss": round(stop_loss, 5),
+                "take_profit": round(take_profit, 5),
+                "diff_stop_pct": round(diff_stop_pct, 2),
+                "diff_take_pct": round(diff_take_pct, 2),
+                "risk_reward_ratio": risk_reward_ratio
+            }
+
+        def analisar_pullback_volume(df, pivot_index, tendencia, n=3, media_volume_window=10, limite_proporcao_contraria=0.70):
+            """
+            Analisa o volume dos candles desde o último pivot até agora, levando em conta a tendência (alta ou baixa).
+
+            Parâmetros:
+                df: DataFrame com ['open', 'close', 'volume']
+                pivot_index: índice do último pivot detectado
+                tendencia: str, 'rising' ou 'falling'
+                n: número de candles desde o pivot (None para pegar todos até o fim)
+                media_volume_window: janela para cálculo de volume médio de referência
+                limite_proporcao_contraria: limite de volume de candles contrários à tendência
+
+            Retorna:
+                dict com métricas e classificação
+            """
+
+            if n is not None:
+                candles = df.iloc[pivot_index+1 : pivot_index+1+n]
+            else:
+                candles = df.iloc[pivot_index+1:]
+
+            if candles.empty:
+                return {"Error": "No candles after pivot."}
+
+            volume_total = candles["volume"].sum()
+            volume_medio_ref = df["volume"].iloc[-media_volume_window:].mean()
+
+            
+            # 👉 Se a tendência for lateral, usamos outro critério
+            if tendencia == 'lateral':
+                desvio_volume = candles["volume"].std()
+                media_volume = candles["volume"].mean()
+
+                if media_volume < volume_medio_ref * 0.75 and desvio_volume < volume_medio_ref * 0.25:
+                    classificacao = "Consolidation (Low and Stable Volume)"
+                elif media_volume > volume_medio_ref * 1.25:
+                    classificacao = "Possible breakout (above average volume in laterality)"
+                else:
+                    classificacao = "Neutral Moviment in Laterality"
+
+                return {
+                    "volume_total": volume_total,
+                    "volume_medio_ref": volume_medio_ref,
+                    "media_volume": media_volume,
+                    "desvio_volume": desvio_volume,
+                    "classificacao": classificacao
+                }
+
+            # Classificação dos candles:
+            if tendencia == 'rising':
+                volume_contrario = candles[candles["close"] < candles["open"]]["volume"].sum()
+                volume_a_favor = candles[candles["close"] > candles["open"]]["volume"].sum()
+            elif tendencia == 'falling':
+                volume_contrario = candles[candles["close"] > candles["open"]]["volume"].sum()
+                volume_a_favor = candles[candles["close"] < candles["open"]]["volume"].sum()
+            else:
+                raise ValueError("Trend need to be 'rising', 'falling' ou 'lateral'!")
+
+            proporcao_contraria = volume_contrario / volume_total if volume_total > 0 else 0
+
+            # Classificação do pullback
+            if volume_total < volume_medio_ref * 0.75:
+                if proporcao_contraria > limite_proporcao_contraria:
+                    classificacao = "dangerous pullback (week volume, but dominant counter candles)"
+                else:
+                    classificacao = "helph pullback (week volume, trend should continue)"
+            elif proporcao_contraria > limite_proporcao_contraria:
+                classificacao = "possible reversal (dominant counter volume)"
+            else:
+                classificacao = "neutral pullback (volume within normal)"
+
+            return {
+                "volume_total": volume_total,
+                "volume_medio_ref": volume_medio_ref,
+                "volume_a_favor": volume_a_favor,
+                "volume_contrario": volume_contrario,
+                "proporcao_contraria": proporcao_contraria,
+                "classificacao": classificacao
+            }
+
+        def analisar_pullback_volume_caio(df, pivot_index, tendencia, n=3, media_volume_window=10, limite_proporcao_a_favor=0.70):
+            """
+            Versão Python traduzida fielmente da função 'analysePullbackVolume' do Caio.
+            """
+            # 1. Seleção do subset após o pivot
+            if n is not None:
+                subset = df.iloc[pivot_index + 1 : pivot_index + 1 + n]
+            else:
+                subset = df.iloc[pivot_index + 1 :]
+
+            if subset.empty:
+                return {"error": "No candles after pivot."}
+
+            # 2. Volume do subset
+            volume_total = subset["volume"].sum()
+            volume_medio_apos_pivot = volume_total / len(subset)
+
+            # 3. Volume de Referência ANTES do pivot (Lógica do Caio)
+            ref_start = max(0, pivot_index - media_volume_window + 1)
+            ref_candles = df.iloc[ref_start : pivot_index + 1]
+            volume_medio_ref = ref_candles["volume"].mean()
+
+            # 4. Caso Lateralidade (Flat)
+            if tendencia == 'lateral' or tendencia == 'flat':
+                media_volume = subset["volume"].mean()
+                # std() no pandas por padrão é sample std; usamos ddof=0 para igualar ao JS se necessário
+                desvio_volume = subset["volume"].std(ddof=0) 
+
+                if media_volume < volume_medio_ref * 0.75 and desvio_volume < volume_medio_ref * 0.25:
+                    classificacao = "consolidation (Low and Stable Volume)"
+                elif media_volume > volume_medio_ref * 1.25:
+                    classificacao = "possible breakout (above average volume in laterality)"
+                else:
+                    classificacao = "neutral movement in laterality"
+
+                return {
+                    "volume_total": volume_total,
+                    "volume_medio_apos_pivot": volume_medio_apos_pivot,
+                    "volume_medio_referencia": volume_medio_ref,
+                    "classificacao": classificacao
+                }
+
+            # 5. Cálculo de Volume A Favor vs Contrário
+            volume_contrario = 0
+            volume_a_favor = 0
+
+            for _, c in subset.iterrows():
+                is_bull = c['close'] > c['open']
+                is_bear = c['close'] < c['open']
+                
+                if tendencia == 'rising' or tendencia == 'increasing':
+                    if is_bear: volume_contrario += c['volume']
+                    elif is_bull: volume_a_favor += c['volume']
+                elif tendencia == 'falling' or tendencia == 'decreasing':
+                    if is_bull: volume_contrario += c['volume']
+                    elif is_bear: volume_a_favor += c['volume']
+
+            proporcao_a_favor = volume_a_favor / volume_total if volume_total > 0 else 0
+
+            # 6. Classificação Final (Lógica de Decisão do Caio)
+            if volume_medio_apos_pivot < volume_medio_ref:
+                if proporcao_a_favor > limite_proporcao_a_favor:
+                    classificacao = "dangerous pullback (week volume, but dominant counter candles)" # Vol baixo + pressão contrária alta
+                else:
+                    classificacao = "helph pullback (week volume, trend should continue)" # Vol baixo + pressão contrária baixa
+            elif proporcao_a_favor > limite_proporcao_a_favor:
+                classificacao = "possible reversal (dominant counter volume)" # Vol normal/alto + dominação contrária
+            else:
+                classificacao = "neutral pullback (volume within normal)"
+
+            return {
+                "volume_total": volume_total,
+                "volume_medio_apos_pivot": volume_medio_apos_pivot,
+                "volume_medio_referencia": volume_medio_ref,
+                "proporcao_a_favor": proporcao_a_favor,
+                "classificacao": classificacao
+            }
+
+        def identificar_congestao(df: pd.DataFrame, timeframe: str) -> bool:
+            # Cálculo das EMAs
+            df['ema21'] = df['close'].ewm(span=21).mean()
+            df['ema50'] = df['close'].ewm(span=50).mean()
+            df['ema100'] = df['close'].ewm(span=100).mean()
+            df['ema200'] = df['close'].ewm(span=200).mean()
+
+            # Parâmetros por timeframe
+            limites_por_tf = {
+                "1m": {"dist_pct_max": 0.35, "inclinacao_max": 0.1, "atraso": 12},
+                "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.15, "atraso": 8},
+                "15m": {"dist_pct_max": 1, "inclinacao_max": 0.2, "atraso": 5},
+                "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.3, "atraso": 3},
+                "4h": {"dist_pct_max": 2, "inclinacao_max": 0.4, "atraso": 3},
+                "1d": {"dist_pct_max": 2.5, "inclinacao_max": 0.5, "atraso": 2}
+            }
+
+            # Parâmetros default se timeframe não for reconhecido
+            params = limites_por_tf.get(timeframe, {"dist_pct_max": 2.5, "inclinacao_max": 0.1, "atraso": 5})
+            atraso = params["atraso"]
+
+            # Últimos valores das EMAs
+            emas = df[['ema21', 'ema50', 'ema100', 'ema200']].iloc[-1]
+            max_ema = emas.max()
+            min_ema = emas.min()
+
+            # Verifica proximidade entre EMAs
+            dist_pct = abs(max_ema - min_ema) / max_ema * 100
+            todas_proximas = dist_pct < params["dist_pct_max"]
+            
+            # Verifica horizontalidade (baixa inclinação)
+            inclinacoes = {}
+            inclinacoes_long = {}
+            direcoes_ema = {}
+            for period in [21, 50, 100, 200]:
+                atual = df[f'ema{period}'].iloc[-1]
+                anterior = df[f'ema{period}'].iloc[-1 - atraso]
+                anterior_long = df[f'ema{period}'].iloc[-1 - (10*atraso)]
+                inclinacao_pct = (atual - anterior) / anterior * 100
+                inclinacao_pct_long = (atual - anterior_long) / anterior_long * 100
+                inclinacoes[period] = abs(inclinacao_pct)
+                # Verificar se a inclinação é positiva ou negativa
+                if inclinacao_pct_long > 0.025:
+                    direcoes_ema[period] = "rising"
+                elif inclinacao_pct_long < -0.025:
+                    direcoes_ema[period] = "falling"
+                else:
+                    direcoes_ema[period] = "flat"
+
+            # Pelo menos 3 inclinações devem estar abaixo do limite
+            todas_horizontais = sum(i < params["inclinacao_max"] for i in inclinacoes.values()) >= 3
+
+            print(params["dist_pct_max"], todas_proximas, params["inclinacao_max"], todas_horizontais,inclinacoes[21],inclinacoes[50],inclinacoes[100],inclinacoes[200])
+            return todas_proximas and todas_horizontais, direcoes_ema
+
+        def identificar_congestao_caio(df: pd.DataFrame, timeframe: str):
+            # 1. Cálculo das EMAs idêntico ao padrão JS (Exponential Moving Average)
+            # Usar adjust=False garante paridade com fórmulas de trading clássicas
+            for p in [21, 50, 100, 200]:
+                df[f'ema{p}'] = df['close'].ewm(span=p, adjust=False).mean()
+
+            # 2. Parâmetros por timeframe (Mantidos)
+            limites_por_tf = {
+                "1m": {"dist_pct_max": 0.35, "inclinacao_max": 0.1, "atraso": 12},
+                "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.15, "atraso": 8},
+                "15m": {"dist_pct_max": 1, "inclinacao_max": 0.2, "atraso": 5},
+                "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.3, "atraso": 3},
+                "4h": {"dist_pct_max": 2, "inclinacao_max": 0.4, "atraso": 3},
+                "1d": {"dist_pct_max": 2.5, "inclinacao_max": 0.5, "atraso": 2}
+            }
+
+            params = limites_por_tf.get(timeframe, {"dist_pct_max": 2.5, "inclinacao_max": 0.1, "atraso": 5})
+            atraso = params["atraso"]
+            
+            # Verificação de segurança: Se não houver candles suficientes para o 'atraso longo', aborta
+            if len(df) < (10 * atraso + 1):
+                return False, {p: "undefined" for p in [21, 50, 100, 200]}
+
+            # 3. Últimos valores e Proximidade
+            last_emas = {p: df[f'ema{p}'].iloc[-1] for p in [21, 50, 100, 200]}
+            max_ema = max(last_emas.values())
+            min_ema = min(last_emas.values())
+
+            dist_pct = abs(max_ema - min_ema) / max_ema * 100
+            todas_proximas = dist_pct < params["dist_pct_max"]
+            
+            # 4. Inclinações e Direções
+            horizontais = 0
+            direcoes_ema = {}
+
+            for p in [21, 50, 100, 200]:
+                atual = last_emas[p]
+                anterior = df[f'ema{p}'].iloc[-(atraso + 1)]
+                anterior_long = df[f'ema{p}'].iloc[-(10 * atraso + 1)]
+
+                inclinacao_pct = (atual - anterior) / anterior * 100
+                inclinacao_pct_long = (atual - anterior_long) / anterior_long * 100
+
+                # Verifica horizontalidade para o sinal de congestão
+                if abs(inclinacao_pct) < params["inclinacao_max"]:
+                    horizontais += 1
+
+                # Define direção usando os termos exatos do Caio para compatibilidade
+                if inclinacao_pct_long > 0.025:
+                    direcoes_ema[p] = "increasing"
+                elif inclinacao_pct_long < -0.025:
+                    direcoes_ema[p] = "decreasing"
+                else:
+                    direcoes_ema[p] = "flat"
+
+            # Definição final de congestão: Proximidade + Pelo menos 3 horizontais
+            todas_horizontais = horizontais >= 3
+            congestion = todas_proximas and todas_horizontais
+
+            return congestion, direcoes_ema
+
+        def calcular_rsi2(df, period=14):
+            delta = df['close'].diff()
+            gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
+            loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+            
+            # Evita divisão por zero retornando 50 (neutro) se não houver variação
+            rs = gain / loss
+            rsi = 100 - (100 / (1 + rs))
+            return rsi.fillna(50) # Substitui NaN por 50
+
+        def calcular_rsi(df, period=14):
+            delta = df['close'].diff()
+            gain = (delta.where(delta > 0, 0))
+            loss = (-delta.where(delta < 0, 0))
+            # Uso de EMA (Wilder's method) para evitar NaNs e instabilidades
+            avg_gain = gain.ewm(com=period-1, adjust=False).mean()
+            avg_loss = loss.ewm(com=period-1, adjust=False).mean()
+            rs = avg_gain / avg_loss.replace(0, np.nan)
+            rsi = 100 - (100 / (1 + rs))
+            return rsi.fillna(50)
+
+        def calcular_rsi_perpetuo(df, period=14):
+            delta = df['close'].diff()
+
+            gain = delta.clip(lower=0)
+            loss = -delta.clip(upper=0)
+
+            avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
+            avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+
+            rs = avg_gain / avg_loss.replace(0, np.nan)
+
+            rsi = 100 - (100 / (1 + rs))
+
+            return rsi.fillna(50)
+
+        def calcular_ema_trend_caio(ema_series, lookback=20, tolerance=0.00001):
+            """
+            Versão Python da função emaTrend do Caio.
+            Analisa a inclinação geral e a consistência ponto a ponto da EMA.
+            """
+            if ema_series is None or len(ema_series) < lookback:
+                return {"trend": "undefined", "reason": "Poucos valores de EMA"}
+
+            # Pegar os últimos 'lookback' valores
+            values = ema_series.tail(lookback).values
+            first = values[0]
+            last = values[-1]
+
+            # Inclinação geral (Slope)
+            if last < (first - tolerance):
+                trend = "decreasing"
+            elif last > (first + tolerance):
+                trend = "increasing"
+            else:
+                trend = "flat"
+
+            # Sequência ponto a ponto (Consistency)
+            falling_steps = 0
+            rising_steps = 0
+            for i in range(len(values) - 1):
+                if values[i + 1] < values[i]:
+                    falling_steps += 1
+                elif values[i + 1] > values[i]:
+                    rising_steps += 1
+
+            pct_falling = falling_steps / (lookback - 1)
+            pct_rising = rising_steps / (lookback - 1)
+
+            return {
+                "trend": trend,         # "decreasing" | "increasing" | "flat"
+                "pct_falling": pct_falling,
+                "pct_rising": pct_rising,
+                "last_val": last
+            }
+
+        def get_variacao_minima_pct(timeframe):
+            """
+            Versão Python da função getVariacaoMinimaPct do Caio.
+            Retorna a variação mínima baseada no tempo gráfico.
+            """
+            variacoes = {
+                "1m": 0.01,
+                "5m": 0.02,
+                "15m": 0.04,
+                "1h": 0.06,
+                "4h": 0.08
+            }
+            
+            if timeframe in variacoes:
+                return variacoes[timeframe]
+            else:
+                # Em Python, usamos ValueError para situações de argumentos inválidos
+                raise ValueError(f"Timeframe {timeframe} não suportado")
+    
+        def get_tickers(exchange="backpack", min_vol=100000):
+            """
+            Busca tickers preservando a nomenclatura ORIGINAL de cada exchange.
+            """
+            exchange = exchange.lower()
+            all_symbols = []
+            ids = {}
+
+            try:
+                # --- LÓGICA BACKPACK ---
+                if exchange == "backpack":
+                    url = "https://api.backpack.exchange/api/v1/tickers"
+                    resp = requests.get(url, timeout=10).json()
+                    # Preserva o símbolo original (ex: "SOL_USDC")
+                    all_symbols = [t["symbol"] for t in resp if float(t.get("quoteVolume", 0)) >= min_vol]
+
+                # --- LÓGICA BINANCE ---
+                elif exchange == "binance":
+                    d_s = requests.get("https://api.binance.com/api/v3/ticker/24hr", timeout=10).json()
+                    s_s = [t["symbol"] for t in d_s if t["symbol"].endswith("USDT") and float(t.get("quoteVolume", 0)) >= min_vol]
+                    d_f = requests.get("https://fapi.binance.com/fapi/v1/ticker/24hr", timeout=10).json()
+                    s_f = [t["symbol"] for t in d_f if t["symbol"].endswith("USDT") and float(t.get("quoteVolume", 0)) >= min_vol]
+                    all_symbols = list(set(s_s + s_f))
+
+                # --- LÓGICA MEXC ---
+                elif exchange == "mexc":
+                    d_s = requests.get("https://api.mexc.com/api/v3/ticker/24hr", timeout=10).json()
+                    s_s = [t["symbol"] for t in d_s if t["symbol"].endswith("USDT") and float(t.get("quoteVolume", 0)) >= min_vol]
+                    d_f = requests.get("https://contract.mexc.com/api/v1/contract/ticker", timeout=10).json().get("data", [])
+                    # Preserva o original (MEXC usa BTC_USDT em contratos)
+                    s_f = [t["symbol"] for t in d_f if t["symbol"].endswith("USDT") and float(t.get("amount24", 0)) >= min_vol]
+                    all_symbols = list(set(s_s + s_f))
+
+                # --- LÓGICA GATE.IO ---
+                elif exchange == "gate.io":
+                    d_s = requests.get("https://api.gateio.ws/api/v4/spot/tickers", timeout=10).json()
+                    # REMOVIDO .replace("_", "") -> Mantém BTC_USDT
+                    s_s = [t["currency_pair"] for t in d_s if t["currency_pair"].endswith("_USDT") and float(t.get("quote_volume", 0)) >= min_vol]
+                    d_f = requests.get("https://api.gateio.ws/api/v4/futures/usdt/tickers", timeout=10).json()
+                    # REMOVIDO .replace("_", "") -> Mantém BTC_USDT
+                    s_f = [t["contract"] for t in d_f if t["contract"].endswith("_USDT") and float(t.get("volume_24h_quote", 0)) >= min_vol]
+                    all_symbols = list(set(s_s + s_f))
+
+                # --- LÓGICA VARIATIONAL ---
+                elif exchange == "variational":
+                    url = "https://omni.variational.io/api/metadata/supported_assets"
+                    scraper = cloudscraper.create_scraper()
+                    resp = scraper.get(url, timeout=5)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        # REMOVIDO f"{symbol}USDT" -> Mantém apenas o "BTC", "ETH" etc que é o que eles usam
+                        all_symbols = [symbol for symbol, assets in data.items() if any(float(a.get("volume_24h", 0)) >= min_vol for a in assets)]
+
+                # --- LÓGICA EXTENDED ---
+                elif exchange == "extended":
+                    data = requests.get("https://app.extended.exchange/api/v1/info/markets", timeout=10).json().get("data", [])
+                    # REMOVIDO .replace("-", "") -> Mantém BTC-USD
+                    all_symbols = [m["name"] for m in data if float(m.get("marketStats", {}).get("dailyVolume", 0)) >= min_vol]
+
+                # --- LÓGICA PARADEX ---
+                elif exchange == "paradex":
+                    data = requests.get("https://api.prod.paradex.trade/v1/markets/summary?market=ALL", timeout=10).json().get("results", [])
+                    # REMOVIDO .replace("-USD-PERP", "USDT") -> Mantém BTC-USD-PERP
+                    all_symbols = [m["symbol"] for m in data if float(m.get("volume_24h", 0)) >= min_vol]
+
+                # --- LÓGICA PACIFICA ---
+                elif exchange == "pacifica":
+                    data = requests.get("https://app.pacifica.fi/api/v1/info/prices", timeout=10).json().get("data", [])
+                    # REMOVIDO f"{m['symbol']}USDT" -> Mantém o original
+                    all_symbols = [m['symbol'] for m in data if float(m.get("volume_24h", 0)) >= min_vol]
+
+                # --- LÓGICA HYPERLIQUID ---
+                elif exchange == "hyperliquid":
+                    payload = {"type": "metaAndAssetCtxs"}
+                    resp = requests.post("https://api.hyperliquid.xyz/info", json=payload, timeout=10).json()
+                    meta, stats = resp[0]["universe"], resp[1]
+                    # REMOVIDO f"{m['name']}USDT" -> Mantém apenas "BTC", "ETH"
+                    all_symbols = [m['name'] for m, s in zip(meta, stats) if float(s.get("dayNtlVlm", 0)) >= min_vol]
+
+                # --- LÓGICA LIGHTER ---
+                elif exchange == "lighter":
+                    markets = requests.get("https://mainnet.zklighter.elliot.ai/api/v1/orderBookDetails", timeout=10).json().get("order_book_details", [])
+                    for m in markets:
+                        if float(m.get("daily_quote_token_volume", 0)) >= min_vol:
+                            sym = m.get("symbol") # REMOVIDO .replace("_", "")
+                            all_symbols.append(sym)
+                            ids[sym] = m.get("market_id")
+
+                # --- LÓGICA NADO ---
+                elif exchange == "nado":
+                    data = requests.get("https://archive.prod.nado.xyz/v2/contracts", timeout=10).json()
+                    for ticker, info in data.items():
+                        if float(info.get("quote_volume", 0)) >= min_vol:
+                            all_symbols.append(ticker)
+                            ids[ticker] = info.get("product_id")
+                            
+
+            except Exception as e:
+                print(f"Erro ao buscar tickers na {exchange}: {e}")
+                return [], {}
+
+            symbols = sorted(list(set(all_symbols)))
+            # Garantir que o dicionário de IDs acompanhe os nomes originais
+            final_ids = {s: ids.get(s) for s in symbols}
+
+            return symbols, final_ids
+
+        def normalize_timestamp(df):
+
+            raw = df["start"].iloc[0]
+
+            if isinstance(raw, (int, float)):
+                unit = "ms" if raw > 1e12 else "s"
+                df["start"] = pd.to_datetime(df["start"], unit=unit, utc=True)
+            else:
+                df["start"] = pd.to_datetime(df["start"], utc=True, errors="coerce")
+
+            return df.sort_values("start")
+        with st.container():
+            st.markdown('<div class="config-section">', unsafe_allow_html=True)
+            
+            col1, col2, col3 = st.columns(3) # Adicionando uma terceira coluna para o volume
+            
+            with col1:
+                strategy = st.selectbox("Strategy:", ["EMA Pullback", "RSI (20/80)"], key="bot_strat")
+                interval = st.selectbox("Timestamp:", ["5m", "15m", "1h", "4h"], index=1)
+                calcular_stop = st.checkbox("Auto Calculate Stop Loss and Take Profit", value=True)
+                mostrar_graficos = st.checkbox("Exibir Gráficos na Varredura", value=False)
+                
+            with col2:
+                price_type = st.selectbox("Price:", ["LastPrice", "IndexPrice"], index=0)
+                # O campo de volume que você pediu:
+                min_vol = st.number_input(
+                    "Min 24h Volume ($):", 
+                    min_value=10000,   # Mínimo permitido
+                    value=300000,      # Valor padrão inicial
+                    step=10000         # Incremento ao clicar nas setas
+                )
+                if calcular_stop:
+                    ratio = st.number_input("Risk Reward Ratio", value=2)
+                    stop_loss_pct = 1
+                    take_profit_pct = 2
+                else:
+                    take_profit_pct = st.number_input("Take Profit (%)", value=2)
+                    stop_loss_pct = st.number_input("Stop Loss (%)", value=1)
+
+            with col3:
+                exchange = st.selectbox("Exchange:", ["backpack", "binance", "mexc", "gate.io", "extended", "paradex", "pacifica", "hyperliquid", "lighter", "nado"], index=0)
+                if strategy == "EMA Pullback":
+                    tolerancia_pct = st.number_input("EMA Touch Tolerance (%)", value=0.20)
+                else:
+                    tolerancia_pct = 0.20
+                
+
+            # Seletor de Visualização
+            # Radio button com key
+            st.radio("Display Mode", ["List Table", "Grid Cards"], horizontal=True, key="sig_view")
+
+            # Pega valor do session_state (vai manter mesmo após rerun)
+            view_mode = st.session_state.get("sig_view", "List Table")
+
+            # Botões de Controle
+            container_botao = st.container()
+
+            with container_botao:
+                if not st.session_state.bot_rodando:
+                    if st.button("🚀 START SCANNER", use_container_width=True):
+                        st.session_state.bot_rodando = True
+                        st.session_state.lista_sinais = [] # Limpa sinais antigos ao começar novo ciclo
+                        st.rerun()
+                else:
+                    if st.button("🛑 STOP BOT", use_container_width=True):
+                        st.session_state.bot_rodando = False
+                        st.rerun()
+        
+
+            # -----------------------------
+            # BUSCA DE DADOS BACKPACK
+            # -----------------------------
+            if "lista_sinais" not in st.session_state:
+                st.session_state.lista_sinais = []
+            url = "https://api.backpack.exchange/api/v1/tickers"
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                tickers = response.json()
+                
+                symbol = sorted([
+                    t["symbol"] for t in tickers 
+                    if float(t.get("quoteVolume", 0)) >= min_vol
+                ])
+            except Exception as e:
+                st.error(f"Erro ao buscar tickers: {e}")
+                symbol = []
+            
+            symbols, ids = get_tickers(exchange=exchange, min_vol=min_vol)
+
+        # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
+        st.markdown("### 🔥 Trade Opportunities")
+
+        # EMAs por timeframe
+        ema_periods = {
+            "5m": [21, 50, 100, 200],
+            "15m": [21, 50, 100, 200],
+            "1h": [21, 50, 100, 200],
+            "4h": [21, 50, 100, 200],
+            "1d": [21, 50, 100, 200]
+        }
+
+        if interval == "15m":
+            period_hours = 360
+        elif interval == "1h":
+            period_hours = 720
+        elif interval == "4h":
+            period_hours = 890
+        else:
+            period_hours = 120
+        
+        if st.session_state.bot_rodando:
+            
+            status_placeholder = st.empty()
+            log_placeholder = st.empty()
+
+            #if "placeholder_chart" not in st.session_state:
+            #    st.session_state.placeholder_chart = st.empty()
+            #if "placeholder_log" not in st.session_state:
+            #    st.session_state.placeholder_log = st.empty()
+            placeholder_chart = st.empty()
+            
+            #status_placeholder.info("🔎 Searching Opportunities...")
+            lista_final = list(zip(symbols, ids))
+            total_moedas = len(lista_final)
+        
+            if total_moedas > 0:
+                # Criação dos elementos visuais de progresso
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                log_placeholder = st.empty()
+                
+                # Lista para armazenar os sinais encontrados neste ciclo
+                all_signals = []
+
+                # LOOP DE CICLO ÚNICO
+                for i, sym in enumerate(symbols):
+                    m_id = ids[sym]
+                    # Verificação de segurança: Se o utilizador clicar em STOP, interrompe o loop
+                    now = int(time.time())
+                    if not st.session_state.bot_rodando:
+                        break
+                    
+                    # Atualiza a barra e o texto (0.0 a 1.0)
+                    progresso_atual = min((i + 1) / total_moedas, 1.0)
+                    progress_bar.progress(progresso_atual)
+                    status_text.markdown(f"**Analysing:** `{sym}` ({i+1} de {total_moedas})")
+
+                    try:
+                         # Consulta dados da API
+                        #start_time = now - period_hours * 3600
+                        #url = "https://api.backpack.exchange/api/v1/klines"
+                        #params = {
+                        #    "symbol": sym,
+                        #    "interval": interval,
+                        #    "startTime": start_time,
+                        #    "endTime": now,
+                        #    "klinePriceType": price_type
+                        #}
+
+                        #response = requests.get(url, params=params)
+                        #response.raise_for_status()
+                        #klines = response.json()
+                        klines = get_klines_data(exchange, sym, interval, price_type, market_id=m_id)
+                        
+                        if klines:
+                            # Cria DataFrame
+                            df = pd.DataFrame(klines)
+                            
+                            # Corrige timestamps (Binance retorna ms)
+                            if "start" in df.columns:
+                                # 1. Tenta converter para numérico. Se for string de data (Backpack), vira NaN
+                                numeric_start = pd.to_numeric(df["start"], errors="coerce")
+                                
+                                if numeric_start.notna().all():
+                                    # LÓGICA BINANCE (Numérico)
+                                    # Identifica se é ms (Binance) ou s (algumas outras APIs)
+                                    unit = "ms" if numeric_start.iloc[0] > 1e12 else "s"
+                                    df["start"] = pd.to_datetime(numeric_start, unit=unit, utc=True)
+                                else:
+                                    # LÓGICA BACKPACK (String de data)
+                                    df["start"] = pd.to_datetime(df["start"], utc=True)
+
+                                # 2. Limpeza e Ordenação comum a ambos
+                                df = df.dropna(subset=["start"])
+                                df = df.sort_values("start").reset_index(drop=True)
+
+                            # Converte colunas numéricas
+                            for col in ["open", "high", "low", "close", "volume", "quoteVolume"]:
+                                if col in df.columns:
+                                    df[col] = df[col].astype(float)
+
+
+                            # Calcular EMAs
+                            for period in ema_periods[interval]:
+                                df[f"EMA_{period}"] = df["close"].ewm(span=period, adjust=False).mean()
+
+                            df['is_bull'] = df['close'] > df['open']
+                            df['RSI'] = calcular_rsi_perpetuo(df)
+
+                            # 📊 Bollinger Bands (period=20, k=2)
+                            bb_period = 20
+                            bb_std = 2
+
+                            df['BB_Middle'] = df['close'].rolling(window=bb_period).mean()
+                            df['BB_Std'] = df['close'].rolling(window=bb_period).std()
+                            df['BB_Upper'] = df['BB_Middle'] + bb_std * df['BB_Std']
+                            df['BB_Lower'] = df['BB_Middle'] - bb_std * df['BB_Std']
+
+
+                            # Verifica se nos últimos 10 candles o preço atingiu ou passou as EMAs
+                            last5 = df.tail(10)
+                            tolerancia = 0.01 * tolerancia_pct / 100
+
+                            # EMA_21
+                            ema21_upper = last5['EMA_21'] * (1 + tolerancia)
+                            ema21_lower = last5['EMA_21'] * (1 - tolerancia)
+                            touched_ema21 = (
+                                ((last5['high'] >= ema21_lower) & (last5['low'] <= ema21_upper))
+                            ).any()
+
+                            # EMA_50
+                            ema50_upper = last5['EMA_50'] * (1 + tolerancia)
+                            ema50_lower = last5['EMA_50'] * (1 - tolerancia)
+                            touched_ema50 = (
+                                ((last5['high'] >= ema50_lower) & (last5['low'] <= ema50_upper))
+                            ).any()
+
+                            # EMA_100
+                            ema100_upper = last5['EMA_100'] * (1 + tolerancia)
+                            ema100_lower = last5['EMA_100'] * (1 - tolerancia)
+                            touched_ema100 = (
+                                ((last5['high'] >= ema100_lower) & (last5['low'] <= ema100_upper))
+                            ).any()
+
+                            # EMA_200
+                            ema200_upper = last5['EMA_200'] * (1 + tolerancia)
+                            ema200_lower = last5['EMA_200'] * (1 - tolerancia)
+                            touched_ema200 = (
+                                ((last5['high'] >= ema200_lower) & (last5['low'] <= ema200_upper))
+                            ).any()
+
+                            # Separar candles de compra e venda
+                            bull_volumes = df[df['is_bull']]['volume']
+                            bear_volumes = df[~df['is_bull']]['volume']
+
+                            # Pegar últimos 30
+                            last30_bull_volumes = bull_volumes.tail(30)
+                            last30_bear_volumes = bear_volumes.tail(30)
+
+                            # Volume médio para candles de compra e venda
+                            bull_avg = bull_volumes.mean()
+                            bear_avg = bear_volumes.mean()
+
+
+                            # último preço
+                            
+                            last = df.iloc[-1]
+                            price = last["close"]
+                            rsi_val = last["RSI"]
+
+                            if pd.isna(rsi_val):
+                                continue
+
+                            # Detectar número de candles de retorno a média a partir do último pivot
+                            try:
+                                var_minima = get_variacao_minima_pct(interval)
+                            except ValueError as e:
+                                st.error(str(e))
+                                var_minima = 0.04  # Fallback de segurança
+
+                            
+                            pivot_res = obter_ultimo_pivot_caio(df, window=2, distancia_minima=2, variacao_minima_pct=var_minima)
+                            n = pivot_res["candlesAgo"]
+                           
+                            if n > len(df):
+                                n = len(df)
+
+                            # Últimos n candles
+                            ultimos_n = df.iloc[-n:]
+
+                            # Maior volume entre os últimos n candles
+                            vol_last = ultimos_n['volume'].max()
+                            vol_medio = df["volume"].mean()
+                            
+
+                            # Tendência de retorno
+                            tendencia_simples = detectar_tendencia_simples(df, n)
+
+                            tendencia_regressao = detectar_tendencia_regressao(df, n, tolerancia=0.3)
+
+                            #tendencia_recente = tendencia_regressao
+
+                            tendencia_recente = detect_trends_caio(df, n, tolerancia=0.15)
+                            
+                            
+                            pullback_volume = analisar_pullback_volume_caio(df, pivot_index=len(df)-n, tendencia=tendencia_recente, n=n, media_volume_window=n*5, limite_proporcao_a_favor=0.70)
+                            
+                            congestao, direcoes_ema = identificar_congestao_caio(df, timeframe=interval)
+                            
+                            ema21 = last.get("EMA_21")
+                            ema50 = last.get("EMA_50")
+                            ema100 = last.get("EMA_100")
+                            ema200 = last.get("EMA_200")
+                            sinal = "⚪ No Signal Detected"
+                            preco_entrada = stop_loss = take_profit = None
+                            motivo = ""
+                            
+                            if strategy == "EMA Pullback":
+                                if ema21 and ema50 and ema100 and ema200:
+                                    # Calcular as tendências de inclinação de cada EMA usando a nova função
+                                    t_ema21 = calcular_ema_trend_caio(df["EMA_21"])
+                                    t_ema50 = calcular_ema_trend_caio(df["EMA_50"])
+                                    t_ema100 = calcular_ema_trend_caio(df["EMA_100"])
+                                    t_ema200 = calcular_ema_trend_caio(df["EMA_200"])
+
+
+                                    delta21 = ((price - ema21) / ema21) * 100
+                                    delta50 = ((price - ema50) / ema50) * 100
+                                    delta100 = ((price - ema100) / ema100) * 100
+                                    delta200 = ((price - ema200) / ema200) * 100
+                                    # ---- EMA_21 ----
+                                    if (-tolerancia_pct < delta21 < tolerancia_pct):
+                                        if tendencia_recente == "increasing" and t_ema21["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📉 SELL (resistance EMA_21): price {price:.5f} touched EMA_21 coming from below and the weak volume indicates this as pullback."
+                                            motivo = "EMA_21"
+                                        elif tendencia_recente == "decreasing" and t_ema21["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📈 BUY (support EMA_21): price {price:.5f} touched EMA_21 coming from above and the weak volume indicates this as pullback."
+                                            motivo = "EMA_21"
+
+                                    # ---- EMA_50 ----
+                                    elif (-tolerancia_pct < delta50 < tolerancia_pct):
+                                        if tendencia_recente == "increasing" and t_ema50["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📉 SELL (resistance EMA_50): price {price:.5f} touched EMA_50 coming from below and the weak volume indicates this as pullback."
+                                            motivo = "EMA_50"
+                                        elif tendencia_recente == "decreasing" and t_ema50["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📈 BUY (support EMA_50): price {price:.5f} touched EMA_50 coming from above and the weak volume indicates this as pullback."
+                                            motivo = "EMA_50"
+
+                                    # ---- EMA_100 ----
+                                    elif (-tolerancia_pct < delta100 < tolerancia_pct):
+                                        if tendencia_recente == "increasing" and t_ema100["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📉 STRONG SELL (resistance EMA_100): price {price:.5f} touched EMA_100 coming from below and the weak volume indicates this as pullback."
+                                            motivo = "EMA_100"
+                                        elif tendencia_recente == "decreasing" and t_ema100["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📈 STRONG BUY (support EMA_100): price {price:.5f} touched EMA_100 coming from above and the weak volume indicates this as pullback."
+                                            motivo = "EMA_100"
+
+                                    # ---- EMA_200 ----
+                                    elif (-tolerancia_pct < delta200 < tolerancia_pct):
+                                        if tendencia_recente == "increasing" and t_ema200["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📉 VERY STRONG SELL (resistance EMA_200): price {price:.5f} touched EMA_200 coming from below and the weak volume indicates this as pullback."
+                                            motivo = "EMA_200"
+                                        elif tendencia_recente == "decreasing" and t_ema200["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                            sinal = f"📈 VERY STRONG BUY (support EMA_200): price {price:.5f} touched EMA_200 coming from above and the weak volume indicates this as pullback."
+                                            motivo = "EMA_200"
+
+                            elif strategy == "RSI (20/80)":
+                                # 1. Parâmetros de Volume Precedente
+                                lookback_vol = n  # Analisamos os últimos n candles após o pivot para ver a pressão
+                                ultimos_vol_df = df.tail(lookback_vol)
+                                
+                                # Calcula se o volume está aumentando ou diminuindo na direção do RSI
+                                # Se RSI é baixo (queda), queremos ver se o volume de queda está secando
+                                media_vol_recente = ultimos_vol_df['volume'].mean()
+                                media_vol_anterior = df['volume'].iloc[-(lookback_vol*2):-lookback_vol].mean()
+                                
+                                volume_secando = media_vol_recente < media_vol_anterior
+                                volume_explodindo = media_vol_recente > (media_vol_anterior * 9)
+
+                                # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
+                                main_trend_long = "up" if price > ema200 else "down"
+
+                                # --- LÓGICA DE COMPRA (BUY) ---
+                                if rsi_val <= 25:
+                                    # Caso 1: Pullback em tendência de alta com volume diminuindo (Exaustão de Venda)
+                                    if main_trend_long == "up" and volume_secando:
+                                        sinal = f"📈 SMART BUY (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Low-volume dip (drying up), indicating imminent reversal.\n"
+                                        motivo = f"RSI {rsi_val:.2f}_VOL_BUY"
+                                    
+                                    # Caso 2: Exaustão extrema (RSI < 20) mesmo contra a tendência, mas com volume diminuindo
+                                    elif rsi_val <= 20 and volume_secando:
+                                        sinal = f"📈 STRONG BUY RSI REVERSAL: RSI {rsi_val:.2f}. Decreasing volume suggests selling pressure is drying up.\n"
+                                        motivo = f"RSI {rsi_val:.2f}_REVERSAL_VOL_BUY"
+                                        
+                                    elif volume_explodindo:
+                                        print(f"Low RSI but volume EXPLODING on the downside. Possible capitulation or news-driven move. Waiting.\n")
+
+                                # --- LÓGICA DE VENDA (SELL) ---
+                                elif rsi_val >= 75:
+                                    # Caso 1: Exaustão de alta em tendência de baixa com volume diminuindo
+                                    if main_trend_long == "down" and volume_secando:
+                                        sinal = f"📉 SMART SELL (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Weak bounce on declining volume, resistance ahead.\n"
+                                        motivo = f"RSI {rsi_val:.2f}_VOL_SELL"
+                                    
+                                    # Caso 2: Topo extremo (RSI > 80) com volume secando
+                                    elif rsi_val >= 80 and volume_secando:
+                                        sinal = f"📉 STRONG SELL RSI REVERSAL: RSI {rsi_val:.2f}. Exhausted Buyers (volume reducing).\n"
+                                        motivo = f"RSI {rsi_val:.2f}_REVERSAL_VOL_SELL"
+
+                                    elif volume_explodindo:
+                                        print(f"High RSI but volume EXPLODING on the upside. Strong breakout momentum. Don't sell yet.\n")
+
+                            if "BUY" in sinal:
+                                preco_entrada = price * (1)
+                                if calcular_stop:
+                                    result = calcular_trade_levels(df, preco_entrada, tipo='BUY', p=0.2, risk_reward_ratio=ratio)
+                                    if result:
+                                        stop_loss = result['stop_loss']
+                                        take_profit = result['take_profit']
+                                    else:
+                                        stop_loss = price * (1 - stop_loss_pct/100)
+                                        take_profit = price * (1 + take_profit_pct/100)
+                                else:
+                                    stop_loss = price * (1 - stop_loss_pct/100)
+                                    take_profit = price * (1 + take_profit_pct/100)
+                            elif "SELL" in sinal:
+                                preco_entrada = price * (1)
+                                if calcular_stop:
+                                    result = calcular_trade_levels(df, preco_entrada, tipo='SELL', p=0.2, risk_reward_ratio=ratio)
+                                    if result:
+                                        stop_loss = result['stop_loss']
+                                        take_profit = result['take_profit']
+                                    else:
+                                        stop_loss = price * (1 + stop_loss_pct/100)
+                                        take_profit = price * (1 - take_profit_pct/100)
+                                else:
+                                    stop_loss = price * (1 + stop_loss_pct/100)
+                                    take_profit = price * (1 - take_profit_pct/100)
+
+                            from plotly.subplots import make_subplots
+                            # =========================
+                            # GRÁFICO 2 PAINÉIS
+                            # =========================
+
+                            fig = make_subplots(
+                                rows=3, cols=1,
+                                shared_xaxes=True,
+                                vertical_spacing=0.04,
+                                row_heights=[0.65, 0.20, 0.15]
+                            )
+
+                            # =========================
+                            # 1️⃣ CANDLES + EMAs + BB
+                            # =========================
+
+                            fig.add_trace(go.Candlestick(
+                                x=df["start"],
+                                open=df["open"],
+                                high=df["high"],
+                                low=df["low"],
+                                close=df["close"],
+                                name="Price"
+                            ), row=1, col=1)
+
+                            for period in ema_periods[interval]:
+                                colname = f"EMA_{period}"
+                                if colname in df.columns:
+                                    fig.add_trace(go.Scatter(
+                                        x=df["start"],
+                                        y=df[colname],
+                                        mode="lines",
+                                        name=colname
+                                    ), row=1, col=1)
+
+                            # Bollinger Bands
+                            fig.add_trace(go.Scatter(
+                                x=df["start"],
+                                y=df["BB_Upper"],
+                                line=dict(color='rgba(255,215,0,0.3)'),
+                                name='BB Upper'
+                            ), row=1, col=1)
+
+                            fig.add_trace(go.Scatter(
+                                x=df["start"],
+                                y=df["BB_Lower"],
+                                line=dict(color='rgba(255,215,0,0.3)'),
+                                name='BB Lower'
+                            ), row=1, col=1)
+
+                            # =========================
+                            # 2️⃣ VOLUME + RSI
+                            # =========================
+
+                            # Volume (linha 2)
+                            fig.add_trace(go.Bar(
+                                x=df["start"],
+                                y=df["volume"],
+                                name="Volume",
+                                marker=dict(color='rgba(255, 215, 0, 0.3)')
+                            ), row=2, col=1)
+
+                            # RSI (linha 3)
+                            fig.add_trace(go.Scatter(
+                                x=df["start"],
+                                y=df["RSI"],
+                                name="RSI (%)",
+                                line=dict(color="orange", width=2)
+                            ), row=3, col=1)
+
+                            #fig.update_yaxes(range=[0, 100], row=3, col=1)
+
+                            # Linhas 30/70
+                            fig.add_hline(y=70, line_dash="dash", line_color="red", row=3, col=1)
+                            fig.add_hline(y=30, line_dash="dash", line_color="green", row=3, col=1)
+
+                            # Ajusta escala do RSI
+                            fig.update_yaxes(range=[0, 100], row=3, col=1, secondary_y=True)
+
+                            # =========================
+                            # LAYOUT
+                            # =========================
+
+                            fig.update_layout(
+                                yaxis=dict(domain=[0.35, 1], title="Price (USD)"),    # topo, ocupa 65% da altura
+                                yaxis2=dict(domain=[0.15, 0.33], title="Volume"),     # meio, 18% da altura
+                                yaxis3=dict(domain=[0.0, 0.12], title="RSI", range=[0, 100]),  # base, 12% da altura
+                                xaxis=dict(domain=[0, 1], rangeslider=dict(visible=False)),
+                                height=700,
+                                template="plotly_dark"
+                            )
+
+                            # Zoom automático
+                            try:
+                                fig.update_xaxes(range=[df["start"].iloc[-300], df["start"].iloc[-1]])
+                            except:
+                                fig.update_xaxes(range=[df["start"].iloc[-50], df["start"].iloc[-1]])
+
+                            # Mostrar gráfico
+                            if mostrar_graficos:
+                                placeholder_chart.plotly_chart(
+                                    fig,
+                                    use_container_width=True,
+                                    key=f"{sym}_{interval}"
+                                )
+                            ## Log ##
+                            
+                            if ema200 > ema100 > ema50 > ema21:
+                                tendency = "📉 Strong bearish trend"
+                                reason = "All EMAs aligned downward; consider selling only."
+                            elif ema21 > ema50 > ema100 > ema200:
+                                tendency = "📈 Strong bullish trend"
+                                reason = "All EMAs aligned upward; consider buying only."
+                            else:
+                                # Procura possíveis reversões de curto prazo
+                                if ema21 > ema50 and ema50 < ema100:
+                                    tendency = "⚠️ Possible bullish reversal"
+                                    reason = "EMA_21 crossed above EMA_50, price may be turning up."
+                                elif ema21 < ema50 and ema50 > ema100:
+                                    tendency = "⚠️ Possible bearish reversal"
+                                    reason = "EMA_21 crossed below EMA_50, price may be turning down."
+                                # Procura possíveis reversões ou cruzamentos de longo prazo
+                                elif ema50 > ema100 and ema100 < ema200:
+                                    tendency = "⚠️ Possible medium-term bullish reversal"
+                                    reason = "EMA_50 is above EMA_100, and EMA_100 is below EMA_200; market might be starting to reverse up."
+                                elif ema50 < ema100 and ema100 > ema200:
+                                    tendency = "⚠️ Possible medium-term bearish reversal"
+                                    reason = "EMA_50 is below EMA_100, and EMA_100 is above EMA_200; market might be starting to reverse down."
+                                else:
+                                    tendency = "ℹ️ No clear trend"
+                                    reason = "EMAs mixed; wait for a clearer signal."
+                                
+                            log_text = (
+                                f"{sym} - {interval}"
+                                f"\n📊 Last Price: {price:.5f} | RSI: {rsi_val:.2f}"
+                                f"\n➡️ EMA_21: {ema21:.5f} | Δ%: {((price - ema21) / ema21) * 100:.3f}"
+                                f"\n➡️ EMA_50: {ema50:.5f} | Δ%: {((price - ema50) / ema50) * 100:.3f}"
+                                f"\n➡️ EMA_100: {ema100:.5f} | Δ%: {((price - ema100) / ema100) * 100:.3f}"
+                                f"\n➡️ EMA_200: {ema200:.5f} | Δ%: {((price - ema200) / ema200) * 100:.3f}"
+                                f"\n📦 Last Candle Volume: {vol_last:.2f} | Average Volume: {vol_medio:.2f}"
+                                f"\n📦 Last 30 Buying Candle Volume: {last30_bull_volumes.sum():.2f} | Last 30 Selling Candle Volume: {last30_bear_volumes.sum():.2f}"
+                                f"\n{sinal}"
+                                f"\nPrice Trend: {tendency}"
+                                f"\nNote: {reason}"
+                            )       
+                            if touched_ema21 or touched_ema50 or touched_ema100 or touched_ema200:
+                                touched_list = (f"")
+                                not_touched_list = (f"")
+                                if touched_ema21:
+                                    touched_list += (f"EMA_21")
+                                else:
+                                    not_touched_list += (f" EMA_21")
+                                if touched_ema50:
+                                    touched_list += (f" EMA_50")
+                                else:
+                                    not_touched_list += (f" EMA_50")
+                                if touched_ema100:
+                                    touched_list += (f" EMA_100")
+                                else:
+                                    not_touched_list += (f" EMA_100")
+                                if touched_ema200:
+                                    touched_list += (f" EMA_200")
+                                else:
+                                    not_touched_list += (f" EMA_200")
+
+                                # Se quiser, transforma em string separada por vírgula
+                                touched_str = (touched_list) if touched_list else ""
+                                log_text += (
+                                    f"\n\n🔍 Verification of Last 10 candles:"
+                                    f"\n- EMA_21: {'⚠️ Already Touched' if touched_ema21 else '👍 Not Touched'}"
+                                    f"\n- EMA_50: {'⚠️ Already Touched' if touched_ema50 else '👍 Not Touched'}"
+                                    f"\n- EMA_100: {'⚠️ Already Touched' if touched_ema100 else '👍 Not Touched'}"
+                                    f"\n- EMA_200: {'⚠️ Already Touched' if touched_ema200 else '👍 Not Touched'}"
+                                    f"\nAdvice: Price already touched {touched_str}, so the setup may be late or there is a congestion. \n        Better to wait for a stronger signal near {not_touched_list}."
+                                    f"\nCongestion: {'Detected'if congestao else 'Not Detected'}"
+                                    f"\nLong-term (EMA_200) Trend: {direcoes_ema[max(direcoes_ema.keys())]}"
+                                )
+                            else:
+                                touched_str = ""
+                                time_window = intervalo_para_minutos(interval) * 10
+                                log_text += (
+                                    f"\n\n🔍 Verifying the Last 10 candles: The price has not touched any of the EMA's in the last {time_window} {interval[-1]}\n"
+                                )
+                            if preco_entrada:
+                                # Hora atual
+                                agora = pd.Timestamp.now(tz='UTC')
+
+                                # Filtro para últimos 24h
+                                ultimo_dia = agora - pd.Timedelta(hours=24)
+                                df_ultimas_24h = df[df['start'] >= ultimo_dia]
+                                
+                                # Somatório do volume nas últimas 24h
+                                day_volume = soma_volume_ultimas_24h(df)
+                                if day_volume <= 50000:
+                                    volume_info = "⚠️ 24h Volume is Lower than $50k (risk of large price variation)."
+                                else:
+                                    volume_info = f"24h Volume is healthy."
+                                info = f"{pullback_volume['classificacao']} + {volume_info}"
+                                log_text += (
+                                    f"\n✅ Entry: {preco_entrada:.4f}"
+                                    f"\n🛡 Stop Loss: {stop_loss:.4f}"
+                                    f"\n🎯 Take Profit: {take_profit:.4f}"
+                                    f" 🔁 Risk/Reward: {(take_profit/stop_loss):.2f}x"
+                                    f" {volume_info}"
+                                    f" Pullback Info: {info}"
+                                )
+                                
+                                # Advice opcional
+                                
+                                advice = ""
+                                if strategy == "EMA Pullback":
+                                    if touched_str != "":
+                                        advice = (
+                                            f"Advice: Price already touched {touched_str}, so the setup may be late or there is a congestion. "
+                                            #f"May be better to wait for a stronger signal near {not_touched_list}."
+                                        )
+
+                                if strategy == "EMA Pullback":
+                                    signal_html = (
+                                        f"<div style='text-align: left; font-size: 11px; line-height: 1.3;'>"
+                                        f"<b>{sinal}</b><br>"
+                                        f"<b>Price Trend from</b>: {tendency}<br>"
+                                        f"<span style='margin-left:12px; display: block;'>↳ Note that {reason}</span>"
+                                        f"<span style='margin-left:12px; display: block;'>↳ Pullback Info: {pullback_volume['classificacao']}</span>"
+                                        f"<span style='margin-left:12px; display: block;'>↳ {volume_info}</span>"
+                                        + (f"<div style='margin-top:4px; color:orange;'>{advice}</div>" if advice else "")
+                                        + "</div>"
+                                    )
+                                else:
+                                    signal_html = (
+                                        f"<div style='text-align: left; font-size: 11px; line-height: 1.3;'>"
+                                        f"<b>{sinal}</b><br>"
+                                        f"</div>"
+                                    )
+
+                                all_signals.append({
+                                    "Symbol": sym,
+                                    "Entry Price": preco_entrada,
+                                    "Stop Loss": stop_loss,
+                                    "Take Profit": take_profit,
+                                    "Reason": motivo,
+                                    "Buy Mean Volume": last30_bull_volumes.sum(),
+                                    "Sell Mean Volume": last30_bear_volumes.sum(),
+                                    "Mean Volume": vol_medio,
+                                    "EMA 21": f"{ema21:.4f} {'⚠️' if touched_ema21 else ''}",
+                                    "EMA 50": f"{ema50:.4f} {'⚠️' if touched_ema50 else ''}",
+                                    "EMA 100": f"{ema100:.4f} {'⚠️' if touched_ema100 else ''}",
+                                    "EMA 200": f"{ema200:.4f} {'⚠️' if touched_ema200 else ''}",
+                                    "Signal": signal_html
+                                })
+                            
+                            #st.session_state.placeholder_log.code(log_text)
+                        
+                        time.sleep(0.1) # Delay para evitar bloqueio da API
+                        
+                    except Exception as e:
+                        st.error(f"Erro em {sym}: {e}")
+
+                # --- FINALIZAÇÃO AUTOMÁTICA ---
+                st.session_state.bot_rodando = False # Desliga o estado do bot
+                
+                status_text.success(f"✅ Search Complete! {total_moedas} tokens processed with {len(all_signals)} opportunities founded.")
+                progress_bar.empty() # Remove a barra ao terminar para limpar o layout
+                time.sleep(1.5)
+                #st.rerun()
+                # Exibe os resultados finais se houver sinais
+                def get_asset_link(exchange, symbol):
+                    exchange = exchange.lower()
+                    
+                    if exchange == "nado":
+                        # Transformar qualquer SYMBOL do tipo NOME-PERP_USDT0 -> NOMEUSDT0
+                        if "_USDT" in symbol:
+                            base, quote = symbol.split("_")
+                            # Remove "-PERP" do base
+                            base = base.replace("-PERP", "")
+                            # Concatena base + quote sem underscore
+                            base = f"{base}{quote}"
+                            return f"https://app.nado.xyz/perpetuals?market={base}"
+                        else:
+                            return f"https://app.nado.xyz/perpetuals?market={symbol}"
+                    
+                    elif exchange == "binance":
+                        return f"https://www.binance.com/en/trade/{symbol}"
+                    
+                    elif exchange == "mexc":
+                        return f"https://www.mexc.com/futures/{symbol}"
+                    
+                    elif exchange == "gate.io":
+                        return f"https://www.gate.com/trade/{symbol}"
+                    
+                    elif exchange == "backpack":
+                        return f"https://www.backpack.exchange/trade/{symbol}"
+                    
+                    elif exchange == "extended":
+                        return f"https://app.extended.exchange/perp/{symbol}"
+                    
+                    elif exchange == "paradex":
+                        return f"https://app.paradex.trade/trade/{symbol}"
+                    
+                    elif exchange == "pacifica":
+                        return f"https://app.pacifica.fi/trade/{symbol}"
+                    
+                    elif exchange == "hyperliquid":
+                        return f"https://app.hyperliquid.xyz/trade/{symbol}"
+                    
+                    elif exchange == "lighter":
+                        return f"https://app.lighter.xyz/trade/{symbol}"
+                    
+                    else:
+                        # fallback
+                        return "#"
+                # --- 1. Dados e Formatação ---
+                if all_signals:
+                    
+                    df_signals = pd.DataFrame(all_signals)
+    
+                    if view_mode == "Grid Cards":
+                        blocks_html = ""
+                        for _, row in df_signals.iterrows():
+                            # cor do sinal
+                            sig = str(row.get('Signal', 'N/A')).upper()
+                            color_sig = "#39FF14" if "BUY" in sig else "#FF3131"
+
+                            # entry / tp / sl
+                            entry = f"{row['Entry Price']:.4f}" if isinstance(row['Entry Price'], (int, float)) else row['Entry Price']
+                            tp = f"{row['Take Profit']:.4f}" if isinstance(row['Take Profit'], (int, float)) else row['Take Profit']
+                            sl = f"{row['Stop Loss']:.4f}" if isinstance(row['Stop Loss'], (int, float)) else row['Stop Loss']
+
+                            # link do asset
+                            symbol = row.get('Symbol', '')
+                            asset_link = get_asset_link(exchange, symbol)
+
+                            # HTML do card
+                            blocks_html += f"""
+                            <div class="container-block">
+                                <div class="header-wrapper">
+                                    <div class="header-content">
+                                        <strong class="header-title">
+                                            <a href="{asset_link}" target="_blank" style="color:lightblue; text-decoration:none;">
+                                                {symbol}
+                                            </a>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="footer-wrapper">
+                                    <p><strong>🔔 Signal:</strong> <span style="color:{color_sig};">{sig}</span></p>
+                                    <p><strong>🎯 Entry Price:</strong> <span style="color:white;">{entry}</span></p>
+                                    <div style="margin-top:10px;">
+                                        <strong>📊 Target Levels:</strong>
+                                        <div style="margin-top:8px;">
+                                            <span style="color:lightblue; font-size:16px; display:block; margin-bottom:5px;">🚀 TP: {tp}</span>
+                                            <span style="color:#FF3131; font-size:16px; display:block; margin-bottom:5px;">🛑 SL: {sl}</span>
+                                            <span font-size:16px; display:block;">Reason: {row.get('Reason', 'N/A')}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            """
+                        
+                        num_cards = len(df_signals)
+                        cards_por_linha = 3 
+                        linhas = (num_cards + cards_por_linha - 1) // cards_por_linha
+                        h_calc = linhas * 480 + 100 # 480px por linha + margem
+
+                        full_html = f"""
+                        <style>
+                        .container-externa {{ display: flex; flex-wrap: wrap; justify-content: center; font-family: 'Segoe UI', sans-serif; gap: 15px; background-color: #0E1117; }}
+                        .container-block {{ display: flex; flex-direction: column; align-items: center; }}
+                        .header-wrapper {{ width: 330px; padding: 25px; margin-top: 10px; border-top: 1px solid rgba(48, 240, 192, 0.2); border-bottom: 1px solid #00e0ff; border-top-left-radius: 40px; border-top-right-radius: 10px; background: #1E1F25; display: flex; justify-content: center; }}
+                        .header-title {{ font-size: 20px; color: lightblue; text-shadow: 0 0 4px #14ffe9; }}
+                        .header-content {{ display: flex; align-items: center; gap: 15px; }}
+                        .footer-wrapper {{ width: 330px; padding: 25px; margin-top: 6px; margin-bottom: 20px; border-top: 1px solid #00e0ff; border-bottom-left-radius: 10px; border-bottom-right-radius: 40px; background: #1E1F25; font-size: 16px; color: white; min-height: 180px; }}
+                        </style>
+                        <div class="container-externa">{blocks_html}</div>
+                        """
+                    
+                    else:
+                        # --- List Table ---
+                        rows_html = ""
+                        for _, row in df_signals.iterrows():
+                            signal_type = str(row.get('Signal', 'N/A')).upper()
+                            color_signal = "#39FF14" if "BUY" in signal_type else "#FF3131"
+                            
+                            symbol = row.get('Symbol', '')
+                            asset_link = get_asset_link(exchange, symbol)
+
+                            rows_html += f"""
+                            <tr class="t-row">
+                                <td>
+                                    <strong style="color:lightblue;">
+                                        <a href="{asset_link}" target="_blank" style="color:lightblue; text-decoration:none;">
+                                            {symbol}
+                                        </a>
+                                    </strong>
+                                </td>
+                                <td><span style="color:{color_signal}; font-weight:bold;">{signal_type}</span></td>
+                                <td>{row['Entry Price']:.4f}</td>
+                                <td style="color:#39FF14;">{row['Take Profit']:.4f}</td>
+                                <td style="color:#FF3131;">{row['Stop Loss']:.4f}</td>
+                                <td><strong style="color:#8293A3;">{row.get('Reason', 'N/A')}</strong></td>
+                            </tr>
+                            """
+
+                        full_html = f"""
+                        <style>
+                        .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; }}
+                        table {{ width: 100%; border-collapse: collapse; }}
+                        th {{ text-align: left; color: #8293A3; padding: 12px; border-bottom: 1px solid #1f2937; font-size: 12px; text-transform: uppercase; }}
+                        td {{ padding: 12px; border-bottom: 1px solid #1f2937; font-size: 14px; }}
+                        .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
+                        </style>
+                        <div class="t-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Asset</th>
+                                        <th>Signal</th>
+                                        <th>Entry</th>
+                                        <th>T/P</th>
+                                        <th>S/L</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{rows_html}</tbody>
+                            </table>
+                        </div>
+                        """
+                    h_calc = len(df_signals) * 75 + 150
+                    components.html(full_html, height=max(h_calc, 500), width=None, scrolling=False)
+                
+            else:
+                st.warning("None Opportunitie founded.")
+                st.session_state.bot_rodando = False
+
     elif st.session_state.pagina == "💵 Solana Stables APY":
 
         # 1. Título e Descrição (Seguindo o padrão airdrop-box)

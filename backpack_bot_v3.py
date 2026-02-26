@@ -70,6 +70,35 @@ def detectar_tendencia_regressao(df, n=3, tolerancia=0.1):
     else:
         return "lateral"
 
+def detect_trends_caio(df, n=3, tolerancia=0.2):
+    """
+    Traduzido da função 'detectTrends' do Caio.
+    Calcula a tendência baseada na variação percentual do ponto médio 
+    usando os últimos 'n' candles.
+    """
+    if df is None or len(df) < n:
+        return "indefinido"
+
+    # Ponto médio = (high + low) / 2 para os últimos 'n' candles
+    recent_candles = df.tail(n)
+    mids = (recent_candles['high'] + recent_candles['low']) / 2
+    mids = mids.values
+
+    # Cálculo da Regressão Linear (Slope 'a')
+    x = np.arange(len(mids))
+    y = mids
+    
+    # Embora o código original calcule 'a' e 'b', 
+    # a decisão final dele é baseada na variacaoPct:
+    variacao_pct = ((mids[-1] - mids[0]) / mids[0]) * 100
+
+    if variacao_pct > tolerancia:
+        return "increasing"
+    elif variacao_pct < -tolerancia:
+        return "decreasing"
+    else:
+        return "lateral"
+
 def obter_ultimo_pivot(df, window=2, distancia_minima=3):
     _,_,indices_alta, indices_baixa = detectar_pivots(df, window=window, distancia_minima=distancia_minima)
     n = len(df)
@@ -82,6 +111,41 @@ def obter_ultimo_pivot(df, window=2, distancia_minima=3):
         indices_baixa.max() if len(indices_baixa) > 0 else 0
     )
     return n - ultimo_pivot
+
+def obter_ultimo_pivot_caio(df, window=2, distancia_minima=2, variacao_minima_pct=0.04):
+    """
+    Versão Python idêntica à 'obterUltimoPivot' do Caio.
+    Retorna a distância em candles e o tipo do último pivô (high/low).
+    """
+    # Ajuste para garantir que detectar_pivots receba os novos parâmetros se necessário
+    _, _, indices_alta, indices_baixa = detectar_pivots_caio(
+        df, 
+        window=window, 
+        distancia_minima=distancia_minima, 
+        variacao_minima_pct=variacao_minima_pct
+    )
+    
+    n = len(df)
+
+    # Fallback caso não encontre nenhum pivô
+    if len(indices_alta) == 0 and len(indices_baixa) == 0:
+        return {"candlesAgo": min(6, n), "type": "none"}
+
+    # Encontra o índice mais recente de cada tipo
+    # Usamos .max() se forem arrays do numpy ou max() se forem listas
+    ultimo_alta = indices_alta.max() if len(indices_alta) > 0 else 0
+    ultimo_baixa = indices_baixa.max() if len(indices_baixa) > 0 else 0
+
+    # Determina qual é o mais recente de todos
+    ultimo_pivot_index = max(ultimo_alta, ultimo_baixa)
+    
+    # Define o tipo baseado em qual índice é maior (mais recente)
+    tipo = "high" if ultimo_alta >= ultimo_baixa else "low"
+
+    return {
+        "candlesAgo": n - ultimo_pivot_index,
+        "type": tipo
+    }
 
 def detectar_pivots(df, window=2, distancia_minima=3):
     """
@@ -105,6 +169,60 @@ def detectar_pivots(df, window=2, distancia_minima=3):
     indices_pivots_baixa = valleys + offset
 
     return indices_pivots_alta.tolist(), indices_pivots_baixa.tolist(), indices_pivots_alta, indices_pivots_baixa
+
+def detectar_pivots_caio(df, window=2, distancia_minima=2, variacao_minima_pct=0.05):
+    """
+    Versão Python idêntica à 'detectarPivots' do Caio.
+    Implementa a suavização SMA e o filtro de variação percentual por vizinhança.
+    """
+    # 1. Suavização (SMA clássica, sem center=True para evitar repainting)
+    high_smooth = df['high'].rolling(window=window).mean().values
+    low_smooth = df['low'].rolling(window=window).mean().values
+    
+    indices_alta = []
+    indices_baixa = []
+    n = len(df)
+
+    # 2. Busca de Picos (Highs)
+    for i in range(distancia_minima, n - distancia_minima):
+        if np.isnan(high_smooth[i]): 
+            continue
+
+        is_peak = True
+        # Verifica vizinhos no raio da distancia_minima
+        for j in range(1, distancia_minima + 1):
+            # O Caio calcula a variação baseada no preço do vizinho anterior
+            var_min = high_smooth[i - j] * (variacao_minima_pct / 100)
+            
+            # Se o ponto atual não for maior que o vizinho + margem, não é pivô
+            if high_smooth[i] <= (high_smooth[i - j] + var_min) or \
+               high_smooth[i] <= (high_smooth[i + j] + var_min):
+                is_peak = False
+                break
+        
+        if is_peak:
+            indices_alta.append(i)
+
+    # 3. Busca de Vales (Lows)
+    for i in range(distancia_minima, n - distancia_minima):
+        if np.isnan(low_smooth[i]): 
+            continue
+
+        is_valley = True
+        for j in range(1, distancia_minima + 1):
+            var_min = low_smooth[i - j] * (variacao_minima_pct / 100)
+            
+            # Se o ponto atual não for menor que o vizinho - margem, não é pivô
+            if low_smooth[i] >= (low_smooth[i - j] - var_min) or \
+               low_smooth[i] >= (low_smooth[i + j] - var_min):
+                is_valley = False
+                break
+        
+        if is_valley:
+            indices_baixa.append(i)
+
+    # Retorno compatível com o resto do seu código
+    return indices_alta, indices_baixa, np.array(indices_alta), np.array(indices_baixa)
     
 def calcular_trade_levels(df, preco_entrada, p=0.02, tipo='SELL', risk_reward_ratio=2):
     """
@@ -352,6 +470,84 @@ def analisar_pullback_volume(df, pivot_index, tendencia, n=3, media_volume_windo
         "classificacao": classificacao
     }
 
+def analisar_pullback_volume_caio(df, pivot_index, tendencia, n=3, media_volume_window=10, limite_proporcao_a_favor=0.70):
+    """
+    Versão Python traduzida fielmente da função 'analysePullbackVolume' do Caio.
+    """
+    # 1. Seleção do subset após o pivot
+    if n is not None:
+        subset = df.iloc[pivot_index + 1 : pivot_index + 1 + n]
+    else:
+        subset = df.iloc[pivot_index + 1 :]
+
+    if subset.empty:
+        return {"error": "No candles after pivot."}
+
+    # 2. Volume do subset
+    volume_total = subset["volume"].sum()
+    volume_medio_apos_pivot = volume_total / len(subset)
+
+    # 3. Volume de Referência ANTES do pivot (Lógica do Caio)
+    ref_start = max(0, pivot_index - media_volume_window + 1)
+    ref_candles = df.iloc[ref_start : pivot_index + 1]
+    volume_medio_ref = ref_candles["volume"].mean()
+
+    # 4. Caso Lateralidade (Flat)
+    if tendencia == 'lateral' or tendencia == 'flat':
+        media_volume = subset["volume"].mean()
+        # std() no pandas por padrão é sample std; usamos ddof=0 para igualar ao JS se necessário
+        desvio_volume = subset["volume"].std(ddof=0) 
+
+        if media_volume < volume_medio_ref * 0.75 and desvio_volume < volume_medio_ref * 0.25:
+            classificacao = "consolidation (Low and Stable Volume)"
+        elif media_volume > volume_medio_ref * 1.25:
+            classificacao = "possible breakout (above average volume in laterality)"
+        else:
+            classificacao = "neutral movement in laterality"
+
+        return {
+            "volume_total": volume_total,
+            "volume_medio_apos_pivot": volume_medio_apos_pivot,
+            "volume_medio_referencia": volume_medio_ref,
+            "classificacao": classificacao
+        }
+
+    # 5. Cálculo de Volume A Favor vs Contrário
+    volume_contrario = 0
+    volume_a_favor = 0
+
+    for _, c in subset.iterrows():
+        is_bull = c['close'] > c['open']
+        is_bear = c['close'] < c['open']
+        
+        if tendencia == 'rising' or tendencia == 'increasing':
+            if is_bear: volume_contrario += c['volume']
+            elif is_bull: volume_a_favor += c['volume']
+        elif tendencia == 'falling' or tendencia == 'decreasing':
+            if is_bull: volume_contrario += c['volume']
+            elif is_bear: volume_a_favor += c['volume']
+
+    proporcao_a_favor = volume_a_favor / volume_total if volume_total > 0 else 0
+
+    # 6. Classificação Final (Lógica de Decisão do Caio)
+    if volume_medio_apos_pivot < volume_medio_ref:
+        if proporcao_a_favor > limite_proporcao_a_favor:
+            classificacao = "dangerous pullback (week volume, but dominant counter candles)" # Vol baixo + pressão contrária alta
+        else:
+            classificacao = "helph pullback (week volume, trend should continue)" # Vol baixo + pressão contrária baixa
+    elif proporcao_a_favor > limite_proporcao_a_favor:
+        classificacao = "possible reversal (dominant counter volume)" # Vol normal/alto + dominação contrária
+    else:
+        classificacao = "neutral pullback (volume within normal)"
+
+    return {
+        "volume_total": volume_total,
+        "volume_medio_apos_pivot": volume_medio_apos_pivot,
+        "volume_medio_referencia": volume_medio_ref,
+        "proporcao_a_favor": proporcao_a_favor,
+        "classificacao": classificacao
+    }
+
 def identificar_congestao(df: pd.DataFrame, timeframe: str) -> bool:
     # Cálculo das EMAs
     df['ema21'] = df['close'].ewm(span=21).mean()
@@ -407,6 +603,67 @@ def identificar_congestao(df: pd.DataFrame, timeframe: str) -> bool:
     print(params["dist_pct_max"], todas_proximas, params["inclinacao_max"], todas_horizontais,inclinacoes[21],inclinacoes[50],inclinacoes[100],inclinacoes[200])
     return todas_proximas and todas_horizontais, direcoes_ema
 
+def identificar_congestao_caio(df: pd.DataFrame, timeframe: str):
+    # 1. Cálculo das EMAs idêntico ao padrão JS (Exponential Moving Average)
+    # Usar adjust=False garante paridade com fórmulas de trading clássicas
+    for p in [21, 50, 100, 200]:
+        df[f'ema{p}'] = df['close'].ewm(span=p, adjust=False).mean()
+
+    # 2. Parâmetros por timeframe (Mantidos)
+    limites_por_tf = {
+        "1m": {"dist_pct_max": 0.35, "inclinacao_max": 0.1, "atraso": 12},
+        "5m": {"dist_pct_max": 0.5, "inclinacao_max": 0.15, "atraso": 8},
+        "15m": {"dist_pct_max": 1, "inclinacao_max": 0.2, "atraso": 5},
+        "1h": {"dist_pct_max": 1.5, "inclinacao_max": 0.3, "atraso": 3},
+        "4h": {"dist_pct_max": 2, "inclinacao_max": 0.4, "atraso": 3},
+        "1d": {"dist_pct_max": 2.5, "inclinacao_max": 0.5, "atraso": 2}
+    }
+
+    params = limites_por_tf.get(timeframe, {"dist_pct_max": 2.5, "inclinacao_max": 0.1, "atraso": 5})
+    atraso = params["atraso"]
+    
+    # Verificação de segurança: Se não houver candles suficientes para o 'atraso longo', aborta
+    if len(df) < (10 * atraso + 1):
+        return False, {p: "undefined" for p in [21, 50, 100, 200]}
+
+    # 3. Últimos valores e Proximidade
+    last_emas = {p: df[f'ema{p}'].iloc[-1] for p in [21, 50, 100, 200]}
+    max_ema = max(last_emas.values())
+    min_ema = min(last_emas.values())
+
+    dist_pct = abs(max_ema - min_ema) / max_ema * 100
+    todas_proximas = dist_pct < params["dist_pct_max"]
+    
+    # 4. Inclinações e Direções
+    horizontais = 0
+    direcoes_ema = {}
+
+    for p in [21, 50, 100, 200]:
+        atual = last_emas[p]
+        anterior = df[f'ema{p}'].iloc[-(atraso + 1)]
+        anterior_long = df[f'ema{p}'].iloc[-(10 * atraso + 1)]
+
+        inclinacao_pct = (atual - anterior) / anterior * 100
+        inclinacao_pct_long = (atual - anterior_long) / anterior_long * 100
+
+        # Verifica horizontalidade para o sinal de congestão
+        if abs(inclinacao_pct) < params["inclinacao_max"]:
+            horizontais += 1
+
+        # Define direção usando os termos exatos do Caio para compatibilidade
+        if inclinacao_pct_long > 0.025:
+            direcoes_ema[p] = "increasing"
+        elif inclinacao_pct_long < -0.025:
+            direcoes_ema[p] = "decreasing"
+        else:
+            direcoes_ema[p] = "flat"
+
+    # Definição final de congestão: Proximidade + Pelo menos 3 horizontais
+    todas_horizontais = horizontais >= 3
+    congestion = todas_proximas and todas_horizontais
+
+    return congestion, direcoes_ema
+
 def calcular_rsi2(df, period=14):
     delta = df['close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
@@ -424,24 +681,84 @@ def calcular_rsi(df, period=14):
     # Uso de EMA (Wilder's method) para evitar NaNs e instabilidades
     avg_gain = gain.ewm(com=period-1, adjust=False).mean()
     avg_loss = loss.ewm(com=period-1, adjust=False).mean()
-    rs = avg_gain / avg_loss
+    rs = avg_gain / avg_loss.replace(0, np.nan)
     rsi = 100 - (100 / (1 + rs))
     return rsi.fillna(50)
 
 def calcular_rsi_perpetuo(df, period=14):
-    # Calcula a variação
     delta = df['close'].diff()
+
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+
+    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+
+    rs = avg_gain / avg_loss.replace(0, np.nan)
+
+    rsi = 100 - (100 / (1 + rs))
+
+    return rsi.fillna(50)
+
+def calcular_ema_trend_caio(ema_series, lookback=20, tolerance=0.00001):
+    """
+    Versão Python da função emaTrend do Caio.
+    Analisa a inclinação geral e a consistência ponto a ponto da EMA.
+    """
+    if ema_series is None or len(ema_series) < lookback:
+        return {"trend": "undefined", "reason": "Poucos valores de EMA"}
+
+    # Pegar os últimos 'lookback' valores
+    values = ema_series.tail(lookback).values
+    first = values[0]
+    last = values[-1]
+
+    # Inclinação geral (Slope)
+    if last < (first - tolerance):
+        trend = "decreasing"
+    elif last > (first + tolerance):
+        trend = "increasing"
+    else:
+        trend = "flat"
+
+    # Sequência ponto a ponto (Consistency)
+    falling_steps = 0
+    rising_steps = 0
+    for i in range(len(values) - 1):
+        if values[i + 1] < values[i]:
+            falling_steps += 1
+        elif values[i + 1] > values[i]:
+            rising_steps += 1
+
+    pct_falling = falling_steps / (lookback - 1)
+    pct_rising = rising_steps / (lookback - 1)
+
+    return {
+        "trend": trend,         # "decreasing" | "increasing" | "flat"
+        "pct_falling": pct_falling,
+        "pct_rising": pct_rising,
+        "last_val": last
+    }
+
+def get_variacao_minima_pct(timeframe):
+    """
+    Versão Python da função getVariacaoMinimaPct do Caio.
+    Retorna a variação mínima baseada no tempo gráfico.
+    """
+    variacoes = {
+        "1m": 0.01,
+        "5m": 0.02,
+        "15m": 0.04,
+        "1h": 0.06,
+        "4h": 0.08
+    }
     
-    # Separa ganhos e perdas
-    gain = delta.where(delta > 0, 0)
-    loss = -delta.where(delta < 0, 0)
-    
-    # Aplica a suavização de Wilder (alpha = 1/periodo)
-    avg_gain = gain.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
-    
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+    if timeframe in variacoes:
+        return variacoes[timeframe]
+    else:
+        # Em Python, usamos ValueError para situações de argumentos inválidos
+        raise ValueError(f"Timeframe {timeframe} não suportado")
+
 
 # Página Streamlit
 st.set_page_config(
@@ -509,7 +826,7 @@ with col3:
         # 🎛 Configurações do usuário
         mostrar_graficos = st.checkbox("Exibir Gráficos na Varredura", value=False)
         
-        strategy = st.selectbox("Choose Strategy:", ["EMA Pullback", "RSI (25/75)"], index=0)
+        strategy = st.selectbox("Choose Strategy:", ["EMA Pullback", "RSI (20/80)"], index=0)
         interval = st.selectbox("Interval:", ["5m", "15m", "1h", "4h"], index=1)
         if interval == "15m":
             periods = 360
@@ -665,8 +982,20 @@ with col2:
                         price = last["close"]
                         rsi_val = last["RSI"]
 
+                        if pd.isna(rsi_val):
+                            continue
+
                         # Detectar número de candles de retorno a média a partir do último pivot
-                        n = obter_ultimo_pivot(df, window=2, distancia_minima=3) 
+                        try:
+                            var_minima = get_variacao_minima_pct(interval)
+                        except ValueError as e:
+                            st.error(str(e))
+                            var_minima = 0.04  # Fallback de segurança
+
+                        print(var_minima)
+                        pivot_res = obter_ultimo_pivot_caio(df, window=2, distancia_minima=2, variacao_minima_pct=var_minima)
+                        n = pivot_res["candlesAgo"]
+                        print(pivot_res)
                         if n > len(df):
                             n = len(df)
 
@@ -683,14 +1012,16 @@ with col2:
 
                         tendencia_regressao = detectar_tendencia_regressao(df, n, tolerancia=0.3)
 
-                        tendencia_recente = tendencia_regressao
+                        #tendencia_recente = tendencia_regressao
+
+                        tendencia_recente = detect_trends_caio(df, n, tolerancia=0.15)
                         
                         print(f"Recent Trend to Last {n} Candles: {tendencia_simples}")
                         print(f"Recent Trend by Regression to Last {n} Candles: {tendencia_regressao}")
                         
-                        pullback_volume = analisar_pullback_volume(df, pivot_index=len(df)-n, tendencia=tendencia_recente, n=n, media_volume_window=n*5, limite_proporcao_contraria=0.70)
+                        pullback_volume = analisar_pullback_volume_caio(df, pivot_index=len(df)-n, tendencia=tendencia_recente, n=n, media_volume_window=n*5, limite_proporcao_a_favor=0.70)
                         
-                        congestao, direcoes_ema = identificar_congestao(df, timeframe=interval)
+                        congestao, direcoes_ema = identificar_congestao_caio(df, timeframe=interval)
                         
                         ema21 = last.get("EMA_21")
                         ema50 = last.get("EMA_50")
@@ -702,54 +1033,100 @@ with col2:
                         
                         if strategy == "EMA Pullback":
                             if ema21 and ema50 and ema100 and ema200:
+                                # Calcular as tendências de inclinação de cada EMA usando a nova função
+                                t_ema21 = calcular_ema_trend_caio(df["EMA_21"])
+                                t_ema50 = calcular_ema_trend_caio(df["EMA_50"])
+                                t_ema100 = calcular_ema_trend_caio(df["EMA_100"])
+                                t_ema200 = calcular_ema_trend_caio(df["EMA_200"])
+
+
                                 delta21 = ((price - ema21) / ema21) * 100
                                 delta50 = ((price - ema50) / ema50) * 100
                                 delta100 = ((price - ema100) / ema100) * 100
                                 delta200 = ((price - ema200) / ema200) * 100
                                 
+                                print("results: trend -", tendencia_recente, "Main Trend: ", t_ema21["trend"], "Congestao - ", congestao, "pullback - ", pullback_volume["classificacao"])
                                 # ---- EMA_21 ----
                                 if (-tolerancia_pct < delta21 < tolerancia_pct):
-                                    if tendencia_recente == "rising" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    if tendencia_recente == "increasing" and t_ema21["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📉 SELL (resistance EMA_21): price {price:.5f} touched EMA_21 coming from below and the weak volume indicates this as pullback."
                                         motivo = "EMA_21"
-                                    elif tendencia_recente == "falling" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    elif tendencia_recente == "decreasing" and t_ema21["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📈 BUY (support EMA_21): price {price:.5f} touched EMA_21 coming from above and the weak volume indicates this as pullback."
                                         motivo = "EMA_21"
 
                                 # ---- EMA_50 ----
                                 elif (-tolerancia_pct < delta50 < tolerancia_pct):
-                                    if tendencia_recente == "rising" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    if tendencia_recente == "increasing" and t_ema50["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📉 SELL (resistance EMA_50): price {price:.5f} touched EMA_50 coming from below and the weak volume indicates this as pullback."
                                         motivo = "EMA_50"
-                                    elif tendencia_recente == "falling" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    elif tendencia_recente == "decreasing" and t_ema50["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📈 BUY (support EMA_50): price {price:.5f} touched EMA_50 coming from above and the weak volume indicates this as pullback."
                                         motivo = "EMA_50"
 
                                 # ---- EMA_100 ----
                                 elif (-tolerancia_pct < delta100 < tolerancia_pct):
-                                    if tendencia_recente == "rising" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    if tendencia_recente == "increasing" and t_ema100["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📉 STRONG SELL (resistance EMA_100): price {price:.5f} touched EMA_100 coming from below and the weak volume indicates this as pullback."
                                         motivo = "EMA_100"
-                                    elif tendencia_recente == "falling" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    elif tendencia_recente == "decreasing" and t_ema100["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📈 STRONG BUY (support EMA_100): price {price:.5f} touched EMA_100 coming from above and the weak volume indicates this as pullback."
                                         motivo = "EMA_100"
 
                                 # ---- EMA_200 ----
                                 elif (-tolerancia_pct < delta200 < tolerancia_pct):
-                                    if tendencia_recente == "rising" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    if tendencia_recente == "increasing" and t_ema200["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📉 VERY STRONG SELL (resistance EMA_200): price {price:.5f} touched EMA_200 coming from below and the weak volume indicates this as pullback."
                                         motivo = "EMA_200"
-                                    elif tendencia_recente == "falling" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                    elif tendencia_recente == "decreasing" and t_ema200["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                         sinal = f"📈 VERY STRONG BUY (support EMA_200): price {price:.5f} touched EMA_200 coming from above and the weak volume indicates this as pullback."
                                         motivo = "EMA_200"
 
-                        elif strategy == "RSI (25/75)":
-                             if rsi_val <= 25:
-                                 sinal = f"📈 BUY (RSI Oversold): RSI is {rsi_val:.2f}, indicating oversold conditions."
-                                 motivo = "RSI_25"
-                             elif rsi_val >= 75:
-                                 sinal = f"📉 SELL (RSI Overbought): RSI is {rsi_val:.2f}, indicating overbought conditions."
-                                 motivo = "RSI_75"
+                        elif strategy == "RSI (20/80)":
+                            # 1. Parâmetros de Volume Precedente
+                            lookback_vol = 5  # Analisamos os últimos 5 candles para ver a pressão
+                            ultimos_vol_df = df.tail(lookback_vol)
+                            
+                            # Calcula se o volume está aumentando ou diminuindo na direção do RSI
+                            # Se RSI é baixo (queda), queremos ver se o volume de queda está secando
+                            media_vol_recente = ultimos_vol_df['volume'].mean()
+                            media_vol_anterior = df['volume'].iloc[-(lookback_vol*2):-lookback_vol].mean()
+                            
+                            volume_secando = media_vol_recente < media_vol_anterior
+                            volume_explodindo = media_vol_recente > (media_vol_anterior * 1.5)
+
+                            # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
+                            main_trend_long = "up" if price > ema200 else "down"
+
+                            # --- LÓGICA DE COMPRA (BUY) ---
+                            if rsi_val <= 25:
+                                # Caso 1: Pullback em tendência de alta com volume diminuindo (Exaustão de Venda)
+                                if main_trend_long == "up" and volume_secando:
+                                    sinal = f"📈 SMART BUY (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Queda sem volume (secagem), indicando reversão iminente."
+                                    motivo = "RSI_VOL_DRY_BUY"
+                                
+                                # Caso 2: Exaustão extrema (RSI < 20) mesmo contra a tendência, mas com volume diminuindo
+                                elif rsi_val <= 20 and volume_secando:
+                                    sinal = f"📈 RSI EXTREME REVERSAL: RSI {rsi_val:.2f}. Volume decrescente sugere fim do despejo."
+                                    motivo = "RSI_EXTREME_VOL_BUY"
+                                    
+                                elif volume_explodindo:
+                                    print(f"RSI baixo mas volume EXPLODINDO na queda. Possível capitulação ou notícia. Aguardando.")
+
+                            # --- LÓGICA DE VENDA (SELL) ---
+                            elif rsi_val >= 75:
+                                # Caso 1: Exaustão de alta em tendência de baixa com volume diminuindo
+                                if main_trend_long == "down" and volume_secando:
+                                    sinal = f"📉 SMART SELL (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Subida sem força (volume baixo), resistência próxima."
+                                    motivo = "RSI_VOL_DRY_SELL"
+                                
+                                # Caso 2: Topo extremo (RSI > 80) com volume secando
+                                elif rsi_val >= 80 and volume_secando:
+                                    sinal = f"📉 RSI EXTREME REVERSAL: RSI {rsi_val:.2f}. Compradores cansados (volume caindo)."
+                                    motivo = "RSI_EXTREME_VOL_SELL"
+
+                                elif volume_explodindo:
+                                    print(f"RSI alto mas volume EXPLODINDO na alta. Forte momentum de rompimento. Não vender agora.")
 
                         if "BUY" in sinal:
                             preco_entrada = price * (1)
