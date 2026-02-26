@@ -5304,7 +5304,7 @@ with col_content:
             </style>
 
             <div class="airdrop-box">
-                <h2>Trade Bot Opportunity</h2>
+                <h2>Trade Opportunity Bot</h2>
                 <p style="color: #8293A3; line-height: 1.2;">
                     Maximize trade accuracy through technical confluence: utilizing a multi-period EMA (21,50,100,200) stack for trend bias or RSI for strength and exhaustion signals.
                 </p>
