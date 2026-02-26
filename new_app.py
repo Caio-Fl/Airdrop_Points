@@ -5306,7 +5306,7 @@ with col_content:
             <div class="airdrop-box">
                 <h2>Trade Bot Opportunity</h2>
                 <p style="color: #8293A3; line-height: 1.2;">
-                    Detect high-probability trade setups using EMAs (21/50/100/200) trend analysis or RSI momentum strategy.
+                    Maximize trade accuracy through technical confluence: utilizing a multi-period EMA (21,50,100,200 periods) stack for trend bias or RSI for strength and exhaustion signals.
                 </p>
                 <h2>What to do?</h2>
                 <ul style="color: #8293A3;">
