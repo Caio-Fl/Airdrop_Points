@@ -16,7 +16,7 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
     elif interval == "4h":
         period_hours = 892
     elif interval == "1d":
-        period_hours = 3600
+        period_hours = 2800
     else:
         period_hours = 120
 
