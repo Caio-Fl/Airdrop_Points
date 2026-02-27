@@ -6922,7 +6922,7 @@ with col_content:
 
                                 if strategy == "EMA Pullback":
                                     signal_html = (
-                                        f"<div style='text-align: left; font-size: 11px; line-height: 1.3;'>"
+                                        f"<div style='text-align: left; font-size: 12px; line-height: 1.3;'>"
                                         f"<b>{sinal}</b><br><br>"
                                         f"<b>Price Trend from</b>: {tendency}<br>"
                                         f"<span style='margin-left:12px; display: block;'>↳ Note that {reason}</span>"
@@ -7029,7 +7029,7 @@ with col_content:
                         for _, row in df_signals.iterrows():
                             # cor do sinal
                             sig = str(row.get('Signal', 'N/A')).upper()
-                            color_sig = "#39FF14" if "BUY" in sig else "#FF3131"
+                            color_sig = "#14FFC8" if "BUY" in sig else "#FAA570"
 
                             # entry / tp / sl
                             entry = f"{row['Entry Price']:.4f}" if isinstance(row['Entry Price'], (int, float)) else row['Entry Price']
@@ -7089,7 +7089,7 @@ with col_content:
                         rows_html = ""
                         for _, row in df_signals.iterrows():
                             signal_type = str(row.get('Signal', 'N/A')).upper()
-                            color_signal = "#39FF14" if "BUY" in signal_type else "#FF3131"
+                            color_signal = "#7FFBDF" if "BUY" in signal_type else "#F6DDCE"
                             
                             symbol = row.get('Symbol', '')
                             asset_link = get_asset_link(exchange, symbol)
@@ -7103,11 +7103,11 @@ with col_content:
                                         </a>
                                     </strong>
                                 </td>
-                                <td><span style="color:{color_signal}; font-weight:bold;">{signal_type}</span></td>
-                                <td>{row['Entry Price']:.4f}</td>
-                                <td style="color:#39FF14;">{row['Take Profit']:.4f}</td>
-                                <td style="color:#FF3131;">{row['Stop Loss']:.4f}</td>
-                                <td><strong style="color:#8293A3;">{row.get('Reason', 'N/A')}</strong></td>
+                                <td><span style="color:{color_signal}; font-weight:bold; font-size: 18px;">{signal_type}</span></td>
+                                <td style="color:#FFFFFF;font-size: 16px;">{row['Entry Price']:.4f}</td>
+                                <td style="color:#39FF14;font-size: 16px;">{row['Take Profit']:.4f}</td>
+                                <td style="color:#FF3131;font-size: 16px;">{row['Stop Loss']:.4f}</td>
+                                <td><strong style="color:#8293A3;font-size: 16px;">{row.get('Reason', 'N/A')}</strong></td>
                             </tr>
                             """
 
@@ -7115,7 +7115,7 @@ with col_content:
                         <style>
                         .t-container {{ background: #111827; padding: 20px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; color: white; }}
                         table {{ width: 100%; border-collapse: collapse; }}
-                        th {{ text-align: left; color: #8293A3; padding: 12px; border-bottom: 1px solid #1f2937; font-size: 12px; text-transform: uppercase; }}
+                        th {{ text-align: left; color: #8293A3; padding: 12px; border-bottom: 1px solid #1f2937; font-size: 14px; text-transform: uppercase; }}
                         td {{ padding: 12px; border-bottom: 1px solid #1f2937; font-size: 14px; }}
                         .t-row:hover {{ background: #1e293b; transition: 0.2s; }}
                         </style>
@@ -7135,8 +7135,8 @@ with col_content:
                             </table>
                         </div>
                         """
-                    h_calc = len(df_signals) * 75 + 150
-                    components.html(full_html, height=max(h_calc, 500), width=None, scrolling=False)
+                    h_calc = len(df_signals) * 200 + 150
+                    components.html(full_html, height=max(h_calc, 1000), width=None, scrolling=False)
                 
             else:
                 st.warning("None Opportunitie founded.")

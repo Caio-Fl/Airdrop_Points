@@ -51,7 +51,11 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
             
             url = "https://api.binance.com/api/v3/klines"
             params = {"symbol": sym.replace("_", ""), "interval": interval, "endTime": now * 1000, "limit": 1000}
-            response = requests.get(url, params=params, timeout=10).json()
+            headers = {
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json"
+            }
+            response = requests.get(url, params=params, headers=headers, timeout=10).json()
             klines = []
             for k in response:
                 if len(k) >= 8:  # garante que todos os índices existem
@@ -147,8 +151,12 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
                 "limit": 1000,
                 "endTime": now * 1000
             }
+            headers = {
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json"
+            }
             
-            resp = requests.get(url, params=params, timeout=10)
+            resp = requests.get(url, params=params, headers=headers, timeout=10)
             if resp.status_code == 200:
                 json_data = resp.json()
                 if json_data.get("status") == "OK":
