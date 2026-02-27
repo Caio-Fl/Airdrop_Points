@@ -5312,7 +5312,7 @@ with col_content:
                 <h2>What to do?</h2>
                 <ul style="color: #8293A3;">
                     <li><strong>Strategy Selection:</strong> Choose your preferred strategy: EMA Pullback follows the main market trend, while RSI focuses on potential reversals against the trend.</li>
-                    <li><strong>Exchange Selection:</strong> Scan for opportunities across 10 different exchanges to find the best setups.</li>
+                    <li><strong>Exchange Selection:</strong> Scan for opportunities across 8 different exchanges to find the best setups.</li>
                     <li><strong>Timeframe Selection:</strong> Select your preferred timeframe — 5m, 15m, 1h, 4h or 1d — depending on your trading style.</li>
                     <li><strong>Risk Management:</strong> Use automatic or manual Stop Loss and Take Profit levels based on your defined risk-reward ratio.</li>
                     <li><strong>Volume Filter:</strong> Set a minimum 24h trading volume to ensure sufficient liquidity and safer trade execution.</li>
@@ -6263,10 +6263,8 @@ with col_content:
             with col3:
                 exchanges = [
                     "backpack",
-                    "binance",
                     "mexc",
                     "gate.io",
-                    "extended",
                     "paradex",
                     "pacifica",
                     "hyperliquid",
