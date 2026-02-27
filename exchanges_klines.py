@@ -56,6 +56,8 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
                 "Accept": "application/json"
             }
             response = requests.get(url, params=params, headers=headers, timeout=10).json()
+            print("STATUS:", response.status_code)
+            print("TEXT:", response.text[:200])
             klines = []
             for k in response:
                 if len(k) >= 8:  # garante que todos os índices existem
@@ -157,6 +159,8 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
             }
             
             resp = requests.get(url, params=params, headers=headers, timeout=10)
+            print("STATUS:", resp.status_code)
+            print("TEXT:", resp.text[:200])
             if resp.status_code == 200:
                 json_data = resp.json()
                 if json_data.get("status") == "OK":
