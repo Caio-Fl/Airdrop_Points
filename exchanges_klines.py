@@ -56,8 +56,7 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
                 "Accept": "application/json"
             }
             response = requests.get(url, params=params, headers=headers, timeout=10).json()
-            print("STATUS:", response.status_code)
-            print("TEXT:", response.text[:200])
+
             klines = []
             for k in response:
                 if len(k) >= 8:  # garante que todos os índices existem
@@ -147,20 +146,24 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
 
             # A URL inclui o símbolo e o tipo de preço na rota
             url = f"https://app.extended.exchange/api/v1/info/candles/{clean_sym}/trades"
-            
+
             params = {
                 "interval": ext_interval,
                 "limit": 1000,
                 "endTime": now * 1000
             }
-            headers = {
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json"
-            }
+
+            # cria scraper que simula navegador
+            scraper = cloudscraper.create_scraper(
+                browser={
+                    "browser": "chrome",
+                    "platform": "windows",
+                    "mobile": False
+                }
+            )
             
-            resp = requests.get(url, params=params, headers=headers, timeout=10)
-            print("STATUS:", resp.status_code)
-            print("TEXT:", resp.text[:200])
+            resp = scraper.get(url, params=params, timeout=10)
+
             if resp.status_code == 200:
                 json_data = resp.json()
                 if json_data.get("status") == "OK":
