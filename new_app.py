@@ -4981,7 +4981,7 @@ with col_content:
             "EXTENDED": "https://app.extended.exchange/join/EXT3NDED15",
             "LIGHTER": "https://app.lighter.xyz/?referral=LIGHTER15",
             "NADO": "https://app.nado.xyz?join=TMTHHkO",
-            "BACKPACK": "https://backpack.exchange/trade/",
+            "BACKPACK": "https://backpack.exchange/join/jj2kkdp1",
         }
 
         EXCHANGE_LOGOS = {
@@ -6372,15 +6372,33 @@ with col_content:
             period_hours = 120
         
         if st.session_state.bot_rodando:
+            links = {
+                "binance": "https://www.binance.com",
+                "mexc": "https://www.mexc.com/pt-BR/acquisition/custom-sign-up?shareCode=mexc-12KuHv",
+                "gate.io": "https://www.gate.io",
+                "backpack": "https://backpack.exchange/join/jj2kkdp1",
+                "extended": "https://app.extended.exchange/join/EXT3NDED15",
+                "paradex": "https://app.paradex.trade/r/Paradex15",
+                "pacifica": "https://app.pacifica.fi/?referral=PacificaRef",
+                "hyperliquid": "https://app.hyperliquid.xyz/join/HYPER15",
+                "lighter": "https://app.lighter.xyz/?referral=LIGHTER15",
+                "nado": "https://app.nado.xyz/perpetuals?join=TMTHHkO",
+            }
 
             # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
             exchange_name = exchange.capitalize()
+            exchange_url = links.get(exchange, "#")
+            
             st.markdown(
                 f"""
                 <div style="margin-top: 25px; display:flex; align-items:center; gap:10px;">
                     <h3 style="margin:0;">🔥 Trade Opportunities in</h3>
                     <img src="{logos[exchange]}" width="40">
-                    <h3 style="margin:0;">{exchange_name}</h3>
+                    <h3 style="margin:0;">
+                        <a href="{exchange_url}" target="_blank" style="text-decoration:none; color:inherit;">
+                            {exchange_name}
+                        </a>
+                    </h3>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -7140,6 +7158,7 @@ with col_content:
                 
             else:
                 st.warning("None Opportunitie founded.")
+
                 st.session_state.bot_rodando = False
 
     elif st.session_state.pagina == "💵 Solana Stables APY":
