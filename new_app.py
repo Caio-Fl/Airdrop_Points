@@ -6663,7 +6663,7 @@ with col_content:
                                 main_trend_long = "up" if price > ema200 else "down"
 
                                 # --- LÓGICA DE COMPRA (BUY) ---
-                                if rsi_val <= 25:
+                                if rsi_val <= 29:
                                     # Caso 1: Pullback em tendência de alta com volume diminuindo (Exaustão de Venda)
                                     if main_trend_long == "up" and volume_secando:
                                         sinal = f"📈 SMART BUY (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Low-volume dip (drying up), indicating imminent reversal.\n"
@@ -6678,7 +6678,7 @@ with col_content:
                                         print(f"Low RSI but volume EXPLODING on the downside. Possible capitulation or news-driven move. Waiting.\n")
 
                                 # --- LÓGICA DE VENDA (SELL) ---
-                                elif rsi_val >= 75:
+                                elif rsi_val >= 71:
                                     # Caso 1: Exaustão de alta em tendência de baixa com volume diminuindo
                                     if main_trend_long == "down" and volume_secando:
                                         sinal = f"📉 SMART SELL (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Weak bounce on declining volume, resistance ahead.\n"
