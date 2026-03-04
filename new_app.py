@@ -6313,7 +6313,7 @@ with col_content:
             with col2:
                 strategy = st.selectbox(
                     "Strategy:",
-                    ["EMA Pullback", "RSI (20/80)"],
+                    ["EMA Pullback", "RSI (30/70)"],
                     key="bot_strat",
                     help="""
                 Select the trading logic used to generate signals.
@@ -6322,10 +6322,10 @@ with col_content:
                 • Trend-following strategy
                 • Looks for pullbacks into EMA structure (21/50/100/200)
 
-                RSI (20/80):
+                RSI (30/70):
                 • Mean-reversion strategy
-                • Oversold below 20
-                • Overbought above 80
+                • Oversold below 30
+                • Overbought above 70
                 """
                 )
 
@@ -6758,7 +6758,7 @@ with col_content:
                                             sinal = f"📈 VERY STRONG BUY (support EMA_200): price {price:.5f} touched EMA_200 coming from above and the weak volume indicates this as pullback."
                                             motivo = "EMA_200"
 
-                            elif strategy == "RSI (20/80)":
+                            elif strategy == "RSI (30/70)":
 
                                 # ==============================
                                 # 1️⃣ CONFIGURAÇÕES
