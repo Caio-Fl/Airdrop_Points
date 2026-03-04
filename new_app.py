@@ -6387,7 +6387,31 @@ with col_content:
                 Higher values = more signals.
                 """
                     )
+                    period = 14
                 else:
+                    period = st.number_input(
+                        "RSI Period",
+                        value=14,
+                        min_value=7,
+                        step=1,
+                        help="""
+                    Defines the number of candles used to calculate RSI.
+
+                    Lower values (7–9):
+                    • More sensitive
+                    • More signals
+                    • Better for scalping
+
+                    Medium values (14):
+                    • Balanced
+                    • Classic setting
+
+                    Higher values (21+):
+                    • Smoother
+                    • Fewer signals
+                    • Better for higher timeframes
+                    """
+                    )
                     tolerancia_pct = 0.20
 
                 if strategy == "EMA Pullback":
@@ -6593,7 +6617,7 @@ with col_content:
                                 df[f"EMA_{period}"] = df["close"].ewm(span=period, adjust=False).mean()
 
                             df['is_bull'] = df['close'] > df['open']
-                            df['RSI'] = calcular_rsi_perpetuo(df)
+                            df['RSI'] = calcular_rsi_perpetuo(df, period=period)
 
                             # 📊 Bollinger Bands (period=20, k=2)
                             bb_period = 20
