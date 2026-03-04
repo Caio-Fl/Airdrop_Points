@@ -6756,77 +6756,158 @@ with col_content:
                                             motivo = "EMA_200"
 
                             elif strategy == "RSI (20/80)":
+
+                                # ==============================
+                                # 1️⃣ CONFIGURAÇÕES
+                                # ==============================
+                                lookback_vol = n
+                                rsi_extreme_low = 29
+                                rsi_extreme_high = 71
+
+                                # ==============================
+                                # 2️⃣ CONTEXTO DE TENDÊNCIA
+                                # ==============================
+                                main_trend = "up" if price > ema200 else "down"
+
+                                # ==============================
+                                # 3️⃣ VOLUME ESTATÍSTICO (Z-SCORE)
+                                # ==============================
+                                vol_ma = df['volume'].rolling(20).mean().iloc[-1]
+                                vol_std = df['volume'].rolling(20).std().iloc[-1]
+                                
+                                if vol_std != 0:
+                                    vol_z = (df['volume'].iloc[-1] - vol_ma) / vol_std
+                                else:
+                                    vol_z = 0
+
+                                # ==============================
+                                # 4️⃣ VOLUME DIRECIONAL
+                                # ==============================
+                                df['down_vol'] = df.apply(
+                                    lambda r: r['volume'] if r['close'] < r['open'] else 0, axis=1
+                                )
+                                
+                                df['up_vol'] = df.apply(
+                                    lambda r: r['volume'] if r['close'] > r['open'] else 0, axis=1
+                                )
+                                
+                                recent_down = df['down_vol'].tail(lookback_vol).mean()
+                                prev_down = df['down_vol'].iloc[-(lookback_vol*2):-lookback_vol].mean()
+                                
+                                recent_up = df['up_vol'].tail(lookback_vol).mean()
+                                prev_up = df['up_vol'].iloc[-(lookback_vol*2):-lookback_vol].mean()
+                                
+                                volume_secando_down = recent_down < prev_down
+                                volume_secando_up = recent_up < prev_up
+
+                                # ==============================
+                                # 5️⃣ SCORE SYSTEM
+                                # ==============================
+                                score = 0
+                                sinal = None
+                                motivo = None
                                 # 1. Parâmetros de Volume Precedente
-                                lookback_vol = n  # Analisamos os últimos n candles após o pivot para ver a pressão
-                                ultimos_vol_df = df.tail(lookback_vol)
+                                #lookback_vol = 4  # Analisamos os últimos n candles após o pivot para ver a pressão
+                                #ultimos_vol_df = df.tail(lookback_vol)
                                 
                                 # Calcula se o volume está aumentando ou diminuindo na direção do RSI
                                 # Se RSI é baixo (queda), queremos ver se o volume de queda está secando
-                                media_vol_recente = ultimos_vol_df['volume'].mean()
-                                media_vol_anterior = df['volume'].iloc[-(lookback_vol*2):-lookback_vol].mean()
+                                #media_vol_recente = ultimos_vol_df['volume'].mean()
+                                #media_vol_anterior = df['volume'].iloc[-(lookback_vol*2):-lookback_vol].mean()
                                 
-                                volume_secando = media_vol_recente < media_vol_anterior
-                                volume_explodindo = media_vol_recente > (media_vol_anterior * 4)
+                                #volume_secando = media_vol_recente < media_vol_anterior
+                                #volume_explodindo = media_vol_recente > (media_vol_anterior * 4)
 
                                 # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
                                 main_trend_long = "up" if price > ema200 else "down"
 
-                                # --- LÓGICA DE COMPRA (BUY) ---
-                                if rsi_val <= 29:
-                                    # Caso 1: Pullback em tendência de alta com volume diminuindo (Exaustão de Venda)
-                                    if main_trend_long == "up" and volume_secando:
-                                        sinal = f"📈 SMART BUY (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Low-volume dip (drying up), indicating imminent reversal.\n"
-                                        motivo = f"RSI {rsi_val:.2f}_VOL_BUY"
+                                # ==========================================
+                                # 🟢 BUY LOGIC (RSI EXTREMO BAIXO)
+                                # ==========================================
+                                if rsi_val <= rsi_extreme_low:
                                     
-                                    # Caso 2: Exaustão extrema (RSI < 20) mesmo contra a tendência, mas com volume diminuindo
-                                    elif rsi_val <= 20 and volume_secando:
-                                        sinal = f"📈 STRONG BUY RSI REVERSAL: RSI {rsi_val:.2f}. Decreasing volume suggests selling pressure is drying up.\n"
-                                        motivo = f"RSI {rsi_val:.2f}_REVERSAL_VOL_BUY"
-                                        
-                                    elif volume_explodindo:
-                                        print(f"Low RSI but volume EXPLODING on the downside. Possible capitulation or news-driven move. Waiting.\n")
+                                    score = 0
+                                    
+                                    # Exaustão de venda
+                                    if volume_secando_down:
+                                        score += 1
+                                    
+                                    # Pullback dentro de tendência de alta
+                                    if main_trend == "up":
+                                        score += 1
+                                    
+                                    # Volume abaixo da média (perda de pressão)
+                                    if vol_z < -0.5:
+                                        score += 1
+                                    
+                                    # Capitulação forte (opcional – reversão agressiva)
+                                    capitulation = (rsi_val <= 20 and vol_z > 2)
+                                    if capitulation:
+                                        score += 2
+                                    
+                                    # Critério final
+                                    if score >= 4:
+                                        sinal = f"🚀 STRONG BUY (Capitulation Reversal) | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_STRONG_BUY_{score}"
+
+                                    elif score == 3:
+                                        sinal = f"🔥 SMART BUY | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_SMART_BUY_{score}"
+
+                                    elif score == 2:
+                                        sinal = f"📈 BUY | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_BUY_{score}"
 
                                 # --- LÓGICA DE VENDA (SELL) ---
                                 elif rsi_val >= 71:
                                     # Caso 1: Exaustão de alta em tendência de baixa com volume diminuindo
-                                    if main_trend_long == "down" and volume_secando:
+                                    if main_trend_long == "down" and volume_secando_up:
                                         sinal = f"📉 SMART SELL (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Weak bounce on declining volume, resistance ahead.\n"
                                         motivo = f"RSI {rsi_val:.2f}_VOL_SELL"
                                     
                                     # Caso 2: Topo extremo (RSI > 80) com volume secando
-                                    elif rsi_val >= 80 and volume_secando:
+                                    elif rsi_val >= 80 and volume_secando_up:
                                         sinal = f"📉 STRONG SELL RSI REVERSAL: RSI {rsi_val:.2f}. Exhausted Buyers (volume reducing).\n"
                                         motivo = f"RSI {rsi_val:.2f}_REVERSAL_VOL_SELL"
 
                                     elif volume_explodindo:
                                         print(f"High RSI but volume EXPLODING on the upside. Strong breakout momentum. Don't sell yet.\n")
 
-                            if "BUY" in sinal:
-                                preco_entrada = price * (1)
-                                if calcular_stop:
-                                    result = calcular_trade_levels(df, preco_entrada, tipo='BUY', p=0.2, risk_reward_ratio=ratio)
-                                    if result:
-                                        stop_loss = result['stop_loss']
-                                        take_profit = result['take_profit']
-                                    else:
-                                        stop_loss = price * (1 - stop_loss_pct/100)
-                                        take_profit = price * (1 + take_profit_pct/100)
-                                else:
-                                    stop_loss = price * (1 - stop_loss_pct/100)
-                                    take_profit = price * (1 + take_profit_pct/100)
-                            elif "SELL" in sinal:
-                                preco_entrada = price * (1)
-                                if calcular_stop:
-                                    result = calcular_trade_levels(df, preco_entrada, tipo='SELL', p=0.2, risk_reward_ratio=ratio)
-                                    if result:
-                                        stop_loss = result['stop_loss']
-                                        take_profit = result['take_profit']
-                                    else:
-                                        stop_loss = price * (1 + stop_loss_pct/100)
-                                        take_profit = price * (1 - take_profit_pct/100)
-                                else:
-                                    stop_loss = price * (1 + stop_loss_pct/100)
-                                    take_profit = price * (1 - take_profit_pct/100)
+                            # ==========================================
+                            # 🔴 SELL LOGIC (RSI EXTREMO ALTO)
+                            # ==========================================
+                            elif rsi_val >= rsi_extreme_high:
+                                
+                                score = 0
+                                
+                                # Exaustão de compra
+                                if volume_secando_up:
+                                    score += 1
+                                
+                                # Pullback dentro de tendência de baixa
+                                if main_trend == "down":
+                                    score += 1
+                                
+                                # Volume abaixo da média
+                                if vol_z < -0.5:
+                                    score += 1
+                                
+                                # Blow-off top (reversão agressiva)
+                                blowoff = (rsi_val >= 80 and vol_z > 2)
+                                if blowoff:
+                                    score += 2
+                                
+                                if score >= 4:
+                                    sinal = f"🚀 STRONG SELL (Blow-off Reversal) | RSI {rsi_val:.2f} | Score {score}"
+                                    motivo = f"RSI_STRONG_SELL_{score}"
+
+                                elif score == 3:
+                                    sinal = f"🔥 SMART SELL | RSI {rsi_val:.2f} | Score {score}"
+                                    motivo = f"RSI_SMART_SELL_{score}"
+
+                                elif score == 2:
+                                    sinal = f"📉 SELL | RSI {rsi_val:.2f} | Score {score}"
+                                    motivo = f"RSI_SELL_{score}"
 
                             from plotly.subplots import make_subplots
                             # =========================
