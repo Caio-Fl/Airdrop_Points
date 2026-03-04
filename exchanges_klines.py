@@ -10,7 +10,7 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
     
     # Lógica de períodos original
     if interval == "15m":
-        period_hours = 360
+        period_hours = 380
     elif interval == "1h":
         period_hours = 720
     elif interval == "4h":

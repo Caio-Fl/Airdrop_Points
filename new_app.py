@@ -5327,6 +5327,11 @@ with col_content:
         if "bot_rodando" not in st.session_state:
             st.session_state.bot_rodando = False
         
+        if "symbols_running" not in st.session_state:
+            st.session_state.symbols_running = []
+
+        if "lista_sinais" not in st.session_state:
+            st.session_state.lista_sinais = []
         # Inicialize os placeholders aqui para evitar o AttributeError
         #if "placeholder_log" not in st.session_state:
         #    st.session_state.placeholder_log = None
@@ -6018,35 +6023,14 @@ with col_content:
 
             return congestion, direcoes_ema
 
-        def calcular_rsi2(df, period=14):
-            delta = df['close'].diff()
-            gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
-            loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
-            
-            # Evita divisão por zero retornando 50 (neutro) se não houver variação
-            rs = gain / loss
-            rsi = 100 - (100 / (1 + rs))
-            return rsi.fillna(50) # Substitui NaN por 50
-
-        def calcular_rsi(df, period=14):
-            delta = df['close'].diff()
-            gain = (delta.where(delta > 0, 0))
-            loss = (-delta.where(delta < 0, 0))
-            # Uso de EMA (Wilder's method) para evitar NaNs e instabilidades
-            avg_gain = gain.ewm(com=period-1, adjust=False).mean()
-            avg_loss = loss.ewm(com=period-1, adjust=False).mean()
-            rs = avg_gain / avg_loss.replace(0, np.nan)
-            rsi = 100 - (100 / (1 + rs))
-            return rsi.fillna(50)
-
-        def calcular_rsi_perpetuo(df, period=14):
+        def calcular_rsi_perpetuo(df, period_rsi=14):
             delta = df['close'].diff()
 
             gain = delta.clip(lower=0)
             loss = -delta.clip(upper=0)
 
-            avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
-            avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+            avg_gain = gain.ewm(alpha=1/period_rsi, adjust=False).mean()
+            avg_loss = loss.ewm(alpha=1/period_rsi, adjust=False).mean()
 
             rs = avg_gain / avg_loss.replace(0, np.nan)
 
@@ -6387,9 +6371,9 @@ with col_content:
                 Higher values = more signals.
                 """
                     )
-                    period = 14
+                    period_rsi = 14
                 else:
-                    period = st.number_input(
+                    period_rsi = st.number_input(
                         "RSI Period",
                         value=14,
                         min_value=7,
@@ -6429,6 +6413,27 @@ with col_content:
                     help="If checked, the bot scans all available markets. If unchecked, it only scans selected token."
                 )
 
+                sym, ids = get_tickers(exchange=exchange, min_vol=min_vol)
+
+                if not evaluate_all_markets:
+
+                    selected_symbol = st.selectbox(
+                        "Choose Market:",
+                        sym,
+                        key="market_selector",
+                        disabled=evaluate_all_markets #or st.session_state.bot_rodando
+                    )
+                else:
+                    selected_symbol = None
+
+                if st.session_state.bot_rodando:
+                    symbols = st.session_state.symbols_running
+                else:
+                    if evaluate_all_markets:
+                        symbols = sym
+                    else:
+                        symbols = [selected_symbol]
+
                 
 
             # Seletor de Visualização
@@ -6443,15 +6448,26 @@ with col_content:
 
             with container_botao:
                 if not st.session_state.bot_rodando:
+
                     if st.button("🚀 START SCANNER", use_container_width=True):
+
+                        # 🔒 Agora selected_symbol já existe
+                        if evaluate_all_markets:
+                            st.session_state.symbols_running = sym.copy()
+                        else:
+                            st.session_state.symbols_running = [selected_symbol]
+
+                        #st.session_state.lista_sinais = []
                         st.session_state.bot_rodando = True
-                        st.session_state.lista_sinais = [] # Limpa sinais antigos ao começar novo ciclo
                         st.rerun()
+
                 else:
                     if st.button("🛑 STOP BOT", use_container_width=True):
                         st.session_state.bot_rodando = False
                         st.rerun()
-        
+
+            if st.session_state.bot_rodando:
+                symbols = st.session_state.symbols_running
 
             # -----------------------------
             # BUSCA DE DADOS BACKPACK
@@ -6472,13 +6488,6 @@ with col_content:
             #    st.error(f"Erro ao buscar tickers: {e}")
             #    symbol = []
             
-            sym, ids = get_tickers(exchange=exchange, min_vol=min_vol)
-
-            if evaluate_all_markets == False:
-                symbols = [st.selectbox("Choose Market:", sym)]
-            else:
-                symbols = sym   
-
         # EMAs por timeframe
         ema_periods = {
             "5m": [21, 50, 100, 200],
@@ -6489,7 +6498,7 @@ with col_content:
         }
 
         if interval == "15m":
-            period_hours = 360
+            period_hours = 380
         elif interval == "1h":
             period_hours = 720
         elif interval == "4h":
@@ -6617,7 +6626,8 @@ with col_content:
                                 df[f"EMA_{period}"] = df["close"].ewm(span=period, adjust=False).mean()
 
                             df['is_bull'] = df['close'] > df['open']
-                            df['RSI'] = calcular_rsi_perpetuo(df, period=period)
+                            df['RSI'] = calcular_rsi_perpetuo(df, period_rsi=period_rsi)
+                            #df["RSI"] = df["RSI"].rolling(14).mean()
 
                             # 📊 Bollinger Bands (period=20, k=2)
                             bb_period = 20
@@ -6787,9 +6797,9 @@ with col_content:
                                 # ==============================
                                 # 1️⃣ CONFIGURAÇÕES
                                 # ==============================
-                                lookback_vol = int(period * 0.40)
-                                rsi_extreme_low = 29
-                                rsi_extreme_high = 71
+                                lookback_vol = int(period * 0.35)
+                                rsi_extreme_low = 30
+                                rsi_extreme_high = 70
 
                                 # ==============================
                                 # 2️⃣ CONTEXTO DE TENDÊNCIA
@@ -6847,20 +6857,20 @@ with col_content:
 
                                 # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
                                 main_trend_long = "up" if price > ema200 else "down"
-
+                                print(rsi_val)
                                 # ==========================================
                                 # 🟢 BUY LOGIC (RSI EXTREMO BAIXO)
                                 # ==========================================
                                 if rsi_val <= rsi_extreme_low:
                                     
-                                    score = 0
+                                    score = 1
                                     
                                     # Exaustão de venda
                                     if volume_secando_down:
                                         score += 1
                                     
                                     # Pullback dentro de tendência de alta
-                                    if main_trend == "up":
+                                    if main_trend == "down":
                                         score += 1
                                     
                                     # Volume abaixo da média (perda de pressão)
@@ -6871,14 +6881,13 @@ with col_content:
                                     capitulation = (rsi_val <= 20 and vol_z > 2)
                                     if capitulation:
                                         score += 2
-                                    
                                     # Critério final
                                     if score >= 4:
-                                        sinal = f"🚀 STRONG BUY (Capitulation Reversal) | RSI {rsi_val:.2f} | Score {score}"
+                                        sinal = f"📈 STRONG BUY (Capitulation Reversal) | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_STRONG_BUY_{score}"
 
                                     elif score == 3:
-                                        sinal = f"🔥 SMART BUY | RSI {rsi_val:.2f} | Score {score}"
+                                        sinal = f"📈 SMART BUY | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_SMART_BUY_{score}"
 
                                     elif score == 2:
@@ -6889,15 +6898,15 @@ with col_content:
                                 # 🔴 SELL LOGIC (RSI EXTREMO ALTO)
                                 # ==========================================
                                 elif rsi_val >= rsi_extreme_high:
-                                    
-                                    score = 0
+                                   
+                                    score = 1
                                     
                                     # Exaustão de compra
                                     if volume_secando_up:
                                         score += 1
                                     
                                     # Pullback dentro de tendência de baixa
-                                    if main_trend == "down":
+                                    if main_trend == "up":
                                         score += 1
                                     
                                     # Volume abaixo da média
@@ -6910,16 +6919,44 @@ with col_content:
                                         score += 2
                                     
                                     if score >= 4:
-                                        sinal = f"🚀 STRONG SELL (Blow-off Reversal) | RSI {rsi_val:.2f} | Score {score}"
+                                        sinal = f"📉 STRONG SELL (Blow-off Reversal) | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_STRONG_SELL_{score}"
 
                                     elif score == 3:
-                                        sinal = f"🔥 SMART SELL | RSI {rsi_val:.2f} | Score {score}"
+                                        sinal = f"📉 SMART SELL | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_SMART_SELL_{score}"
 
                                     elif score == 2:
                                         sinal = f"📉 SELL | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_SELL_{score}"
+                            if sinal and isinstance(sinal, str):
+                                if "BUY" in sinal:
+                                    preco_entrada = price
+                                    if calcular_stop:
+                                        result = calcular_trade_levels(df, preco_entrada, tipo='BUY', p=0.2, risk_reward_ratio=ratio)
+                                        if result:
+                                            stop_loss = result['stop_loss']
+                                            take_profit = result['take_profit']
+                                        else:
+                                            stop_loss = price * (1 - stop_loss_pct/100)
+                                            take_profit = price * (1 + take_profit_pct/100)
+                                    else:
+                                        stop_loss = price * (1 - stop_loss_pct/100)
+                                        take_profit = price * (1 + take_profit_pct/100)
+
+                                elif "SELL" in sinal:
+                                    preco_entrada = price
+                                    if calcular_stop:
+                                        result = calcular_trade_levels(df, preco_entrada, tipo='SELL', p=0.2, risk_reward_ratio=ratio)
+                                        if result:
+                                            stop_loss = result['stop_loss']
+                                            take_profit = result['take_profit']
+                                        else:
+                                            stop_loss = price * (1 + stop_loss_pct/100)
+                                            take_profit = price * (1 - take_profit_pct/100)
+                                    else:
+                                        stop_loss = price * (1 + stop_loss_pct/100)
+                                        take_profit = price * (1 - take_profit_pct/100)
 
                             from plotly.subplots import make_subplots
                             # =========================
@@ -7005,6 +7042,7 @@ with col_content:
                             # =========================
 
                             fig.update_layout(
+                                title=f"{sym}",
                                 yaxis=dict(domain=[0.35, 1], title="Price (USD)"),    # topo, ocupa 65% da altura
                                 yaxis2=dict(domain=[0.15, 0.33], title="Volume"),     # meio, 18% da altura
                                 yaxis3=dict(domain=[0.0, 0.12], title="RSI", range=[0, 100]),  # base, 12% da altura
