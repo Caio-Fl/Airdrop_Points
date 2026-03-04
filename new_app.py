@@ -6238,29 +6238,7 @@ with col_content:
             col1, col2, col3 = st.columns(3) # Adicionando uma terceira coluna para o volume
             
             with col1:
-                strategy = st.selectbox("Strategy:", ["EMA Pullback", "RSI (20/80)"], key="bot_strat")
-                interval = st.selectbox("Timestamp:", ["5m", "15m", "1h", "4h", "1d"], index=1)
-                calcular_stop = st.checkbox("Auto Calculate Stop Loss and Take Profit", value=True)
-                mostrar_graficos = st.checkbox("Exibir Gráficos na Varredura", value=False)
-                
-            with col2:
-                price_type = st.selectbox("Price:", ["LastPrice", "IndexPrice"], index=0)
-                # O campo de volume que você pediu:
-                min_vol = st.number_input(
-                    "Min 24h Volume ($):", 
-                    min_value=10000,   # Mínimo permitido
-                    value=300000,      # Valor padrão inicial
-                    step=10000         # Incremento ao clicar nas setas
-                )
-                if calcular_stop:
-                    ratio = st.number_input("Risk Reward Ratio", value=2)
-                    stop_loss_pct = 1
-                    take_profit_pct = 2
-                else:
-                    take_profit_pct = st.number_input("Take Profit (%)", value=2)
-                    stop_loss_pct = st.number_input("Stop Loss (%)", value=1)
 
-            with col3:
                 exchanges = [
                     "backpack",
                     "mexc",
@@ -6289,15 +6267,140 @@ with col_content:
                     "Exchange:",
                     exchanges,
                     index=0,
-                    format_func=lambda x: x.replace(".", ". ").title().replace(". ", ".")
+                    format_func=lambda x: x.replace(".", ". ").title().replace(". ", "."),
+                    help="Select the exchange where the bot will scan for trade opportunities."
+                )
+                
+                interval = st.selectbox(
+                    "Timestamp:",
+                    ["5m", "15m", "1h", "4h", "1d"],
+                    index=1,
+                    help="""
+                Select the candle timeframe used for signal generation.
+
+                Lower timeframes:
+                • More signals
+                • More noise
+
+                Higher timeframes:
+                • Fewer signals
+                • Stronger trend structure
+                """
                 )
 
-                if strategy == "EMA Pullback":
-                    tolerancia_pct = st.number_input("EMA Touch Tolerance (%)", value=0.20)
-                else:
-                    tolerancia_pct = 0.20  
+                calcular_stop = st.checkbox(
+                    "Auto Calculate Stop Loss and Take Profit",
+                    value=True,
+                    help="""
+                Automatically defines Stop Loss and Take Profit
+                based on the selected Risk/Reward ratio.
 
-                evaluate_all_markets = st.checkbox("Verify All Markets", value=True)
+                If disabled, only entry signals are generated.
+                """
+                )
+
+                mostrar_graficos = st.checkbox(
+                    "Displays Chart",
+                    value=False,
+                    help="""
+                Displays chart previews for each detected setup.
+
+                May slow down scanning when verifying many markets.
+                Recommended only for manual analysis mode.
+                """
+                )
+                
+            with col2:
+                strategy = st.selectbox(
+                    "Strategy:",
+                    ["EMA Pullback", "RSI (20/80)"],
+                    key="bot_strat",
+                    help="""
+                Select the trading logic used to generate signals.
+
+                EMA Pullback:
+                • Trend-following strategy
+                • Looks for pullbacks into EMA structure (21/50/100/200)
+
+                RSI (20/80):
+                • Mean-reversion strategy
+                • Oversold below 20
+                • Overbought above 80
+                """
+                )
+
+                price_type = "LastPrice"
+                # O campo de volume que você pediu:
+                min_vol = st.number_input(
+                    "Min 24h Volume ($)",
+                    min_value=10000,
+                    value=300000,
+                    step=10000,
+                    help="""
+                Filters markets by minimum 24h trading volume.
+
+                Higher values:
+                • More liquidity
+                • Lower slippage
+                • Cleaner technical setups
+
+                Lower values:
+                • More trade opportunities
+                • Higher volatility
+                • Higher slippage risk
+                """
+                )
+                if calcular_stop:
+                    ratio = st.number_input(
+                        "Risk Reward Ratio",
+                        value=2.0,
+                        min_value=0.5,
+                        step=0.5,
+                        help="""
+                    Defines the Take Profit distance relative to Stop Loss.
+
+                    Example:
+                    RR = 2.0 → If Stop Loss is 1%, Take Profit will be 2%.
+                    Higher RR = larger targets but lower win rate.
+                    Lower RR = smaller targets but higher win rate.
+                    """
+                    )
+                    stop_loss_pct = 1
+                    take_profit_pct = 2
+                else:
+                    take_profit_pct = st.number_input("Take Profit (%)", value=2)
+                    stop_loss_pct = st.number_input("Stop Loss (%)", value=1)
+
+            with col3:
+
+
+                if strategy == "EMA Pullback":
+                    tolerancia_pct = st.number_input(
+                        "EMA Touch Tolerance (%)",
+                        value=0.20,
+                        min_value=0.0,
+                        step=0.05,
+                        help="""
+                Defines how close price must be to the EMA to be considered a valid pullback.
+                Example: 0.20 means the price can deviate up to 0.20% from the EMA.
+                Lower values = stricter entries.
+                Higher values = more signals.
+                """
+                    )
+                else:
+                    tolerancia_pct = 0.20
+                
+                aligned_ema = st.checkbox(
+                    "Only Aligned EMA's Trend",
+                    value=True,
+                    help="When enabled, only shows setups where EMA 21, 50, 100 and 200 are aligned in the same trend direction."
+                )
+
+                evaluate_all_markets = st.checkbox(
+                    "Verify All Markets",
+                    value=True,
+                    help="If checked, the bot scans all available markets. If unchecked, it only scans selected token."
+                )
 
                 
 
@@ -6596,6 +6699,12 @@ with col_content:
                             sinal = "⚪ No Signal Detected"
                             preco_entrada = stop_loss = take_profit = None
                             motivo = ""
+                            if aligned_ema:
+                                bearish_trend = ema200 > ema100 > ema50 > ema21
+                                bull_trend = ema21 > ema50 > ema100 > ema200
+                            else:
+                                bearish_trend = True
+                                bull_trend = True
                             
                             if strategy == "EMA Pullback":
                                 if ema21 and ema50 and ema100 and ema200:
@@ -6612,37 +6721,37 @@ with col_content:
                                     delta200 = ((price - ema200) / ema200) * 100
                                     # ---- EMA_21 ----
                                     if (-tolerancia_pct < delta21 < tolerancia_pct):
-                                        if tendencia_recente == "increasing" and t_ema21["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        if tendencia_recente == "increasing" and bearish_trend and t_ema21["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📉 SELL (resistance EMA_21): price {price:.5f} touched EMA_21 coming from below and the weak volume indicates this as pullback."
                                             motivo = "EMA_21"
-                                        elif tendencia_recente == "decreasing" and t_ema21["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        elif tendencia_recente == "decreasing" and bull_trend and t_ema21["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📈 BUY (support EMA_21): price {price:.5f} touched EMA_21 coming from above and the weak volume indicates this as pullback."
                                             motivo = "EMA_21"
 
                                     # ---- EMA_50 ----
                                     elif (-tolerancia_pct < delta50 < tolerancia_pct):
-                                        if tendencia_recente == "increasing" and t_ema50["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        if tendencia_recente == "increasing" and bearish_trend and t_ema50["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📉 SELL (resistance EMA_50): price {price:.5f} touched EMA_50 coming from below and the weak volume indicates this as pullback."
                                             motivo = "EMA_50"
-                                        elif tendencia_recente == "decreasing" and t_ema50["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        elif tendencia_recente == "decreasing" and bull_trend and t_ema50["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📈 BUY (support EMA_50): price {price:.5f} touched EMA_50 coming from above and the weak volume indicates this as pullback."
                                             motivo = "EMA_50"
 
                                     # ---- EMA_100 ----
                                     elif (-tolerancia_pct < delta100 < tolerancia_pct):
-                                        if tendencia_recente == "increasing" and t_ema100["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        if tendencia_recente == "increasing" and bearish_trend and t_ema100["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📉 STRONG SELL (resistance EMA_100): price {price:.5f} touched EMA_100 coming from below and the weak volume indicates this as pullback."
                                             motivo = "EMA_100"
-                                        elif tendencia_recente == "decreasing" and t_ema100["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        elif tendencia_recente == "decreasing" and bull_trend and t_ema100["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📈 STRONG BUY (support EMA_100): price {price:.5f} touched EMA_100 coming from above and the weak volume indicates this as pullback."
                                             motivo = "EMA_100"
 
                                     # ---- EMA_200 ----
                                     elif (-tolerancia_pct < delta200 < tolerancia_pct):
-                                        if tendencia_recente == "increasing" and t_ema200["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        if tendencia_recente == "increasing" and bearish_trend and t_ema200["trend"] == "decreasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📉 VERY STRONG SELL (resistance EMA_200): price {price:.5f} touched EMA_200 coming from below and the weak volume indicates this as pullback."
                                             motivo = "EMA_200"
-                                        elif tendencia_recente == "decreasing" and t_ema200["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
+                                        elif tendencia_recente == "decreasing" and bull_trend and t_ema200["trend"] == "increasing" and congestao == False and pullback_volume["classificacao"] != "possible reversal (dominant counter volume)" and pullback_volume["classificacao"] != "dangerous pullback (week volume, but dominant counter candles)":
                                             sinal = f"📈 VERY STRONG BUY (support EMA_200): price {price:.5f} touched EMA_200 coming from above and the weak volume indicates this as pullback."
                                             motivo = "EMA_200"
 
@@ -6657,7 +6766,7 @@ with col_content:
                                 media_vol_anterior = df['volume'].iloc[-(lookback_vol*2):-lookback_vol].mean()
                                 
                                 volume_secando = media_vol_recente < media_vol_anterior
-                                volume_explodindo = media_vol_recente > (media_vol_anterior * 9)
+                                volume_explodindo = media_vol_recente > (media_vol_anterior * 4)
 
                                 # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
                                 main_trend_long = "up" if price > ema200 else "down"
