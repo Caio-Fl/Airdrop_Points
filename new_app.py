@@ -6787,7 +6787,7 @@ with col_content:
                                 # ==============================
                                 # 1️⃣ CONFIGURAÇÕES
                                 # ==============================
-                                lookback_vol = period*0.40
+                                lookback_vol = int(period * 0.40)
                                 rsi_extreme_low = 29
                                 rsi_extreme_high = 71
 
