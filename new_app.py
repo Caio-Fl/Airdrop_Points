@@ -555,15 +555,15 @@ import requests
 # 1. Coloque a lógica dentro de uma função para isolar do layout principal
 def gerar_ticker():
     tokens = {
-        "bitcoin": {"name": "BTC", "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png"},
-        "ethereum": {"name": "ETH", "icon": "https://cryptologos.cc/logos/ethereum-eth-logo.png"},
-        "solana": {"name": "SOL", "icon": "https://cryptologos.cc/logos/solana-sol-logo.png"},
-        "binancecoin": {"name": "BNB", "icon": "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"},
+        "bitcoin": {"name": "BTC", "icon": "https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"},
+        "ethereum": {"name": "ETH", "icon": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"},
+        "solana": {"name": "SOL", "icon": "https://assets.coingecko.com/coins/images/4128/standard/solana.png?1718769756"},
+        "binancecoin": {"name": "BNB", "icon": "https://assets.coingecko.com/coins/images/825/standard/bnb-icon2_2x.png?1696501970"},
         "hyperliquid": {"name": "HYPE", "icon": "https://assets.coingecko.com/coins/images/50882/standard/hyperliquid.jpg?1729431300"},
-        "aave": {"name": "AAVE", "icon": "https://cryptologos.cc/logos/aave-aave-logo.png"},
-        "ripple": {"name": "XRP", "icon": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=002"},
-        "sui": {"name": "SUI", "icon": "https://cryptologos.cc/logos/sui-sui-logo.png"},
-        "chainlink": {"name": "LINK", "icon": "https://cryptologos.cc/logos/chainlink-link-logo.png"},
+        "aave": {"name": "AAVE", "icon": "https://assets.coingecko.com/coins/images/12645/standard/aave-token-round.png?1720472354"},
+        "ripple": {"name": "XRP", "icon": "https://assets.coingecko.com/coins/images/44/standard/xrp-symbol-white-128.png?1696501442"},
+        "sui": {"name": "SUI", "icon": "https://assets.coingecko.com/coins/images/26375/standard/sui-ocean-square.png?1727791290"},
+        "chainlink": {"name": "LINK", "icon": "https://assets.coingecko.com/coins/images/877/standard/Chainlink_Logo_500.png?1760023405"},
         "ethena": {"name": "ENA", "icon": "https://assets.coingecko.com/coins/images/36530/standard/ethena.png?1711701436"},
     }
 
