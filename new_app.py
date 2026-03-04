@@ -6857,7 +6857,7 @@ with col_content:
 
                                 # 2. Filtro de Contexto (EMA 200 ainda é útil para saber o lado do mercado)
                                 main_trend_long = "up" if price > ema200 else "down"
-                                print(rsi_val)
+                               
                                 # ==========================================
                                 # 🟢 BUY LOGIC (RSI EXTREMO BAIXO)
                                 # ==========================================
