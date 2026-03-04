@@ -7,9 +7,9 @@ import pandas as pd
 import time
 from datetime import datetime, timezone
 from get_leader_Ethena_function import get_ethena_Data
-from get_Leader_Spark_Data import get_Leader_Spark_Data
+#from get_Leader_Spark_Data import get_Leader_Spark_Data
 from get_fragmetric_data import get_fragmetric_data
-from get_leader_Gaib_function import get_leader_Gaib_function
+#from get_leader_Gaib_function import get_leader_Gaib_function
 from get_Pendle_Data import get_Pendle_Data
 from get_rateX_data import get_rateX_data
 from get_leader_kyros_function import get_leader_kyros_function
