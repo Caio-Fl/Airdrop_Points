@@ -6389,12 +6389,15 @@ with col_content:
                     )
                 else:
                     tolerancia_pct = 0.20
-                
-                aligned_ema = st.checkbox(
-                    "Only Aligned EMA's Trend",
-                    value=True,
-                    help="When enabled, only shows setups where EMA 21, 50, 100 and 200 are aligned in the same trend direction."
-                )
+
+                if strategy == "EMA Pullback":
+                    aligned_ema = st.checkbox(
+                        "Only Aligned EMA's Trend",
+                        value=True,
+                        help="When enabled, only shows setups where EMA 21, 50, 100 and 200 are aligned in the same trend direction."
+                    )
+                else:
+                    aligned_ema = True
 
                 evaluate_all_markets = st.checkbox(
                     "Verify All Markets",
@@ -6858,56 +6861,41 @@ with col_content:
                                         sinal = f"📈 BUY | RSI {rsi_val:.2f} | Score {score}"
                                         motivo = f"RSI_BUY_{score}"
 
-                                # --- LÓGICA DE VENDA (SELL) ---
-                                elif rsi_val >= 71:
-                                    # Caso 1: Exaustão de alta em tendência de baixa com volume diminuindo
-                                    if main_trend_long == "down" and volume_secando_up:
-                                        sinal = f"📉 SMART SELL (RSI + Vol Exhaustion): RSI {rsi_val:.2f}. Weak bounce on declining volume, resistance ahead.\n"
-                                        motivo = f"RSI {rsi_val:.2f}_VOL_SELL"
+                                # ==========================================
+                                # 🔴 SELL LOGIC (RSI EXTREMO ALTO)
+                                # ==========================================
+                                elif rsi_val >= rsi_extreme_high:
                                     
-                                    # Caso 2: Topo extremo (RSI > 80) com volume secando
-                                    elif rsi_val >= 80 and volume_secando_up:
-                                        sinal = f"📉 STRONG SELL RSI REVERSAL: RSI {rsi_val:.2f}. Exhausted Buyers (volume reducing).\n"
-                                        motivo = f"RSI {rsi_val:.2f}_REVERSAL_VOL_SELL"
+                                    score = 0
+                                    
+                                    # Exaustão de compra
+                                    if volume_secando_up:
+                                        score += 1
+                                    
+                                    # Pullback dentro de tendência de baixa
+                                    if main_trend == "down":
+                                        score += 1
+                                    
+                                    # Volume abaixo da média
+                                    if vol_z < -0.5:
+                                        score += 1
+                                    
+                                    # Blow-off top (reversão agressiva)
+                                    blowoff = (rsi_val >= 80 and vol_z > 2)
+                                    if blowoff:
+                                        score += 2
+                                    
+                                    if score >= 4:
+                                        sinal = f"🚀 STRONG SELL (Blow-off Reversal) | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_STRONG_SELL_{score}"
 
-                                    elif volume_explodindo:
-                                        print(f"High RSI but volume EXPLODING on the upside. Strong breakout momentum. Don't sell yet.\n")
+                                    elif score == 3:
+                                        sinal = f"🔥 SMART SELL | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_SMART_SELL_{score}"
 
-                            # ==========================================
-                            # 🔴 SELL LOGIC (RSI EXTREMO ALTO)
-                            # ==========================================
-                            elif rsi_val >= rsi_extreme_high:
-                                
-                                score = 0
-                                
-                                # Exaustão de compra
-                                if volume_secando_up:
-                                    score += 1
-                                
-                                # Pullback dentro de tendência de baixa
-                                if main_trend == "down":
-                                    score += 1
-                                
-                                # Volume abaixo da média
-                                if vol_z < -0.5:
-                                    score += 1
-                                
-                                # Blow-off top (reversão agressiva)
-                                blowoff = (rsi_val >= 80 and vol_z > 2)
-                                if blowoff:
-                                    score += 2
-                                
-                                if score >= 4:
-                                    sinal = f"🚀 STRONG SELL (Blow-off Reversal) | RSI {rsi_val:.2f} | Score {score}"
-                                    motivo = f"RSI_STRONG_SELL_{score}"
-
-                                elif score == 3:
-                                    sinal = f"🔥 SMART SELL | RSI {rsi_val:.2f} | Score {score}"
-                                    motivo = f"RSI_SMART_SELL_{score}"
-
-                                elif score == 2:
-                                    sinal = f"📉 SELL | RSI {rsi_val:.2f} | Score {score}"
-                                    motivo = f"RSI_SELL_{score}"
+                                    elif score == 2:
+                                        sinal = f"📉 SELL | RSI {rsi_val:.2f} | Score {score}"
+                                        motivo = f"RSI_SELL_{score}"
 
                             from plotly.subplots import make_subplots
                             # =========================
