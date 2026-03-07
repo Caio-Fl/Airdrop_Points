@@ -7784,7 +7784,10 @@ with col_content:
 
         # --- 4. Lógica de Filtragem e Ordenação ---
         filtered_ranking = [p for p in solana_ranking if p['risk'] in selected_risks]
-        filtered_ranking.sort(key=lambda x: float(x['apy'].replace('%', '')), reverse=True)
+        filtered_ranking.sort(
+            key=lambda x: float(str(x.get('apy', 0)).replace('%', '')) if x.get('apy') else 0,
+            reverse=True
+        )
 
         if not filtered_ranking:
             st.info("No protocols match the selected filters.")
