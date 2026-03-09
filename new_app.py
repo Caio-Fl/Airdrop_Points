@@ -6193,7 +6193,39 @@ with col_content:
                         if float(info.get("quote_volume", 0)) >= min_vol:
                             all_symbols.append(ticker)
                             ids[ticker] = info.get("product_id")
+
+                # --- LÓGICA 01 ---
+                elif exchange == "01":
+                    try:
+                        # 1. Pegar a lista de todos os mercados
+                        info_res = requests.get("https://zo-mainnet.n1.xyz/info", timeout=10)
+                        if info_res.status_code == 200:
+                            markets_data = info_res.json().get("markets", [])
                             
+                            for m in markets_data:
+                                m_id = m.get("marketId")
+                                ticker = m.get("symbol")
+                                
+                                # 2. Para cada mercado, buscar o volume 24h individualmente
+                                try:
+                                    stats_url = f"https://zo-mainnet.n1.xyz/market/{m_id}/stats"
+                                    stats_res = requests.get(stats_url, timeout=1)
+                                    
+                                    if stats_res.status_code == 200:
+                                        stats = stats_res.json()
+                                        # Usamos volumeQuote24h que geralmente representa o volume em dólar (USDC)
+                                        vol_24h = float(stats.get("volumeQuote24h", 0) or 0)
+                                        
+                                        if vol_24h >= min_vol:
+                                            all_symbols.append(ticker)
+                                            ids[ticker] = str(m_id)
+                                            
+                                except Exception:
+                                    # Se falhar um ticker específico (ex: link quebrado), ignora e pula pro próximo
+                                    continue
+                                    
+                    except Exception as e:
+                        st.error(f"Erro ao carregar dados da 01: {e}")
 
             except Exception as e:
                 print(f"Erro ao buscar tickers na {exchange}: {e}")
@@ -6232,6 +6264,7 @@ with col_content:
                     "hyperliquid",
                     "lighter",
                     "nado",
+                    "01"
                 ]
 
                 logos = {
@@ -6245,6 +6278,7 @@ with col_content:
                     "hyperliquid": "https://pbs.twimg.com/profile_images/2001260078352285697/f5cl2Syx_400x400.jpg",
                     "lighter": "https://pbs.twimg.com/profile_images/1968693128002412544/mH8iX9SN_400x400.jpg",
                     "nado": "https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg",
+                    "01": "https://pbs.twimg.com/profile_images/1553029460236337152/QjHF5aPb_400x400.jpg"
                 }
 
                 exchange = st.selectbox(
@@ -6520,6 +6554,7 @@ with col_content:
                 "hyperliquid": "https://app.hyperliquid.xyz/join/HYPER15",
                 "lighter": "https://app.lighter.xyz/?referral=LIGHTER15",
                 "nado": "https://app.nado.xyz/perpetuals?join=TMTHHkO",
+                "01": "https://01.xyz/ref/019cd269-db19-7527-9391-928671d76bb9"
             }
 
             # --- 4. ÁREA DE EXECUÇÃO DO SCANNER ---
@@ -6592,6 +6627,7 @@ with col_content:
                         #response.raise_for_status()
                         #klines = response.json()
                         klines = get_klines_data(exchange, sym, interval, price_type, market_id=m_id)
+                        
                         
                         if klines:
                             # Cria DataFrame
@@ -7222,7 +7258,6 @@ with col_content:
 
                 if evaluate_all_markets == False:
                     log_placeholder = st.empty()
-                    print(log_text)
                     log_placeholder.code(log_text)
                 
                 status_text.success(f"✅ Search Complete! {total_moedas} tokens processed with {len(all_signals)} opportunities founded.")

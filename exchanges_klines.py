@@ -326,6 +326,45 @@ def get_klines_data(exchange, sym, interval, price_type="last", market_id=None):
                     "quoteVolume": float(k["volume"]) / factor
                 } for k in json_data["candlesticks"]]
     
+        # --- LÓGICA 01 (TradingView Style) ---
+        elif exchange.lower() == "01":
+            # Mapeamento de intervalos para a 01 (em minutos)
+            map_res = {"1m": "1", "5m": "5", "15m": "15", "1h": "60", "4h": "240", "1d": "D"}
+            resolution = map_res.get(interval, "15")
+            
+            # A API da 01 espera o símbolo (ex: SOLUSD) e o tempo em segundos
+            url = "https://zo-mainnet.n1.xyz/tv/history"
+            
+            # Caso o símbolo venha como 'SOL_USDC_PERP', limpamos para o padrão deles 'SOLUSD'
+            clean_sym = sym.replace("_USDC_PERP", "USD").replace("_", "").upper()
+            if "USD" not in clean_sym:
+                clean_sym = f"{clean_sym}USD"
+
+            params = {
+                "symbol": clean_sym,
+                "resolution": resolution,
+                "from": int(start_time),
+                "to": int(now),
+                "countback": 1000 # Quantidade de velas para retornar
+            }
+
+            resp = requests.get(url, params=params, timeout=10)
+            
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get("s") == "ok":
+                    # Aqui usamos o "esquema Hyperliquid": 
+                    # Uma lista criada e retornada em uma única instrução
+                    return [{
+                        "start": datetime.fromtimestamp(data['t'][i]).strftime('%Y-%m-%d %H:%M:%S'),
+                        "open": float(data['o'][i]),
+                        "high": float(data['h'][i]),
+                        "low": float(data['l'][i]),
+                        "close": float(data['c'][i]),
+                        "volume": float(data['v'][i]),
+                        "quoteVolume": float(data['v'][i])
+                    } for i in range(len(data.get('t', [])))]
+
     except Exception as e:
         print(f"❌ Erro na exchange {exchange} para {sym}: {e}")
         return []
