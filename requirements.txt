@@ -6,7 +6,7 @@ matplotlib
 streamlit_option_menu
 langchain-core
 langchain-mistralai
-mistralai
+mistralai==1.7.0
 python-dotenv
 cloudscraper
 openpyxl
