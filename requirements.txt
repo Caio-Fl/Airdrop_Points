@@ -3,12 +3,11 @@ plotly
 pandas
 requests
 matplotlib
-plotly
 streamlit_option_menu
 langchain-core
 langchain-mistralai
 mistralai
-dotenv
+python-dotenv
 cloudscraper
 openpyxl
 scipy
