@@ -1186,11 +1186,11 @@ with col_content:
         referral = ""
         logo_url = ""
 
-        protocolos = ["Nado","Backpack", "Variational", "Pacifica", "Ostium", "Paradex", "Extended", "Gvrt S2", "EdgeX", "Reya", "Any"]
+        protocolos = ["Nado","01", "Variational", "Pacifica", "Ostium", "Paradex", "Extended", "Gvrt S2", "EdgeX", "Reya", "Any"]
 
         logos = {
             "Nado": "https://pbs.twimg.com/profile_images/2010908038514032641/5E7RkPLF_400x400.jpg",
-            "Backpack": "https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg",
+            "01": "https://pbs.twimg.com/profile_images/1553029460236337152/QjHF5aPb_400x400.jpg",
             "Variational": "https://pbs.twimg.com/profile_images/1983193863532548096/2FkeRmBg_400x400.jpg",
             "Pacifica": "https://pbs.twimg.com/profile_images/1911022804159389696/THxMFj50_400x400.jpg",
             "Paradex": "https://pbs.twimg.com/profile_images/2001911524429041669/P9KQbeNz_400x400.jpg",
@@ -1285,23 +1285,23 @@ with col_content:
                     if selected_protocol == "Nado":
                         date_tge = st.text_input("📅 TGE Date", "2026-08-30")
                         last_update = "2026-01-29"
-                        FDV, airdrop_pct, your_points = 500, 20, 1000
+                        FDV, airdrop_pct, your_points = 300, 20, 1000
                         total_points = calc(date_tge, 8_915_074, 950_000/7, last_update)
                         referral = "https://app.nado.xyz?join=TMTHHkO"
                         logo_url = logos["Nado"]
 
-                    if selected_protocol == "Backpack":
-                        date_tge = st.text_input("📅 TGE Date", "2026-01-28")
-                        last_update = "2026-01-26"
-                        FDV, airdrop_pct, your_points = 1000, 24, 1_000
-                        total_points = calc(date_tge, 420_790_000, 10_000_000/7, last_update)
-                        referral = "https://backpack.exchange/join/jj2kkdp1"
-                        logo_url = logos["Backpack"]
+                    if selected_protocol == "01":
+                        date_tge = st.text_input("📅 TGE Date", "2026-09-01")
+                        last_update = "2026-03-23"
+                        FDV, airdrop_pct, your_points = 50, 15, 1_000
+                        total_points = calc(date_tge, 2_333_333, 10000000/30, last_update)
+                        referral = "https://01.xyz/ref/019cd269-db19-7527-9391-928671d76bb9"
+                        logo_url = logos["01"]
 
                     elif selected_protocol == "Variational":
                         date_tge = st.text_input("📅 TGE Date", "2026-10-01")
                         last_update = "2026-01-02"
-                        FDV, airdrop_pct, your_points = 1000, 20, 100
+                        FDV, airdrop_pct, your_points = 500, 20, 100
                         total_points = calc(date_tge, 3_450_000, 150_000/7, last_update)
                         referral = "https://omni.variational.io/"
                         logo_url = logos["Variational"]
@@ -1309,7 +1309,7 @@ with col_content:
                     elif selected_protocol == "Pacifica":
                         date_tge = st.text_input("📅 TGE Date", "2026-10-01")
                         last_update = "2026-01-20"
-                        FDV, airdrop_pct, your_points = 300, 20, 1_000
+                        FDV, airdrop_pct, your_points = 200, 20, 1_000
                         total_points = calc(date_tge, 190_000_000, 10_000_000/7, last_update)
                         referral = "https://app.pacifica.fi?referral=PacificaRef"
                         logo_url = logos["Pacifica"]
@@ -1317,7 +1317,7 @@ with col_content:
                     elif selected_protocol == "Paradex":
                         date_tge = st.text_input("📅 TGE Date", "2026-02-01")
                         last_update = "2026-01-15"
-                        FDV, airdrop_pct, your_points = 1000, 20, 1_000
+                        FDV, airdrop_pct, your_points = 500, 20, 1_000
                         total_points = calc(date_tge, 323_000_000, 4_200_000/7, last_update)
                         referral = "https://app.paradex.trade/r/Paradex15"
                         logo_url = logos["Paradex"]
@@ -1325,7 +1325,7 @@ with col_content:
                     elif selected_protocol == "Extended":
                         date_tge = st.text_input("📅 TGE Date", "2026-06-01")
                         last_update = "2026-01-19"
-                        FDV, airdrop_pct, your_points = 500, 20, 100
+                        FDV, airdrop_pct, your_points = 200, 20, 100
                         total_points = calc(date_tge, 46_403_962, 1_034_000/7, last_update)
                         referral = "https://app.extended.exchange/join/EXT3NDED15"
                         logo_url = logos["Extended"]
@@ -1333,7 +1333,7 @@ with col_content:
                     elif selected_protocol == "Gvrt S2":
                         date_tge = st.text_input("📅 TGE Date", "2026-04-01")
                         last_update = "2026-01-20"
-                        FDV, airdrop_pct, your_points = 500, 12, 100
+                        FDV, airdrop_pct, your_points = 200, 12, 100
                         total_points = calc(date_tge, 2_325_000, 135_000/7, last_update)
                         referral = "https://grvt.io/?ref=C496Y64"
                         logo_url = logos["Gvrt S2"]
@@ -1341,7 +1341,7 @@ with col_content:
                     elif selected_protocol == "Ostium":
                         date_tge = st.text_input("📅 TGE Date", "2026-12-21")
                         last_update = "2026-01-26"
-                        FDV, airdrop_pct, your_points = 500, 20, 1_000
+                        FDV, airdrop_pct, your_points = 200, 20, 1_000
                         total_points = calc(date_tge, 32_500_000, 500_000/7, last_update)
                         referral = "https://app.ostium.com/trade?from=SPX&to=USD&ref=EIETH"
                         logo_url = logos["Ostium"]
@@ -1349,7 +1349,7 @@ with col_content:
                     elif selected_protocol == "EdgeX":
                         date_tge = st.text_input("📅 TGE Date", "2026-03-31")
                         last_update = "2026-01-07"
-                        FDV, airdrop_pct, your_points = 1000, 25, 100
+                        FDV, airdrop_pct, your_points = 200, 25, 100
                         total_points = calc(date_tge, 7_300_000, 0, last_update)
                         referral = "https://pro.edgex.exchange/referral/EDGE15"
                         logo_url = logos["EdgeX"]
@@ -1357,7 +1357,7 @@ with col_content:
                     elif selected_protocol == "Reya":
                         date_tge = st.text_input("📅 TGE Date", "2026-03-31")
                         last_update = "2026-01-26"
-                        FDV, airdrop_pct, your_points = 500, 20, 100
+                        FDV, airdrop_pct, your_points = 200, 20, 100
                         total_points = calc(date_tge, 10_500_000, 153_000/7, last_update)
                         referral = "https://app.reya.xyz/trade?referredBy=xe369dux"
                         logo_url = logos["Reya"]
@@ -3730,7 +3730,6 @@ with col_content:
             {"name":"Extended","priority":"A","funding":"Ex-Revolut","site":"https://app.extended.exchange/join/EXT3NDED15","twitter":"https://x.com/extendedapp","discord":"https://discord.gg/extendedapp","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1876581196173320192/pF4KQQCb_400x400.jpg", "maker": "0%", "taker": "0.025%", "leverage": "50x"},
             {"name":"StandX","priority":"A","funding":"Ex-Binance","site":"https://standx.com/referral?code=STAND_5","twitter":"https://x.com/StandX_Official","discord":"https://discord.gg/standx","status":"Early Farming","application":"Perp Infra","image":"https://pbs.twimg.com/profile_images/2005237613246959616/UHa0DROv_400x400.jpg", "maker": "0.03%", "taker": "0%", "leverage": "40x"},
             {"name":"HyENA","priority":"A","funding":"Ethena / Hyperliquid","site":"https://app.hyena.trade","twitter":"https://x.com/hyenatrade","discord":"https://hyena.trade","status":"Early Farming","application":"Meta Perp","image":"https://pbs.twimg.com/profile_images/1994070254411038720/aYWh2ESb_400x400.jpg", "maker": "0.0167%", "taker": "0.05%", "leverage": "40X"},
-            {"name":"Backpack","priority":"A","funding":"Strong backing","site":"https://backpack.exchange/join/jj2kkdp1","twitter":"https://x.com/Backpack","discord":"https://discord.gg/backpack","status":"Ending Farming","application":"Exchange","image":"https://pbs.twimg.com/profile_images/1957829985143791616/sA2YoWNq_400x400.jpg", "maker": "0.02%", "taker": "0.05%", "leverage": "50x"},
             
             # ======================
             # 🟡 PRIORIDADE B
