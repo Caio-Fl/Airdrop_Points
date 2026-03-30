@@ -916,9 +916,10 @@ with col_left:
             st.session_state.pagina = "📈 Trade Opportunity Bot"
         if st.button("💎 Points Viewer", key="btn_points"):
             st.session_state.pagina = "💎 Airdrop Points Viewer"
-        if st.button("🎒 Backpack Check", key="btn_backpack"):
-            st.session_state.pagina = "🎒 BackPack Volume Check"
-
+        if st.button("🌉 Bridges & Swaps Protocols", key="btn_bridge"):
+            st.session_state.pagina = "🌉 Bridges & Swaps Protocols"
+        if st.button("🚰 Faucets", key="btn_faucets"):
+            st.session_state.pagina = "🚰 Faucets"
     # --- SEÇÃO RETRÁTIL: AIRDROPS ---
     with st.expander("🪂 AIRDROPS", expanded=False): # False para começar fechado
         if st.button("♾️ PerpDex Airdrops", key="btn_perpdex"):
@@ -3744,7 +3745,7 @@ with col_content:
             # ======================
             {"name":"Reya","priority":"C","funding":"CoinList","site":"https://app.reya.xyz/trade?referredBy=xe369dux","twitter":"https://x.com/reya_xyz","discord":"https://discord.gg/reya","status":"Mid Farming","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1969675819510374400/V-ldI5xq_400x400.png", "maker": "0.04%", "taker": "0.04%", "leverage": "100x"},
             {"name":"EdgeX","priority":"C","funding":"VC backed","site":"https://pro.edgex.exchange/referral/EDGE15","twitter":"https://x.com/edgeX_exchange","discord":"https://discord.gg/edgex","status":"Pre-TGE","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1976495879319322624/mMUMJ9ym_400x400.jpg", "maker": "0.012%", "taker": "0.038%", "leverage": "100x"},
-            {"name":"Hibachi","priority":"C","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/1956079411758870529/S4XqEf2n_400x400.jpg", "maker": "0%", "taker": "0.045%", "leverage": "5x"},
+            {"name":"Hibachi","priority":"C","funding":"ZK","site":"https://hibachi.xyz","twitter":"https://x.com/hibachi_xyz","discord":"https://discord.gg/hibachi","status":"Monitoring","application":"ZK Perps","image":"https://pbs.twimg.com/profile_images/2027080000231419904/x7Atysy8_400x400.png", "maker": "0%", "taker": "0.045%", "leverage": "5x"},
             {"name":"GRVT","priority":"C","funding":"Institutional","site":"https://grvt.io/?ref=C496Y64","twitter":"https://x.com/grvt_io","discord":"https://discord.gg/3jsVPwaGeB","status":"Season 2","application":"Perp + Yield","image":"https://pbs.twimg.com/profile_images/1991661582527655936/Kn9vFGru_400x400.jpg", "maker": "-0.0001%", "taker": "0.055%", "leverage": "50x"},
             {"name":"Apex","priority":"C","funding":"Live token","site":"https://omni.apex.exchange/referral?referralCode=OK0IKNEJ!","twitter":"https://x.com/OfficialApeXdex","discord":"https://discord.gg/apexprotocol","status":"Ongoing","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/1731089772423081984/v-oW-QsC_400x400.jpg", "maker": "0%", "taker": "0.025%", "leverage": "50x"},
             {"name":"Aster","priority":"C","funding":"Multiple VCs","site":"https://asterdex.com","twitter":"https://x.com/Aster_DEX","discord":"https://discord.gg/asterdex","status":"Ongoing Drops","application":"Perp DEX","image":"https://pbs.twimg.com/profile_images/2008172513965326336/4MwHdULr_400x400.jpg", "maker": "0.01%", "taker": "0.035%", "leverage": "100x"},
@@ -4522,14 +4523,14 @@ with col_content:
                 {"name": "Synapse", "site": "https://synapseprotocol.com", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1692635184837836800/uZB0CnEG_400x400.jpg"},
                 {"name": "Gas.zip", "site": "https://lz.gas.zip/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1750310657680101376/HEtUyTZy_400x400.jpg"}, 
                 {"name": "LayerSwap", "site": "https://layerswap.io/app", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1635993072327639041/G_YIQ-G1_400x400.jpg"},      
-                {"name": "SushiSwap", "site": "https://www.sushi.com/sonic/swap",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1848386042073858048/Dev1DVpq_400x400.jpg"},
+                {"name": "SushiSwap", "site": "https://www.sushi.com/sonic/swap",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2021693386558722048/9YNuOpXf_400x400.jpg"},
                 {"name": "KyberSwap", "site": "https://kyberswap.com/swap/sonic",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1641706567014940672/UFuWgdxn_400x400.jpg"},  
                 {"name": "PancakeSwap", "site": "https://pancakeswap.finance/swap", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2004910939959967744/wr7-zpVh_400x400.jpg"},
                 {"name": "SquidRouter", "site": "https://app.squidrouter.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1938625911743524864/ppNPPF84_400x400.jpg"},
                 {"name": "Stargate", "site": "https://stargate.finance", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1928147506699145217/n7-KQGNJ_400x400.png"},
-                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"}, 
+                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2036830795831054336/A2ScYsIt_400x400.jpg"}, 
                 {"name": "Merkly", "site": "https://minter.merkly.com/hyperlane/token", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1730147960082628608/3Oz6434E_400x400.jpg"},
-                {"name": "Across Protocol", "site": "https://app.across.to/bridge?", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2008632947612565507/YHUF-r2L_400x400.jpg"},
+                {"name": "Across Protocol", "site": "https://app.across.to/bridge?", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2013300935758376960/Q_2CYFRP_400x400.jpg"},
                 {"name": "Rhino.fi", "site": "https://app.rhino.fi/bridge?", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1938213012181078016/luFTCyEW_400x400.jpg"},
                 {"name": "Retro", "site": "https://app.retrobridge.io/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1764776304895787009/TqIDlj_P_400x400.jpg"},
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
@@ -4545,13 +4546,13 @@ with col_content:
                 {"name": "Relay", "site": "https://relay.link/bridge/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1960334543052816384/ejODKCzq_400x400.jpg"},
                 {"name": "Portal Bridge", "site": "https://portalbridge.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1927411080172593152/n_qpHIq7_400x400.jpg"},
                 {"name": "Jumper Exchange", "site": "https://jumper.exchange", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1995446284627632128/UEEe3Id8_400x400.jpg"},
-                {"name": "Mayan", "site": "https://swap.mayan.finance/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1995516018748219392/4Q4w7xBt_400x400.png"},
+                {"name": "Mayan", "site": "https://swap.mayan.finance/", "fees": "High", "image": "https://pbs.twimg.com/profile_images/2024603291741544448/sJEXZbYk_400x400.png"},
                 {"name": "Orbiter Finance", "site": "https://www.orbiter.finance/?channel=0xa786817be0b3fc4385e9f93140b513c9846c6f74", "fees": "High", "image": "https://pbs.twimg.com/profile_images/1880886737221664768/_uBH9pgt_400x400.jpg"},
                 {"name": "Owlto", "site": "https://owlto.finance/?ref=0xa786817bE0B3FC4385E9F93140B513c9846C6f74", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1886736859054923778/Iv098oCX_400x400.jpg"},
                 {"name": "deBridge", "site": "https://debridge.finance", "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Sui": [
-                {"name": "Bridge.sui", "site": "https://bridge.sui.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2001729274496053248/SKLMdvW__400x400.jpg"},
+                {"name": "Bridge.sui", "site": "https://bridge.sui.io/", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2031771773897740289/j21cXusg_400x400.jpg"},
                 {"name": "Aftermath (Sui)", "site": "https://aftermath.finance/trade?", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1898807230818078720/g20J2FLu_400x400.jpg"},
                 {"name": "7k (Sui)", "site": "https://7k.ag/?ref=6ZG45VKF2W", "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2005513583443279872/GvR8SSaf_400x400.jpg"},
                 {"name": "Portal Bridge", "site": "https://portalbridge.com", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1927411080172593152/n_qpHIq7_400x400.jpg"},
@@ -4578,12 +4579,12 @@ with col_content:
                 {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
             ],
             "Celestia": [
-                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"}, 
+                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2036830795831054336/A2ScYsIt_400x400.jpg"}, 
                 {"name": "Injective Bridge", "site": "https://hub.injective.network/bridge", "fees": "Fair", "image": "https://injective.com/favicon.ico"},
                 {"name": "Skip.go", "site": "https://go.skip.build/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
             ],
             "Injective": [
-                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1671589406816313345/wGzRPeEf_400x400.jpg"},  
+                {"name": "Hyperlane", "site": "https://hyperlane.xyz", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/2036830795831054336/A2ScYsIt_400x400.jpg"},  
                 {"name": "Skip.go", "site": "https://ibcprotocol.org", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1983807442874929152/gO8dvfPE_400x400.png"},
                 {"name": "Helix", "site": "https://helixapp.com/swap/", "fees": "Fair", "image": "https://pbs.twimg.com/profile_images/1557766092088610816/ZPpcNEAd_400x400.jpg"},
             ],
@@ -4599,13 +4600,15 @@ with col_content:
                 {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
             ],
             "Sonic Labs": [
-                {"name": "SushiSwap", "site": "https://www.sushi.com/sonic/swap",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1848386042073858048/Dev1DVpq_400x400.jpg"},
+                {"name": "SushiSwap", "site": "https://www.sushi.com/sonic/swap",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2021693386558722048/9YNuOpXf_400x400.jpg"},
                 {"name": "KyberSwap", "site": "https://kyberswap.com/swap/sonic",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1641706567014940672/UFuWgdxn_400x400.jpg"},    
                 {"name": "Swapx", "site": "https://swapx.fi/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1896588709870317568/fj3naflX_400x400.jpg"},        
                 {"name": "Sonic", "site": "https://gateway.soniclabs.com/ethereum/sonic/ftm-s",  "fees": "High", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAA8FBMVEVHcEzRWCHmjUHlWhRNZIT1hzD1hC8tT298aGoeP1j8t1cnUoErV4khRGJEYocfQFkcO05saHQcO0+jYEb7rE/4nkT9vVz9wF6xXTuxXTv9vl39vl0UFBYBDBQABBMmTHEeP1gTEhQREA8oU4AbL0MSDAUjRWRqZ3PNVyHbVhZEYohSaYYBBQmJZV79sFKNVUHCXTArWYw2Xopea4AgJC12UEaaZVSrWzlONjH0bx3mWxP3Xg4nGhfBUhpgVFngfS9xW1r8oUT5kDeqY0liOib1fyqBTCe5aTu0VClmMBqcPxYOCwg7Sl5hbYTsl0FEIRWX2w4JAAAAHHRSTlMAdDPpdRlCOvrp7BnjGe9iwsKG6WPih/zDwsPCZvwGfwAAAUpJREFUKJF9k+eWgkAMhcdetvdGZuiCIqALFopi7/r+b7ODqHvW9Uz+zfnOzSQ3CULHSKfen1r14kO2gM4jldHs9ojCynftNvsH5TKeTqHlulFlU6s2r69+Wb7re/o8ABqG4ayrzYZ0yp2fdP1lqC2Ai0NYiWpDIgeaG066Cxxo9jihHKfIEiE3e/hCYQgQ2LOxcaSOREoxex4Mp6Gv7yBoj1wQE7qSiXpHYXnQx3jpe0vAVqvuGEKi5VUqTZsD+hfsQt2eCp16scetYiw4Kl9Ar+YW0wfAYj4buZ1eZbPmFDGW8o/o05zhfSLAHStxqEpkUVFk/h6VzSnGOO4fsAFUSSE1QZVlvoTezG2/7+m6Fs7blhVFB0iIyvMnGF6CzLRfp4Lgf0HMVpgmMO27bLx4MP7SyMTjyNjDZq4Je8HYq8le6uQcPs7P4QdCT2YBNL5ZPgAAAABJRU5ErkJggg=="},
                 {"name": "deBridge", "site": "https://debridge.finance",  "fees": "Very High", "image": "https://pbs.twimg.com/profile_images/1894665537466040320/5vQrjq6M_400x400.jpg"},
             ],
             "Hyperliquid":[
+                {"name": "Project X", "site": "https://www.prjx.com/@Fleming",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1922089219737911296/1miGhDTB_400x400.jpg"},
+                {"name": "Hyperbloom", "site": "https://app.hyperbloom.xyz/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1974003014659723264/5pzYHG6A_400x400.jpg"},
                 {"name": "HyperSwap", "site": "https://app.hyperswap.exchange/#/swap?referral=Fleming",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/2008202311873544192/nnkMb5Qy_400x400.jpg"},
                 {"name": "TimeSwap", "site": "https://timeswap.io/",  "fees": "Low", "image": "https://pbs.twimg.com/profile_images/1879076220106678272/ZkkhrcyV_400x400.jpg"},
             ]
