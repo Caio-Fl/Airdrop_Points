@@ -18,6 +18,7 @@ from protocol_rate import protocol_rate
 from getAllPendleMarkets import get_pendle_apy_data, get_pendle_markets
 from barra_compra_venda import barra_compra_venda
 from exchanges_klines import get_klines_data
+from get_perpdex_stats import get_perpdex_stats
 import streamlit.components.v1 as components
 import re
 from PIL import Image
@@ -7706,9 +7707,21 @@ with col_content:
 
             # CARROT (CRT Vault)
             try:
-                r = requests.get("https://api.deficarrot.com//performance?vault=FfCRL34rkJiMiX5emNDrYp3MdWH2mES3FvDQyFppqgpJ&useCache=true", timeout=5)
-                data['carrot'] = f"{r.json()['apy']:.2f}%"
-            except: data['carrot'] = "5.21%"
+                r = requests.get(
+                    "https://api.deficarrot.com/performance?vault=FfCRL34rkJiMiX5emNDrYp3MdWH2mES3FvDQyFppqgpJ&useCache=true",
+                    timeout=5
+                )
+                j = r.json()
+
+                apy_7d = next(
+                    item["apy"] for item in j["navAPY"]
+                    if item["label"] == "7 Day"
+                )
+
+                data['carrot'] = f"{apy_7d:.2f}%"
+
+            except:
+                data['carrot'] = "5.21%"
 
             # LULO (Lending)
             try:
